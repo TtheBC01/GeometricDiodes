@@ -3,3 +3,7 @@ results/*.csv
 results/*.svg
 
 /tools/__pycache__/
+meshes/
+.venv/
+results/*.vtk
+results/*.fld

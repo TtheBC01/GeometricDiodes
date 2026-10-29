@@ -1,0 +1,21 @@
+[PASS] H1     Poiseuille no-slip: rel err u 1.7e-13 p 3.9e-13, flux out 1.0000000000
+[PASS] H1b    slip S=0.5: rel err u 3.3e-13 p 1.0e-12, -dp/dx 3.000000 (exact 3.000000)
+[PASS] H1b    slip S=2: rel err u 3.3e-13 p 3.5e-12, -dp/dx 0.923077 (exact 0.923077)
+[PASS] H1b    slip S=inf: rel err u 6.5e-13 p 4.8e-11, -dp/dx 0.000000 (exact 0.000000)
+[PASS] H2     Brinkman Da=10 S=0.5: u err 5.75e-05 7.73e-06 1.22e-06 (rate 2.67), p err 2.11e-05 4.92e-06 1.52e-06 (rate 1.69)
+[PASS] H2b    Brinkman Da=1 plug flow (exact): rel err u 3.8e-13, -dp/dx 1.000000 (exact 1.000000)
+[PASS] H4     Kovasznay Re=40: max u err 1.27e-03 1.67e-04 2.22e-05 (rate 2.91), p err 2.37e-03 7.51e-04 2.21e-04 (rate 1.77)
+[PASS] H3     Stokes reciprocity tesla1 Da=0 S=0: Pi_f 16036.358443 Pi_r 16036.358443 D-1 = -2.07e-12 (flux out f 1.000000 r 1.000000)
+[PASS] H3     Stokes reciprocity tesla1 Da=2 S=0.5: Pi_f 2764.604250 Pi_r 2764.604250 D-1 = 1.18e-11 (flux out f 1.000000 r 1.000000)
+[PASS] H3     Stokes reciprocity tesla1 Da=0 S=inf: Pi_f 2311.835877 Pi_r 2311.835877 D-1 = 2.40e-11 (flux out f 1.000000 r 1.000000)
+[PASS] H8     symmetric constriction Re=10: Pi_f 1275.876963 Pi_r 1275.886129 D-1 = 7.18e-06
+[PASS] U1     units: R_Poiseuille 87.38 ohm (Gurzhi 87.38), R_ohmic 14.56 ohm (Drude 14.56, (2e^2/h)k_F l 6.8666e-02 vs 6.8666e-02 S), m* 0.0205 m_e, Da 2.00
+[PASS] H7     D-1 at Re=10: [hw 20: +1.0126e-02 (Re 3: +3.927e-04), 22730 tris, Pi_f 3329.2] [hw 14: +1.1015e-02 (Re 3: +4.474e-04), 35433 tris, Pi_f 3401.1] [hw 10: +1.1379e-02 (Re 3: +5.255e-04), 55115 tris, Pi_f 3437.4] change last two 3.2%
+[PASS] H7b    D-1 at Re=1: [hw 20: -2.470e-05] [hw 14: -2.172e-05] [hw 10: +5.993e-06] (bound only: O(Re) term unresolved, below 1e-4 on every mesh)
+[PASS] H9a    tesla1 Da=1 S=0.5: (D-1)/Re = -4.5797e-05 -4.5637e-05 -4.4997e-05 at Re 0.05 0.1 0.2
+[PASS] H9b    mirrored+remeshed tesla1 Re=0.2: D-1 -8.999e-06 vs 1/D_mirror-1 -1.025e-05, directional bias 6.3e-07
+[PASS] H5     backward-facing step Re_lit=100: x_r/h = 2.904 (literature 2.85-3.05), Newton converged
+[PASS] H5     backward-facing step Re_lit=200: x_r/h = 4.964 (literature 4.75-5.10), Newton converged
+[PASS] H6     classical tesla1 (Da=0, no-slip) D: Re 25: 0.9993 Re 50: 1.0037 Re 100: 1.0197 (monotonic)
+
+19 passed, 0 failed (434.0 s)

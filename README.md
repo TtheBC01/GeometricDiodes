@@ -3,8 +3,10 @@
 Event-driven semiclassical electron transport in two-dimensional graphene
 devices, built to answer one question first: **does a Tesla-valve-inspired
 channel rectify better than a funnel under the same physics?** (the "kill
-test"). Everything else (self-consistent Poisson, CUDA, optimisation, the
-electron-hydrodynamic solver) is deferred until this stage is believed.
+test"), answered in `results/KILLTEST.md`. Stage H, the electron-hydrodynamic
+solver (`src/hydro/`, `plans/hydro_tesla.md`, `results/HYDRO.md`), asks the
+follow-up question the ballistic model cannot: does the Tesla shape rectify in
+the viscous electron-fluid window (20 to 100 K), and at what current.
 
 ## Physics model (Stage 0 + Stage 1)
 
@@ -116,3 +118,39 @@ All with 2 um wide leads, 175 nm minimum feature, n = 1.4e12 cm^-2
   n ~ 1e12 cm^-2 (Fermi wavelength 30 to 35 nm).
 * Arcs are discretised in 2 degree chords, which adds a small artificial
   angular spread to specular reflections on curved walls.
+
+## Stage H: electron-hydrodynamic solver
+
+Steady incompressible Navier-Stokes with a Brinkman (momentum-relaxation)
+term and Navier-slip walls, nondimensionalised by the inlet width `W` and the
+mean inlet speed `U = I/(n e W)`:
+
+    Re (u.grad)u = -grad p + lap u - Da u,  div u = 0
+    Re = I/(n e nu)     (width independent in 2D)
+    Da = W^2/(nu tau_mr)  (Gurzhi number)
+    S  = l_s / W          (slip length; 0 no-slip, inf perfect slip)
+    R  = Pi m* nu/(e^2 n W^2),  Pi = nondimensional pressure drop, m* = hbar k_F/v_F
+
+* Taylor-Hood P2/P1 triangles, Newton with the analytic Jacobian, continuation
+  in Re from the Stokes solution, Eigen SparseLU.
+* Current bias as in the experiments: developed Brinkman-Poiseuille profile
+  with slip at the inlet, do-nothing at the outlet (sets the pressure level).
+* Walls: `u.n = 0` strongly in a rotated nodal frame with length-weighted
+  (Engelman-Sani-Gresho) vertex normals, which makes the discrete wall flux
+  vanish exactly; the Navier condition is a boundary integral. Vertices
+  sharper than 25 degrees are pinned to `u = 0`.
+* Meshes from gmsh (`tools/mesh.py`, pip-installed into `.venv`), generated
+  on demand from the same `Boundary` polygons as the ballistic code and
+  cached in `meshes/`. Midside nodes are built in C++.
+* `D = Pi_reverse / Pi_forward` with reverse = flow from contact 1 to 0.
+
+Build and run:
+
+    make venv            # once: python venv with gmsh and pillow
+    make                 # adds build/gd_hydro_tests, gd_hydro_sweep, gd_hydro_mesh
+    make hydro-test      # acceptance ladder H1-H9 (several minutes; "quick" arg skips H5-H9)
+    ./build/gd_hydro_sweep --geo tesla1,funnel --Re 0.3,1,3 --Da 0,1 --S 0.5,inf --threads 4
+
+`src/hydro/units.hpp` converts (n, T, mobility, edge quality, I) to
+(Re, Da, S) and `Pi` back to volts and ohms. VTK output (`write_vtk`) opens in
+ParaView.

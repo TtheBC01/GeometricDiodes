@@ -1,18 +1,19 @@
 # GeometricDiodes kill-test build (single-threaded physics, std::thread over particle batches)
 CXX      ?= clang++
-CXXFLAGS ?= -std=c++20 -O2 -Wall -Wextra -Wpedantic -Isrc
+CXXFLAGS ?= -std=c++20 -O2 -Wall -Wextra -Wpedantic -Isrc -isystem /opt/homebrew/include/eigen3
 LDFLAGS  ?= -lpthread
 
-SRC  := $(wildcard src/*.cpp)
-OBJ  := $(SRC:src/%.cpp=build/%.o)
-APPS := build/gd_tests build/gd_killtest build/gd_geom
+SRC  := $(wildcard src/*.cpp) $(wildcard src/hydro/*.cpp)
+OBJ  := $(patsubst src/%.cpp,build/%.o,$(SRC))
+APPS := build/gd_tests build/gd_killtest build/gd_geom build/gd_hydro_mesh build/gd_hydro_tests build/gd_hydro_sweep build/gd_hydro_fields
 
 all: $(APPS)
 
-build/%.o: src/%.cpp src/*.hpp | build
+build/%.o: src/%.cpp src/*.hpp src/hydro/*.hpp | build
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-build/gd_%: apps/%.cpp $(OBJ) src/*.hpp | build
+build/gd_%: apps/%.cpp $(OBJ) src/*.hpp src/hydro/*.hpp | build
 	$(CXX) $(CXXFLAGS) $< $(OBJ) -o $@ $(LDFLAGS)
 
 build:
@@ -20,6 +21,12 @@ build:
 
 test: build/gd_tests
 	./build/gd_tests
+
+hydro-test: build/gd_hydro_tests
+	./build/gd_hydro_tests
+
+venv:
+	python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt
 
 clean:
 	rm -rf build
