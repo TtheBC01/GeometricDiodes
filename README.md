@@ -1,0 +1,118 @@
+# GeometricDiodes
+
+Event-driven semiclassical electron transport in two-dimensional graphene
+devices, built to answer one question first: **does a Tesla-valve-inspired
+channel rectify better than a funnel under the same physics?** (the "kill
+test"). Everything else (self-consistent Poisson, CUDA, optimisation, the
+electron-hydrodynamic solver) is deferred until this stage is believed.
+
+## Physics model (Stage 0 + Stage 1)
+
+* Massless Dirac electrons, `E = hbar v_F |k|`, `v_F = 1e6 m/s`. Electrons only.
+* **Contacts** are ideal reservoirs at `mu_S = E_F` and `mu_D = E_F - eV`.
+  Carriers are injected with the flux-weighted (cosine) angular law and with
+  total energies drawn from `N(E) |f_S(E) - f_D(E)|`, where `N(E) = E W/(pi hbar v_F)`
+  is the mode number of the injecting contact. The current is the Landauer
+  bias-window estimator `I = g (e^2/h) sign(V) Z <T>`, `g = 4`, with
+  `Z = int N(E) |f_S - f_D| dE`. This gives exactly zero current at zero bias.
+* **In-device potential**: Stage 1 uses the same assumption as the published
+  geometric-diode Monte Carlo papers, a uniform in-plane field
+  `F = (eV/L, 0)` over the whole device, i.e. `U(x) = -eV x/L`. Flights in the
+  field are chord-stepped with a sagitta tolerance (default 0.05 nm) and the
+  kinetic energy is re-imposed from energy conservation at every step.
+  Field-free flights are analytic (one ray/segment query per flight).
+* **Walls**: specular reflection with probability `p`, otherwise diffuse
+  (cosine-law) re-emission about the inward normal. `p` is a free parameter
+  because no measured value exists for etched graphene edges (inferred range
+  0 to 0.5).
+* **Bulk scattering**: isotropic momentum relaxation after an exponentially
+  distributed free path `lambda_mfp` (elastic; `|k|` preserved).
+* **Fates**: `source`, `drain`, `trapped` (residence time cutoff),
+  `dirac` (kinetic energy fell below 2 meV; a classical stand-in for the
+  Klein-tunnelling region), `leaked` (numerical escape; must be zero).
+
+Sign convention: `V > 0` means the drain electrostatic potential is higher
+than the source, so electrons are accelerated from source toward drain.
+Positive `I` is net electron flow source to drain. The asymmetry ratio is
+`A(V) = I(+V) / |I(-V)|`. Hole transport in the same device is obtained by
+`V -> -V` (`A_h = 1/A_e`), which is the polarity reversal seen in experiments.
+
+Why the field-free engine alone cannot rectify: for any fixed potential
+landscape, flux conservation gives `N_S(E) T_SD(E) = N_D(E) T_DS(E)`, so with
+no in-device potential `I(V)` is odd in `V` for every shape (test T3). Only a
+bias-dependent potential (here the imposed uniform field) breaks the symmetry
+between `+V` and `-V` landscapes (test T4 checks reciprocity still holds within
+each landscape).
+
+## Layout
+
+```
+src/core.hpp        units, Vec2, xoshiro RNG, running statistics
+src/geometry.*      polygon boundary with holes, inward normals, grid-accelerated
+                    ray/segment query, validation (crossings, orientation,
+                    contacts, minimum feature), SVG export
+src/generators.*    straight channel, stepped channel, funnel (Nguyen 2021 /
+                    Truccolo 2024 style), symmetric constriction, Tesla stages
+src/material.hpp    graphene k_F, E_F, Fermi function, modes, Sharvin conductance
+src/transport.*     injection, flights, reflection, scattering, batch statistics,
+                    Landauer current
+apps/geom.cpp       builds and validates every device, writes results/geom_*.svg
+apps/tests.cpp      acceptance ladder T1..T11
+apps/killtest.cpp   funnel vs Tesla sweep -> results/killtest.csv
+tools/svg2png.py    rasteriser for the SVGs (needs Pillow)
+```
+
+Units everywhere: nm, fs, eV. `hbar = 0.6582 eV fs`, `v_F = 1 nm/fs`.
+
+## Build and run
+
+```bash
+make            # clang++ -std=c++20, no dependencies beyond pthread
+make test       # acceptance ladder (default 200000 particles per run)
+./build/gd_geom
+./build/gd_killtest 400000
+```
+
+Runs are multi-threaded over 64 independent batches; the batch means give the
+standard errors. Results are reproducible for a given seed and batch count.
+
+## Acceptance ladder (all pass)
+
+| test | what | target |
+|---|---|---|
+| T1 | specular straight channel, field-free | T = 1 exactly |
+| T2 | diffuse-wall channel, L/W = 0.5 .. 16 | 2D Clausing factors 0.804, 0.683, 0.541, 0.400, 0.274, 0.179 |
+| T3 | asymmetric funnel, field-free, p = 1 and 0.3, lambda = 700 nm | `W_S T_SD = W_D T_DS` |
+| T4 | same funnel with the field on, injection from both sides at one total energy | `N_S T_SD = N_D T_DS` |
+| T5 | mirror-symmetric constriction under bias | A = 1 |
+| T6 | zero bias | Z = 0, I = 0 |
+| T7 | Tesla 3-stage, diffuse walls | trapped + leaked + dirac < 1e-3 |
+| T8 | ballistic 1 um channel at n = 1e12 | Sharvin 8.74 mS |
+| T9 | 10 um channel, lambda = 300 nm | `T = l1/(L + l1)`, `l1 = pi lambda/2` (Drude limit) |
+| T10 | chord tolerance 0.05 vs 0.005 nm | same T |
+| T11 | Truccolo-like funnel (Wc 100 / Wn 10 / Wd 40 nm) | T = Wn/Wc = 0.10 at zero field (info only) |
+
+## Geometries in the kill test
+
+All with 2 um wide leads, 175 nm minimum feature, n = 1.4e12 cm^-2
+(E_F = 0.138 eV), 300 K:
+
+* `funnel_nguyenD`: 30 degree taper to a 175 nm neck, abrupt shoulder, 6 um long
+  (Nguyen et al. 2021, Device D; measured gamma = 1.66 at 80 uA).
+* `straight_control`: 175 nm channel of the same length as the Tesla main channel.
+* `tesla_1stage`, `tesla_3stage`, `tesla_3stage_v2`: 175 nm channel with
+  Tesla-inspired bypass loops (branch peels off at 30 degrees against the
+  reverse direction, turns through a 210 nm radius, re-enters at 45 degrees).
+
+## Known limitations of Stage 1
+
+* The uniform field is an assumption, not a solution; the Udine group's
+  self-consistent 3D Poisson results roughly halve the uniform-field asymmetry
+  and can reverse it for shallow funnel angles.
+* No electron-electron scattering, so no hydrodynamic effects. The Tesla
+  geometry's only demonstrated rectification mechanism (viscous flow at
+  20 to 100 K) is therefore outside this model by construction.
+* Classical trajectories are not valid for features below roughly 50 nm at
+  n ~ 1e12 cm^-2 (Fermi wavelength 30 to 35 nm).
+* Arcs are discretised in 2 degree chords, which adds a small artificial
+  angular spread to specular reflections on curved walls.
