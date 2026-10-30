@@ -168,6 +168,8 @@ def draw(poly, info, p, path):
         return PathPatch(Path(v, c), **kw)
 
     L = info["L"]; w = p.w; th = p.theta
+    u = w / 175.0                                   # annotation offsets scale with the channel width
+    bar = 1000.0 if L < 20000 else 10000.0          # scale bar length, nm
     fig = plt.figure(figsize=(14, 10.5))
     gs = fig.add_gridspec(2, 1, height_ratios=[1, 1.5], hspace=0.2)
     # ---- full device
@@ -175,17 +177,17 @@ def draw(poly, info, p, path):
     ax.add_patch(patch(poly, facecolor="#dfe8f3", edgecolor="#222", lw=0.8))
     ax.plot([0, 0], [-p.Wc / 2, p.Wc / 2], color="#d62728", lw=4)
     ax.plot([L, L], [-p.Wd / 2, p.Wd / 2], color="#2ca02c", lw=4)
-    ax.annotate("", (L * 0.62, -p.Wc / 2 - 350), (L * 0.38, -p.Wc / 2 - 350),
+    ax.annotate("", (L * 0.62, -p.Wc / 2 - 350 * u), (L * 0.38, -p.Wc / 2 - 350 * u),
                 arrowprops=dict(arrowstyle="-|>", color="#1f77b4", lw=2.5))
-    ax.text(L * 0.5, -p.Wc / 2 - 520, "forward = unimpeded (contact 0 -> 1)", ha="center", color="#1f77b4", fontsize=11)
-    ax.annotate("", (L * 0.38, p.Wc / 2 + 350), (L * 0.62, p.Wc / 2 + 350),
+    ax.text(L * 0.5, -p.Wc / 2 - 520 * u, "forward = unimpeded (contact 0 -> 1)", ha="center", color="#1f77b4", fontsize=11)
+    ax.annotate("", (L * 0.38, p.Wc / 2 + 350 * u), (L * 0.62, p.Wc / 2 + 350 * u),
                 arrowprops=dict(arrowstyle="-|>", color="#d62728", lw=2.5))
-    ax.text(L * 0.5, p.Wc / 2 + 480, "reverse = blocking (contact 1 -> 0)", ha="center", color="#d62728", fontsize=11)
-    ax.text(-60, 0, f"source\n{p.Wc:g} nm", ha="right", va="center", color="#d62728", fontsize=9)
-    ax.text(L + 60, 0, f"drain\n{p.Wd:g} nm", ha="left", va="center", color="#2ca02c", fontsize=9)
-    ax.plot([L - 1500, L - 500], [-p.Wc / 2 - 900, -p.Wc / 2 - 900], color="k", lw=3)
-    ax.text(L - 1000, -p.Wc / 2 - 1150, "1 um", ha="center", fontsize=10)
-    ax.set_aspect("equal"); ax.set_xlim(-900, L + 900); ax.set_ylim(-p.Wc / 2 - 1300, p.Wc / 2 + 800)
+    ax.text(L * 0.5, p.Wc / 2 + 480 * u, "reverse = blocking (contact 1 -> 0)", ha="center", color="#d62728", fontsize=11)
+    ax.text(-60 * u, 0, f"source\n{p.Wc:g} nm", ha="right", va="center", color="#d62728", fontsize=9)
+    ax.text(L + 60 * u, 0, f"drain\n{p.Wd:g} nm", ha="left", va="center", color="#2ca02c", fontsize=9)
+    ax.plot([L - 500 * u - bar, L - 500 * u], [-p.Wc / 2 - 900 * u, -p.Wc / 2 - 900 * u], color="k", lw=3)
+    ax.text(L - 500 * u - 0.5 * bar, -p.Wc / 2 - 1150 * u, f"{bar / 1000:g} um", ha="center", fontsize=10)
+    ax.set_aspect("equal"); ax.set_xlim(-900 * u, L + 900 * u); ax.set_ylim(-p.Wc / 2 - 1300 * u, p.Wc / 2 + 800 * u)
     ax.axis("off")
     ax.set_title(f"Classical Tesla valve, {p.n} loops: w = {w:g} nm, theta = {th:g} deg, R = {p.R:g} nm, "
                  f"a = {p.a:g} nm, Ls = {p.Ls:g} nm, L_total = {L:.0f} nm", fontsize=12)

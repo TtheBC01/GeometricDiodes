@@ -27,6 +27,10 @@ Boundary make_geo(const std::string& name, double& x0, double& x1) {
     Boundary b = load_boundary("meshes/tesla_classic_h.poly");
     x0 = 6000; x1 = b.bbox_max().x - 6000; return b;
   }
+  if (name == "tesla_classic_w1000") {
+    Boundary b = load_boundary("meshes/tesla_classic_w1000_h.poly");
+    x0 = 12000; x1 = b.bbox_max().x - 12000; return b;
+  }
   if (name == "funnel") { FunnelParams f; f.Lc = 6000; f.Ld = 6000; x0 = f.Lc; x1 = 6000 + 0.5 * (f.Wc - f.Wn) / std::tan(deg2rad(f.alpha_deg)) + f.Ln; return make_funnel(f); }
   throw std::runtime_error("unknown geometry");
 }

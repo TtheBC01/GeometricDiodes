@@ -144,7 +144,8 @@ Reading:
    scaled to 1 um reaches Re 3-15, where this table promises D - 1 of
    0.01-0.4, but at 1 um the slip number S = l_s / W is smaller and the
    damping Da = W^2 / (nu tau_mr) is larger, both of which weaken the
-   effect, and that case has not been run. It is the obvious next sweep.
+   effect. That case is run below (S4): with realistic Da and S the
+   survivable-current diodicity is 1e-3 to 3e-2.
 5. **The resistance penalty is severe.** With no-slip walls the four-loop
    valve costs 86 kOhm, with slip 10-12 kOhm, against 1.7-2.9 kOhm for the
    funnel. The Tesla term is bought with 5 um of 175 nm channel.
@@ -160,6 +161,69 @@ Numerical caveats: no mesh-convergence study has been run on this geometry
 floor of ~3e-5 below Re 1, which should carry over); the Re 30 slip states
 carry strong jets (reverse peak speed 45 % above forward), so a finer mesh
 will move the large values by a few per cent, not their order of magnitude.
+
+## S4: the valve scaled to a 1 um channel (`hydro_S4_classic_w1000_stdout.txt`)
+
+Same design with every length multiplied by 1000/175 (w = 1000 nm,
+R = 1000, a = 3429, Ls = 5714, 4 loops, 56.8 um end to end), 4 um x 12 um
+leads as for the earlier `tesla1w1000`, drawn in
+`geom_tesla_classic_w1000.png`. Mesh hw 114 nm / hm 686 nm (9 473 nodes),
+all 36 points converged. Da and S are defined on the 4 um lead width as in
+`HYDRO.md` (channel Gurzhi number = Da / 16; slip length l_s = 4 um x S).
+R is the forward resistance at n = 1e12 cm^-2, nu = 0.1 m^2/s, for which
+R = 0.455 Pi ohm with 4 um leads.
+
+Physical anchors at n = 1e12 cm^-2: Re = 1 is 160 uA at nu = 0.1 m^2/s and
+32 uA at 0.02; the drift ceiling u < 0.3 v_F allows Re <= 3 at nu = 0.1 and
+Re <= 15 at nu = 0.02; Da = 8 / 32 correspond to tau_mr = 2e-11 / 5e-12 s
+(l_mr = 20 / 5 um) at nu = 0.1, and to l_mr = 100 / 25 um at nu = 0.02, so
+at the low viscosity needed for Re 10 the realistic damping is Da 40-160.
+
+D - 1:
+
+| Da | S | R (kOhm) | Re 1 | Re 3 | Re 10 | Re 30 |
+|---|---|---|---|---|---|---|
+| 0 | inf | 0.30 | +4.0e-4 | +1.2e-2 | +2.4e-1 | +1.57 |
+| 0 | 0.5 | 0.50 | +5.9e-5 | +3.0e-3 | +8.0e-2 | +7.9e-1 |
+| 0 | 0.1 | 1.0 | -2.0e-5 | +2.7e-4 | +1.1e-2 | +1.5e-1 |
+| 8 | inf | 0.44 | +1.3e-4 | +4.9e-3 | +1.2e-1 | +1.01 |
+| 8 | 0.5 | 0.64 | +1.2e-5 | +1.6e-3 | +4.7e-2 | +5.3e-1 |
+| 8 | 0.1 | 1.2 | -2.1e-5 | +1.7e-4 | +8.4e-3 | +1.2e-1 |
+| 32 | inf | 0.87 | -1.2e-5 | +7.8e-4 | +2.6e-2 | +3.3e-1 |
+| 32 | 0.5 | 1.1 | -2.3e-5 | +3.5e-4 | +1.4e-2 | +2.0e-1 |
+| 32 | 0.1 | 1.6 | -2.1e-5 | +3.9e-5 | +3.8e-3 | +6.0e-2 |
+
+Reading:
+
+1. **Scaling check.** The ideal row (Da 0, perfect slip) reproduces the
+   175 nm device (0.24 against 0.23 at Re 10, 1.57 against 1.47 at Re 30;
+   the residual is mesh resolution relative to the channel), as it must:
+   with Da = 0 and S = inf the problem depends on Re alone.
+2. **Slip costs a factor 3 to 7, damping a factor 2 to 3 per step.** Going
+   from perfect slip to S = 0.5 (l_s = 2 um) divides D - 1 by about 3 at
+   Re 10, to S = 0.1 (0.4 um) by about 20; each factor-4 increase in Da
+   divides it by a further 2 to 3. The dependence on Da is the Gurzhi
+   crossover: once momentum relaxation dominates the channel friction the
+   flow profile flattens and the inertial loss shrinks relative to the
+   ohmic drop.
+3. **Inside the survivable window the classical valve gives 1e-3 to 3e-2.**
+   At nu = 0.1 the ceiling is Re 3, where every realistic point is below
+   2e-3. Reaching Re 10 needs nu <= 0.02, which puts Da at 40 or more, so
+   the relevant entries are the Da 32 row and below: 4e-3 to 3e-2 at Re 10,
+   and another factor 2 to 3 lower at Da 80. The 0.5 to 1.6 values exist
+   only at Re 30, i.e. drift speeds of 0.6 v_F or more, which the model
+   does not describe.
+4. **Resistance is no longer the problem.** The 1 um valve costs 0.3 to
+   1.6 kOhm, comparable to the 175 nm funnel.
+5. **Net.** A classical Tesla valve in hydrodynamic graphene can be made to
+   show a diodicity of a few per cent at a few hundred microamps in a
+   1 um channel at the temperatures where nu ~ 0.02 m^2/s, which is the
+   same order as the published 5 % Geurs signal but requires Re 10, two
+   decades above the current Geurs used. It cannot reach the tens of per
+   cent the ideal rows show without drift speeds outside the Fermi-liquid
+   picture. For the rectenna this is the cryogenic, sub-100 GHz,
+   few-per-cent corner of the design space; the ballistic funnel at 1.62
+   remains the only large and fast mechanism found.
 
 ## Changes to the earlier verdicts
 
