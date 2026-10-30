@@ -142,6 +142,15 @@ Reading:
    both large and fast. The classical Tesla reopens the *cryogenic,
    sub-100 GHz* hydrodynamic case, not the THz one.
 
+Fields (`hydro_tesla_classic_Re30_Sinf_{f,r}.png`, `hydro_tesla_classic_Re100_S0_{f,r}.png`,
+logs `hydro_fields_classic_Re{30,100}_stdout.txt`): in the forward direction
+the loops are dark (stagnant) and the flow follows the zig-zag; in reverse
+every loop carries a strong stream that re-enters the main channel at the
+merge points, where the speed peaks. At Re 30 with slip the stage region
+dissipates 22 170 (reverse) against 9 270 (forward) in Pi units, with the
+lead on the exit side taking the rest of the difference (jet decay); at
+Re 100 no-slip the split is 65 220 against 52 980.
+
 Numerical caveats: no mesh-convergence study has been run on this geometry
 (the tesla1 study in `HYDRO.md` found 3 % at Re 10, ~15 % at Re 3, and a
 floor of ~3e-5 below Re 1, which should carry over); the Re 30 slip states

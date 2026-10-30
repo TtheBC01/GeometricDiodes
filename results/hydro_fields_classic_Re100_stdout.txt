@@ -1,0 +1,4 @@
+tesla_classic: Re 100 Da 0 S 0, stage region x in [3.000, 5.866] W, L = 8.866 W
+dir              Pi    Pi/diss | diss_lead0 diss_stage diss_lead1 |   KE_stage
+forward   61151.951     1.0187 |     99.384  52977.472   6950.528 |    39.0849   (slip 0.000, Brinkman 0.000) 
+reverse   73319.861     1.0185 |   6661.156  65224.446     99.544 |    39.3153   (slip 0.000, Brinkman 0.000) 
