@@ -1,5 +1,11 @@
 # Kill test result (2026-10-29)
 
+> **Geometry caveat (added 2026-10-29).** The Tesla devices here are a
+> straight through-channel with side loops, not the classical zig-zag Tesla
+> valve. The classical geometry was rerun afterwards (`CLASSIC.md`) and gives
+> the same ballistic answer: A = 0.89-1.05, no rectification, higher
+> resistance.
+
 Model: Stage 1 (uniform in-device field, isotropic momentum relaxation with
 free path lambda, edge specularity p, cosine Fermi-Dirac injection, Landauer
 bias-window current). n = 1.4e12 cm^-2 (E_F = 0.138 eV), 300 K, 400 000

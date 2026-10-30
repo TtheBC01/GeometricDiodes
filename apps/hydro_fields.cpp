@@ -23,6 +23,10 @@ Boundary make_geo(const std::string& name, double& x0, double& x1) {
     x0 = t.Lc; x1 = t.Lc + info.main_length;
     return b;
   }
+  if (name == "tesla_classic") {  // tools/tesla_classic.py with 6 um leads; stage region = everything between the leads
+    Boundary b = load_boundary("meshes/tesla_classic_h.poly");
+    x0 = 6000; x1 = b.bbox_max().x - 6000; return b;
+  }
   if (name == "funnel") { FunnelParams f; f.Lc = 6000; f.Ld = 6000; x0 = f.Lc; x1 = 6000 + 0.5 * (f.Wc - f.Wn) / std::tan(deg2rad(f.alpha_deg)) + f.Ln; return make_funnel(f); }
   throw std::runtime_error("unknown geometry");
 }

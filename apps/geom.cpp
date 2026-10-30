@@ -3,6 +3,7 @@
 #include "generators.hpp"
 #include "transport.hpp"
 #include <cstdio>
+#include <cstdlib>
 #include <string>
 
 using namespace gd;
@@ -27,7 +28,16 @@ static void dump(const std::string& name, const Boundary& b, double min_feature)
   b.write_svg("results/geom_" + name + ".svg", pts, cols);
 }
 
-int main() {
+int main(int argc, char** argv) {
+  // gd_geom <file.poly> [min_feature]: validate and draw one file-defined geometry.
+  if (argc > 1) {
+    double mf = argc > 2 ? std::atof(argv[2]) : 175;
+    std::string name = argv[1];
+    size_t p = name.find_last_of('/'); if (p != std::string::npos) name = name.substr(p + 1);
+    p = name.find_last_of('.'); if (p != std::string::npos) name = name.substr(0, p);
+    dump(name, load_boundary(argv[1]), mf);
+    return 0;
+  }
   dump("straight_175", make_straight_channel(6000, 175), 175);
   dump("stepped_175", make_stepped_channel(2000, 1500, 175, 3000, 2000, 1500), 175);
   FunnelParams f;  // Nguyen 2021 Device D like

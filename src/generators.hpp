@@ -56,6 +56,13 @@ struct TeslaInfo {
 };
 Boundary make_tesla(const TeslaParams& p, TeslaInfo* info = nullptr);
 
+// Load a boundary written in the .poly interchange format used by
+// hydro/mesh.cpp ("loops N", then per loop "loop n" and n lines "x y tag").
+// Contacts are re-tagged from the end planes x == 0 and x == max x, so the
+// file's own tags are ignored. Used for geometries generated in Python
+// (tools/tesla_classic.py).
+Boundary load_boundary(const std::string& path);
+
 // Tagger shared by all generators: contact 0 at x==0, contact 1 at x==L.
 ContactTagger end_plane_tagger(double L, double tol = 1e-6);
 

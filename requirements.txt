@@ -1,2 +1,4 @@
 gmsh>=4.13
 pillow>=10
+shapely>=2.0
+matplotlib>=3.8

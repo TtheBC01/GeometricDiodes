@@ -1,0 +1,5 @@
+tesla_classic   16440 vertices   29642 tris  W_ref 2000 nm
+tesla_classic Da  0.00 S  0.00 Re  25.000 | Pi_f   47566.1513 Pi_r   47789.2871 | D-1 +4.691e-03 | flux err 1.0e-14 umax 17.32 17.32 
+tesla_classic Da  0.00 S  0.00 Re  50.000 | Pi_f   52574.5292 Pi_r   54753.4441 | D-1 +4.144e-02 | flux err 1.1e-15 umax 17.38 17.35 
+tesla_classic Da  0.00 S  0.00 Re 100.000 | Pi_f   61151.9506 Pi_r   73319.8613 | D-1 +1.990e-01 | flux err 1.0e-15 umax 17.86 17.87 
+CSV written to results/hydro_classic_Re.csv

@@ -3,7 +3,9 @@ results/*.csv
 results/*.svg
 
 /tools/__pycache__/
-meshes/
+meshes/*
+!meshes/tesla_classic.poly
+!meshes/tesla_classic_h.poly
 .venv/
 results/*.vtk
 results/*.fld

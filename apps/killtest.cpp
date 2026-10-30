@@ -14,8 +14,13 @@ using namespace gd;
 
 struct Geo { std::string name; Boundary b; double L; };
 
+// usage: gd_killtest [N] [geo1,geo2,...] [out.csv]
+// geometries: funnel_nguyenD straight_control tesla_1stage tesla_3stage tesla_3stage_v2 tesla_classic
 int main(int argc, char** argv) {
   long N = argc > 1 ? std::atol(argv[1]) : 400000;
+  std::vector<std::string> want;
+  if (argc > 2) { std::string s = argv[2], t; for (char c : s) { if (c == ',') { want.push_back(t); t.clear(); } else t += c; } if (!t.empty()) want.push_back(t); }
+  std::string out = argc > 3 ? argv[3] : "results/killtest.csv";
   const double n_cm2 = 1.4e12;  // Nguyen 2021 Device D at V_g = +18 V
   const double EF = EF_from_density(n_cm2);
   std::vector<double> specs = {1.0, 0.5, 0.0};
@@ -29,8 +34,15 @@ int main(int argc, char** argv) {
   { TeslaParams t; t.n_stages = 3; Boundary b = make_tesla(t); geos.push_back({"tesla_3stage", b, b.bbox_max().x}); }
   { TeslaParams t; t.n_stages = 3; t.beta_entry_deg = 20; t.beta_exit_deg = 60; t.r = 300; t.a = 2400;
     Boundary b = make_tesla(t); geos.push_back({"tesla_3stage_v2", b, b.bbox_max().x}); }
+  // classical zig-zag Tesla valve (tools/tesla_classic.py), same 2 um x 1 um leads
+  { Boundary b = load_boundary("meshes/tesla_classic.poly"); geos.push_back({"tesla_classic", b, b.bbox_max().x}); }
+  if (!want.empty()) {
+    std::vector<Geo> sel;
+    for (auto& g : geos) for (auto& w : want) if (g.name == w) sel.push_back(g);
+    geos = sel;
+  }
 
-  std::ofstream csv("results/killtest.csv");
+  std::ofstream csv(out);
   csv << "geometry,L_nm,W_S_nm,specularity,lambda_nm,V,I_A,I_err_A,T,T_err,f_source,f_trapped,f_dirac,mean_hits,mean_scatters,mean_time_fs,mean_time_tx_fs\n";
   std::printf("Kill test: n=%.2e cm^-2 (E_F=%.3f eV, lambda_F=%.1f nm), T=300 K, N=%ld per point\n\n",
               n_cm2, EF, fermi_wavelength(n_cm2), N);
@@ -67,6 +79,6 @@ int main(int argc, char** argv) {
         }
     std::printf("\n");
   }
-  std::printf("CSV written to results/killtest.csv\n");
+  std::printf("CSV written to %s\n", out.c_str());
   return 0;
 }

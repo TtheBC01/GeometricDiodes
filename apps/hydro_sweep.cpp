@@ -30,6 +30,8 @@ static std::vector<std::string> parse_names(const std::string& s) {
 }
 
 Boundary make_geo(const std::string& name) {
+  // classical zig-zag Tesla valve from tools/tesla_classic.py, 6 um leads
+  if (name == "tesla_classic") return load_boundary("meshes/tesla_classic_h.poly");
   if (name == "tesla1") { TeslaParams t; t.n_stages = 1; t.Lc = t.Ld = 6000; return make_tesla(t); }
   if (name == "tesla3") { TeslaParams t; t.n_stages = 3; t.Lc = t.Ld = 6000; return make_tesla(t); }
   if (name == "tesla3v2") { TeslaParams t; t.n_stages = 3; t.beta_entry_deg = 20; t.beta_exit_deg = 60; t.r = 300; t.a = 2400; t.Lc = t.Ld = 6000; return make_tesla(t); }

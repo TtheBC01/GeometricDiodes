@@ -1,5 +1,6 @@
 #include "generators.hpp"
 #include <cmath>
+#include <fstream>
 #include <stdexcept>
 #include <string>
 
@@ -157,6 +158,28 @@ Boundary make_tesla(const TeslaParams& p, TeslaInfo* info) {
   if (info) {
     info->main_length = Lm; info->total_length = L;
     info->stage_footprint = footprint; info->island_area = island_area;
+  }
+  return Boundary(loops, end_plane_tagger(L));
+}
+
+Boundary load_boundary(const std::string& path) {
+  std::ifstream f(path);
+  if (!f) throw std::runtime_error("load_boundary: cannot open " + path);
+  std::string kw; int nloops = 0;
+  if (!(f >> kw >> nloops) || kw != "loops") throw std::runtime_error("load_boundary: bad header in " + path);
+  std::vector<Polygon> loops;
+  double L = 0;
+  for (int k = 0; k < nloops; ++k) {
+    int n = 0;
+    if (!(f >> kw >> n) || kw != "loop") throw std::runtime_error("load_boundary: bad loop header in " + path);
+    Polygon P;
+    for (int i = 0; i < n; ++i) {
+      double x, y; int tag;
+      if (!(f >> x >> y >> tag)) throw std::runtime_error("load_boundary: truncated loop in " + path);
+      P.pts.push_back({x, y});
+      L = std::max(L, x);
+    }
+    loops.push_back(P);
   }
   return Boundary(loops, end_plane_tagger(L));
 }

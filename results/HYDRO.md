@@ -1,5 +1,11 @@
 # Stage H result: electron-hydrodynamic Tesla valve (2026-10-29)
 
+> **Geometry caveat (added 2026-10-29).** Every Tesla device in this note
+> (`tesla1`, `tesla3`, `tesla3v2`, `tesla1w1000`) is a straight through-channel
+> with side loops, not the classical zig-zag Tesla valve. The classical
+> geometry was run afterwards; see `CLASSIC.md`, which revises verdict
+> points 2 and 4 below. Points 1, 3 and 5 stand.
+
 Model: steady incompressible Navier-Stokes with Brinkman damping and Navier
 slip on Taylor-Hood P2/P1 meshes (`src/hydro/`, plan in
 `plans/hydro_tesla.md`). Current bias, developed inlet profile, do-nothing
