@@ -137,7 +137,7 @@ Fields: `hydro_tesla1_Re10_Sinf_{f,r}.png`, `hydro_tesla3v2_Re10_Sinf_{f,r}.png`
 | H3 | Stokes reciprocity, tesla1, three (Da, S) | D - 1 = 2e-12, 1e-11, 2e-11; wall flux exactly zero |
 | H4 | Kovasznay Re 40 | velocity O(h^2.9), 2.2e-5 at h = 25 nm |
 | H5 | backward-facing step, ER 2 | x_r/h = 2.90 at Re 100 (lit. 2.85-3.05), 4.96 at Re 200 (lit. 4.75-5.10) |
-| H6 | classical Tesla trend, Da 0, no-slip | D = 0.9993, 1.0037, 1.0197 at Re 25, 50, 100 (monotonic, literature 1.01-1.05) |
+| H6 | classical Tesla trend, Da 0, no-slip | D = 0.9993, 1.0037, 1.0197 at Re 25, 50, 100 (monotonic, literature 1.01-1.05; Re 100 is above the steady fold, see deviations) |
 | H7 | mesh convergence, tesla1, Re 10, Da 1, S 0.5 | D - 1 = 1.01e-2, 1.10e-2, 1.14e-2 (hw 20, 14, 10 nm): 3 % |
 | H7b | same at Re 1 | -2.5e-5, -2.2e-5, +6e-6: unresolved, bound 1e-4 |
 | H8 | symmetric constriction, Re 10 | D - 1 = 7e-6 (mesh asymmetry floor) |
@@ -148,9 +148,18 @@ Fields: `hydro_tesla1_Re10_Sinf_{f,r}.png`, `hydro_tesla3v2_Re10_Sinf_{f,r}.png`
 Deviations from the plan: no fully specified 2D Tesla geometry with
 tabulated D(Re) exists in the literature (the candidates are 3D, figure-only,
 or paywalled), so H6 is a trend-and-magnitude check and the quantitative
-separated-flow benchmark is the backward-facing step. Steady Newton with Re
-continuation fails for the classical valve between Re 100 and 150 (probably
-loss of a stable steady state); irrelevant for graphene.
+separated-flow benchmark is the backward-facing step. For the classical
+no-slip valve the steady branch continued from Stokes flow ends at a fold
+near Re 85 on the hw 20 nm mesh (84.7 forward, 84.9 reverse, D = 1.016
+there): Newton converges quadratically at Re 84.6 and then stagnates at
+Re 84.8 however small the step (a singular Jacobian, the limit-point
+signature). Steady states reported above the fold are
+path-dependent samples of other branches: Re 100 gives D = 1.020 when
+reached via Re 25 and 50 (H6) but 1.128 from a direct jump, and a gentle
+continuation reaches no state at all between Re 100 and 140
+(`hydro_relimit_stdout.txt`, `hydro_relimit_fold.txt`). H6 is therefore a
+trend check at Re 25 and 50 with a branch sample at 100; the flow is
+presumably unsteady there. Irrelevant for graphene (Re <= 30).
 
 ## Numerical notes
 

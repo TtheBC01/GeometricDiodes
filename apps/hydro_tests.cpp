@@ -222,9 +222,9 @@ int main(int argc, char** argv) {
   // the laminar range. No fully specified 2D geometry with tabulated D(Re)
   // exists in the literature, so this is a trend and magnitude check against
   // single/few-stage values (D ~ 1.01-1.05 at Re 50-100, 1.1-1.3 at Re 200).
-  // Steady Newton with Re continuation fails between Re = 100 and 150 in this
-  // geometry (see results/HYDRO.md); graphene cannot reach it, so the check
-  // stops at 100.
+  // The steady branch continued from Stokes flow folds near Re 85 in this
+  // geometry, so the Re 100 value is a path-dependent branch sample (see
+  // results/HYDRO.md); graphene cannot reach it, so the check stops at 100.
   if (!quick && want("H6")) {
     TeslaParams t1; t1.n_stages = 1; t1.Lc = t1.Ld = 6000;
     Boundary b = make_tesla(t1);

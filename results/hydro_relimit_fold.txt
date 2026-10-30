@@ -1,0 +1,55 @@
+# Re continuation trail, classical tesla1 (Da 0, no-slip), hw 20 / hm 120 mesh, from Stokes to Re 100.
+# Each 'continuation' line is one Newton attempt; a repeated start Re means the previous attempt failed.
+# Newton converges quadratically at Re 84.64 (fwd) and stagnates at 84.76-84.88 with no residual decrease: fold (limit point).
+  continuation: Re 0 -> 100
+  continuation: Re 0 -> 50
+  continuation: Re 0 -> 25
+  continuation: Re 25 -> 50
+  continuation: Re 50 -> 75
+  continuation: Re 75 -> 100
+  continuation: Re 75 -> 87.5
+  continuation: Re 75 -> 81.25
+  continuation: Re 81.25 -> 90.625
+  continuation: Re 81.25 -> 85.9375
+  continuation: Re 81.25 -> 83.5938
+  continuation: Re 83.5938 -> 87.1094
+  continuation: Re 83.5938 -> 85.3516
+  continuation: Re 83.5938 -> 84.4727
+  continuation: Re 84.4727 -> 85.791
+  continuation: Re 84.4727 -> 85.1318
+  continuation: Re 84.4727 -> 84.8022
+  continuation: Re 84.4727 -> 84.6375
+  continuation: Re 84.6375 -> 84.8846
+  continuation: Re 84.6375 -> 84.761
+  continuation: Re 84.6375 -> 84.6992
+  continuation: Re 84.6992 -> 84.7919
+  continuation: Re 84.6992 -> 84.7456
+  continuation: Re 84.6992 -> 84.7224
+  continuation: Re 84.6992 -> 84.7108
+  continuation: Re 84.7108 -> 84.7282
+DIR 0 target 100 reached 84.7108 converged 0 Pi 25121.791357 umax 16.973
+  continuation: Re 0 -> 100
+  continuation: Re 0 -> 50
+  continuation: Re 50 -> 75
+  continuation: Re 75 -> 100
+  continuation: Re 75 -> 87.5
+  continuation: Re 75 -> 81.25
+  continuation: Re 81.25 -> 90.625
+  continuation: Re 81.25 -> 85.9375
+  continuation: Re 81.25 -> 83.5938
+  continuation: Re 83.5938 -> 87.1094
+  continuation: Re 83.5938 -> 85.3516
+  continuation: Re 83.5938 -> 84.4727
+  continuation: Re 84.4727 -> 85.791
+  continuation: Re 84.4727 -> 85.1318
+  continuation: Re 84.4727 -> 84.8022
+  continuation: Re 84.8022 -> 85.2966
+  continuation: Re 84.8022 -> 85.0494
+  continuation: Re 84.8022 -> 84.9258
+  continuation: Re 84.8022 -> 84.864
+  continuation: Re 84.864 -> 84.9567
+  continuation: Re 84.864 -> 84.9104
+  continuation: Re 84.9104 -> 84.9799
+  continuation: Re 84.9104 -> 84.9452
+  continuation: Re 84.9104 -> 84.9278
+DIR 1 target 100 reached 84.9104 converged 0 Pi 25529.631214 umax 17.197
