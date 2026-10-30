@@ -1,0 +1,5 @@
+meshes/h_funnel_hw28_hm168.mesh: 7446 nodes, 13786 triangles, 1104 boundary edges
+meshes/h_funnel_hw14_hm84.mesh: 17027 nodes, 31874 triangles, 2178 boundary edges
+[PASS] T8     funnel I_sc/Va^2 vs mesh (hw, hm) = (28,168), (20,120), (14,84) nm: [Om 1: 1.58437e-03 1.60058e-03 1.56980e-03, last change 2.0e-02] [Om 3: 5.92158e-03 5.83972e-03 5.77508e-03, last change 1.1e-02]
+
+1 passed, 0 failed (27.6 s)

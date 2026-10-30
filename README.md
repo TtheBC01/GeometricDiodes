@@ -181,3 +181,34 @@ unimpeded direction.
 Approved parameters: w 175 nm, theta 25 deg, R 175 nm, a 600 nm, Ls 1000 nm,
 4 loops. Results: `results/CLASSIC.md`. Every geometry is drawn and approved
 before it is simulated.
+
+## Stage H2: unsteady gated-compressible (plasmonic) solver
+
+Plan: `plans/hydro_thz.md`; derivation and discretisation: `plans/hydro_thz_notes.md`;
+results: `results/THZ.md`. The electron fluid of Stage H made compressible by
+the gate capacitance and the quantum capacitance, written in barotropic form
+(`d_t u + (u.grad)u + u/tau = -grad h(n) + nu lap u`, `d_t n + div(n u) = 0`)
+and solved as a second-order perturbation about rest: one complex linear
+solve per frequency for the plasmonic response, one real Stokes-Brinkman
+solve for the rectified dc flow, with lumped ports (Thevenin source, current
+source, open, ground) as boundary tractions. A BDF2 time-domain solver on the
+full nonlinear system anchors the perturbation solver in the ladder.
+
+    ./build/gd_thz_tests                 # ladder T1-T9, 9/9 pass, ~80 min (T1, T5, T6, T8 are slow; "quick" skips them)
+    ./build/gd_thz_sweep --geo funnel --set 100K --term sym --out results/thz/x.csv
+    .venv/bin/python tools/thz_plot.py out.png label=results/thz/x.csv
+
+Results: `results/THZ.md` (tables in `results/thz/tables.md`, CSVs, logs and
+figures alongside). Headline: with the Dyakonov-Shur termination a 1 um
+graphene funnel reaches 0.1 to 0.3 A/W from 10 GHz to 1 THz at an impedance a
+75 ohm antenna can drive; the funnel's own geometric rectification matters
+only near its taper resonance (1.87 THz for the 175 nm neck) and at 100 K;
+the classical Tesla valve is an order of magnitude below the funnel.
+
+Terminations: `sym` splits the antenna +-Va/2 with R/2 at each contact (the gate
+at the midpoint potential: geometric rectification only); `dss` / `dsd` put the
+Thevenin source at the source / drain with the other contact grounded to the
+gate (the Dyakonov-Shur configuration, which rectifies any channel); `ds` is
+the ideal-source / open-drain detector of the DS papers. Density is P1
+(Taylor-Hood) with the density gradient integrated by parts, which gives
+second-order dispersion accuracy and keeps the quasi-static limit stable.
