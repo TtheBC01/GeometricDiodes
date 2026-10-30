@@ -75,7 +75,9 @@ def build(p):
     for k in range(n):
         verts.append(np.array([x, h if k % 2 == 0 else -h]))
         x += Ls * math.cos(math.radians(th))
-    Q1 = np.array([x, -h if n % 2 == 0 else h])
+    # vertex k sits at +h for even k, so the last vertex (k = n-1) is at -h
+    # when n is even; the closing segment must then rise to +h.
+    Q1 = np.array([x, h if n % 2 == 0 else -h])
     main = [Q0 - np.array([p.lead, 0.0]), Q0] + verts + [Q1, Q1 + np.array([p.lead, 0.0])]
     paths = [main]
     loops = []
@@ -106,6 +108,22 @@ def build(p):
     if len(dom.interiors) != n:
         sys.exit(f"expected {n} islands, got {len(dom.interiors)}: loops overlap a lead or each other; "
                  "increase --lead or --Ls")
+    # Self-checks that every stage is identical and every main segment is a
+    # proper zig-zag segment (an earlier version produced a horizontal closing
+    # segment that cut through the last loop).
+    areas = sorted(abs(Polygon(r.coords).area) for r in dom.interiors)
+    if areas[-1] - areas[0] > 1e-6 * areas[-1]:
+        sys.exit(f"islands differ in area ({areas[0]:.1f} .. {areas[-1]:.1f} nm^2): a loop is malformed")
+    seg_pts = [Q0] + verts + [Q1]
+    for P0, P1 in zip(seg_pts[:-1], seg_pts[1:]):
+        d = P1 - P0; ang = abs(math.degrees(math.atan2(d[1], d[0])))
+        if abs(np.hypot(*d) - Ls) > 1e-6 * Ls or abs(ang - th) > 1e-6:
+            sys.exit(f"main segment {P0} -> {P1} is not Ls at +-theta (len {np.hypot(*d):.1f}, angle {ang:.2f})")
+    for d in loops:
+        # the merge point must lie strictly inside a main segment, clear of both ends
+        V, M = d["V"], d["M"]
+        if np.hypot(*(M - V)) > Ls - 1.5 * w:
+            sys.exit("merge point too close to the next vertex; increase --Ls")
     # --- mirror x so that the unimpeded direction is +x; source face at x = 0
     def mir(ring):
         return [(-xx, yy) for xx, yy in ring]
@@ -240,6 +258,8 @@ def main():
     print(f"forward centreline path through the valve: {(p.n + 1) * p.Ls + 2 * p.lead:.0f} nm; "
           f"loop path per stage (vertex to merge via the loop): {p.a + math.pi * p.R + info['t_ret']:.0f} nm "
           f"vs {info['s_merge']:.0f} nm along the main channel")
+    areas = [abs(Polygon(r.coords).area) for r in poly.interiors]
+    print(f"self-checks passed: {len(areas)} identical islands of {areas[0]:.0f} nm^2, all main segments Ls at +-theta")
     print(f"wrote {p.out}: L_total = {info['L']:.1f} nm, {len(poly.interiors)} islands, "
           f"vertex pitch {info['pitch']:.1f} nm, merge at {info['s_merge']:.1f} nm, return leg {info['t_ret']:.1f} nm, "
           f"island tip {info['island_tip_offset']:.1f} nm from the vertex, exterior {len(poly.exterior.coords)} pts")

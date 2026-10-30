@@ -1,18 +1,18 @@
-meshes/h_tesla_classic_hw20_hm120.mesh: 16440 nodes, 29642 triangles, 3244 boundary edges
-tesla_classic   16440 vertices   29642 tris  W_ref 2000 nm
-tesla_classic Da  0.00 S  0.00 Re   0.300 | Pi_f   43922.6722 Pi_r   43922.7054 | D-1 +7.553e-07 | flux err 1.0e-14 umax 17.15 17.15 
-tesla_classic Da  0.00 S  0.00 Re   1.000 | Pi_f   43930.8447 Pi_r   43930.9192 | D-1 +1.694e-06 | flux err 6.7e-16 umax 17.15 17.16 
-tesla_classic Da  0.00 S  0.00 Re   3.000 | Pi_f   44002.3649 Pi_r   44001.7514 | D-1 -1.394e-05 | flux err 8.9e-16 umax 17.17 17.17 
-tesla_classic Da  0.00 S  0.00 Re  10.000 | Pi_f   44746.4810 Pi_r   44737.7889 | D-1 -1.943e-04 | flux err 8.9e-16 umax 17.23 17.21 
-tesla_classic Da  0.00 S  0.00 Re  30.000 | Pi_f   48595.0849 Pi_r   49038.2550 | D-1 +9.120e-03 | flux err 1.8e-15 umax 17.33 17.33 
-tesla_classic Da  0.00 S   inf Re   0.300 | Pi_f    5441.4725 Pi_r    5441.4558 | D-1 -3.055e-06 | flux err 1.3e-15 umax 13.70 13.79 
-tesla_classic Da  0.00 S   inf Re   1.000 | Pi_f    5466.2419 Pi_r    5468.0630 | D-1 +3.332e-04 | flux err 6.7e-16 umax 13.61 13.91 
-tesla_classic Da  0.00 S   inf Re   3.000 | Pi_f    5658.9899 Pi_r    5711.4163 | D-1 +9.264e-03 | flux err 2.2e-16 umax 13.42 14.30 
-tesla_classic Da  0.00 S   inf Re  10.000 | Pi_f    7000.3025 Pi_r    8282.2910 | D-1 +1.831e-01 | flux err 6.7e-16 umax 14.15 16.24 
-tesla_classic Da  0.00 S   inf Re  30.000 | Pi_f   11326.0640 Pi_r   24773.3725 | D-1 +1.187e+00 | flux err 3.6e-15 umax 17.54 24.70 
-tesla_classic Da  0.00 S  0.50 Re   0.300 | Pi_f    6605.3398 Pi_r    6605.2978 | D-1 -6.361e-06 | flux err 2.2e-15 umax 13.33 13.38 
-tesla_classic Da  0.00 S  0.50 Re   1.000 | Pi_f    6627.1028 Pi_r    6628.2635 | D-1 +1.752e-04 | flux err 4.4e-16 umax 13.37 13.48 
-tesla_classic Da  0.00 S  0.50 Re   3.000 | Pi_f    6799.3678 Pi_r    6835.7254 | D-1 +5.347e-03 | flux err 4.4e-16 umax 13.46 13.81 
-tesla_classic Da  0.00 S  0.50 Re  10.000 | Pi_f    8052.0621 Pi_r    9016.0119 | D-1 +1.197e-01 | flux err 1.6e-15 umax 13.92 15.39 
-tesla_classic Da  0.00 S  0.50 Re  30.000 | Pi_f   12188.0726 Pi_r   23464.0793 | D-1 +9.252e-01 | flux err 1.8e-15 umax 17.22 22.60 
+meshes/h_tesla_classic_hw20_hm120.mesh: 16703 nodes, 30055 triangles, 3357 boundary edges
+tesla_classic   16703 vertices   30055 tris  W_ref 2000 nm
+tesla_classic Da  0.00 S  0.00 Re   0.300 | Pi_f   47045.2626 Pi_r   47045.3220 | D-1 +1.263e-06 | flux err 4.7e-15 umax 17.15 17.15 
+tesla_classic Da  0.00 S  0.00 Re   1.000 | Pi_f   47053.9013 Pi_r   47054.0801 | D-1 +3.800e-06 | flux err 2.0e-15 umax 17.15 17.16 
+tesla_classic Da  0.00 S  0.00 Re   3.000 | Pi_f   47129.3310 Pi_r   47129.4869 | D-1 +3.308e-06 | flux err 1.7e-15 umax 17.16 17.17 
+tesla_classic Da  0.00 S  0.00 Re  10.000 | Pi_f   47896.6845 Pi_r   47908.2038 | D-1 +2.405e-04 | flux err 1.6e-15 umax 17.23 17.21 
+tesla_classic Da  0.00 S  0.00 Re  30.000 | Pi_f   51684.1411 Pi_r   52433.1970 | D-1 +1.449e-02 | flux err 2.0e-15 umax 17.33 17.33 
+tesla_classic Da  0.00 S   inf Re   0.300 | Pi_f    5460.9936 Pi_r    5460.9429 | D-1 -9.286e-06 | flux err 2.1e-15 umax 13.70 13.79 
+tesla_classic Da  0.00 S   inf Re   1.000 | Pi_f    5489.0886 Pi_r    5491.3651 | D-1 +4.147e-04 | flux err 1.6e-15 umax 13.61 13.91 
+tesla_classic Da  0.00 S   inf Re   3.000 | Pi_f    5703.9162 Pi_r    5771.9084 | D-1 +1.192e-02 | flux err 1.8e-15 umax 13.42 14.30 
+tesla_classic Da  0.00 S   inf Re  10.000 | Pi_f    7120.0200 Pi_r    8787.1990 | D-1 +2.342e-01 | flux err 8.9e-16 umax 14.15 16.24 
+tesla_classic Da  0.00 S   inf Re  30.000 | Pi_f   11525.3476 Pi_r   28491.4635 | D-1 +1.472e+00 | flux err 4.1e-15 umax 17.54 25.54 
+tesla_classic Da  0.00 S  0.50 Re   0.300 | Pi_f    6717.6948 Pi_r    6717.6119 | D-1 -1.235e-05 | flux err 3.6e-15 umax 13.34 13.38 
+tesla_classic Da  0.00 S  0.50 Re   1.000 | Pi_f    6742.1579 Pi_r    6743.5745 | D-1 +2.101e-04 | flux err 1.6e-15 umax 13.37 13.48 
+tesla_classic Da  0.00 S  0.50 Re   3.000 | Pi_f    6932.7399 Pi_r    6979.7355 | D-1 +6.779e-03 | flux err 1.6e-15 umax 13.47 13.81 
+tesla_classic Da  0.00 S  0.50 Re  10.000 | Pi_f    8250.5517 Pi_r    9500.4811 | D-1 +1.515e-01 | flux err 1.1e-15 umax 13.92 15.39 
+tesla_classic Da  0.00 S  0.50 Re  30.000 | Pi_f   12460.4959 Pi_r   26723.5065 | D-1 +1.145e+00 | flux err 8.9e-16 umax 17.22 22.98 
 CSV written to results/hydro_S2_classic.csv

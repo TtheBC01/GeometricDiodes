@@ -32,15 +32,15 @@ results (identical code and seeds).
 
 | device | p | lambda (nm) | A at 0.05 V | A at 0.1 V | R+ (kOhm) |
 |---|---|---|---|---|---|
-| Tesla classic | 1.0 | inf | 0.929 +- 0.015 | **0.894 +- 0.014** | 2.4-2.7 |
-| Tesla classic | 1.0 | 700 | 0.973 +- 0.021 | 1.034 +- 0.023 | 4.7-4.9 |
-| Tesla classic | 1.0 | 200 | 0.967 +- 0.031 | 1.001 +- 0.034 | 11.2-11.5 |
-| Tesla classic | 0.5 | inf | 0.999 +- 0.023 | 1.017 +- 0.021 | 4.3-4.4 |
-| Tesla classic | 0.5 | 700 | 1.011 +- 0.029 | 1.018 +- 0.028 | 7.0-7.1 |
-| Tesla classic | 0.5 | 200 | 0.964 +- 0.031 | 1.005 +- 0.035 | 13.2-13.8 |
-| Tesla classic | 0.0 | inf | 1.016 +- 0.028 | 1.041 +- 0.031 | 6.9-7.0 |
-| Tesla classic | 0.0 | 700 | 1.021 +- 0.031 | 1.046 +- 0.030 | 9.5-9.7 |
-| Tesla classic | 0.0 | 200 | 0.993 +- 0.038 | 0.964 +- 0.040 | 15.9-16.6 |
+| Tesla classic | 1.0 | inf | **0.933 +- 0.015** | **0.891 +- 0.014** | 2.4-2.7 |
+| Tesla classic | 1.0 | 700 | 1.016 +- 0.023 | 0.994 +- 0.023 | 4.9-5.0 |
+| Tesla classic | 1.0 | 200 | 1.009 +- 0.032 | 1.026 +- 0.035 | 11.7-12.1 |
+| Tesla classic | 0.5 | inf | 1.031 +- 0.021 | 1.015 +- 0.024 | 4.6-4.7 |
+| Tesla classic | 0.5 | 700 | 1.035 +- 0.029 | 0.981 +- 0.029 | 7.1-7.4 |
+| Tesla classic | 0.5 | 200 | 0.931 +- 0.036 | 0.990 +- 0.039 | 14.2-14.2 |
+| Tesla classic | 0.0 | inf | 0.999 +- 0.026 | 0.989 +- 0.026 | 7.7-7.8 |
+| Tesla classic | 0.0 | 700 | 1.000 +- 0.033 | 0.987 +- 0.034 | 10.2-10.4 |
+| Tesla classic | 0.0 | 200 | 1.065 +- 0.045 | 1.083 +- 0.045 | 16.1-16.9 |
 | funnel (Nguyen D) | 1.0 | inf | 1.254 +- 0.010 | **1.624 +- 0.015** | 0.53 |
 | funnel (Nguyen D) | 1.0 | 700 | 1.040 +- 0.010 | 1.086 +- 0.011 | 0.92 |
 | funnel (Nguyen D) | 0.0 | 700 | 1.032 +- 0.011 | 1.063 +- 0.012 | 1.02 |
@@ -48,14 +48,15 @@ results (identical code and seeds).
 Reading:
 
 1. **No classical-geometry ballistic rectification.** Sixteen of the
-   eighteen points are within two standard errors of A = 1. The two that are
-   not (specular walls, infinite mean free path: A = 0.93 and 0.89) have the
-   *reverse* direction easier, i.e. the valve rectifies the wrong way in the
-   pure ballistic limit. Diffuse edges push A to 1.02-1.05, at most 1.5
-   standard errors above 1 and far below the funnel.
+   eighteen points are within two standard errors of A = 1 (bold marks the
+   exceptions). The two that are not (specular walls, infinite mean free
+   path: A = 0.93 and 0.89) have the *reverse* direction easier, i.e. the
+   valve rectifies the wrong way in the pure ballistic limit. With partly or
+   fully diffuse edges A scatters between 0.93 and 1.08 with no systematic
+   sign.
 2. **The funnel still wins at every point**: A = 1.62 ballistic and 1.06-1.09
-   at lambda = 700 nm against 0.89-1.05 for the classical Tesla, at four to
-   eight times lower resistance (0.5-1 kOhm versus 2.4-16.6 kOhm).
+   at lambda = 700 nm against 0.89-1.08 for the classical Tesla, at four to
+   eight times lower resistance (0.5-1 kOhm versus 2.4-16.9 kOhm).
 3. Changing from the earlier straight-channel Tesla to the classical geometry
    therefore does not change the ballistic verdict; it only raises the
    resistance (2.4 kOhm versus 1.1 kOhm specular/ballistic for one stage).
@@ -72,7 +73,7 @@ soon as edges are partly diffuse or bulk scattering is present.
 ## Hydrodynamic sweep (`hydro_S2_classic_stdout.txt`, `hydro_S2_classic.csv`)
 
 Same Stage H solver and settings as the S2 table in `HYDRO.md`: Da = 0,
-6 um leads, hw 20 nm / hm 120 nm mesh (16 440 nodes, 29 642 triangles), all
+6 um leads, hw 20 nm / hm 120 nm mesh (16 703 nodes, 30 055 triangles), all
 points converged to a Newton residual below 1e-10, discrete flux error below
 2e-14. R is the forward resistance at n = 1e12 cm^-2, nu = 0.1 m^2/s
 (R = 1.82 Pi ohm for the 2 um leads). Funnel and old single-loop rows are
@@ -83,9 +84,9 @@ D - 1:
 
 | device | S | R (kOhm) | Re 0.3 | Re 1 | Re 3 | Re 10 | Re 30 |
 |---|---|---|---|---|---|---|---|
-| **Tesla classic** | 0 | 80 | +7.6e-7 | +1.7e-6 | -1.4e-5 | -1.9e-4 | +9.1e-3 |
-| **Tesla classic** | 0.5 | 12 | -6.4e-6 | +1.8e-4 | +5.3e-3 | **+1.2e-1** | **+9.3e-1** |
-| **Tesla classic** | inf | 9.9 | -3.1e-6 | +3.3e-4 | +9.3e-3 | **+1.8e-1** | **+1.19** |
+| **Tesla classic** | 0 | 86 | +1.3e-6 | +3.8e-6 | +3.3e-6 | +2.4e-4 | +1.4e-2 |
+| **Tesla classic** | 0.5 | 12 | -1.2e-5 | +2.1e-4 | +6.8e-3 | **+1.5e-1** | **+1.15** |
+| **Tesla classic** | inf | 9.9 | -9.3e-6 | +4.1e-4 | +1.2e-2 | **+2.3e-1** | **+1.47** |
 | funnel | 0 | 2.9 | +8e-6 | -5.8e-5 | -2.4e-3 | -6.7e-2 | -1.8e-1 |
 | funnel | 0.5 | 1.8 | -1.4e-4 | -7.8e-4 | -1.0e-2 | -1.5e-1 | -1.1e-1 |
 | funnel | inf | 1.7 | -1.5e-4 | -8.7e-4 | -1.2e-2 | -1.6e-1 | -1.1e-1 |
@@ -97,44 +98,56 @@ continuation through Re 25 -> 50 -> 100:
 
 | Re | 25 | 50 | 100 |
 |---|---|---|---|
-| D (4 loops, 2D) | 1.0047 | 1.041 | 1.199 |
+| D (4 loops, 2D) | 1.0085 | 1.053 | 1.230 |
 | literature, 3D square ducts (3 / 5 stages) | - | 1.023 / 1.033 | 1.103 / 1.150 |
 
 The literature row is the double-to-five-stage table in the 2025 micro Tesla
 valve study (https://pmc.ncbi.nlm.nih.gov/articles/PMC12735025/); the 2D
-value sits where a four-loop device should, slightly above the 3D numbers
+value sits where a four-loop device should, somewhat above the 3D numbers
 because a square duct adds wall friction that dilutes the inertial term.
 The generator therefore produces a genuine Tesla valve, which the earlier
-geometry did not (old tesla1 gave D = 1.020 at Re 100).
+geometry did not (old tesla1 gave D = 1.020 at Re 100). A first take of
+this geometry with one malformed loop (the lead channel cut through it)
+gave 20-25 % smaller values at Re 10-30; those runs are superseded.
+
+Fields (`hydro_tesla_classic_Re30_Sinf_{f,r}.png`, `hydro_tesla_classic_Re100_S0_{f,r}.png`,
+logs `hydro_fields_classic_Re{30,100}_stdout.txt`): in the forward direction
+the loops are dark (stagnant) and the flow follows the zig-zag; in reverse
+every loop carries a strong stream that re-enters the main channel at the
+merge points, where the speed peaks (reverse peak speed 25.5 against 17.5
+forward at Re 30 with slip). Stage-region dissipation, Pi units: 9 430
+forward against 25 610 reverse at Re 30 slip; 56 000 against 70 630 at
+Re 100 no-slip; the exit-side lead takes the rest of the difference as the
+jets decay.
 
 Reading:
 
 1. **The classical geometry works as a Tesla valve in the electron fluid.**
-   With slip walls D - 1 = 0.12-0.18 at Re 10 and 0.9-1.2 at Re 30, ten to
-   twenty times the old single loop and five to seven times the old
+   With slip walls D - 1 = 0.15-0.23 at Re 10 and 1.1-1.5 at Re 30, fifteen
+   to twenty-five times the old single loop and five to nine times the old
    three-stage device. The growth is close to Re^2 between Re 3 and 30, the
-   signature of an inertial (Borda-Carnot / jet-collision) loss that is
-   present in one direction only. Even with no-slip walls the term appears,
-   later: D - 1 = 9e-3 at Re 30, 4e-2 at Re 50, 0.20 at Re 100.
+   signature of an inertial (Borda-Carnot / jet-collision) loss present in
+   one direction only. With no-slip walls the term appears later:
+   D - 1 = 1.4e-2 at Re 30, 5.3e-2 at Re 50, 0.23 at Re 100.
 2. **The Geurs-regime conclusion is unchanged.** At Re 0.3 the classical
-   valve gives |D - 1| <= 6e-6 for every wall condition, against the
+   valve gives |D - 1| <= 1.2e-5 for every wall condition, against the
    measured 5e-2. Whatever Geurs et al. saw, it is not steady inertial
    electron hydrodynamics in a Tesla geometry.
-3. **Funnel versus Tesla now depends on Re.** Up to Re 3 the funnel is still
-   ahead (|D - 1| = 1.2e-2 against 9.3e-3 at Re 3, 8.7e-4 against 3.3e-4 at
-   Re 1). At Re 10 they cross (0.16 against 0.18) and at Re 30 the Tesla is
-   ten times stronger (1.19 against 0.11), because the funnel's exit-loss
-   asymmetry saturates while the Tesla's keeps growing.
+3. **Funnel versus Tesla now depends on Re.** At Re 1 the funnel is still
+   ahead (|D - 1| = 8.7e-4 against 4.1e-4), at Re 3 they are equal (1.2e-2
+   each, perfect slip), at Re 10 the Tesla leads (0.23 against 0.16) and at
+   Re 30 it is thirteen times stronger (1.47 against 0.11), because the
+   funnel's exit-loss asymmetry saturates while the Tesla's keeps growing.
 4. **What is survivable has not changed, and it decides the matter.** For a
    175 nm channel the drift-speed ceiling (u < 0.3 v_F) caps Re at 0.5-2.6
    (`HYDRO.md`), where the classical valve gives at most 1e-2. A channel
    scaled to 1 um reaches Re 3-15, where this table promises D - 1 of
-   0.01-0.3, but at 1 um the slip number S = l_s / W is smaller and the
+   0.01-0.4, but at 1 um the slip number S = l_s / W is smaller and the
    damping Da = W^2 / (nu tau_mr) is larger, both of which weaken the
    effect, and that case has not been run. It is the obvious next sweep.
 5. **The resistance penalty is severe.** With no-slip walls the four-loop
-   valve costs 80 kOhm, with slip 10-12 kOhm, against 1.7-2.9 kOhm for the
-   funnel. The Tesla term is bought with 4 um of 175 nm channel.
+   valve costs 86 kOhm, with slip 10-12 kOhm, against 1.7-2.9 kOhm for the
+   funnel. The Tesla term is bought with 5 um of 175 nm channel.
 6. **For the rectenna goal nothing changes yet.** The steady-flow diodicity
    is band-limited to roughly 10-100 GHz by the viscous and convective
    times (`HYDRO.md`), and the ballistic funnel asymmetry at room
@@ -142,21 +155,11 @@ Reading:
    both large and fast. The classical Tesla reopens the *cryogenic,
    sub-100 GHz* hydrodynamic case, not the THz one.
 
-Fields (`hydro_tesla_classic_Re30_Sinf_{f,r}.png`, `hydro_tesla_classic_Re100_S0_{f,r}.png`,
-logs `hydro_fields_classic_Re{30,100}_stdout.txt`): in the forward direction
-the loops are dark (stagnant) and the flow follows the zig-zag; in reverse
-every loop carries a strong stream that re-enters the main channel at the
-merge points, where the speed peaks. At Re 30 with slip the stage region
-dissipates 22 170 (reverse) against 9 270 (forward) in Pi units, with the
-lead on the exit side taking the rest of the difference (jet decay); at
-Re 100 no-slip the split is 65 220 against 52 980.
-
 Numerical caveats: no mesh-convergence study has been run on this geometry
 (the tesla1 study in `HYDRO.md` found 3 % at Re 10, ~15 % at Re 3, and a
 floor of ~3e-5 below Re 1, which should carry over); the Re 30 slip states
-show reverse peak speeds 40 % above forward (umax 24.7 against 17.5), so
-the jets are strong and a finer mesh will move the large values by a few
-per cent, not their order of magnitude.
+carry strong jets (reverse peak speed 45 % above forward), so a finer mesh
+will move the large values by a few per cent, not their order of magnitude.
 
 ## Changes to the earlier verdicts
 
@@ -164,7 +167,8 @@ per cent, not their order of magnitude.
   wrong geometry, but the classical geometry gives the same answer.
 * `HYDRO.md` verdict point 2 ("the Tesla term appears only with slip walls
   and only at Re >~ 3", with D - 1 ~ 1e-2 at Re 10) understates the
-  classical valve by an order of magnitude at Re 10 and 30; point 3 (Re >~ 3
-  is not survivable at 175 nm) is what still closes the case at this width.
-  Point 4 (funnel beats Tesla at every Re) holds only up to Re 3.
+  classical valve by more than an order of magnitude at Re 10 and 30;
+  point 3 (Re >~ 3 is not survivable at 175 nm) is what still closes the
+  case at this width. Point 4 (funnel beats Tesla at every Re) holds only
+  below Re 3.
 * `HYDRO.md` point 1 (Geurs regime) and the THz caveat are unchanged.
