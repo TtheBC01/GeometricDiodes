@@ -1,0 +1,7 @@
+  H3 ladder mesh: 8383 nodes, Rdc 2.5218, Omega 2.1120, 12 periods
+[PASS] T10    time-domain eta vs BDF2-discrete perturbation asymptote, 1 um funnel 100 K dss bias tee R_L = R_dc = 2.522, 0.3 THz: [Va 0.01: eta 6.0859e-07 vs 6.0660e-07, ratio 1.0033] [Va 0.02: eta 2.4356e-06 vs 2.4264e-06, ratio 1.0038]; I*(0.02)/I*(0.01)/4 = 1.0003; tail 0.0e+00/0.0e+00, Thevenin corr -6.1e-04/-7.0e-04, drift 4.1e-03/4.5e-03; continuous asymptote / discrete 0.9526
+[PASS] T13    power bookkeeping at Va 0.01: P_in 9.9493e-06, P_dc 6.5920e-12, P_av 1.0832e-05 (P_in/P_av 0.9186, linear 0.9205, ratio 0.9979)
+[PASS] T11    Thevenin correction from a half-size bias seed at Va 0.01: R_L = 0: I* 3.2334e-06 vs I_sc Va^2 3.2283e-06 (ratio 1.0016, raw I_dc 2.7251e-06, corr 1.6e-01, tail 0.0e+00); R_L = 1e4: V_rect -8.1547e-06 vs V_oc Va^2 -8.1411e-06 (ratio 1.0017, corr -1.4e+03, tail 0.0e+00)
+[PASS] T12    time-step convergence at Va 0.3: eta 6.1882e-04 (60 steps) vs 6.2451e-04 (120 steps), ratio 0.9909; n_min 0.8258 vs 0.8264, n_max 1.2375 vs 1.2260; tail 0.0e+00/6.8e-05, corr -2.3e-02/-3.0e-02; small-signal eta 5.4594e-04
+
+4 passed, 0 failed (1761.8 s)

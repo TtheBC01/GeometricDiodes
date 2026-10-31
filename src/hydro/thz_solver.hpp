@@ -6,6 +6,7 @@
 #include "hydro/thz_common.hpp"
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+#include <complex>
 #include <memory>
 
 namespace gd::hydro {
@@ -30,6 +31,14 @@ class ThzSolver {
   // density_order: 1 (default, Taylor-Hood) or 2 (equal order; inaccurate as Omega -> 0).
   ThzSolver(const Mesh& m, const ThzParams& p, int density_order = 1);
   FirstOrder solve_linear(double Omega);
+  // The same with the time-derivative factor i Omega replaced by sigma, e.g. the
+  // BDF2 symbol (3 - 4/z + 1/z^2)/(2 dt), z = e^{i Omega dt}: the periodic state
+  // of the time-stepped linear problem, used to start time-domain runs.
+  FirstOrder solve_linear(double Omega, cd sigma);
+  static cd bdf2_symbol(double Omega, double dt) {
+    cd z = std::exp(cd(0.0, Omega * dt));
+    return (3.0 - 4.0 / z + 1.0 / (z * z)) / (2.0 * dt);
+  }
   SecondOrder solve_dc(const FirstOrder& f);
   // dc (zero-frequency, linear) resistance between ports src and drn in units
   // of R_unit: potential at src per unit flux with drn grounded, no forcing.
@@ -41,7 +50,7 @@ class ThzSolver {
  private:
   // Linear operator (i Omega + Gamma) u + grad n - nu lap u, i Omega n + div u,
   // plus slip, on grid g; rows/cols in g's dof layout, Dirichlet rows left empty.
-  void assemble_operator(const ThzGrid& g, double Omega, cd nu, std::vector<Eigen::Triplet<cd>>& trip) const;
+  void assemble_operator(const ThzGrid& g, cd sigma, cd nu, std::vector<Eigen::Triplet<cd>>& trip) const;
   // Port rows and contact-node rows for the given order (ac or dc) with a
   // prescribed known flux per port (dc Stokes drift) and known node offsets.
   void assemble_ports(const ThzGrid& g, bool dc, const std::vector<double>& known_flux,

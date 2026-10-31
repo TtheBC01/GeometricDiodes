@@ -1,5 +1,8 @@
-// Acceptance ladder for the Stage H2 solvers (plans/hydro_thz.md, sec. 3).
+// Acceptance ladder for the Stage H2 solvers (plans/hydro_thz.md, sec. 3), T1-T9,
+// and the Stage H3 large-signal ladder (plans/hydro_largesignal.md, sec. 4), T10-T14.
 #include "generators.hpp"
+#include "thz_geo.hpp"
+#include "thz_power_common.hpp"
 #include "hydro/ds_reference.hpp"
 #include "hydro/mesh.hpp"
 #include "hydro/post.hpp"
@@ -283,6 +286,99 @@ int main(int argc, char** argv) {
     report("T9", ok, fmt("n 1e12, d 30 nm: s0 %.2e m/s (q %.3f), U0 %.3f V, R_unit %.1f ohm, f_unit %.3f THz, I_unit %.3e A; "
                          "DS dU %.3e V vs Ua^2/4U0 %.3e V (graphene V_unit %.3f V); R_V(f=1, 75 ohm) %.1f V/W",
                          u.s0, u.q, u.U0, u.R_unit, u.f_unit / 1e12, u.I_unit, dU_V, dU_ref, u.V_unit, RV));
+  }
+
+  // Stage H3 ladder (plans/hydro_largesignal.md, sec. 4): 1 um funnel, 100 K,
+  // dss termination with an ideal bias tee, 0.3 THz, on a coarse mesh
+  // (hw 160, hm 960 nm). Runs start from the perturbative state. The time-domain
+  // efficiency must meet the perturbation asymptote at small amplitude (T10), the
+  // dc Thevenin correction must reproduce the short- and open-circuit limits
+  // from a deliberately wrong bias seed (T11), the largest amplitude must be
+  // converged in the time step (T12), and the power bookkeeping must be
+  // passive and match the linear absorbed power (T13). T14 repeats T10 for the
+  // sym termination, whose drain also has a bias tee (R/2 ac, short dc).
+  if (!quick && (want("T10") || want("T11") || want("T12") || want("T13") || want("T14"))) {
+    ThzGeo G = make_thz_geo("funnel_w1000");
+    Mesh m = Mesh::load(ensure_mesh(G.b, G.mesh_name, 160, 960), G.W_ref);
+    ThzUnits u = ThzUnits::make(1e12, 30e-9, 3.8, 4e-6, 0.1, 5e-12, 1e-12);
+    ThzParams p; p.Gamma = u.Gamma; p.nu = u.inv_Res; p.tau_ee = 0; p.closure.q = u.q;   // Newtonian, as the time solver
+    const double R = u.R_nd(75), Om = u.Omega(3e11), Tp = 2 * M_PI / Om, Pav1 = 1.0 / (8 * R);
+    auto ports = [&](double Va, double RL) { return std::vector<Port>{Port::thevenin(0, Va, R, RL), Port::ground(1)}; };
+    p.ports = ports(1.0, 0.0);
+    ThzSolver s0(m, p);
+    const double Rdc = s0.dc_resistance(0, 1);
+    LsOptions o; o.Rdc = Rdc; o.first = (int)std::ceil(std::max(3 * 2 / u.Gamma, 10.0) / Tp); o.periods = o.first + 3;
+    std::printf("  H3 ladder mesh: %d nodes, Rdc %.4f, Omega %.4f, %d periods\n", m.nn(), Rdc, Om, o.periods);
+    // continuous (fo, sc) and BDF2-discrete (fod, scd) perturbation solutions
+    struct Small { FirstOrder fo, fod; SecondOrder sc, scd; double Pin_lin; };
+    auto small = [&](double RL, int steps) {
+      ThzParams pl = p; pl.ports = ports(1.0, RL); ThzSolver sl(m, pl);
+      Small r; r.fo = sl.solve_linear(Om); r.sc = sl.solve_dc(r.fo); r.Pin_lin = (r.fo.power_in(0) + r.fo.power_in(1)) / Pav1;
+      r.fod = sl.solve_linear(Om, ThzSolver::bdf2_symbol(Om, Tp / steps)); r.scd = sl.solve_dc(r.fod); return r;
+    };
+    auto point = [&](double Va, double RL, const Small& sm, int steps, double seed_scale) {
+      ThzParams pt = p; pt.ports = ports(Va, RL);
+      LsOptions oo = o; oo.RL = RL; oo.steps = steps; oo.seed_scale = seed_scale;
+      return run_ls_point(m, pt, sm.fod, sm.scd, Va, Om, oo);
+    };
+    auto eta_of = [&](const LsPoint& r) { return r.Pdc / (r.Va * r.Va * Pav1); };
+    if (want("T14")) {
+      auto ports_sym = [&](double Va, double RL) {
+        return std::vector<Port>{Port::thevenin(0, 0.5 * Va, R / 2, RL), Port::thevenin(1, -0.5 * Va, R / 2, 0.0)};
+      };
+      ThzParams pl = p; pl.ports = ports_sym(1.0, Rdc); ThzSolver sl(m, pl);
+      FirstOrder fod = sl.solve_linear(Om, ThzSolver::bdf2_symbol(Om, Tp / 60)); SecondOrder scd = sl.solve_dc(fod);
+      double es = scd.I20[0] * scd.I20[0] * Rdc / Pav1;
+      ThzParams pt = p; pt.ports = ports_sym(0.02, Rdc);
+      LsOptions oo = o; oo.RL = Rdc;
+      LsPoint t = run_ls_point(m, pt, fod, scd, 0.02, Om, oo);
+      double ratio = t.Pdc / (4e-4 * Pav1) / (es * 4e-4);
+      bool ok = t.ok && std::fabs(ratio - 1) < 0.01 + 2 * 0.02 && t.tail < 0.02 && std::fabs(t.corr) < 0.02 && std::fabs(t.tr.I_bias[0] + t.tr.I_bias[1]) < 1e-12;
+      report("T14", ok, fmt("sym termination (bias tees at both contacts) at Va 0.02, R_L = R_dc: eta %.4e vs BDF2-discrete asymptote %.4e, ratio %.4f; "
+                            "tail %.1e, Thevenin corr %.1e, drift %.1e; V_d dc %.2e vs V_s dc %.2e", t.Pdc / (4e-4 * Pav1), es * 4e-4, ratio, t.tail,
+                            t.corr, t.tr.dc_drift, t.tr.V_dc[1], t.tr.V_dc[0]));
+    }
+    Small sm = small(Rdc, 60);
+    const double eta_small1 = sm.scd.I20[0] * sm.scd.I20[0] * Rdc / Pav1;   // eta / Va^2, BDF2-discrete
+    const double eta_small_c = sm.sc.I20[0] * sm.sc.I20[0] * Rdc / Pav1;   // continuous
+    LsPoint t1 = point(0.01, Rdc, sm, 60, 1.0), t2 = point(0.02, Rdc, sm, 60, 1.0);
+    if (want("T10")) {
+      double r1 = eta_of(t1) / (eta_small1 * 1e-4), r2 = eta_of(t2) / (eta_small1 * 4e-4), scal = t2.Istar / t1.Istar / 4;
+      bool ok = t1.ok && t2.ok && std::fabs(r1 - 1) < 0.01 + 2 * 0.01 && std::fabs(r2 - 1) < 0.01 + 2 * 0.02 && std::fabs(scal - 1) < 0.05
+                && t1.tail < 0.02 && t2.tail < 0.02 && std::fabs(t1.corr) < 0.02;
+      report("T10", ok, fmt("time-domain eta vs BDF2-discrete perturbation asymptote, 1 um funnel 100 K dss bias tee R_L = R_dc = %.3f, 0.3 THz: "
+                            "[Va 0.01: eta %.4e vs %.4e, ratio %.4f] [Va 0.02: eta %.4e vs %.4e, ratio %.4f]; I*(0.02)/I*(0.01)/4 = %.4f; "
+                            "tail %.1e/%.1e, Thevenin corr %.1e/%.1e, drift %.1e/%.1e; continuous asymptote / discrete %.4f", Rdc, eta_of(t1),
+                            eta_small1 * 1e-4, r1, eta_of(t2), eta_small1 * 4e-4, r2, scal, t1.tail, t2.tail, t1.corr, t2.corr, t1.tr.dc_drift,
+                            t2.tr.dc_drift, eta_small_c / eta_small1));
+    }
+    if (want("T13")) {
+      double Pav = 1e-4 * Pav1, ratio = t1.Pin / Pav / sm.Pin_lin;
+      bool ok = t1.ok && t1.Pin >= t1.Pdc && t1.Pin <= Pav && std::fabs(ratio - 1) < 0.02;
+      report("T13", ok, fmt("power bookkeeping at Va 0.01: P_in %.4e, P_dc %.4e, P_av %.4e (P_in/P_av %.4f, linear %.4f, ratio %.4f)",
+                            t1.Pin, t1.Pdc, Pav, t1.Pin / Pav, sm.Pin_lin, ratio));
+    }
+    if (want("T11")) {
+      // short circuit (R_L = 0) and open circuit (R_L = 1e4) with the bias seeded at half the prediction
+      Small ss = small(0.0, 60), so = small(1e4, 60);
+      ThzParams po = p; po.ports = ports(1.0, 0.0); po.ports[0].dc = Port::Kind::Open; ThzSolver sopen(m, po);
+      double V20o; { FirstOrder fo = sopen.solve_linear(Om, ThzSolver::bdf2_symbol(Om, Tp / 60)); SecondOrder sc = sopen.solve_dc(fo); V20o = sc.V20[0] - sc.V20[1]; }
+      LsPoint ps = point(0.01, 0.0, ss, 60, 0.5), pop = point(0.01, 1e4, so, 60, 0.5);
+      double rs = ps.Istar / (ss.scd.I20[0] * 1e-4), ro = pop.Vrect / (V20o * 1e-4);
+      bool ok = ps.ok && pop.ok && std::fabs(rs - 1) < 0.02 && std::fabs(ro - 1) < 0.02;
+      report("T11", ok, fmt("Thevenin correction from a half-size bias seed at Va 0.01: R_L = 0: I* %.4e vs I_sc Va^2 %.4e (ratio %.4f, "
+                            "raw I_dc %.4e, corr %.1e, tail %.1e); R_L = 1e4: V_rect %.4e vs V_oc Va^2 %.4e (ratio %.4f, corr %.1e, tail %.1e)",
+                            ps.Istar, ss.scd.I20[0] * 1e-4, rs, ps.I_raw, ps.corr, ps.tail, pop.Vrect, V20o * 1e-4, ro, pop.corr, pop.tail));
+    }
+    if (want("T12")) {
+      Small sm120 = small(Rdc, 120);
+      LsPoint a = point(0.3, Rdc, sm, 60, 1.0), b = point(0.3, Rdc, sm120, 120, 1.0);
+      double ea = eta_of(a), eb = eta_of(b);
+      bool ok = a.ok && b.ok && std::fabs(ea / eb - 1) < 0.03 && std::fabs(a.tr.n_min - b.tr.n_min) < 0.02;
+      report("T12", ok, fmt("time-step convergence at Va 0.3: eta %.4e (60 steps) vs %.4e (120 steps), ratio %.4f; n_min %.4f vs %.4f, "
+                            "n_max %.4f vs %.4f; tail %.1e/%.1e, corr %.1e/%.1e; small-signal eta %.4e", ea, eb, ea / eb, a.tr.n_min, b.tr.n_min,
+                            a.tr.n_max, b.tr.n_max, a.tail, b.tail, a.corr, b.corr, eta_small1 * 0.09));
+    }
   }
 
   double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();

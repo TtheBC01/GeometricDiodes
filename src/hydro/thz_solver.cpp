@@ -23,9 +23,9 @@ void ThzSolver::flux_row(const ThzGrid& g, int c, std::vector<std::pair<int, dou
   }
 }
 
-void ThzSolver::assemble_operator(const ThzGrid& g, double Omega, cd nu, std::vector<Eigen::Triplet<cd>>& trip) const {
+void ThzSolver::assemble_operator(const ThzGrid& g, cd sigma, cd nu, std::vector<Eigen::Triplet<cd>>& trip) const {
   const auto& Q = tri_quad7();
-  const cd iO(0.0, Omega);
+  const cd iO = sigma;   // i Omega, or the time-stepping symbol
   const double Gamma = p_.Gamma;
   const int ndl = g.density_order == 2 ? 6 : 3;   // local density basis size
   std::array<double, 6> N; std::array<Vec2, 6> dN;
@@ -91,7 +91,7 @@ void ThzSolver::assemble_operator(const ThzGrid& g, double Omega, cd nu, std::ve
         double c[2] = {Knu[v][b][0], Knu[v][b][1]}, cr[2]; g.rot(gb, c, cr);
         for (int j = 0; j < 2; ++j) if (!g.dir[2 * gb + j]) trip.emplace_back(row, 2 * gb + j, cd(cr[j]));
       }
-      if (Omega != 0)
+      if (iO != 0.0)
         for (int wv = 0; wv < ndl; ++wv) if (Knn[v][wv] != 0) trip.emplace_back(row, g.ndof_n(T[wv]), iO * Knn[v][wv]);
     }
   }
@@ -155,12 +155,14 @@ void ThzSolver::assemble_ports(const ThzGrid& g, bool dc, const std::vector<doub
   }
 }
 
-FirstOrder ThzSolver::solve_linear(double Omega) {
+FirstOrder ThzSolver::solve_linear(double Omega) { return solve_linear(Omega, cd(0.0, Omega)); }
+
+FirstOrder ThzSolver::solve_linear(double Omega, cd sigma) {
   const ThzGrid& g = g1_;
   std::vector<Eigen::Triplet<cd>> trip;
   trip.reserve(m_.tri.size() * 400 + m_.bedges.size() * 60 + g.ndof);
   Eigen::VectorXcd rhs = Eigen::VectorXcd::Zero(g.ndof);
-  assemble_operator(g, Omega, p_.nu_omega(Omega), trip);
+  assemble_operator(g, sigma, p_.nu_omega(Omega), trip);
   assemble_ports(g, false, {}, {}, trip, rhs);
   Eigen::SparseMatrix<cd> A(g.ndof, g.ndof);
   A.setFromTriplets(trip.begin(), trip.end());

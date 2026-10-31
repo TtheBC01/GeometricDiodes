@@ -1,0 +1,4 @@
+  H3 ladder mesh: 8383 nodes, Rdc 2.5218, Omega 2.1120, 12 periods
+[PASS] T14    sym termination (bias tees at both contacts) at Va 0.02, R_L = R_dc: eta 7.4736e-07 vs BDF2-discrete asymptote 7.4910e-07, ratio 0.9977; tail 0.0e+00, Thevenin corr 4.3e-04, drift 7.4e-03; V_d dc -3.32e-09 vs V_s dc -9.04e-06
+
+1 passed, 0 failed (407.5 s)

@@ -1,5 +1,6 @@
 #include "hydro/thz_time.hpp"
 #include "hydro/fem.hpp"
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 
@@ -26,7 +27,10 @@ double ThzTimeSolver::port_drive(int cidx, double t, double Omega, bool steady) 
   const Port& P = p_.ports[cidx];
   if (steady) return P.dc == Port::Kind::Current ? P.Idc : 0.0;   // dc Voltage ports: Va = 0 at dc
   if (P.ac == Port::Kind::Current) return P.I0 * std::cos(Omega * t);
-  return std::real(P.Va * std::exp(cd(0.0, Omega * t)));
+  double d = std::real(P.Va * std::exp(cd(0.0, Omega * t)));
+  // bias tee: R_ac (I - I_b) + R_dc I_b + V = drive  <=>  R_ac I + V = drive + (R_ac - R_dc) I_b
+  if (bias_tee_ && !ibias_.empty()) d += (P.Rac - P.Rdc) * ibias_[cidx];
+  return d;
 }
 
 void ThzTimeSolver::assemble(double c0, const Eigen::VectorXd& hist, double t, double Omega, bool steady,
@@ -317,20 +321,56 @@ ThzState ThzTimeSolver::solve_steady(double tol, int max_newton) {
   return s;
 }
 
-TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol) {
+Eigen::VectorXd ThzTimeSolver::perturbative_state(const FirstOrder& f, const SecondOrder& s, double Va, double t) const {
+  const ThzGrid& g = g_;
+  Eigen::VectorXd x = Eigen::VectorXd::Zero(g.ndof);
+  const cd ph = std::exp(cd(0.0, f.Omega * t));
+  const double kappa = p_.closure.kappa();
+  for (int a = 0; a < g.nn; ++a) {
+    Vec2 u{Va * std::real(f.u1x[a] * ph) + Va * Va * s.sol.u[a].x, Va * std::real(f.u1y[a] * ph) + Va * Va * s.sol.u[a].y};
+    if (g.type[a] == ThzNode::Wall) { x[2 * a] = dot(u, g.t[a]); x[2 * a + 1] = dot(u, g.n[a]); }
+    else { x[2 * a] = u.x; x[2 * a + 1] = u.y; }
+    for (int k = 0; k < 2; ++k) if (g.dir[2 * a + k]) x[2 * a + k] = 0.0;
+  }
+  for (int v = 0; v < g.nd; ++v) {
+    double n20 = s.sol.p[v] - 0.25 * kappa * std::norm(f.n1[v]);
+    x[g.ndof_n(v)] = 1.0 + Va * std::real(f.n1[v] * ph) + Va * Va * n20;
+  }
+  for (int c = 0; c < g.np; ++c) x[g.ndof_port(c)] = Va * std::real(f.V1[c] * ph) + Va * Va * s.V20[c];
+  return x;
+}
+
+void ThzTimeSolver::init_from_perturbation(const FirstOrder& f, const SecondOrder& s, double Va, double Omega, int steps) {
+  double dt = 2 * M_PI / Omega / steps;
+  x_ = perturbative_state(f, s, Va, 0.0);
+  xprev_ = perturbative_state(f, s, Va, -dt);
+  have_prev_ = true;
+}
+
+TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol, const BiasTee& bt) {
   TimeTrace tr;
   tr.V.assign(g_.np, {}); tr.I.assign(g_.np, {});
   double Tp = 2 * M_PI / Omega, dt = Tp / steps;
-  Eigen::VectorXd xm1 = x_, xm2 = x_, hist(g_.ndof);
+  Eigen::VectorXd xm1 = x_, xm2 = have_prev_ ? xprev_ : x_, hist(g_.ndof);
+  const bool bdf2_start = have_prev_;
+  have_prev_ = false;
   int ntot = periods * steps;
+  std::vector<std::vector<double>> Vmeans(g_.np), Imeans(g_.np);
+  bias_tee_ = bt.on;
+  ibias_.assign(g_.np, 0.0); ibias_prev_.assign(g_.np, 0.0); imean_prev_.assign(g_.np, 0.0);
+  for (int c = 0; c < g_.np && c < (int)bt.seed.size(); ++c) ibias_[c] = bt.seed[c];
+  bias_updates_ = 0;
+  const double Rdc_dev = bt.Rdc_dev;
+  std::vector<double> Vm_prev(g_.np, 0.0), Im_prev(g_.np, 0.0);
+  double nmin = 1e300, nmax = -1e300, Pin = 0;
   for (int k = 1; k <= ntot; ++k) {
     double t = k * dt, c0;
-    if (k == 1) { c0 = 1.0 / dt; hist = xm1 / dt; }                       // BDF1 start
+    if (k == 1 && !bdf2_start) { c0 = 1.0 / dt; hist = xm1 / dt; }       // BDF1 start from rest
     else { c0 = 1.5 / dt; hist = (2.0 * xm1 - 0.5 * xm2) / dt; }           // BDF2: (3x - 4x1 + x2)/(2dt)
     // history for velocity must be Cartesian per node: convert the rotated dofs
     for (int a = 0; a < g_.nn; ++a) if (g_.type[a] == ThzNode::Wall) {
       auto cart = [&](const Eigen::VectorXd& v) { return g_.t[a] * v[2 * a] + g_.n[a] * v[2 * a + 1]; };
-      Vec2 h = (k == 1) ? cart(xm1) * (1.0 / dt) : (cart(xm1) * 2.0 - cart(xm2) * 0.5) * (1.0 / dt);
+      Vec2 h = (k == 1 && !bdf2_start) ? cart(xm1) * (1.0 / dt) : (cart(xm1) * 2.0 - cart(xm2) * 0.5) * (1.0 / dt);
       hist[2 * a] = h.x; hist[2 * a + 1] = h.y;
     }
     if (!newton(c0, hist, t, Omega, false, tol, 25)) { tr.ok = false; break; }
@@ -338,6 +378,58 @@ TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol) {
     ThzState s = state();
     tr.t.push_back(t);
     for (int c = 0; c < g_.np; ++c) { tr.V[c].push_back(s.V[c]); tr.I[c].push_back(s.I[c]); }
+    bool last_period = k > ntot - steps;
+    if (last_period) {
+      for (double n : s.n) { nmin = std::min(nmin, n); nmax = std::max(nmax, n); }
+      for (int c = 0; c < g_.np; ++c) Pin += s.V[c] * s.I[c] / steps;
+    }
+    if (k % steps == 0) {
+      // end of a period: period means, drift, bias-tee fixed point
+      int period = k / steps, n0 = k - steps;
+      std::vector<double> Vm(g_.np, 0.0), Im(g_.np, 0.0);
+      for (int c = 0; c < g_.np; ++c) {
+        for (int j = n0; j < k; ++j) { Vm[c] += tr.V[c][j]; Im[c] += tr.I[c][j]; }
+        Vm[c] /= steps; Im[c] /= steps;
+      }
+      if (period > 1) {
+        double drift = 0;
+        for (int c = 0; c < g_.np; ++c) {
+          double sI = std::max(std::fabs(Im[c]), 1e-300), sV = std::max(std::fabs(Vm[c]), 1e-300);
+          if (std::fabs(Im[c]) > 1e-14) drift = std::max(drift, std::fabs(Im[c] - Im_prev[c]) / sI);
+          if (std::fabs(Vm[c]) > 1e-14) drift = std::max(drift, std::fabs(Vm[c] - Vm_prev[c]) / sV);
+        }
+        tr.dc_drift = drift;
+      }
+      Vm_prev = Vm; Im_prev = Im;
+      for (int c = 0; c < g_.np; ++c) { Vmeans[c].push_back(Vm[c]); Imeans[c].push_back(Im[c]); }
+      tr.I_bias = ibias_;
+      tr.periods_run = period;
+      bool update = bias_tee_ && bias_updates_ < bt.max_updates && period >= bt.first
+                    && (period - bt.first) % std::max(bt.every, 1) == 0 && period + bt.every <= periods;
+      if (update) {
+        ++bias_updates_;
+        double change = 0;
+        for (int c = 0; c < g_.np; ++c) {
+          const Port& P = p_.ports[c];
+          if (P.ac != Port::Kind::Voltage || P.Rac == P.Rdc) { ibias_[c] = Im[c]; continue; }
+          double Ib = ibias_[c], Inew = Im[c];
+          // The map I_b -> <I> is nearly linear with slope a = (Rac - Rdc)/(Rdc_dev + Rac)
+          // (fixed point -V_rect/(Rdc_dev + Rdc)); plain iteration diverges for |a| > 1
+          // (large loads), so update as I_b <- (<I> - a I_b)/(1 - a) with the analytic
+          // slope first and the secant slope once two updates exist.
+          double a = Rdc_dev > 0 ? (P.Rac - P.Rdc) / (Rdc_dev + P.Rac) : 0.0;
+          if (bias_updates_ >= 2 && std::fabs(Ib - ibias_prev_[c]) > 1e-10 * std::max(std::fabs(Ib), 1e-12)) {
+            double as = (Im[c] - imean_prev_[c]) / (Ib - ibias_prev_[c]);
+            if (std::isfinite(as) && as < 0.95) a = as;
+          }
+          if (a < 0.95) Inew = (Im[c] - a * Ib) / (1 - a);
+          ibias_prev_[c] = Ib; imean_prev_[c] = Im[c]; ibias_[c] = Inew;
+          change = std::max(change, std::fabs(Inew - Ib) / std::max(std::fabs(Inew), 1e-300));
+        }
+        tr.bias_change = change;
+      }
+      if (p_.verbose) std::printf("  period %d: I_dc %.6e V_dc %.6e drift %.2e bias %.6e%s\n", period, Im[0], Vm[0], tr.dc_drift, ibias_[0], update ? " (updated)" : "");
+    }
   }
   tr.V_dc.assign(g_.np, 0.0); tr.I_dc.assign(g_.np, 0.0);
   if (tr.ok && (int)tr.t.size() >= steps) {
@@ -346,7 +438,24 @@ TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol) {
       for (int k = n0; k < (int)tr.t.size(); ++k) { tr.V_dc[c] += tr.V[c][k]; tr.I_dc[c] += tr.I[c][k]; }
       tr.V_dc[c] /= steps; tr.I_dc[c] /= steps;
     }
+    tr.P_in = Pin; tr.n_min = nmin; tr.n_max = nmax;
+    // Aitken: with a single slow exponential the period means are geometric
+    tr.V_dc_ext = tr.V_dc; tr.I_dc_ext = tr.I_dc;
+    int np_ = (int)Imeans[0].size();
+    if (np_ >= 3) {
+      auto ext = [&](const std::vector<double>& m, double& out, double& r_out) {
+        double m1 = m[np_ - 3], m2 = m[np_ - 2], m3 = m[np_ - 1], d1 = m2 - m1, d2 = m3 - m2;
+        r_out = -1;
+        if (std::fabs(d1) > 1e-300 && d2 / d1 > 0 && d2 / d1 < 0.98) { double r = d2 / d1; r_out = r; out = m3 + d2 * r / (1 - r); }
+        else out = m3;
+      };
+      double r;
+      for (int c = 0; c < g_.np; ++c) { ext(Imeans[c], tr.I_dc_ext[c], r); if (c == 0 && r > 0) tr.tau_periods = -1.0 / std::log(r); ext(Vmeans[c], tr.V_dc_ext[c], r); }
+      double sI = std::max(std::fabs(tr.I_dc_ext[0]), 1e-300), sV = std::max(std::fabs(tr.V_dc_ext[0]), 1e-300);
+      tr.tail = std::max(std::fabs(tr.I_dc_ext[0] - tr.I_dc[0]) / sI, std::fabs(tr.V_dc_ext[0] - tr.V_dc[0]) / sV);
+    }
   }
+  bias_tee_ = false;
   return tr;
 }
 

@@ -1,8 +1,9 @@
-# Stage H2 result: plasmonic rectification of graphene geometric diodes (2026-10-30)
+# Stage H2 and H3 results: plasmonic rectification of graphene geometric diodes (2026-10-30/31)
 
-Plan: `plans/hydro_thz.md`. Derivation: `plans/hydro_thz_notes.md`. Code:
-`src/hydro/thz_*.{hpp,cpp}`, `apps/thz_tests.cpp`, `apps/thz_sweep.cpp`.
-Logs and CSVs: `results/thz/`.
+Plan: `plans/hydro_thz.md` (H2, small signal) and `plans/hydro_largesignal.md`
+(H3, finite amplitude, section S5). Derivation: `plans/hydro_thz_notes.md`.
+Code: `src/hydro/thz_*.{hpp,cpp}`, `apps/thz_tests.cpp`, `apps/thz_sweep.cpp`,
+`apps/thz_power.cpp`. Logs and CSVs: `results/thz/`.
 
 ## Method in one paragraph
 
@@ -79,6 +80,16 @@ uncertainty.
    friction width (0.0203 vs 0.0202) and the real part of nu(Omega) adds a
    small frequency shift instead. The criterion was rewritten to that
    expectation; the earlier scan that "failed" was the physics, not the solver.
+6. **Bias tee at both contacts (H3).** The first large-signal runs of the sym
+   termination sat at a constant 0.81 of the quadratic law down to the
+   smallest amplitude, which is not physics: the dc load current was held
+   only at the source port, so the drain's dc current returned through its
+   R/2 antenna half instead of to ground, and the Thevenin correction then
+   read the rectified voltage a factor (R_dc + R_L)/(R_dc + R_L + R/2) = 0.90
+   too small. Every port now carries its perturbative dc current and the
+   Thevenin voltage is taken across the device; T14 repeats the small-
+   amplitude check for the sym termination. The dss and ant runs ground the
+   drain and were never affected.
 
 ## S1: Dyakonov-Shur detector in physical units (`thz/S1_chan_*`)
 
@@ -274,6 +285,149 @@ Reading:
    impedance, and the Tesla valve adds nothing. The funnel shape matters as
    an impedance transformer at its taper resonance, which is a design
    handle, and as a dc diode only at 100 K.
+
+## S5: conversion efficiency at finite amplitude (`thz/P1_*` to `thz/P4_*`, figures `P1_eta.png` to `P4_eta.png`, tables `thz/tables_H3.md`)
+
+Plan `plans/hydro_largesignal.md`. The 1 um funnel of S2 (1 um neck, 4 um
+leads, production mesh hw 20 / hm 120 nm) driven by the full nonlinear BDF2
+solver at finite antenna amplitude Va (units of V_unit = 1.487 V; Va = 1 is
+the gate overdrive U0 = 1.43 V, so Va <= 0.7 covers every physical
+amplitude). The antenna is the 75 ohm Thevenin source of S2, the dc path an
+ideal bias tee into a load R_L, and the figure of merit the conversion
+efficiency eta_av = P_dc / P_av with P_av = Va^2 / (8 R_ant) the available
+power (Va = 0.1 is 37 uW, Va = 0.7 is 1.8 mW). Four experiments:
+
+| run | set | termination | dc load | f | amplitudes |
+|---|---|---|---|---|---|
+| P1 | 100 K | dss (Thevenin at the source, drain grounded to the gate) | bias tee, R_L = R_dc = 168 ohm | 0.1, 0.3, 1 THz | Va 0.01 to 0.7 |
+| P2 | 300 K | dss | bias tee, R_L = R_dc = 579 ohm | 0.1, 0.3, 1 THz | 0.01 to 0.7 |
+| P3 | 100 K | dss | no bias tee: the 75 ohm antenna is the dc load | 0.3 THz | 0.01 to 0.7 |
+| P4 | 100 K | sym (antenna split +-Va/2, gate at the midpoint: geometric rectification only) | bias tee, R_L = R_dc | 0.3, 1 THz | 0.05 to 0.5 |
+
+Numerics (plan sec. 3, and deviations 6 and the H3 lessons in the memory
+notes): 60 BDF2 steps per period; each run starts from the second-order
+perturbative state of the *time-stepped* operator (the linear problem solved
+with the BDF2 symbol in place of i Omega), which removes the start-up charge
+transient that otherwise swamps the quadratic dc signal at small amplitude;
+the dc load current is held at the small-signal prediction I20 Va^2 and the
+operating point is corrected afterwards through the device's dc Thevenin
+source, V_rect = V_dc - R_dc I_dc, I* = -V_rect / (R_dc + R_L); the period
+means are Aitken-extrapolated over the last three periods after a settling
+time of 3 x 2/Gamma (27 time units at 100 K, 10 at 300 K). The time solver
+is Newtonian (no Maxwell relaxation), so the small-signal reference here is
+the tau_ee = 0 perturbation solution, not the viscoelastic numbers of S2;
+at 100 K and 1 THz (Omega tau_ee = 6) this lowers the small-signal
+efficiency four-fold against S2 and the 1 THz, 100 K rows are indicative only.
+Cost: 0.6 to 0.8 s per step, 300 to 1600 s per amplitude, 10 CPU-hours for
+P1 to P3 and 2 more for P4.
+
+### Ladder T10 to T14 (`thz/ladder_H3.txt`, `thz/ladder_H3_T14.txt`; coarse mesh hw 160 / hm 960 nm, 8383 nodes, 0.3 THz, 100 K)
+
+| test | what it checks | result | criterion |
+|---|---|---|---|
+| T10 | time-domain eta vs the BDF2-discrete perturbation asymptote at Va 0.01 and 0.02, dss, R_L = R_dc | ratios 1.0033 and 1.0038; I*(0.02)/I*(0.01)/4 = 1.0003; continuous / discrete asymptote 0.953 | within 3 % and 5 %, tail < 2 %, Thevenin correction < 2 % |
+| T11 | dc Thevenin correction from a bias seed deliberately half the prediction: short circuit and open circuit (R_L = 1e4) | I* / I_sc Va^2 = 1.0016 (raw mean 16 % off); V_rect / V_oc Va^2 = 1.0017 | within 2 % |
+| T12 | time-step convergence at Va 0.3: 60 vs 120 steps per period | eta ratio 0.991; n_min 0.8258 vs 0.8264 | within 3 %, n_min within 0.02 |
+| T13 | power bookkeeping at Va 0.01: P_dc <= P_in <= P_av, P_in vs the linear absorbed power | P_in / P_av 0.9186 vs 0.9205 linear (ratio 0.998) | within 2 % |
+| T14 | T10 for the sym termination (bias tees at both contacts) at Va 0.02 | eta ratio 0.9977 (the unfixed drain port gave 0.81); Thevenin correction 4e-4, drain dc potential 4e-4 of the source's | within 5 % |
+
+Uncertainty of the production numbers: the absolute level of the quadratic
+law carries the 60-step time-step bias, +0.6 % at 0.1 THz, +4.5 % at
+0.3 THz and -0.5 % at 1 THz (BDF2-discrete vs continuous perturbation on the
+production mesh), and the 2 % mesh uncertainty of T8; the *shape* of
+eta(P_av), i.e. the saturation, is converged to 1 % (T12). The ratios below
+are taken against the BDF2-discrete law so that the time-step bias cancels.
+
+### Results
+
+Peak efficiency, saturation and breakdown per run (`tables_H3.md`):
+
+| run | set | term | f | peak eta_av | at P_av | eta / quadratic law at peak | n_min, n_max at peak | onset of saturation (eta 10 % below quadratic) | breakdown |
+|---|---|---|---|---|---|---|---|---|---|
+| P1 | 100 K | dss | 0.1 THz | 3.8e-3 | 1.8 mW (Va 0.7) | 0.86 | 0.52, 1.37 | 0.9 mW (Va 0.5) | none to Va 0.7 |
+| P1 | 100 K | dss | 0.3 THz | 2.9e-3 | 1.8 mW | 0.89 | 0.59, 1.61 | 1.8 mW (Va 0.7) | none |
+| P1 | 100 K | dss | 1 THz | 1.4e-3 | 1.8 mW | 0.60 | 0.61, 1.39 | 0.15 mW (Va 0.2) | none |
+| P2 | 300 K | dss | 0.1 THz | 2.1e-3 | 1.8 mW | 1.14 | 0.55, 1.36 | none (super-quadratic) | none |
+| P2 | 300 K | dss | 0.3 THz | 2.4e-3 | 1.8 mW | 1.10 | 0.59, 1.30 | none (super-quadratic) | none |
+| P2 | 300 K | dss | 1 THz | 1.6e-3 | 1.8 mW | 0.81 | 0.59, 1.33 | 0.9 mW (Va 0.5) | none |
+| P3 | 100 K | ant | 0.3 THz | 2.3e-3 | 1.8 mW | 0.82 | 0.60, 1.61 | 1.8 mW (Va 0.7) | none |
+| P4 | 100 K | sym | 0.3 THz | 2.3e-4 | 0.9 mW (Va 0.5) | 0.43 | 0.75, 1.26 | 0.15 mW (Va 0.2) | none to Va 0.5 |
+| P4 | 100 K | sym | 1 THz | 2.2e-7 | 0.9 mW | (law at a zero crossing) | 0.82, 1.18 | - | none |
+
+Efficiency at fixed available power, interpolated in log-log between the
+computed amplitudes (1 mW is Va 0.52, a 0.78 V amplitude):
+
+| run | set | term | f | 1 uW | 10 uW | 100 uW | 1 mW | quadratic law eta / P_av (1/W) |
+|---|---|---|---|---|---|---|---|---|
+| P1 | 100 K | dss | 0.1 THz | 2.4e-6 | 2.4e-5 | 2.4e-4 | 2.1e-3 | 2.4 |
+| P1 | 100 K | dss | 0.3 THz | 1.8e-6 | 1.8e-5 | 1.9e-4 | 1.8e-3 | 1.7 |
+| P1 | 100 K | dss | 1 THz | 1.3e-6 | 1.3e-5 | 1.1e-4 | 7.8e-4 | 1.3 |
+| P2 | 300 K | dss | 0.1 THz | 1.0e-6 | 1.0e-5 | 1.0e-4 | 1.1e-3 | 1.0 |
+| P2 | 300 K | dss | 0.3 THz | 1.2e-6 | 1.2e-5 | 1.2e-4 | 1.3e-3 | 1.2 |
+| P2 | 300 K | dss | 1 THz | 1.1e-6 | 1.1e-5 | 1.1e-4 | 9.3e-4 | 1.1 |
+| P3 | 100 K | ant | 0.3 THz | 1.6e-6 | 1.6e-5 | 1.6e-4 | 1.5e-3 | 1.5 |
+| P4 | 100 K | sym | 0.3 THz | 5.8e-7 | 5.8e-6 | 5.2e-5 | - | 0.56 |
+| P4 | 100 K | sym | 1 THz | 8.5e-10 | 8.4e-9 | 4.1e-8 | - | 2e-5 |
+
+Reading:
+
+1. **The quadratic law holds to 100 uW of available power everywhere, and
+   to about 1 mW below 300 GHz.** The time-domain efficiency meets the
+   perturbation asymptote at the 0.3 % level at Va 0.01 (0.37 uW) and stays
+   within 10 % of it up to Va 0.5 (0.9 mW) at 0.1 and 0.3 THz, at both
+   temperatures. The 1 THz runs saturate first (10 % below quadratic at
+   150 uW at 100 K, 0.9 mW at 300 K) and reach 0.6 to 0.8 of the law at
+   1.8 mW. Over the amplitudes a THz antenna can deliver to one element the
+   device is a square-law rectifier, and the S2/S4 responsivities and NEP
+   apply unchanged.
+2. **No breakdown up to the gate overdrive.** At Va 0.7 (a 1.04 V swing on
+   a 1.43 V overdrive) the carrier density inside the device swings between
+   0.52 and 1.6 of its gated value and Newton converges every step; neither
+   the n -> 0 limit of the local-capacitance closure nor a shock is reached,
+   so the saturation onset is a measured value, not a lower bound set by the
+   method. The density range says the next physics to add at these
+   amplitudes is the non-local electrostatics of the depleted neck, not
+   shock capturing.
+3. **The sign of the first correction is set by the damping.** At 100 K
+   (Gamma 0.22) the rectified current falls below the quadratic law, most at
+   1 THz where the plasmon standing wave in the leads is strongest; at
+   300 K (Gamma 1.1, overdamped) the 0.1 and 0.3 THz responses grow
+   *faster* than Va^2 (1.10 to 1.14 at 1.8 mW), i.e. the diffusive device
+   has a weakly expansive I-V. The 300 K shape was not checked at 120 steps
+   per period; the 100 K T12 check bounds the time-step effect on the shape
+   at 1 %, and the 300 K Omega dt is the same.
+4. **The matched dc load is worth 15 %, no more.** With the 75 ohm antenna
+   as the dc load (P3) the efficiency is 0.85 of the matched-load value at
+   small amplitude, exactly 4 R_L R_dc / (R_L + R_dc)^2, and the ratio is
+   unchanged to 1.8 mW: there is no large-signal reason for a bias tee, and
+   a rectenna element can return its dc current through the antenna.
+5. **The geometric rectification saturates first and hardest.** With the
+   gate at the antenna midpoint (sym, P4) the funnel shape alone gives
+   0.56 per watt at 0.3 THz, a quarter of the DS circuit term of the same
+   device, and it leaves the quadratic law at 150 uW, reaching 0.43 of it
+   at 0.9 mW (eta 2.3e-4) while the dss response of the same device at the
+   same amplitude is still at 0.9 of its law. The dc Thevenin correction
+   grows to 20 % there, so the last P4 point carries a few per cent more
+   uncertainty than the rest. At 1 THz the shape-only response of the 1 um
+   funnel is below 3e-7 at every amplitude, four thousand times below the
+   circuit term, as the small-signal zero crossing of S2 predicts (the
+   small-signal law itself is 40 times time-step sensitive there and the
+   ratio is meaningless). The Borda-Carnot picture of a geometric diode
+   that improves at large signal is not what the fluid does: the
+   constriction's rectification is a resonance effect that detunes as the
+   density swings, and the circuit asymmetry, not the shape, carries the
+   large-signal response too.
+6. **Verdict: detector, not harvester.** The efficiency is proportional to
+   the available power, eta = (1 to 2.4 per watt) x P_av, up to about 1 mW
+   per element, where it levels off at 0.1 to 0.4 %. A THz beam at
+   1 W/m^2 delivers of order 10 nW to a half-wave antenna at 1 THz, i.e.
+   eta ~ 1e-8; even a 1 mW source focused on a single 1 um element is
+   converted at 0.2 %. The hydrodynamic graphene rectenna has no harvesting
+   regime: its use is as a square-law detector, where the quadratic range
+   found here (seven decades of power above the 100 K NEP of S4) is the
+   figure that matters. Reaching per-cent efficiency would need the
+   small-signal curvature r to rise by an order of magnitude, which is the
+   lower-density, thinner-gate regime excluded from this stage.
 
 ## Limitations
 

@@ -205,6 +205,27 @@ graphene funnel reaches 0.1 to 0.3 A/W from 10 GHz to 1 THz at an impedance a
 only near its taper resonance (1.87 THz for the 175 nm neck) and at 100 K;
 the classical Tesla valve is an order of magnitude below the funnel.
 
+### Stage H3: large-signal conversion efficiency
+
+Plan: `plans/hydro_largesignal.md`; results: `results/THZ.md`, section S5. The
+full nonlinear BDF2 solver driven at finite antenna amplitude, with an ideal
+bias tee (ac current through R_ant, dc current through a matched load), gives
+the conversion efficiency P_dc / P_av against incident power, the saturation
+onset and the amplitude at which the fluid model breaks down. Runs start from
+the BDF2-consistent perturbative state (the small-signal solution of the
+time-stepped operator), which removes the start-up transient that otherwise
+swamps the quadratic dc signal at small amplitude. Result (S5): the quadratic
+law holds to about 100 uW of available power at every temperature and
+frequency and to 1 mW below 300 GHz; peak efficiency 0.1 to 0.4 % at 1.8 mW
+with no breakdown up to the gate overdrive; the shape-only (sym) response
+saturates first. A square-law detector, not a harvester.
+
+    ./build/gd_thz_tests T10,T11,T12,T13,T14   # H3 ladder on a coarse mesh (~35 min)
+    ./build/gd_thz_power --geo funnel_w1000 --set 100K --term dss --f 3e11 --out results/thz/x.csv
+    ./tools/thz_power_runs.sh              # the nine production runs P1-P4, in parallel
+    .venv/bin/python tools/thz_power_plot.py out.png label=results/thz/x.csv
+    .venv/bin/python tools/thz_power_tables.py results/thz
+
 Terminations: `sym` splits the antenna +-Va/2 with R/2 at each contact (the gate
 at the midpoint potential: geometric rectification only); `dss` / `dsd` put the
 Thevenin source at the source / drain with the other contact grounded to the

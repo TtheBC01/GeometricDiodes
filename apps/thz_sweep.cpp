@@ -13,6 +13,7 @@
 // source, drain grounded to the gate (Dyakonov-Shur configuration); dsd = the
 // mirror image (source grounded, Thevenin at the drain).
 #include "generators.hpp"
+#include "thz_geo.hpp"
 #include "hydro/mesh.hpp"
 #include "hydro/thz_solver.hpp"
 #include "hydro/thz_units.hpp"
@@ -30,21 +31,6 @@ static std::vector<double> parse_list(const std::string& s) {
   std::vector<double> v; std::stringstream ss(s); std::string t;
   while (std::getline(ss, t, ',')) v.push_back(std::stod(t));
   return v;
-}
-
-struct Geo { Boundary b; double W_ref; std::string mesh_name; };
-static Geo make_geo(const std::string& name) {
-  if (name == "chan") return {make_straight_channel(10000, 1000), 1000, "t_chan10"};
-  if (name == "funnel") { FunnelParams f; f.Lc = 6000; f.Ld = 6000; return {make_funnel(f), 2000, "h_funnel"}; }
-  // control: 1 um leads, so the graphene between the contacts is the taper alone (no 6 um plasmonic cavities)
-  if (name == "funnel_short") { FunnelParams f; f.Lc = 1000; f.Ld = 1000; return {make_funnel(f), 2000, "h_funnel_short"}; }
-  if (name == "funnel_w1000") {
-    FunnelParams f; f.Wc = f.Wd = 4000; f.Wn = 1000; f.Lc = f.Ld = 12000; f.Ld = 12000;
-    return {make_funnel(f), 4000, "h_funnel_w1000"};
-  }
-  if (name == "tesla_classic") return {load_boundary("meshes/tesla_classic_h.poly"), 2000, "h_tesla_classic"};
-  if (name == "tesla_classic_w1000") return {load_boundary("meshes/tesla_classic_w1000_h.poly"), 4000, "h_tesla_classic_w1000"};
-  throw std::runtime_error("unknown geometry " + name);
 }
 
 int main(int argc, char** argv) {
@@ -71,7 +57,7 @@ int main(int argc, char** argv) {
   else { std::fprintf(stderr, "unknown set %s\n", set.c_str()); return 1; }
   if (freqs.empty()) for (int i = 0; i < nf; ++i) freqs.push_back(fmin * std::pow(fmax / fmin, nf > 1 ? double(i) / (nf - 1) : 0.0));
 
-  Geo G = make_geo(geo);
+  ThzGeo G = make_thz_geo(geo);
   Mesh m = Mesh::load(ensure_mesh(G.b, G.mesh_name, hw, hm), G.W_ref);
   ThzUnits u = ThzUnits::make(n_cm2, d, eps, G.W_ref * 1e-9, nu, tau, tauee);
   ThzParams p;
