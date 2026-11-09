@@ -1,0 +1,7 @@
+funnel_w1000 set 100K term dss closure graphene: 18601 nodes, W_ref 4000 nm, n 2e+11 cm^-2, d 30 nm, s0 2.445e+06 m/s, q 0.084, U0 0.2857 V, Gamma 0.7318, 1/Re_s 1.023e-02, Omega tau_ee per THz 2.81, R_unit 99.5 ohm (R_ant 75 -> 0.754), R_c 0.0 ohm (0.000), f_unit 0.097 THz, I_unit 3.133e-03 A, V_unit 0.3118 V, tau 2.24 ps (scale 0.447)
+T 100 K: E_F 52.2 meV = 6.1 kT (Fermi liquid ok), U0 = 33.2 kT (gating ok), q 0.08
+dc resistance 6.9252 R_unit = 689.1 ohm (+ 2 R_c = 689.1 ohm)
+    f (Hz)    Omega   R_ant | Re Z (ohm) Im Z (ohm)  Re Z_ant |   I_sc/Va^2   V_oc/Va^2 |  R_I (A/W)  R_V (V/W) | P_in/P_av | NEP W/rtHz eta/P (1/W)  P_knee W
+ 1.000e+11   1.0281    75.0 |     112.47     -41.67    112.47 |  2.6084e-02 -1.8064e-01 |  5.044e-01 -3.476e+02 |    0.9149 |  5.612e-12  4.383e+01 4.051e-05
+ 3.000e+11   3.0843    75.0 |     100.70     -17.74    100.70 |  2.7955e-02 -1.9359e-01 |  5.406e-01 -3.725e+02 |    0.9687 |  5.237e-12  5.035e+01 4.051e-05
+ 1.000e+12  10.2809    75.0 |      99.35      -2.41     99.35 |  2.5385e-02 -1.7580e-01 |  4.909e-01 -3.383e+02 |    0.9803 |  5.767e-12  4.152e+01 4.051e-05

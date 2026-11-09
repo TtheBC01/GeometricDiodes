@@ -1,0 +1,7 @@
+funnel_w1000 set 300K term dss closure graphene: 18601 nodes, W_ref 4000 nm, n 1e+11 cm^-2, d 30 nm, s0 2.091e+06 m/s, q 0.114, U0 0.1429 V, Gamma 1.9130, 1/Re_s 3.587e-03, Omega tau_ee per THz 0.63, R_unit 120.4 ohm (R_ant 75 -> 0.623), R_c 0.0 ohm (0.000), f_unit 0.083 THz, I_unit 1.340e-03 A, V_unit 0.1613 V, tau 1 ps (scale 1.000)
+T 300 K: E_F 36.9 meV = 1.4 kT (Fermi liquid VIOLATED), U0 = 5.5 kT (gating ok), q 0.11
+dc resistance 15.2186 R_unit = 1831.9 ohm (+ 2 R_c = 1831.9 ohm); antenna matched to Re Z_ant at each frequency
+    f (Hz)    Omega   R_ant | Re Z (ohm) Im Z (ohm)  Re Z_ant |   I_sc/Va^2   V_oc/Va^2 |  R_I (A/W)  R_V (V/W) | P_in/P_av | NEP W/rtHz eta/P (1/W)  P_knee W
+ 1.000e+11   1.2020   143.8 |     143.77     -79.34    143.77 |  7.8054e-03 -1.1879e-01 |  4.624e-01 -8.470e+02 |    0.9292 |  6.504e-12  9.790e+01 5.656e-06
+ 3.000e+11   3.6059   124.7 |     124.75     -30.16    124.75 |  9.4594e-03 -1.4396e-01 |  4.862e-01 -8.907e+02 |    0.9856 |  6.185e-12  1.083e+02 6.518e-06
+ 1.000e+12  12.0196   121.9 |     121.94      -7.23    121.94 |  8.3306e-03 -1.2678e-01 |  4.186e-01 -7.667e+02 |    0.9991 |  7.185e-12  8.023e+01 6.668e-06

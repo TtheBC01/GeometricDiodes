@@ -1,5 +1,6 @@
 // Acceptance ladder for the Stage H2 solvers (plans/hydro_thz.md, sec. 3), T1-T9,
-// and the Stage H3 large-signal ladder (plans/hydro_largesignal.md, sec. 4), T10-T14.
+// the Stage H3 large-signal ladder (plans/hydro_largesignal.md, sec. 4), T10-T14,
+// and the Stage H4 operating-point ladder (plans/hydro_density.md, sec. 4), T15-T17.
 #include "generators.hpp"
 #include "thz_geo.hpp"
 #include "thz_power_common.hpp"
@@ -286,6 +287,116 @@ int main(int argc, char** argv) {
     report("T9", ok, fmt("n 1e12, d 30 nm: s0 %.2e m/s (q %.3f), U0 %.3f V, R_unit %.1f ohm, f_unit %.3f THz, I_unit %.3e A; "
                          "DS dU %.3e V vs Ua^2/4U0 %.3e V (graphene V_unit %.3f V); R_V(f=1, 75 ohm) %.1f V/W",
                          u.s0, u.q, u.U0, u.R_unit, u.f_unit / 1e12, u.I_unit, dU_V, dU_ref, u.V_unit, RV));
+  }
+
+  // Stage H4 ladder (plans/hydro_density.md, sec. 4), quick: a contact
+  // resistance in series with every port is bookkeeping only (T15); the
+  // physical layer enters the solver only through the dimensionless groups
+  // (T16); the units at the second operating point (T17).
+  if (want("T15") || want("T16")) {
+    ThzGeo G = make_thz_geo("funnel_w1000");
+    Mesh m = Mesh::load(ensure_mesh(G.b, G.mesh_name, 160, 960), G.W_ref);
+    // dss termination with R_c at both contacts, as gd_thz_sweep builds it
+    auto ports = [](double R, double Rc) { return std::vector<Port>{Port::thevenin(0, 1.0, R + Rc, Rc), Port::thevenin(1, 0.0, Rc, Rc)}; };
+    struct Resp { double Rdc, Isc, Voc, Pin_Pav; cd Z, Zant, Vs, Vd, Is, Id; double R, Rc; };
+    auto respond = [&](const ThzUnits& u, double Rant_ohm, double Rc_ohm, double f) {
+      ThzParams p; p.Gamma = u.Gamma; p.nu = u.inv_Res; p.tau_ee = u.t_ee; p.closure.q = u.q;
+      double R = u.R_nd(Rant_ohm), Rc = u.R_nd(Rc_ohm), Om = u.Omega(f);
+      p.ports = ports(R, Rc);
+      ThzSolver s(m, p);
+      Resp r; r.Rdc = s.dc_resistance(0, 1);
+      FirstOrder fo = s.solve_linear(Om);
+      r.Z = (fo.V1[0] - fo.V1[1]) / fo.I1[0];
+      r.Zant = (1.0 - R * fo.I1[0]) / fo.I1[0];   // what the antenna sees: (Va - R I_s) / I_s
+      r.Vs = fo.V1[0]; r.Vd = fo.V1[1]; r.Is = fo.I1[0]; r.Id = fo.I1[1]; r.R = R; r.Rc = Rc;
+      r.Pin_Pav = (fo.power_in(0) + fo.power_in(1)) * 8 * R;
+      SecondOrder sc = s.solve_dc(fo); r.Isc = sc.I20[0];
+      ThzParams po = p; po.ports[0].dc = Port::Kind::Open; ThzSolver so(m, po);
+      SecondOrder oc = so.solve_dc(fo); r.Voc = oc.V20[0] - oc.V20[1];
+      return r;
+    };
+    ThzUnits uA = ThzUnits::make(1e12, 30e-9, 3.8, 4e-6, 0.1, 5e-12, 1e-12);
+    if (want("T15")) {
+      const double Rc_ohm = 300.0 / 4.0;   // 300 ohm um over the 4 um contact
+      Resp a = respond(uA, 75, Rc_ohm, 3e11), b = respond(uA, 75, 0.0, 3e11);
+      // the R_c = 0 construction must equal the S2 ports exactly
+      ThzParams p0; p0.Gamma = uA.Gamma; p0.nu = uA.inv_Res; p0.tau_ee = uA.t_ee; p0.closure.q = uA.q;
+      p0.ports = {Port::thevenin(0, 1.0, uA.R_nd(75), 0.0), Port::ground(1)};
+      ThzSolver s0(m, p0); FirstOrder fo0 = s0.solve_linear(uA.Omega(3e11)); SecondOrder sc0 = s0.solve_dc(fo0);
+      double Rc = uA.R_nd(Rc_ohm);
+      double thev = std::fabs(a.Isc * (a.Rdc + 2 * Rc) + a.Voc) / std::fabs(a.Voc);   // I_sc (R_dc + 2 R_c) = -V_oc
+      double thev0 = std::fabs(b.Isc * b.Rdc + b.Voc) / std::fabs(b.Voc);
+      double rep = std::fabs(b.Isc - sc0.I20[0]) / std::fabs(sc0.I20[0]);
+      // port relations with R_c in series: V_s = Va - (R + R_c) I_s and V_d = -R_c I_d. The ac drain
+      // current is not -I_s (the gate carries displacement current), so the antenna sees
+      // Z_ant = (Va - R I_s) / I_s rather than Z_dev + 2 R_c.
+      double prel = std::max(std::abs(a.Vs - (1.0 - (a.R + a.Rc) * a.Is)), std::abs(a.Vd + a.Rc * a.Id));
+      double zant = std::abs(a.Zant - (a.Z + a.Rc - a.Rc * a.Id / a.Is)) / std::abs(a.Zant);
+      double imb = std::abs(a.Id + a.Is) / std::abs(a.Is);
+      bool ok = thev < 1e-3 && thev0 < 1e-3 && rep < 1e-6 && prel < 1e-9 && zant < 1e-9 && a.Pin_Pav <= 1.0 + 1e-9 && b.Pin_Pav <= 1.0 + 1e-9 &&
+                a.Pin_Pav < b.Pin_Pav && std::fabs(a.Rdc - b.Rdc) < 1e-12;
+      report("T15", ok, fmt("contact resistance 300 ohm um (%.1f ohm = %.4f R_unit) at (1e12, 30 nm) 100 K 0.3 THz dss: I_sc (R_dc + 2 R_c) = -V_oc to %.1e "
+                            "(R_c = 0: %.1e); R_c = 0 reproduces the S2 ports to %.1e; port relations V_s = Va - (R + R_c) I_s, V_d = -R_c I_d to %.1e; "
+                            "Z_ant = Z_dev + R_c (1 - I_d / I_s) to %.1e (ac |I_d + I_s| / |I_s| = %.3f: gate displacement current); "
+                            "P_in/P_av %.4f (R_c = 0: %.4f); I_sc %.4e -> %.4e, V_oc %.4e -> %.4e", Rc_ohm, Rc, thev, thev0, rep, prel, zant, imb,
+                            a.Pin_Pav, b.Pin_Pav, b.Isc, a.Isc, b.Voc, a.Voc));
+    }
+    if (want("T16")) {
+      // B: 4 n, d / 2 (same sqrt(n) d, so the same s0 and q; R_unit halves); C: W, tau, nu doubled
+      // (same Gamma, 1/Re_s, q; f_unit and R_unit halve). Antenna and frequency co-scaled.
+      ThzUnits uB = ThzUnits::make(4e12, 15e-9, 3.8, 4e-6, 0.1, 5e-12, 1e-12);
+      ThzUnits uC = ThzUnits::make(1e12, 30e-9, 3.8, 8e-6, 0.2, 10e-12, 2e-12);
+      auto groups = [](const ThzUnits& u, double Rant, double f) {
+        return std::vector<double>{u.Gamma, u.q, u.inv_Res, u.t_ee, u.Omega(f), u.R_nd(Rant)};
+      };
+      double fA = 3e11, RA = 75;
+      double fB = fA * uB.f_unit / uA.f_unit, RB = RA * uB.R_unit / uA.R_unit;
+      double fC = fA * uC.f_unit / uA.f_unit, RC = RA * uC.R_unit / uA.R_unit;
+      auto gA = groups(uA, RA, fA), gB = groups(uB, RB, fB), gC = groups(uC, RC, fC);
+      double gerr = 0;
+      for (size_t i = 0; i < gA.size(); ++i) gerr = std::max({gerr, std::fabs(gB[i] - gA[i]) / std::fabs(gA[i]), std::fabs(gC[i] - gA[i]) / std::fabs(gA[i])});
+      Resp a = respond(uA, RA, 0, fA), b = respond(uB, RB, 0, fB), c = respond(uC, RC, 0, fC);
+      auto rel = [](double x, double y) { return std::fabs(x - y) / std::fabs(y); };
+      double nd = std::max({rel(b.Isc, a.Isc), rel(c.Isc, a.Isc), rel(b.Voc, a.Voc), rel(c.Voc, a.Voc), std::abs(b.Z - a.Z) / std::abs(a.Z),
+                            std::abs(c.Z - a.Z) / std::abs(a.Z), rel(b.Rdc, a.Rdc), rel(c.Rdc, a.Rdc)});
+      // physical responsivities scale as I_unit R_ant / V_unit^2 and V_unit R_ant / V_unit^2
+      double RIA = uA.amp_per_watt(a.Isc, RA), RIB = uB.amp_per_watt(b.Isc, RB), RIC = uC.amp_per_watt(c.Isc, RC);
+      double sB = (uB.I_unit / uA.I_unit) * (RB / RA) * std::pow(uA.V_unit / uB.V_unit, 2);
+      double sC = (uC.I_unit / uA.I_unit) * (RC / RA) * std::pow(uA.V_unit / uC.V_unit, 2);
+      double ph = std::max(rel(RIB / RIA, sB), rel(RIC / RIA, sC));
+      bool ok = gerr < 1e-9 && nd < 1e-6 && ph < 1e-6;
+      report("T16", ok, fmt("group invariance: (4e12, 15 nm) and (1e12, 30 nm, W tau nu x2) co-scaled to (1e12, 30 nm, 75 ohm, 0.3 THz): "
+                            "groups equal to %.1e, nondimensional I_sc, V_oc, Z, R_dc equal to %.1e, R_I scales with I_unit R_ant / V_unit^2 to %.1e "
+                            "(R_I %.3f, %.3f, %.3f A/W at R_ant %.1f, %.1f, %.1f ohm)", gerr, nd, ph, RIA, RIB, RIC, RA, RB, RC));
+    }
+  }
+
+  // T17: units at the second operating point (5e11, 10 nm): closed forms and
+  //      hand values; then the DS response of the uniform channel with the
+  //      graphene closure at this q against the classical Ua^2 f / (4 U_0).
+  if (want("T17")) {
+    ThzUnits u = ThzUnits::make(5e11, 10e-9, 3.8, 4e-6, 0.1, 5e-12, 1e-12);
+    using namespace units;
+    double EF_meV = EF_J(5e11) / e * 1e3;
+    auto rel = [](double x, double y) { return std::fabs(x - y) / std::fabs(y); };
+    // closed forms: V_unit = U0 / (1 - q), R_unit = m0 s0 / (e^2 n0 W), f_unit = s0 / (2 pi W)
+    double cf = std::max({rel(u.V_unit, u.U0 / (1 - u.q)), rel(u.R_unit, u.m0 * u.s0 / (e * e * u.n0 * 4e-6)), rel(u.f_unit, u.s0 / (2 * M_PI * 4e-6)),
+                          rel(u.U0, e * u.n0 * 10e-9 / (8.8541878128e-12 * 3.8))});
+    // hand values (python, 2026-11-08): s0 1.8402e6 m/s, q 0.1477, U0 0.2381 V, V_unit 0.2793 V, R_unit 47.37 ohm, f_unit 73.22 GHz, E_F 82.49 meV
+    double hv = std::max({rel(u.s0, 1.8402e6), rel(u.q, 0.1477), rel(u.U0, 0.2381), rel(u.V_unit, 0.2793), rel(u.R_unit, 47.37),
+                          rel(u.f_unit, 73.22e9), rel(EF_meV, 82.49)});
+    // DS response of the channel, graphene closure at this q vs shallow water, friction only, Gamma 1, Omega 3 (as T4)
+    Mesh m = channel_mesh(L, g_hw);
+    ThzParams psw = ds_params(1.0, 0.0), pgr = psw; pgr.closure.kind = Closure::Graphene; pgr.closure.q = u.q;
+    ThzSolver ssw(m, psw), sgr(m, pgr);
+    FirstOrder fsw = ssw.solve_linear(3.0), fgr = sgr.solve_linear(3.0);
+    double dU_sw = ssw.solve_dc(fsw).V20[1], dU_gr = sgr.solve_dc(fgr).V20[1];
+    // in volts: graphene dU_gr V_unit vs classical dU_sw U0 (shallow water V_unit = U0)
+    double ratio = dU_gr * u.V_unit / (dU_sw * u.U0);
+    bool ok = cf < 1e-9 && hv < 1e-3 && std::fabs(ratio - 1) < 0.1;
+    report("T17", ok, fmt("units at (5e11, 10 nm): E_F %.1f meV, s0 %.4e m/s, q %.4f, U0 %.4f V, V_unit %.4f V, R_unit %.2f ohm, f_unit %.2f GHz; "
+                          "closed forms to %.1e, hand values to %.1e; channel DS dU at Gamma 1 Omega 3: graphene %.5f V_unit vs shallow water %.5f U0, "
+                          "ratio in volts %.4f", EF_meV, u.s0, u.q, u.U0, u.V_unit, u.R_unit, u.f_unit / 1e9, cf, hv, dU_gr, dU_sw, ratio));
   }
 
   // Stage H3 ladder (plans/hydro_largesignal.md, sec. 4): 1 um funnel, 100 K,

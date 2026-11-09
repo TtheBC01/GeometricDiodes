@@ -226,6 +226,30 @@ saturates first. A square-law detector, not a harvester.
     .venv/bin/python tools/thz_power_plot.py out.png label=results/thz/x.csv
     .venv/bin/python tools/thz_power_tables.py results/thz
 
+### Stage H4: carrier density, gate distance and contact resistance
+
+Plan: `plans/hydro_density.md`; results: `results/THZ.md`, section S6. The
+small-signal solver swept over n = 1e12 to 5e10 cm^-2 and d = 30, 10, 5 nm on
+the 1 um funnel with the Fermi-liquid (E_F >= 3 kT) and gating (U_0 >= 4 kT)
+limits carried as flags, with a matched antenna and a constant-mobility
+variant, plus a contact resistance R_c in series with each contact (a port
+change only) and one time-domain ladder at a second operating point to check
+that the H3 saturation factor transfers in units of V_unit. Result (S6): the
+knee of the efficiency curve moves as (n d)^2, from 0.9 mW at the H3 point to
+3 uW at (5e10, 30 nm); the predicted peak efficiency stays below 1 % (0.03 to
+0.9 %) over the whole valid grid, 0.25 % at best at 300 K, so lowering n and d converts
+microwatts at the same few tenths of a per cent that the H3 device needs a
+milliwatt for, and no gated-graphene operating point reaches per-cent
+efficiency. Contact resistance is severe: 300 ohm um costs a factor 4 to 10 in
+eta/P_av and a factor 3 in responsivity, because R_c at the drain lifts it off
+the gate at ac and weakens the Dyakonov-Shur asymmetry itself.
+
+    ./build/gd_thz_tests T15,T16,T17       # H4 ladder (seconds)
+    ./build/gd_thz_sweep --geo funnel_w1000 --set 100K --term dss --hw 80 --hm 480 --n 5e11 --d 10e-9 --Rc 300 --f 1e11,3e11,1e12
+    ./tools/thz_density_runs.sh D1         # the (n, d) grid, matched antenna, tau ~ sqrt(n); D2 n d_nm; D3
+    .venv/bin/python tools/thz_density_plot.py results/thz
+    .venv/bin/python tools/thz_density_tables.py results/thz > results/thz/tables_H4.md
+
 Terminations: `sym` splits the antenna +-Va/2 with R/2 at each contact (the gate
 at the midpoint potential: geometric rectification only); `dss` / `dsd` put the
 Thevenin source at the source / drain with the other contact grounded to the

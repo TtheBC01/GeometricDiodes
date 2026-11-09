@@ -1,0 +1,7 @@
+dc resistance 17.2930 R_unit = 819.2 ohm; dc load R_L 17.2930 R_unit = 819.2 ohm (bias tee); device length 6.65 W_ref, settle 10.0, relax 39.4
+f 3.000e+11 Hz, Omega 4.0974, period 1.533: small-signal I_dc/Va^2 2.6000e-03, eta/Va^2 1.4805e-03 (BDF2-discrete 1.4774e-03), P_in/P_av 0.948; 10 periods x 60 steps (0 bias updates from period 7 every 26)
+     Va   P_av (W)   P_in (W)    I_dc raw      I* (A)    P_dc (W)     eta_av    eta_abs  eta_small   n_min   n_max     tail     corr    drift   wall
+  0.100  1.301e-06  1.233e-06  1.5472e-07  1.5371e-07  1.9357e-11  1.488e-05  1.570e-05  1.481e-05  0.9583  1.0402  3.5e-03 -3.1e-03  6.5e-04    448
+  0.300  1.170e-05  1.110e-05  1.4244e-06  1.3941e-06  1.5921e-09  1.360e-04  1.434e-04  1.332e-04  0.8700  1.1171  1.2e-02 -9.4e-03  2.3e-03    438
+  0.500  3.251e-05  3.091e-05  4.1318e-06  3.9318e-06  1.2665e-08  3.895e-04  4.097e-04  3.701e-04  0.7736  1.1899  2.8e-02 -2.2e-02  5.4e-03    457
+  0.700  6.373e-05  6.078e-05  8.6208e-06  7.8836e-06  5.0917e-08  7.990e-04  8.377e-04  7.255e-04  0.6675  1.2598  5.1e-02 -4.0e-02  9.7e-03    470

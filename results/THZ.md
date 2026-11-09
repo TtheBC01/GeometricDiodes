@@ -1,7 +1,8 @@
-# Stage H2 and H3 results: plasmonic rectification of graphene geometric diodes (2026-10-30/31)
+# Stage H2, H3 and H4 results: plasmonic rectification of graphene geometric diodes (2026-10-30 to 2026-11-08)
 
-Plan: `plans/hydro_thz.md` (H2, small signal) and `plans/hydro_largesignal.md`
-(H3, finite amplitude, section S5). Derivation: `plans/hydro_thz_notes.md`.
+Plan: `plans/hydro_thz.md` (H2, small signal), `plans/hydro_largesignal.md`
+(H3, finite amplitude, section S5) and `plans/hydro_density.md` (H4, operating
+point and contacts, section S6). Derivation: `plans/hydro_thz_notes.md`.
 Code: `src/hydro/thz_*.{hpp,cpp}`, `apps/thz_tests.cpp`, `apps/thz_sweep.cpp`,
 `apps/thz_power.cpp`. Logs and CSVs: `results/thz/`.
 
@@ -90,6 +91,23 @@ uncertainty.
    Thevenin voltage is taken across the device; T14 repeats the small-
    amplitude check for the sym termination. The dss and ant runs ground the
    drain and were never affected.
+
+7. **Contact resistance is not a series element at ac (H4).** The plan said
+   the antenna sees Z_dev + 2 R_c. The ac drain current is not -I_s: the
+   gate carries displacement current (|I_d + I_s| / |I_s| = 1.16 at the H3
+   point, 0.3 THz), so the antenna sees Z_dev + R_c (1 - I_d / I_s), and
+   R_c at the drain lifts the drain off the gate at ac by R_c I_d, which is
+   the Dyakonov-Shur asymmetry itself. T15 checks the two port relations
+   V_s = Va - (R + R_c) I_s and V_d = -R_c I_d instead, and the sweep
+   reports Z_ant separately from Z_dev. At dc the identity I_sc (R_dc +
+   2 R_c) = -V_oc holds to 1e-14.
+8. **NEP units (H4).** The first H4 sweep divided the Johnson *voltage*
+   noise by the *current* responsivity, 4.4 nW/Hz^1/2 at the H3 point
+   against the 26 pW/Hz^1/2 of S4; caught by comparing with S4, fixed
+   (sqrt(4 k_B T / (R_dc + 2 R_c)) / R_I) and the grid rerun. The mesh
+   statement of S5 was also wrong: the 18601-node production mesh of the
+   1 um funnel is hw 80 / hm 480 nm (gd_thz_power's default), not hw 20 /
+   hm 120 (that is the 175 nm funnel's); S5 and the H4 plan now say so.
 
 ## S1: Dyakonov-Shur detector in physical units (`thz/S1_chan_*`)
 
@@ -289,7 +307,7 @@ Reading:
 ## S5: conversion efficiency at finite amplitude (`thz/P1_*` to `thz/P4_*`, figures `P1_eta.png` to `P4_eta.png`, tables `thz/tables_H3.md`)
 
 Plan `plans/hydro_largesignal.md`. The 1 um funnel of S2 (1 um neck, 4 um
-leads, production mesh hw 20 / hm 120 nm) driven by the full nonlinear BDF2
+leads, production mesh hw 80 / hm 480 nm, 18601 nodes) driven by the full nonlinear BDF2
 solver at finite antenna amplitude Va (units of V_unit = 1.487 V; Va = 1 is
 the gate overdrive U0 = 1.43 V, so Va <= 0.7 covers every physical
 amplitude). The antenna is the 75 ohm Thevenin source of S2, the dc path an
@@ -428,6 +446,166 @@ Reading:
    figure that matters. Reaching per-cent efficiency would need the
    small-signal curvature r to rise by an order of magnitude, which is the
    lower-density, thinner-gate regime excluded from this stage.
+
+## S6: carrier density, gate distance and contact resistance (`thz/D1_*`, `D1m_*`, `D1t_*`, `D2_*`, `D2m_*`, `D3_*`; figures `D1_maps.png`, `D1_lines.png`, `D2_contacts.png`, `D3_ladder.png`; tables `thz/tables_H4.md`)
+
+Plan `plans/hydro_density.md`. S5 found the efficiency of the 1 um funnel
+proportional to the available power up to a knee near 1 mW and a peak of a
+few tenths of a per cent, both at one operating point (n = 1e12 cm^-2,
+d = 30 nm). In units of V_unit and R_unit the matched-load efficiency is
+eta = 2 r^2 (R_ant / R_dc) Va^2 with r = V_oc / Va^2, so eta / P_av = 16 r^2
+R_ant^2 / (R_dc V_unit^2) in 1/W, the knee sits at V_a ~ 0.5 V_unit, i.e.
+P_knee = (V_unit / 2)^2 / (8 R_ant), and the peak is eta_peak ~ 2 r^2
+(R_ant / R_dc) x 0.49 x S with S the S5 saturation factor (0.86, 0.89, 0.60
+at 100 K and 1.14, 1.10, 0.81 at 300 K for 0.1, 0.3, 1 THz). The peak is a
+pure number; n and d enter it only through the dimensionless groups (Gamma,
+q, 1/Re_s, Omega, R_ant / R_unit) that set r, and set the knee through
+V_unit ~ U_0 ~ n d. This stage maps both over n = 1e12, 5e11, 2e11, 1e11,
+5e10 cm^-2 and d = 30, 10, 5 nm with the H2 perturbation solver on the
+production mesh (hw 80 / hm 480 nm, 18601 nodes), viscoelastic as in S2,
+scattering times held at the set values (constant tau) with a constant-
+mobility variant tau ~ sqrt(n) at 100 K, a 75 ohm antenna with a matched
+variant R_ant = Re Z_ant, and a contact resistance R_c in series with each
+contact as a port-only change (ac and dc; the dc Thevenin resistance becomes
+R_dc + 2 R_c and the NEP uses it). Validity is carried as flags: Fermi
+liquid E_F >= 3 k_B T (excludes n <= 2e11 at 300 K), gating U_0 = e n /
+C_g >= 4 k_B T (excludes the thin-gate low-density corner: (1e11, 5 nm),
+(5e10, 10 nm), (5e10, 5 nm) at 100 K, everything below U_0 = 0.1 V at
+300 K), and q = s_q^2 / s0^2 > 0.3 marked (quantum capacitance dominant).
+The operating-point table (E_F / kT, U_0 / kT, q, V_unit, R_unit, R_dc,
+P_knee, flags) is the first table of `tables_H4.md`. Cost: 20 s per
+frequency; D1 to D2 are 240 solves, 12 CPU-minutes; D3 is the time solver,
+8 amplitudes, about an hour wall on two cores.
+
+| run | what | set | f (THz) | R_c (ohm um) | R_ant |
+|---|---|---|---|---|---|
+| D1 | the (n, d) grid, dss termination | 100 K, 300 K | 0.1, 0.3, 1.0 | 0 | 75 ohm |
+| D1m | D1 with the antenna matched to Re Z_ant at each point | both | same | 0 | matched |
+| D1t | D1 at 100 K with tau_mr, tau_ee ~ sqrt(n / 1e12) (constant mobility) | 100 K | same | 0 | 75 ohm |
+| D2 | contact resistance at (1e12, 30 nm), (5e11, 10 nm) and (5e10, 30 nm) | both | same | 100, 300, 1000 | 75 ohm and matched |
+| D3 | time-domain ladder at (5e11, 10 nm), Va 0.1, 0.3, 0.5, 0.7 (gd_thz_power) | both | 0.3 | 0 | 75 ohm |
+
+### Ladder T15 to T17 (`thz/ladder_H4.txt`; quick, 9 s)
+
+| test | what it checks | result | criterion |
+|---|---|---|---|
+| T15 | R_c = 300 ohm um (75 ohm per contact) at (1e12, 30 nm), 100 K, 0.3 THz, coarse mesh: I_sc (R_dc + 2 R_c) = -V_oc; R_c = 0 reproduces the S2 ports; port relations V_s = Va - (R + R_c) I_s, V_d = -R_c I_d; passivity | 6.7e-15; 0; 3.9e-16; P_in / P_av 0.386 (0.902 at R_c = 0); I_sc 3.05e-2 -> 1.09e-2, V_oc -7.69e-2 -> -5.27e-2 | 1e-3; 1e-6; 1e-9; P_in <= P_av |
+| T16 | the physical layer enters only through the groups: (4e12, 15 nm) and (1e12, 30 nm, W, tau, nu doubled) co-scaled to the same (Gamma, q, 1/Re_s, Omega, R_ant / R_unit) as (1e12, 30 nm, 75 ohm, 0.3 THz) | groups, nondimensional I_sc, V_oc, Z, R_dc identical to 0; R_I scales as I_unit R_ant / V_unit^2 to 0 (0.189, 0.095, 0.189 A/W at 75, 37.5, 37.5 ohm) | 1e-9; 1e-6; 1e-6 |
+| T17 | units at (5e11, 10 nm): closed forms V_unit = U_0 / (1 - q), R_unit = m0 s0 / (e^2 n W), f_unit = s0 / 2 pi W; hand values E_F 82.5 meV, s0 1.840e6 m/s, q 0.148, U_0 0.238 V, V_unit 0.279 V, R_unit 47.4 ohm, f_unit 73.2 GHz; channel DS response with the graphene closure at this q against the classical U_a^2 f / 4 U_0 | 2e-16; 2.8e-4; graphene 0.599 V_unit vs shallow water 0.724 U_0, ratio in volts 0.970 | 1e-9; 1e-3; within 10 % |
+
+### Results
+
+Reading (figures `D1_maps.png`, `D1_lines.png`; the per-point numbers are in
+`tables_H4.md`; all efficiencies are for the matched dc load):
+
+1. **The knee moves as (n d)^2, as predicted.** P_knee = (V_unit / 2)^2 /
+   8 R_ant runs from 0.92 mW at the H3 point to 33 uW at (5e11, 10 nm),
+   3.0 uW at (5e10, 30 nm) and 0.26 uW at (5e10, 5 nm); with it the
+   small-signal efficiency per watt rises from 1.9 /W (100 K, 0.3 THz) to
+   51 /W at (5e11, 10 nm) and 1770 /W at (5e10, 30 nm), a factor 950 of
+   which (n d)^-2 accounts for 400, the growth of r from 0.088 to 0.324
+   for 13.7, and the rise of R_dc from 168 to 751 ohm for a factor 4.5 the
+   other way. At 300 K the valid grid ends at 5e11, where eta / P_av is
+   4.8 /W (30 nm), 11 /W (10 nm) and 16 /W (5 nm) against 1.2 /W at the H3
+   point.
+2. **The ceiling barely moves, and it moves the wrong way for thin
+   gates.** The predicted peak efficiency over the valid grid is 3.0e-4 to
+   9.2e-3 at 100 K and 1.3e-4 to 2.4e-3 at 300 K (the low ends at 1 THz
+   with the 5 nm gate). At fixed n a thinner
+   gate *lowers* it: at 1e12, 0.3 THz, 100 K, eta_peak is 3.0e-3 (30 nm),
+   2.1e-3 (10 nm), 9.9e-4 (5 nm), because r falls from 0.088 to 0.073 to
+   0.050 (a thinner gate lowers s0, raising Gamma and q, and the 75 ohm
+   antenna is increasingly mismatched to Z_ant ~ 30 ohm). At fixed d a
+   lower density raises r (0.088 to 0.32 at 30 nm, 100 K) and the ceiling
+   with it, to 9.2e-3 at (5e10, 30 nm), 0.3 THz, the edge of the Fermi-
+   liquid limit (E_F = 3.0 kT); at 300 K the H3 point is already the ceiling
+   (2.4e-3 at 300 GHz; 2.4e-3 at (5e11, 30 nm)). The hypothesis of the plan
+   holds at 300 K and holds within a factor 3 at 100 K: the reachable peak
+   is below 1 % (0.03 to 0.9 %), r^2-limited, and no operating point of gated graphene
+   reaches per-cent efficiency.
+3. **What the sweep buys is efficiency at low power.** At 10 uW of
+   available power the H3 device converts 1.9e-5 (100 K) and 1.2e-5
+   (300 K); the best valid points convert 9.2e-3 at (5e10, 30 nm) and
+   3.0e-3 at (1e11, 30 nm) or (2e11, 10 nm) at 100 K, and 1.6e-4 at (5e11,
+   5 nm) at 300 K; at 100 uW, 8.0e-4 at (5e11, 10 nm), 300 K, against
+   1.2e-4. At 1 uW the best is 1.8e-3 (100 K) and 1.6e-5 (300 K). The
+   design rule is therefore "put the knee at the available power": with the
+   knee there the element converts at its r^2-limited peak, a few tenths of
+   a per cent, and nothing in n or d raises that number.
+4. **Matching the antenna is not neutral but changes nothing.** R_ant =
+   Re Z_ant raises eta / P_av by 1.0 to 1.5 (most at the thin gates, Z_ant
+   30 to 40 ohm) and moves eta_peak both ways: up by 3.7 at (1e12, 5 nm),
+   where the 75 ohm antenna was mismatched, down by 1.5 at the low-density
+   30 nm points with Z_ant above 100 ohm. The best matched eta_peak on the
+   valid grid is 1.3e-2 at (5e11, 30 nm), 100 K, 0.3 THz (R_ant 51 ohm) and
+   2.7e-3 at 300 K: one per cent at 100 K with a matched antenna at the
+   knee of 0.5 mW, still two to three tenths of a per cent at 300 K.
+5. **Constant mobility takes most of the low-density gain back.** With
+   tau ~ sqrt(n) at 100 K the dc resistance at (5e10, 30 nm) is 2509 ohm
+   instead of 751, r is 0.24 instead of 0.32, and eta / P_av is 286 /W
+   instead of 1770 (0.16 of the constant-tau value), eta_peak 1.5e-3 instead
+   of 9.2e-3; at (1e11, 30 nm) 0.40 and 2.3e-3; at (5e11, 10 nm) 0.65 and
+   1.9e-3. The per-watt figures of items 1 and 3 at the low-density end
+   are therefore bounds that assume the 5 ps momentum relaxation survives
+   to 5e10 cm^-2; the ceiling conclusion of item 2 is unchanged (0.15 to
+   0.23 % everywhere on the constant-mobility grid).
+6. **Contact resistance is the dominant loss, and it acts on the
+   asymmetry, not only in series.** At the H3 point, 0.3 THz, 100 K,
+   R_c = 100, 300, 1000 ohm um (25, 75, 250 ohm per 4 um contact) cuts
+   eta / P_av from 1.86 /W to 1.15, 0.40 and 0.024 /W (factors 1.6, 4.6,
+   78), the responsivity from 0.211 A/W to 0.145, 0.071 and 0.012 A/W and
+   raises the NEP from 27 to 35, 59 and 240 pW/Hz^1/2; at 300 K from
+   1.21 /W to 0.59, 0.18, 0.012 /W and the NEP from 59 to 84, 152, 600
+   pW/Hz^1/2. Matching the antenna to the new Z_ant recovers little (0.53
+   instead of 0.40 /W at 300 ohm um). The loss is larger than the series
+   picture gives: with R_c the drain is no longer at the gate potential at
+   ac (|I_d| ~ |I_s| through the gate capacitance, so V_d = -R_c I_d is a
+   large fraction of V_s), which is the Dyakonov-Shur boundary condition
+   being removed, and the absorbed fraction P_in / P_av falls to 0.39 at
+   300 ohm um. The relative damage is similar at the other two points
+   (factors 4 and 11 at 300 ohm um at (5e10, 30 nm) and (5e11, 10 nm),
+   where R_dc is 751 and 237 ohm). The NEP of the best valid point, (5e10,
+   30 nm) at 100 K, is 0.9 pW/Hz^1/2 with ideal contacts, 1.8 with 300
+   ohm um, and 2.2 with ideal contacts and constant mobility; at 300 K the
+   best is 3.7 pW/Hz^1/2 at (5e10, 30 nm), outside the Fermi-liquid limit,
+   and 15 pW/Hz^1/2 at the best valid point (5e11, 5 nm). A graphene
+   rectenna element needs contacts at the 100 ohm um level, where the
+   penalty is a factor 1.6 to 2.5, and the S4 and S5 figures assume ideal
+   ones.
+7. **The saturation factor transfers between operating points (D3).**
+   The time-domain ladder at (5e11, 10 nm), 0.3 THz
+   (V_unit 0.279 V, R_dc 237 and 819 ohm, dc load matched, 60 steps per
+   period, started from the BDF2-consistent perturbative state as in S5)
+   gives, against its own BDF2-discrete quadratic law, eta / law = 1.007,
+   1.023, 1.055, 1.104 at Va 0.1, 0.3, 0.5, 0.7 at 300 K, where the H3
+   device gave 0.992, 1.020, 1.054, 1.101: the saturation factor transfers
+   to 0.2 % at 300 K. At 100 K it gives 0.996, 0.935, 0.843, 0.764 against
+   1.017, 1.106, 1.012, 0.891: the second operating point saturates
+   earlier (Gamma 0.43 and q 0.15 instead of 0.22 and 0.04), and S at
+   Va 0.7 is 0.76 instead of the 0.89 assumed, 14 % lower, inside the 20 %
+   the plan asked for. The density extrema at Va 0.7 are n_min 0.69 and
+   0.67 against 0.59 at the H3 point, no breakdown. The absolute numbers
+   confirm the scaling: the same Va = 0.7 that is 1.8 mW at the H3 point is
+   64 uW here, converted at 1.4e-3 (100 K) and 8.0e-4 (300 K) against
+   2.9e-3 and 2.4e-3 there. The eta_peak values of items 2 to 4 at 100 K
+   are therefore upper estimates by 10 to 20 % at the lower densities and
+   thinner gates, where Gamma and q are larger still; at 300 K they are
+   good to the S5 accuracy.
+8. **Verdict.** The density and gate sweep closes the question S5 left
+   open. Lowering n d moves the knee of the efficiency curve from a
+   milliwatt to a microwatt exactly as (n d)^2, so a gated-graphene funnel
+   can be designed to convert any given available power between 1 uW and
+   1 mW at its peak; but the peak is 0.2 to 0.9 % (1.3 % with a matched
+   antenna at 100 K, 0.3 % at 300 K) at every operating point the fluid
+   model is valid for, falls for thinner gates, loses a factor 4 to 6 at
+   the low-density end if the mobility rather than the scattering time is
+   constant, and loses a further factor 2 to 5 for realistic 100 to 300 ohm
+   um contacts. As a detector the same lever is worth having: the NEP of the
+   matched 1 um funnel falls from 26 pW/Hz^1/2 at (1e12, 30 nm) to 1 to 2
+   pW/Hz^1/2 at (5e10 to 1e11, 30 nm) at 100 K with 5 ps scattering, and
+   the responsivity reaches 3 A/W. As a harvester the geometric diode has no
+   regime: the per-cent question is answered by the dimensionless curvature
+   r alone, which the sweep moves by a factor 3.7 at most.
 
 ## Limitations
 

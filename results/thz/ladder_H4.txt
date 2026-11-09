@@ -1,0 +1,5 @@
+[PASS] T15    contact resistance 300 ohm um (75.0 ohm = 1.1540 R_unit) at (1e12, 30 nm) 100 K 0.3 THz dss: I_sc (R_dc + 2 R_c) = -V_oc to 6.7e-15 (R_c = 0: 2.4e-15); R_c = 0 reproduces the S2 ports to 0.0e+00; port relations V_s = Va - (R + R_c) I_s, V_d = -R_c I_d to 3.9e-16; Z_ant = Z_dev + R_c (1 - I_d / I_s) to 5.7e-16 (ac |I_d + I_s| / |I_s| = 1.163: gate displacement current); P_in/P_av 0.3862 (R_c = 0: 0.9021); I_sc 3.0497e-02 -> 1.0903e-02, V_oc -7.6907e-02 -> -5.2660e-02
+[PASS] T16    group invariance: (4e12, 15 nm) and (1e12, 30 nm, W tau nu x2) co-scaled to (1e12, 30 nm, 75 ohm, 0.3 THz): groups equal to 0.0e+00, nondimensional I_sc, V_oc, Z, R_dc equal to 0.0e+00, R_I scales with I_unit R_ant / V_unit^2 to 0.0e+00 (R_I 0.189, 0.095, 0.189 A/W at R_ant 75.0, 37.5, 37.5 ohm)
+[PASS] T17    units at (5e11, 10 nm): E_F 82.5 meV, s0 1.8402e+06 m/s, q 0.1477, U0 0.2381 V, V_unit 0.2793 V, R_unit 47.37 ohm, f_unit 73.22 GHz; closed forms to 2.0e-16, hand values to 2.8e-04; channel DS dU at Gamma 1 Omega 3: graphene 0.59907 V_unit vs shallow water 0.72435 U0, ratio in volts 0.9703
+
+3 passed, 0 failed (8.7 s)
