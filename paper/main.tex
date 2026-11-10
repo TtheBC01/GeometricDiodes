@@ -2,12 +2,13 @@
 % make terahertz rectennas.
 % Draft 2026-11-10. Every number is taken from results/*.md of the repository
 % (commit to be tagged at submission); the figures are produced by
-% paper/make_figures.py. Not yet compiled on this machine: no TeX toolchain
-% was installed when the draft was written (see paper/README.md).
+% paper/make_figures.py. Build: see paper/README.md.
 \documentclass[aps,prapplied,twocolumn,superscriptaddress,floatfix,longbibliography]{revtex4-2}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 \usepackage{bm}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 
 \newcommand{\vF}{v_{F}}
@@ -31,6 +32,7 @@
 \newcommand{\percm}{\,\mathrm{cm^{-2}}}
 \newcommand{\figpath}{figs}
 
+\raggedbottom
 \begin{document}
 
 \title{Shape versus circuit: why graphene geometric diodes and Tesla valves do not make terahertz rectennas}

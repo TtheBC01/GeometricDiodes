@@ -13,16 +13,20 @@ Manuscript draft for the results of this repository. Outline and decisions:
 | `make_figures.py`, `figstyle.py` | all eight figures, drawn from `results/` |
 | `figs/` | figure output (PDF for the manuscript, PNG for viewing) |
 | `check_tex.py` | structural check of the sources (braces, environments, labels, figures, citation keys) |
+| `main.pdf`, `supplement.pdf` | the compiled draft |
 
 Build:
 
     .venv/bin/python paper/make_figures.py          # all figures; or: make_figures.py 4 7
     python3 paper/check_tex.py                       # structural check, no TeX needed
-    cd paper && latexmk -pdf main.tex && latexmk -pdf supplement.tex
+    cd paper && tectonic -o build main.tex && tectonic -o build supplement.tex
 
-The draft was written on a machine without a TeX installation, so it has
-been checked structurally but **not compiled**. `brew install tectonic` (then
-`tectonic main.tex`) or MacTeX provides a toolchain.
+Both documents compile cleanly with Tectonic 0.17 (`brew install tectonic`):
+no undefined references or citations, no overfull boxes; the main article is
+16 pages in two-column REVTeX including references and appendices, the
+supplement 3. `main.pdf` and `supplement.pdf` in this folder are copies of
+the last build; `build/` is ignored by git. `latexmk -pdf` with TeX Live
+works as well.
 
 Every number in the text comes from `results/*.md`; the closing checks added
 for the paper are in `results/checks/` and `results/bthz/B6.csv`.

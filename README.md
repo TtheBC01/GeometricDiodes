@@ -1,5 +1,8 @@
 # GeometricDiodes
 
+New to the topic? Start with the plain-language summary in
+[OVERVIEW.md](OVERVIEW.md).
+
 Event-driven semiclassical electron transport in two-dimensional graphene
 devices, built to answer one question first: **does a Tesla-valve-inspired
 channel rectify better than a funnel under the same physics?** (the "kill

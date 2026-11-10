@@ -269,11 +269,15 @@ since:
 - Figures 1 to 8 (`make_figures.py`), manuscript (`main.tex`,
   `sections/`), supplement (`supplement.tex`).
 
+- Compiled on 2026-11-10 with Tectonic 0.17: clean build, 16 pages plus a
+  3-page supplement (`main.pdf`, `supplement.pdf`). Fixed on first
+  compilation: three tables and one equation too wide, two undefined month
+  abbreviations and four missing article numbers in `refs_detectors.bib`,
+  and label collisions in Figs. 1, 2, 4, 5 and 7 at print size. The article
+  is 4 pages over the 12 planned; nothing has been cut.
+
 Open:
 
-- The sources have not been compiled: no TeX toolchain on this machine.
-  `check_tex.py` passes (braces, environments, labels, figures, citation
-  keys).
 - Author affiliation and contact in `main.tex`.
 - Unverified details listed at the end of `refs_verification.md` and
   `literature_detectors.md`: the backward-facing-step literature bands,

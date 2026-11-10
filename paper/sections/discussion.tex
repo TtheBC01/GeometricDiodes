@@ -35,7 +35,7 @@ $75\ \Omega$ source. ``Shape only'' is the symmetric termination; DS has
 the drain tied to the gate.}
 \label{tab:verdict}
 \begin{ruledtabular}
-\begin{tabular}{llll}
+\begin{tabular}{L{0.14\textwidth}L{0.30\textwidth}L{0.26\textwidth}L{0.23\textwidth}}
 Regime & Funnel & Classical Tesla valve & What limits it \\
 \hline
 Ballistic, dc & $A=1.62$ clean; $1.06$ to $1.09$ at $\lambda=700\nm$ & $A=0.89$ to $1.08$, no systematic sign & reciprocity; needs the bias landscape \\
@@ -101,30 +101,34 @@ reaches only at $100$~K.
 \begin{table*}
 \caption{Measured graphene terahertz detectors and the simulated element.
 Responsivity and NEP as stated by the authors; the last column gives the
-power to which they are referred. NEPs are estimated from Johnson noise
-unless marked. Entries marked with a dagger were read from the abstract
+power to which they are referred: the power in a diffraction-limited spot,
+the full optical beam power, the power delivered to the antenna, an
+extrinsic figure, the waveguide input, or the available power with ideal
+coupling. NEPs are estimated from Johnson noise except the one marked with
+a double dagger, which was measured; the commercial values are typical
+specifications. Entries marked with a dagger were read from the abstract
 only.}
 \label{tab:detectors}
 \begin{ruledtabular}
-\begin{tabular}{llccccl}
-Reference & Device and mechanism & $f$ (THz) & $T$ (K) & Responsivity & NEP (pW/Hz$^{1/2}$) & Power reference \\
+\begin{tabular}{lL{0.21\textwidth}cccL{0.14\textwidth}l}
+Reference & Device and mechanism & $f$ (THz) & $T$ (K) & Responsivity & NEP (pW/Hz$^{1/2}$) & Power \\
 \hline
-\cite{vicarelli2012graphene} & FET, overdamped plasma wave & 0.3 & 300 & 0.10 to 0.15 V/W & $3\times10^{4}$ & diffraction-limited spot \\
-\cite{spirito2014high} & bilayer FET & 0.29 to 0.36 & 300 & 1.2 V/W & $2\times10^{3}$ & diffraction-limited spot \\
+\cite{vicarelli2012graphene} & FET, overdamped plasma wave & 0.3 & 300 & 0.10 to 0.15 V/W & $3\times10^{4}$ & spot \\
+\cite{spirito2014high} & bilayer FET & 0.29 to 0.36 & 300 & 1.2 V/W & $2\times10^{3}$ & spot \\
 \cite{zak2014antenna}$^{\dagger}$ & CVD FET, bow-tie antenna & 0.6 & 300 & 14 V/W & 515 & optical \\
 \cite{generalov2017graphene} & CVD FET, bow-tie antenna & 0.4 & 300 & 74 V/W & 130 & optical \\
 \cite{ludwig2024terahertz} & CVD FET, bow-tie antenna & 0.4 & 300 & 59 to 63 V/W & 101 to 114 & optical \\
-\cite{bandurin2018dual} & encapsulated FET & 0.13 & 300 & 20 V/W & 600 & delivered to antenna \\
-\cite{bandurin2018resonant} & encapsulated bilayer FET & 0.13 & 10 & $>3$ kV/W & 0.2 & delivered to antenna \\
-\cite{tong2015antenna} & thermoelectric, patch antenna & 1.9 & 300 & 4.9 V/W & $1.7\times10^{3}$ (measured) & optical \\
-\cite{castilla2019fast} & photothermoelectric p-n junction & 2.5 & 300 & 105 V/W & 80 & diffraction-limited spot \\
-\cite{viti2020hbn} & photothermoelectric and plasma wave & 2.8 & 300; 77 & 49; 180 V/W & 160; 18 & diffraction-limited spot \\
+\cite{bandurin2018dual} & encapsulated FET & 0.13 & 300 & 20 V/W & 600 & antenna \\
+\cite{bandurin2018resonant} & encapsulated bilayer FET & 0.13 & 10 & $>3$ kV/W & 0.2 & antenna \\
+\cite{tong2015antenna} & thermoelectric, patch antenna & 1.9 & 300 & 4.9 V/W & $1.7\times10^{3}$\,$^{\ddagger}$ & optical \\
+\cite{castilla2019fast} & photothermoelectric p-n junction & 2.5 & 300 & 105 V/W & 80 & spot \\
+\cite{viti2020hbn} & photothermoelectric and plasma wave & 2.8 & 300; 77 & 49; 180 V/W & 160; 18 & spot \\
 \cite{auton2017terahertz}$^{\dagger}$ & four-terminal ballistic rectifier & up to 0.69 & 300 & 764 V/W & 34 & extrinsic \\
-\cite{vdi2026detectors} & commercial zero-bias Schottky & 0.22 to 1.1 & 300 & 750 to 2200 V/W & 5 to 27 (typical) & waveguide input \\
+\cite{vdi2026detectors} & commercial zero-bias Schottky & 0.22 to 1.1 & 300 & 750 to 2200 V/W & 5 to 27 & waveguide \\
 \hline
-This work & $1\um$ funnel, DS, simulated & 0.3 to 1 & 300 & 0.09 A/W, 52 V/W & 60; 150 with contacts & available, ideal coupling \\
-This work & same & 0.3 to 1 & 100 & 0.21 to 0.34 A/W, 36 to 58 V/W & 17 to 27 & available, ideal coupling \\
-This work & same, $5\times10^{10}\percm$ & 0.3 & 100 & & 0.9 & available, ideal coupling \\
+This work & $1\um$ funnel, DS, simulated & 0.3 to 1 & 300 & 0.09 A/W, 52 V/W & 60; 150 with contacts & available \\
+This work & same & 0.3 to 1 & 100 & 0.21 to 0.34 A/W, 36 to 58 V/W & 17 to 27 & available \\
+This work & same, $5\times10^{10}\percm$ & 0.3 & 100 & & 0.9 & available \\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}

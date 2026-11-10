@@ -1,5 +1,5 @@
 """All figures of the paper, drawn from the result files of this repository.
-usage: .venv/bin/python paper/make_figures.py [1 2 ...]     (no argument: all)
+usage: .venv/bin/python paper/make_figures.py [1 2 ... overview]     (no argument: all)
 Outputs paper/figs/figN_*.pdf and .png. Style and colour conventions: paper/figstyle.py.
 """
 import sys, os, math, csv
@@ -35,7 +35,7 @@ def fig1():
     ax.text(1900, 1380, "forward", fontsize=6.8, ha="center", va="bottom")
     ax.set_xlim(-300, 8200); ax.set_ylim(-2300, 1900); ax.set_aspect("equal"); ax.axis("off")
     scalebar(ax, 700, -1500, 1000, r"1 $\mu$m")
-    ax.text(0.0, 1.0, "(a)  funnel (geometric diode)", transform=ax.transAxes, fontsize=8, fontweight="bold", va="bottom")
+    ax.text(0.0, 1.0, "(a)  funnel diode", transform=ax.transAxes, fontsize=8, fontweight="bold", va="bottom")
 
     # (b) classical Tesla valve, same minimum feature
     ax = fig.add_subplot(gs[0, 1])
@@ -56,11 +56,11 @@ def fig1():
     k = 8000.0 / (xs.max() - xs.min())
     draw_domain(ax, fl, scale=k)
     ax.plot([0, 0], [-2000 * k, 2000 * k], color=BLUE, lw=2.2, zorder=3); ax.plot([xs.max() * k] * 2, [-2000 * k, 2000 * k], color=BLUE, lw=2.2, zorder=3)
-    ax.text(6000, 0, r"gate at distance $d$", fontsize=6.5, ha="center", va="center")
+    ax.text(4000, -1250, r"gate at distance $d$ above", fontsize=6.5, ha="center", va="top")
     ax.text(0, 1150, r"$V_a\cos\omega t$ through $R_{\rm ant}$", fontsize=6.5, ha="left", va="bottom", color=BLUE)
     ax.text(xs.max() * k, 1150, "drain to gate", fontsize=6.5, ha="right", va="bottom", color=BLUE)
     ax.set_xlim(-300, 8300); ax.set_ylim(-2300, 1900); ax.set_aspect("equal"); ax.axis("off")
-    scalebar(ax, 3000, -1500, 4000 * k, r"4 $\mu$m")
+    scalebar(ax, 3000, -1900, 4000 * k, r"4 $\mu$m")
     ax.text(0.0, 1.0, r"(c)  gated 1 $\mu$m funnel", transform=ax.transAxes, fontsize=8, fontweight="bold", va="bottom")
 
     # (d) characteristic frequencies
@@ -138,7 +138,7 @@ def fig2():
     hh, ll = axes[0].get_legend_handles_labels()
     fig.legend(hh, ll, loc="upper center", ncol=3, fontsize=6.8, bbox_to_anchor=(0.5, 1.03), handletextpad=0.2, columnspacing=1.4)
     axes[1].set_yscale("log"); axes[1].set_ylabel(r"forward resistance $V/I(+V)$ (k$\Omega$)"); axes[1].set_ylim(0.3, 40)
-    panel(axes[0], "a", x=-0.16, y=0.98); panel(axes[1], "b", x=-0.16, y=0.98)
+    panel(axes[0], "a", x=-0.16, y=1.02); panel(axes[1], "b", x=-0.16, y=1.02)
     save(fig, "fig2_ballistic_dc")
 
 
@@ -266,7 +266,7 @@ def fig4():
     ax.legend(loc="upper left", fontsize=6.3, borderaxespad=0.6)
     panel(ax, "a")
 
-    def ri_panel(ax, stem, sets, entries, title, ylim=(3e-6, 1.2)):
+    def ri_panel(ax, stem, sets, entries, title, ylim=(3e-6, 4)):
         for term, color, lab in entries:
             for st, ls in sets:
                 rows = load_csv(f"{T}/{stem}_{st}_{term}.csv")
@@ -302,7 +302,7 @@ def fig4():
 # =============================================================================
 def fig5():
     T = os.path.join(RES, "thz"); VU = 1.487
-    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.65), gridspec_kw=dict(wspace=0.36))
+    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.75), gridspec_kw=dict(wspace=0.46))
     fs = [("1e11", BLUES[0], "0.1 THz"), ("3e11", BLUES[1], "0.3 THz"), ("1e12", BLUES[2], "1 THz")]
     ax = axes[0]
     for st, run, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
@@ -326,7 +326,7 @@ def fig5():
     rows = sorted(load_csv(f"{T}/P4_funnel_w1000_100K_sym_f3e11.csv"), key=lambda r: r["Va"])
     ax.plot([r["Va"] * VU for r in rows], [r["eta_av"] / r["eta_small_bdf"] for r in rows], color=GREEN, ls="-", marker="o", ms=3, mec="white", mew=0.3)
     ax.axhline(1, color=GREY, lw=0.6, ls=":")
-    ax.text(0.5, 0.47, "shape only,\n0.3 THz", fontsize=6.3, color=GREEN, ha="center")
+    ax.text(0.2, 0.52, "shape only,\n0.3 THz", fontsize=6.3, color=GREEN, ha="right", va="center")
     ax.set_xscale("log"); ax.set_xlim(0.012, 1.3); ax.set_ylim(0.35, 1.2)
     ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"$\eta$ / square law")
     panel(ax, "b", x=-0.22)
@@ -337,9 +337,9 @@ def fig5():
         ax.plot(V, [r["n_max"] for r in rows], color=c, marker="o", ms=3, mec="white", mew=0.3)
         ax.plot(V, [r["n_min"] for r in rows], color=c, marker="o", ms=3, mec="white", mew=0.3)
     ax.axhline(1, color=GREY, lw=0.6, ls=":"); ax.axvline(1.43, color=GREY, lw=0.6, ls="--")
-    ax.text(1.3, 0.08, "gate overdrive", fontsize=6.3, color=GREY, rotation=90, ha="right", va="bottom")
-    ax.set_xscale("log"); ax.set_xlim(0.012, 1.7); ax.set_ylim(0, 1.8)
-    ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"density extremes $n_{\min},n_{\max}$ / $n_0$ (100 K)")
+    ax.text(1.55, 0.06, "gate overdrive", fontsize=6.3, color=GREY, rotation=90, ha="left", va="bottom")
+    ax.set_xscale("log"); ax.set_xlim(0.012, 2.4); ax.set_ylim(0, 1.8)
+    ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"$n_{\min}/n_0$ and $n_{\max}/n_0$ (100 K)")
     panel(ax, "c", x=-0.22)
     h = [Line2D([], [], color=c, marker="o", ms=3, label=lab) for f, c, lab in fs] + [Line2D([], [], color=GREY, ls="-", label="100 K"), Line2D([], [], color=GREY, ls="--", label="300 K")]
     fig.legend(handles=h, loc="upper center", ncol=5, fontsize=6.6, bbox_to_anchor=(0.5, 1.04), columnspacing=1.6)
@@ -454,24 +454,24 @@ def fig7():
     B = os.path.join(RES, "bthz")
     sc = bc.static_curves(bc.load(f"{B}/B1.csv")); geo = "funnel_nguyenD"
     b2 = {"uniform": bc.load(f"{B}/B2u.csv"), "local500": bc.load(f"{B}/B2l.csv")}; b3 = bc.load(f"{B}/B3.csv")
-    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.7), gridspec_kw=dict(wspace=0.36))
+    fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.85), gridspec_kw=dict(wspace=0.46))
     ax = axes[0]
-    sty = {("uniform", "inf"): (PURPLE, "-", "o", "uniform field, clean"), ("uniform", "700"): (PURPLE, "--", "o", r"uniform field, $\lambda=700$ nm"),
-           ("local500", "inf"): (DPURPLE, "-", "s", "500 nm drop at the neck, clean")}
+    sty = {("uniform", "inf"): (PURPLE, "-", "o", "uniform, clean"), ("uniform", "700"): (PURPLE, "--", "o", r"uniform, $\lambda=700$ nm"),
+           ("local500", "inf"): (DPURPLE, "-", "s", "500 nm drop, clean")}
     for (fk, lk), (c, ls, m, lab) in sty.items():
         rs = sorted([r for r in b2[fk] if bc.lam_key(r) == lk and abs(r["V_V"] - 0.1) < 1e-9], key=lambda r: r["f_Hz"])
         qs, eqs, _, _ = sc[(geo, fk, lk)].qs(0.1)
         S = np.array([r["Idc_A"] for r in rs]) / qs; e = np.array([math.hypot(r["Idc_err_A"] / qs, r["Idc_A"] * eqs / qs ** 2) for r in rs])
         ax.errorbar([r["f_Hz"] for r in rs], S, e, color=c, ls=ls, marker=m, ms=3.5, lw=1.2, mec="white", mew=0.3, label=lab)
     ff = np.logspace(8.3, 12.1, 300); x = np.pi * ff * 3.58e-12
-    ax.plot(ff, np.sin(x) / x, color=GREY, lw=0.7, ls=":", label=r"$\sin(\pi f\tau_{\rm tr})/\pi f\tau_{\rm tr}$")
+    ax.plot(ff, np.sin(x) / x, color=GREY, lw=0.7, ls=":", label="transit factor")
     ax.axhline(0, color=GREY, lw=0.5); ax.axvspan(3e11, 1e12, color="#e3f4ee", zorder=0)
-    ax.set_xscale("log"); ax.set_xlim(2e8, 1.5e12); ax.set_ylim(-0.3, 1.2)
+    ax.set_xscale("log"); ax.set_xlim(2e8, 1.5e12); ax.set_ylim(-0.95, 1.2)
     ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"$I_{\rm dc}(f)$ / quasi-static value")
-    ax.legend(loc="lower left", fontsize=6.0, handlelength=1.8)
+    ax.legend(loc="lower left", fontsize=6.0, handlelength=1.8, borderaxespad=0.3, labelspacing=0.3)
     panel(ax, "a", x=-0.22)
     ax = axes[1]
-    for f0, m, c in ((3e11, "o", DPURPLE), (1e12, "s", BLACK)):
+    for f0, m, c in ((3e11, "o", GREY), (1e12, "s", BLACK)):
         xs, ys, es = [], [], []
         for ell in (175, 500, 1600):
             rs = [r for r in b3 if abs(r["f_Hz"] - f0) < 1 and abs(r["ellF_nm"] - ell) < 1]
@@ -497,10 +497,10 @@ def fig7():
         cnt = np.array([float(r[k]) for r in rows]); tail = np.cumsum(cnt[::-1])[::-1] / cnt.sum()
         m = lo > 0
         ax.plot(lo[m] * 1e-3, tail[m], color=c, ls=ls, lw=1.2, label=lab)
-    ax.axvline(3.58, color=GREY, lw=0.5, ls=":"); ax.text(3.3, 2e-5, "direct flight\nto the neck", fontsize=6.0, color=GREY, ha="right", va="bottom")
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(1, 1500); ax.set_ylim(1e-5, 60)
+    ax.axvline(3.58, color=GREY, lw=0.5, ls=":"); ax.text(4.3, 1.6e-5, "direct flight\nto the neck", fontsize=6.0, color=GREY, ha="left", va="bottom")
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(1, 1500); ax.set_ylim(1e-5, 300)
     ax.set_yticks([1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1])
-    ax.set_xlabel("flight time $t$ (ps)"); ax.set_ylabel("fraction of electrons flying longer than $t$")
+    ax.set_xlabel("flight time $t$ (ps)"); ax.set_ylabel("fraction with flight time $>t$")
     ax.legend(loc="upper right", fontsize=5.8, handlelength=1.8, borderaxespad=0.3)
     panel(ax, "c", x=-0.22)
     save(fig, "fig7_ballistic_thz")
@@ -578,8 +578,40 @@ def fig8():
     save(fig, "fig8_synthesis")
 
 
+# =============================================================================
+# Overview figure for OVERVIEW.md: the two shapes, plain labels
+# =============================================================================
+def fig_overview():
+    fig, axes = plt.subplots(1, 2, figsize=(COL2, 1.95), gridspec_kw=dict(wspace=0.05))
+    def arrow(ax, x0, x1, y, text, color):
+        ax.annotate("", xy=(x1, y), xytext=(x0, y), arrowprops=dict(arrowstyle="->", lw=0.9, color=color))
+        ax.text(0.5 * (x0 + x1), y + (130 if y > 0 else -130), text, fontsize=7.5, ha="center", va="bottom" if y > 0 else "top", color=color)
+    ax = axes[0]
+    loops, xn, L = funnel_loops(); draw_domain(ax, loops)
+    for x in (0, L): ax.plot([x, x], [-1000, 1000], color=BLUE, lw=2.4, zorder=3)
+    arrow(ax, 900, L - 900, 1300, "easy direction (into the funnel)", BLACK)
+    arrow(ax, L - 900, 900, -1300, "harder direction", GREY)
+    ax.annotate("neck:\n175 nm", xy=(xn + 40, 0), xytext=(xn + 1250, 0), fontsize=7, ha="center", va="center", color=GREY,
+                arrowprops=dict(arrowstyle="-", lw=0.5, color=GREY))
+    ax.set_title("Funnel (\"geometric diode\")", fontsize=9, fontweight="bold")
+    ax = axes[1]
+    tl = load_poly(os.path.join(ROOT, "meshes", "tesla_classic.poly")); draw_domain(ax, tl, fc="#fbe3d4")
+    xs = np.concatenate([l[:, 0] for l in tl])
+    for x in (xs.min(), xs.max()): ax.plot([x, x], [-1000, 1000], color=VERM, lw=2.4, zorder=3)
+    arrow(ax, 900, xs.max() - 900, 1300, "easy direction (straight through)", BLACK)
+    arrow(ax, xs.max() - 900, 900, -1300, "harder direction (the loops turn the flow back)", GREY)
+    ax.set_title("Tesla valve", fontsize=9, fontweight="bold")
+    for ax in axes:
+        ax.set_xlim(-400, 8300); ax.set_ylim(-2350, 2000); ax.set_aspect("equal"); ax.axis("off")
+        ax.plot([200, 1200], [-2200, -2200], color=BLACK, lw=1.2, solid_capstyle="butt")
+        ax.text(1350, -2200, "1 micrometre", fontsize=7, va="center")
+    save(fig, "overview_devices")
+
+
 FIGS = {1: fig1, 2: fig2, 3: fig3, 4: fig4, 5: fig5, 6: fig6, 7: fig7, 8: fig8}
 
 if __name__ == "__main__":
-    which = [int(a) for a in sys.argv[1:]] or sorted(FIGS)
+    args = sys.argv[1:]
+    if "overview" in args or not args: fig_overview()
+    which = [int(a) for a in args if a != "overview"] or ([] if args else sorted(FIGS))
     for k in which: FIGS[k]()
