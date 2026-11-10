@@ -118,6 +118,7 @@ path of the solver is unchanged).
 | B0 | straight 175 nm control | uniform; localised 500 nm | inf | 8 frequencies | 0.1 | 16 | 15 min |
 | B4 | amplitude ladder | localised 500 nm | inf | 300 GHz | 0.05, 0.1, 0.2, 0.3 | 4 | 5 min |
 | B5 | Dirac cut against the classical turning point | localised 500 nm; uniform | inf, 700 | 10 GHz, 300 GHz, 1 THz | 0.1 | 10 | 20 min |
+| B6 | half-diffuse walls, p = 0.5 (added 2026-11-10) | uniform; localised 500, 175 nm | inf | 0, 0.3 GHz, 300 GHz, 1 THz | 0.1 | 15 | 5 min |
 
 Each point is 1e6 particles per side (4e6 at 700 nm and at V_a = 0.05 V,
 2e6 for the 700 nm static points), 16 to 60 us per particle depending on
@@ -198,7 +199,19 @@ are in `bthz/tables_B2.md`.
    106 uW). No electron is heated beyond its injection energy plus two
    drops; the exit-energy histograms stay within the Fermi tail plus
    e V_a.
-8. **Verdict against the criteria fixed in the plan.** Not alive: the
+8. **Half-diffuse walls do not remove the THz response (B6, `B6.csv`).**
+   With p = 0.5 in the clean limit the static asymmetry falls to 1.17
+   (uniform field), 1.01 (500 nm drop) and 0.94 (175 nm drop), and the
+   uniform-field response is 0.31 A/W at 0.3 GHz and zero at 300 GHz and
+   1 THz (0.0 +- 0.6 and -0.1 +- 0.6 uA). The confined-drop response at
+   1 THz is nevertheless 6.8 +- 0.7 uA, 0.45 A/W (500 nm) and 4.5 +- 0.6
+   uA, 0.31 A/W (175 nm), although at 0.3 GHz it is 0.5 +- 0.6 and -1.5 +-
+   0.6 uA. As at lambda = 700 nm (item 5), the THz rectification of the
+   neck-confined field is a transit-time effect that does not need the
+   static asymmetry, and it is robust to edge roughness at 0.3 to 0.45 A/W.
+   The specular clean case is therefore not the unique best case, but no
+   variant exceeds 0.45 A/W.
+9. **Verdict against the criteria fixed in the plan.** Not alive: the
    best clean-limit responsivity at 1 THz is 0.45 A/W under the
    neck-width drop and 0.37 under the 500 nm drop, against the 1 A/W
    required, and S_B(300 GHz) is 0.35 to 0.64. Not closed either, by the

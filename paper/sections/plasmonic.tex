@@ -1,0 +1,204 @@
+\section{The plasmonic element at terahertz frequencies}
+\label{sec:plasmonic}
+
+\subsection{Small signal: the terminations rectify, the shape tunes}
+\label{sec:small}
+
+The solver is first checked where an analytic answer exists. For a uniform
+channel driven by an ideal source with an open drain, the shallow-water
+closure reproduces the closed form of Dyakonov and
+Shur~\cite{dyakonov1996detection} to three digits from $10\GHz$ to $3\THz$,
+through the plasmon resonances at $100$~K and on the broadband plateau at
+$300$~K [Fig.~\ref{fig:small}(a)]. The Dirac closure of Eq.~\eqref{eq:s2}
+raises the response by $40\%$ near the resonances and by up to a factor two
+between them; the difference is the nonlinearity of the Dirac fluid itself,
+whose density-dependent mass and quantum capacitance add second-order terms
+that the shallow-water model lacks.
+
+Figure~\ref{fig:small}(b) shows the $1\um$ funnel. Its impedance is $80$ to
+$200\ \Omega$ across the band, so it absorbs $80$ to $95\%$ of the available
+power of a $75\ \Omega$ source at $100$~K. With the DS termination the
+responsivity is $0.15$ to $0.34\AW$ at $100$~K and $0.07$ to $0.09\AW$ at
+$300$~K, flat from $10\GHz$ to beyond $1\THz$. With the symmetric
+termination, which isolates the shape, it is $10^{-5}$ to $10^{-2}\AW$ below
+$100\GHz$, rises to $0.13\AW$ at $1\THz$ at $100$~K as the taper becomes
+comparable to the plasmon wavelength, and stays at a few mA/W at $300$~K,
+where friction and viscosity damp the plasmon. Below $100\GHz$ the
+shape-only response is the curvature of the steady current-voltage relation
+of Sec.~\ref{sec:dc}; a ladder test ties the two solvers together there.
+The sign of the DS response follows the termination: exchanging the roles of
+source and drain reverses it.
+
+The $175\nm$ funnel [Fig.~\ref{fig:small}(c)] has a dc resistance of
+$1.9$~k$\Omega$ and absorbs only $15$ to $80\%$ of the available power, but
+it has one feature the wide device lacks. At $1.87\THz$ the taper passes
+through a series resonance, the horn is matched to the antenna, and the
+shape-only responsivity reaches $0.22\AW$ at $100$~K, half of the $0.45\AW$
+of the DS termination at the same frequency. The resonance belongs to the
+taper and not to the leads: a control with $1\um$ leads has it at the same
+frequency, with an impedance of $57-8i\ \Omega$ there. This is the one place where the
+funnel shape earns its keep in a plasmonic design, as a matched horn. At
+$300$~K it gives $0.03\AW$ against $0.10\AW$ for the terminations.
+
+The Tesla valve [Fig.~\ref{fig:small}(d)] contributes almost nothing. Its
+shape-only responsivity is $10^{-5}$ to $10^{-3}\AW$ below $300\GHz$ and
+reaches $2\times10^{-2}\AW$ only at a $100$~K resonance near $0.7\THz$, ten
+to twenty times below the funnel at every frequency and temperature. Its
+resistance of $6$ to $11$~k$\Omega$ is two orders of magnitude from the
+antenna, so $3$ to $50\%$ of the available power is absorbed, and whatever
+the DS termination adds, $0.02$ to $0.1\AW$, is the terminations and not
+the loops. The valve's asymmetry is an inertial loss that needs a Reynolds
+number of ten; at terahertz frequencies the long path that produces it is
+also several plasmon wavelengths long, so its stages do not act coherently.
+
+With ideal contacts and the Johnson noise of $\Rdc$ alone, the
+noise-equivalent power of the funnel elements is $4$ to $60\pWrtHz$ between
+$0.3$ and $2\THz$: $17\pWrtHz$ for the $1\um$ funnel at $100$~K, about
+$60\pWrtHz$ at $300$~K, and $4\pWrtHz$ for the $175\nm$ funnel at its taper
+resonance at $100$~K.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig4_plasmonic_small_signal.pdf}
+\caption{Small-signal plasmonic response. (a) Validation on a uniform
+$1\um\times10\um$ channel with an ideal source and open drain: dc drain
+voltage per squared ac amplitude in units of the inverse gate overdrive. The
+solver with the shallow-water closure lies on the Dyakonov-Shur closed
+form~\cite{dyakonov1996detection}; the Dirac closure of
+Eq.~\eqref{eq:s2} is $40\%$ higher near resonance. (b)--(d) Current
+responsivity into a $75\ \Omega$ antenna for the $1\um$ funnel, the $175\nm$
+funnel and the classical Tesla valve, with the drain tied to the gate
+(circuit asymmetry) and with the symmetric drive that isolates the shape.
+Open symbols mark a negative sign. The shaded band is $0.3$ to $1\THz$.}
+\label{fig:small}
+\end{figure*}
+
+\subsection{Large signal: a square law up to the gate overdrive}
+\label{sec:large}
+
+A detector is judged by responsivity and noise, a harvester by conversion
+efficiency $\eta=P_{\mathrm{dc}}/\Pav$ at the power the antenna supplies.
+In second-order perturbation the device is a dc Thevenin source with
+open-circuit voltage $V_{\mathrm{oc}}=r\,V_{a}^{2}/V_{u}$ and resistance
+$\Rdc$, where $V_{u}=m^{*}s_{0}^{2}/e$ is the natural voltage unit of the
+gated fluid ($1.49$~V here, the gate overdrive up to the quantum-capacitance
+correction) and $r$ is a pure number. Into a matched dc load
+\begin{equation}
+\eta=2r^{2}\,\frac{\Rant}{\Rdc}\,\frac{V_{a}^{2}}{V_{u}^{2}}
+=\frac{16\,r^{2}\Rant^{2}}{\Rdc V_{u}^{2}}\,\Pav .
+\label{eq:eta}
+\end{equation}
+For the $1\um$ funnel $r\approx0.1$ and $\eta/\Pav$ is $1.0$ to
+$2.4$~W$^{-1}$. Since $V_{a}$ cannot usefully exceed $V_{u}$, where the
+channel is depleted on the negative half cycle, Eq.~\eqref{eq:eta} already
+bounds the efficiency below one per cent; what the nonlinear solver decides
+is where the law fails and how.
+
+Figure~\ref{fig:large} shows the time-domain results for the DS-terminated
+$1\um$ funnel. The efficiency meets the perturbative law to $0.3\%$ at the
+smallest amplitude and stays within about $10\%$ of it up to $0.9$~mW of available
+power at $0.1$ and $0.3\THz$ at both temperatures. At $1\THz$ the response
+saturates first, $10\%$ below the law at $150\ \mu$W at $100$~K. At
+$1.8$~mW, a swing of $1.04$~V on a gate overdrive of $1.43$~V, the
+efficiency is $0.14$ to $0.38\%$ and the response is $0.6$ to $0.9$ of the
+square law at $100$~K; at $300$~K the overdamped device is weakly
+super-quadratic, $1.10$ to $1.14$ of the law at $0.1$ and $0.3\THz$. The
+density inside the device swings between $0.52$ and $1.6$ of its gated
+value [Fig.~\ref{fig:large}(c)] and the solver converges at every step, so
+the saturation is a property of the fluid and not a failure of the method.
+Returning the dc current through the antenna instead of a matched load costs
+the expected $15\%$ and nothing more.
+
+The shape-only response behaves worse, not better, at large signal. With
+the symmetric drive the funnel gives $0.56$~W$^{-1}$ at $0.3\THz$, a third
+of the DS term of the same device; it leaves its square law at $150\ \mu$W
+and is at $0.43$ of it at $0.9$~mW [Fig.~\ref{fig:large}(b)]. The picture
+of a geometric diode that improves when driven hard is not what the fluid
+does: the constriction's rectification is a resonance effect that detunes
+as the density swings.
+
+The scale of the result is set by Eq.~\eqref{eq:eta}. A beam of
+$1$~W/m$^{2}$ delivers about $10$~nW to a half-wave antenna at $1\THz$,
+which the element converts at $\eta\sim10^{-8}$; a full milliwatt focused
+on one element is converted at $0.2\%$.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig5_large_signal.pdf}
+\caption{Finite-amplitude response of the DS-terminated $1\um$ funnel from
+the time-domain solver. (a) Conversion efficiency into a matched dc load
+against available power. (b) Efficiency relative to the square law of
+Eq.~\eqref{eq:eta}, against the ac amplitude; the green curve is the
+shape-only response (symmetric drive) at $0.3\THz$, $100$~K. (c) Smallest
+and largest density in the device over a period, relative to the gated
+density, at $100$~K.}
+\label{fig:large}
+\end{figure*}
+
+\subsection{Operating point and contacts: the knee moves, the ceiling does not}
+\label{sec:operating}
+
+Equation~\eqref{eq:eta} suggests a lever. The efficiency saturates when
+$V_{a}$ approaches $V_{u}$, at an available power
+$P_{\mathrm{knee}}=(V_{u}/2)^{2}/8\Rant$, and $V_{u}$ is proportional to the
+gate overdrive $e n_{0}/C_{g}\propto n_{0}d$. A lower density or a thinner
+gate should bring the saturation down to the microwatts an antenna
+collects. What it does to the peak depends on the pure number
+$r^{2}\Rant/\Rdc$, which the solver has to supply. We swept
+$n_{0}=5\times10^{10}$ to $10^{12}\percm$ and $d=30$, $10$, $5\nm$ with the
+scattering times of Table~\ref{tab:params}, flagging points outside the
+Fermi-liquid limit $\EF\geq3\kB T$ or the gating limit
+$e n_{0}/C_{g}\geq4\kB T/e$; the saturation factors of Sec.~\ref{sec:large}
+were carried over in units of $V_{u}$ (Appendix~\ref{app:knee}), and a second time-domain ladder at
+$(5\times10^{11}\percm,10\nm)$ confirmed that they transfer, to $0.2\%$ at
+$300$~K and within $14\%$ at $100$~K.
+
+The saturation power moves as predicted [Fig.~\ref{fig:operating}(a)]: from
+$0.92$~mW at the reference point to $33\ \mu$W at
+$(5\times10^{11}\percm,10\nm)$ and $3\ \mu$W at $(5\times10^{10}\percm,30\nm)$,
+with $\eta/\Pav$ rising from $1.9$ to $51$ and $1770$~W$^{-1}$ at $100$~K
+and $0.3\THz$. The peak barely moves [Fig.~\ref{fig:operating}(b)]. Over the
+valid grid it is $0.03$ to $0.9\%$ at $100$~K and at most $0.24\%$ at
+$300$~K, where the reference point is already the best. A thinner gate
+lowers it, because $r$ falls from $0.088$ to $0.050$ between $30$ and
+$5\nm$ as the plasma speed drops and friction and quantum capacitance gain
+weight; a lower density raises $r$, to $0.32$ at the edge of the
+Fermi-liquid limit. A matched antenna in place of $75\ \Omega$ gives at
+best $1.3\%$ at $100$~K and $0.27\%$ at $300$~K. If the mobility rather
+than the scattering time is held constant as the density falls, the
+low-density gain shrinks by a factor four to six. The design rule is
+therefore to put the knee at the available power; the element then converts
+at a few tenths of a per cent, and nothing in $n_{0}$ or $d$ raises that
+number.
+
+Contact resistance is the dominant practical loss, and it is not a series
+loss. A contact resistance $R_{c}$ at each contact of the reference device
+reduces $\eta/\Pav$ by factors $1.6$, $4.6$ and $78$ for $R_{c}=100$, $300$
+and $1000\ \Omega\um$ at $100$~K and $0.3\THz$
+[Fig.~\ref{fig:operating}(c)], the responsivity from $0.21\AW$ to $0.15$,
+$0.07$ and $0.01\AW$, and it raises the NEP from $27$ to $35$, $59$ and
+$240\pWrtHz$. The series picture underestimates this. The gate carries
+displacement current, so the ac drain current is not the negative of the
+source current, and a resistance at the drain lifts it off the gate
+potential at the signal frequency: the boundary condition that makes the
+Dyakonov-Shur mechanism work is partly removed. Matching the antenna to the
+new impedance recovers little.
+
+For detection the same lever is worth having
+[Fig.~\ref{fig:operating}(d)]. The Johnson-limited NEP of the $1\um$ funnel
+at $0.3\THz$ falls from $27\pWrtHz$ at the reference point to about
+$1\pWrtHz$ at $5\times10^{10}\percm$ at $100$~K if the $5$~ps scattering
+time survives there, $2\pWrtHz$ with constant mobility or with
+$300\ \Omega\um$ contacts; at $300$~K the best valid point is
+$15\pWrtHz$.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig6_operating_point.pdf}
+\caption{Carrier density, gate distance and contacts for the DS-terminated
+$1\um$ funnel. (a) Saturation power $P_{\mathrm{knee}}$ against the product
+$n_{0}d$; the dotted line is $(n_{0}d)^{2}$ through the reference point, and
+the departure at small $n_{0}d$ is the quantum capacitance. (b) Predicted
+peak efficiency at $0.3\THz$. (c) Efficiency per watt against contact
+resistance, relative to ideal contacts, at the reference point. (d)
+Johnson-limited NEP at $0.3\THz$. Open symbols are outside the
+Fermi-liquid or gating limits.}
+\label{fig:operating}
+\end{figure*}

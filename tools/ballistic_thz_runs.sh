@@ -1,7 +1,7 @@
 #!/bin/zsh
 # Stage B2 science runs (plans/ballistic_thz.md section 4). Each gd_bthz call
 # is multi-threaded over 64 batches; stages run sequentially.
-# usage: tools/ballistic_thz_runs.sh B1|B2u|B2l|B3|B0|B4|B5 [f_Hz for B4] [field for B4] [ellF for B4]
+# usage: tools/ballistic_thz_runs.sh B1|B2u|B2l|B3|B0|B4|B5|B6 [f_Hz for B4] [field for B4] [ellF for B4]
 set -e
 cd "$(dirname "$0")/.."
 B=./build/gd_bthz
@@ -66,6 +66,17 @@ case $stage in
       set -- ${=args}
       for rf in "" "--reflect"; do
         $B --geo funnel_nguyenD --field $1 --ellF $2 --lambda $3 --f $4 --V 0.1 --N $5 --out $R/B5.csv ${=rf}
+      done
+    done ;;
+  B6)  # partly diffuse walls (p = 0.5), clean limit: static +-0.1 V and the decision frequencies
+    rm -f $R/B6.csv
+    for args in "uniform 500" "local 500" "local 175"; do
+      set -- ${=args}
+      for V in 0.1 -0.1; do
+        $B --geo funnel_nguyenD --field $1 --ellF $2 --lambda inf --p 0.5 --f 0 --V $V --N 1000000 --out $R/B6.csv
+      done
+      for f in 3e8 3e11 1e12; do
+        $B --geo funnel_nguyenD --field $1 --ellF $2 --lambda inf --p 0.5 --f $f --V 0.1 --N 1000000 --out $R/B6.csv
       done
     done ;;
   *) echo "unknown stage $stage"; exit 2 ;;

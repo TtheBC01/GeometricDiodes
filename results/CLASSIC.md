@@ -156,11 +156,26 @@ Reading:
    both large and fast. The classical Tesla reopens the *cryogenic,
    sub-100 GHz* hydrodynamic case, not the THz one.
 
-Numerical caveats: no mesh-convergence study has been run on this geometry
-(the tesla1 study in `HYDRO.md` found 3 % at Re 10, ~15 % at Re 3, and a
-floor of ~3e-5 below Re 1, which should carry over); the Re 30 slip states
-carry strong jets (reverse peak speed 45 % above forward), so a finer mesh
-will move the large values by a few per cent, not their order of magnitude.
+Mesh convergence (added 2026-11-10, `results/checks/classic_mesh_hw{14,10}.csv`):
+D - 1 at Da 0 on the production mesh (hw 20 / hm 120 nm, 16 703 nodes) and
+on hw 14 / hm 84 (25 447 nodes) and hw 10 / hm 60 (38 449 nodes):
+
+| S | Re | hw 20 | hw 14 | hw 10 | 20 -> 14 | 14 -> 10 |
+|---|---|---|---|---|---|---|
+| inf | 3 | 0.01192 | 0.0118 | 0.01236 | -1.0 % | +4.7 % |
+| inf | 10 | 0.2342 | 0.2316 | 0.243 | -1.1 % | +4.9 % |
+| inf | 30 | 1.472 | 1.51 | 1.619 | +2.6 % | +7.2 % |
+| 0.5 | 3 | 0.006779 | 0.006825 | 0.007161 | +0.7 % | +4.9 % |
+| 0.5 | 10 | 0.1515 | 0.1513 | 0.1586 | -0.2 % | +4.8 % |
+| 0.5 | 30 | 1.145 | 1.177 | 1.257 | +2.8 % | +6.9 % |
+
+The first refinement moves D - 1 by less than 3 %, the second by 5 to 7 %
+at every Re: the sequence is not yet in its asymptotic range (Pi converges
+only at first order because of the re-entrant corners at the loop
+junctions, as for tesla1 in `HYDRO.md`). The diodicities in this note are
+therefore good to about 10 %, not the 3 % carried over from tesla1; no
+conclusion depends on the difference. The Re 30 slip states carry strong
+jets (reverse peak speed 45 % above forward).
 
 ## S4: the valve scaled to a 1 um channel (`hydro_S4_classic_w1000_stdout.txt`)
 

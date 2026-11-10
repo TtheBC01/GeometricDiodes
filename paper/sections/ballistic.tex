@@ -1,0 +1,114 @@
+\section{The ballistic element at terahertz frequencies}
+\label{sec:ballistic}
+
+One mechanism is outside the fluid model by construction. In the clean
+limit the ballistic funnel of Sec.~\ref{sec:dc} has a curvature
+$G_{2}=3.8$~mA/V$^{2}$; if it responded instantaneously, a cosine drive of
+$0.1$~V across the device would rectify $18\ \mu$A, which is $0.87\AW$ of
+the available power of a $75\ \Omega$ source, two to ten times the plasmonic
+figures. Whether it does respond is a transit-time question, and we ask it
+of the same model.
+
+The imposed potential is made time dependent, $U(x,t)=-eV_{a}\cos(\omega
+t)\,g(x)$, and the flights integrate $\hbar\dot{\bm{k}}=-\nabla U$ without
+the energy conservation that holds only in a static landscape. Two profiles
+$g$ bracket the electrostatics, which the model does not compute: the
+uniform ramp over the $6\um$ device used at dc, and a drop of length
+$\ell_{F}$ centred on the neck, with $\ell_{F}=175$, $500$ and $1600\nm$
+(one neck width, three, and the taper length). The bias-window estimator of
+Eq.~\eqref{eq:landauer} relies on flux conservation in a fixed landscape and
+fails in a moving one, so electrons are injected from both contacts with the
+equilibrium distribution $N(E)f(E-\EF)$ at uniformly distributed phases, and
+\begin{equation}
+\Idc=\frac{g e}{h}\,\Phi\,\bigl[\langle T_{SD}\rangle-\langle T_{DS}\rangle\bigr],
+\qquad \Phi=\int dE\,N(E)f(E-\EF),
+\label{eq:twosided}
+\end{equation}
+with the averages taken over injection phase; $(ge/h)\Phi$ is $1.43$~mA
+for the $2\um$ contacts. The first harmonic of the drain current, from the
+arrival phases, gives the transport admittance and hence the mismatch to
+the antenna. Six further tests validate the estimator: it reproduces the
+bias-window current in a static field, it gives zero at zero bias, zero for
+the straight control at every frequency, and at $300$~MHz it reproduces the
+rectified current and the admittance computed from the static curve
+(Supplemental Material). The results are reported as the transfer
+$S_{B}(f)=\Idc(f)/\Idc(0)$, with $\Idc(0)$ the quasi-static value for the
+same field profile, and as responsivity.
+
+\subsection{Uniform field: two roll-offs}
+
+With the uniform field the response dies in two steps
+[Fig.~\ref{fig:ballistic-thz}(a)]. The transfer is $0.98\pm0.04$ at
+$0.3\GHz$ and already $0.82$ at $3\GHz$ and $0.67$ at $10\GHz$, although a
+direct flight from the source contact to the neck takes $3.6$~ps. The
+reason is in the distribution of flight times
+[Fig.~\ref{fig:ballistic-thz}(c)]. The taper scatters part of the incoming
+electrons into directions nearly perpendicular to the axis, and these drift
+back to the source contact, bouncing between the walls of the lead, over
+tens of picoseconds: $5\%$ of the source-injected electrons fly longer than
+$20$~ps and $0.9\%$ longer than $50$~ps. In a field that fills the leads,
+this slow population is displaced in energy between wall collisions once
+the period approaches its lifetime, and the transmission in both directions
+changes. The response time of a ballistic device is set by its slowest
+population, not by its mean transit, and a converging taper manufactures
+slow electrons. The second step is the transit roll-off of the direct
+electrons: the transfer is $0.41$ at $100\GHz$, crosses zero at $300\GHz$,
+where $\sin(\pi f\tau_{\mathrm{tr}})$ vanishes for
+$\tau_{\mathrm{tr}}=3.6$~ps, and is $0.05\pm0.04$ at $1\THz$, i.e.
+$0.05\AW$. At a mean free path of $700\nm$ the quasi-static responsivity is
+only $0.15\AW$ to begin with; it is $0.04\AW$ at $30\GHz$ and zero at
+$1\THz$. With the field
+model in which the dc asymmetry was established, the ballistic funnel is
+not a terahertz rectifier.
+
+\subsection{Field confined to the neck}
+
+Self-consistent electrostatics concentrates the field of such a diode at
+the neck rather than spreading it along the
+leads~\cite{truccolo2024comprehensive}. Confining the drop to the
+neck lowers the static asymmetry, from $1.61$ for the uniform field to
+$1.52$, $1.50$ and $1.40$ for $\ell_{F}=1600$, $500$ and $175\nm$, and it
+changes the dynamics [Fig.~\ref{fig:ballistic-thz}(a) and
+\ref{fig:ballistic-thz}(b)]. For $\ell_{F}=500\nm$ the transfer is
+$1.02\pm0.04$ up to $3\GHz$, since the slow electrons in the lead no
+longer see a field, then falls to $0.54$ at $100\GHz$, and is $0.64$ at
+$300\GHz$ and $0.38\pm0.04$ at $1\THz$. The decline between $10$ and
+$100\GHz$ is not what the $0.5$~ps crossing of the field region would
+suggest; the transfer is set by the whole flight between the contacts. At
+$1\THz$ the transfer is $0.51$ for a drop of one neck width, $0.38$ for
+$500\nm$ and zero for $1600\nm$. The corresponding responsivities are
+$0.45\pm0.04$ and $0.37\pm0.04\AW$: this is the most the shape mechanism
+gives at $1\THz$ in this model, with infinite mean free path, specular
+walls and a drop of favourable length, and it equals the Dyakonov-Shur
+response of the plasmonic funnel at $100$~K rather than exceeding it. The
+amplitude dependence is that of the dc curve: at $300\GHz$ the rectified
+current follows $V_{a}^{2}$ to $0.1$~V and is $0.40$ and $0.24$ of the
+square law at $0.2$ and $0.3$~V.
+
+Two further cases show that the terahertz response of the confined field is
+not simply the static asymmetry carried up in frequency. At $\lambda=700\nm$
+the static asymmetry of the confined-field models is reversed ($A=0.94$ to
+$0.97$), the rectified current passes through zero between $30$ and
+$100\GHz$, and it returns with the sign of the clean funnel, $0.20\AW$ at
+$300\GHz$ and $0.24\AW$ at $1\THz$. With half-diffuse walls ($p=0.5$) in the
+clean limit the static asymmetry of the $500\nm$ drop is $1.01$, and the
+responsivity at $1\THz$ is nevertheless $0.45\pm0.04\AW$ ($0.31\AW$ for the
+neck-width drop). There is, then, a transit-time rectification of the
+funnel with a neck-confined field that is robust against edge roughness
+and bulk scattering, of $0.2$ to $0.45\AW$. It does not depend on the
+treatment of the few electrons that reach the Dirac point: replacing their
+removal by a classical turning point changes no result by more than one
+standard error.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig7_ballistic_thz.pdf}
+\caption{The ballistic funnel under an ac drive of amplitude $0.1$~V. (a)
+Rectified current relative to its quasi-static value for the uniform field
+(clean limit and $\lambda=700\nm$) and for a potential drop of $500\nm$ at
+the neck; the dotted line is the transit factor for a flight of $3.6$~ps
+from the source contact to the neck. (b) The same ratio at $0.3$ and
+$1\THz$ against the length of the drop; open symbols: uniform field. (c)
+Fraction of electrons with a flight time longer than $t$ in the static
+device at $0.1$~V. Error bars are one standard error.}
+\label{fig:ballistic-thz}
+\end{figure*}

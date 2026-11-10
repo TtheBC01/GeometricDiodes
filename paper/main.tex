@@ -1,0 +1,92 @@
+% Shape versus circuit: why graphene geometric diodes and Tesla valves do not
+% make terahertz rectennas.
+% Draft 2026-11-10. Every number is taken from results/*.md of the repository
+% (commit to be tagged at submission); the figures are produced by
+% paper/make_figures.py. Not yet compiled on this machine: no TeX toolchain
+% was installed when the draft was written (see paper/README.md).
+\documentclass[aps,prapplied,twocolumn,superscriptaddress,floatfix,longbibliography]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+
+\newcommand{\vF}{v_{F}}
+\newcommand{\EF}{E_{F}}
+\newcommand{\kB}{k_{B}}
+\newcommand{\RI}{R_{I}}
+\newcommand{\Rant}{R_{\mathrm{ant}}}
+\newcommand{\Rdc}{R_{\mathrm{dc}}}
+\newcommand{\Pav}{P_{\mathrm{av}}}
+\newcommand{\Idc}{I_{\mathrm{dc}}}
+\newcommand{\taumr}{\tau_{\mathrm{mr}}}
+\newcommand{\tauee}{\tau_{ee}}
+\newcommand{\Rey}{\mathrm{Re}}
+\newcommand{\Da}{\mathrm{Da}}
+\newcommand{\um}{\,\mu\mathrm{m}}
+\newcommand{\nm}{\,\mathrm{nm}}
+\newcommand{\THz}{\,\mathrm{THz}}
+\newcommand{\GHz}{\,\mathrm{GHz}}
+\newcommand{\AW}{\,\mathrm{A/W}}
+\newcommand{\pWrtHz}{\,\mathrm{pW/Hz^{1/2}}}
+\newcommand{\percm}{\,\mathrm{cm^{-2}}}
+\newcommand{\figpath}{figs}
+
+\begin{document}
+
+\title{Shape versus circuit: why graphene geometric diodes and Tesla valves do not make terahertz rectennas}
+
+% AUTHOR BLOCK: affiliation and contact to be supplied by the author.
+\author{Todd Chapman}
+%\affiliation{}
+%\email{}
+
+\date{\today}
+
+\begin{abstract}
+Geometric diodes, in which an asymmetric channel is meant to rectify by its
+shape, and electronic Tesla valves have both been proposed as junction-free
+rectifiers for terahertz rectennas in graphene. We test the proposal in three
+transport limits with one set of device geometries and validated solvers. A
+semiclassical ballistic model reproduces the measured asymmetry of a funnel
+diode in the clean limit and gives none for any Tesla geometry. Steady viscous
+electron flow makes the classical Tesla valve work, but only at Reynolds
+numbers above the drift-velocity limit of the Fermi liquid. At terahertz
+frequencies the gated electron fluid is plasmonic: a funnel matched to a
+$75\ \Omega$ antenna responds at $0.07$ to $0.34\AW$, and nearly all of it is
+the Dyakonov-Shur asymmetry of the source and drain terminations, which any
+gated channel has. The rectified power follows the square law up to the gate
+overdrive and peaks below one per cent conversion efficiency for every carrier
+density and gate distance; lowering either only moves the saturation power,
+from a milliwatt to a microwatt. Driving the ballistic funnel at terahertz
+frequencies closes the remaining route: its shape asymmetry survives the
+transit time only if the potential drop is confined to the neck, and then
+merely equals the plasmonic figure. The graphene funnel is a
+picowatt-per-root-hertz square-law detector, not an energy harvester, and the
+Tesla valve is neither.
+\end{abstract}
+
+\maketitle
+
+\input{sections/intro}
+\input{sections/models}
+\input{sections/dc}
+\input{sections/plasmonic}
+\input{sections/ballistic}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\begin{acknowledgments}
+The simulation code, the analysis and this manuscript were developed with the
+assistance of an AI coding assistant (Claude, Anthropic); the author directed
+the work, reviewed the results and takes responsibility for the content. The
+code, the input geometries, all result files and the scripts that produce the
+figures are available in the public repository
+\url{https://github.com/TtheBC01/GeometricDiodes}.
+\end{acknowledgments}
+
+\appendix
+\input{sections/appendix}
+
+\bibliography{refs,refs_detectors}
+
+\end{document}

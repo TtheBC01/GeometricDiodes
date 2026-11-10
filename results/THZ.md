@@ -275,12 +275,16 @@ Reading:
 1. **Idealised, a graphene funnel element with the DS termination reaches
    4 to 60 pW/Hz^1/2 across 0.3 to 2 THz**, the lower figure at 100 K with
    the 175 nm neck at its taper resonance, the upper at 300 K. Reported
-   room-temperature graphene THz detectors sit at hundreds of pW/Hz^1/2 to
-   nW/Hz^1/2 with responsivities of 0.1 to 30 V/W; our 50 to 300 V/W at
-   300 K and the corresponding NEP are therefore upper bounds by one to two
-   orders, the gap being contact resistance, antenna coupling and the
-   electrostatics the local-capacitance model idealises, not the
-   mechanism.
+   room-temperature graphene THz detectors (verified against the sources on
+   2026-11-10, `paper/literature_detectors.md`) have NEPs of 100 to 130
+   pW/Hz^1/2 optical at 0.4 THz at best (Generalov 2017, Ludwig 2024) and
+   80 to 160 pW/Hz^1/2 referred to a diffraction-limited spot at 2.5 to
+   2.8 THz (Castilla 2019, Viti 2020), 0.5 to 2 nW/Hz^1/2 for most others
+   and tens of nW/Hz^1/2 for the first devices, with responsivities of 0.1
+   to about 100 V/W; our 50 V/W and 60 pW/Hz^1/2 at 300 K are therefore at
+   the level of the best measured devices, not one to two orders above
+   them as an earlier version of this note said from memory. Commercial
+   zero-bias Schottky detectors are at 5 to 27 pW/Hz^1/2 below 1.1 THz.
 2. **The geometric diode contributes at 100 K near the taper resonance and
    nowhere else.** At 300 K the shape-only NEP is 140 pW/Hz^1/2 at best,
    four times worse than the circuit term of the same device; at 100 K the
@@ -414,9 +418,12 @@ Reading:
    1 THz where the plasmon standing wave in the leads is strongest; at
    300 K (Gamma 1.1, overdamped) the 0.1 and 0.3 THz responses grow
    *faster* than Va^2 (1.10 to 1.14 at 1.8 mW), i.e. the diffusive device
-   has a weakly expansive I-V. The 300 K shape was not checked at 120 steps
-   per period; the 100 K T12 check bounds the time-step effect on the shape
-   at 1 %, and the 300 K Omega dt is the same.
+   has a weakly expansive I-V. The 300 K shape was checked at 120 steps per
+   period on 2026-11-10 (`results/checks/P2_steps120_*`): eta / law is
+   1.004, 1.058, 1.109 at Va 0.1, 0.5, 0.7 at 0.3 THz and 1.145 at Va 0.7 at
+   0.1 THz, against 0.992, 1.054, 1.101 and 1.144 at 60 steps, a change of
+   0.1 to 1.2 %, with n_min unchanged to 3e-4. The super-quadratic rise is
+   not a time-step effect.
 4. **The matched dc load is worth 15 %, no more.** With the 75 ohm antenna
    as the dc load (P3) the efficiency is 0.85 of the matched-load value at
    small amplitude, exactly 4 R_L R_dc / (R_L + R_dc)^2, and the ratio is

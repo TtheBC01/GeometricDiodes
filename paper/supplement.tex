@@ -1,0 +1,194 @@
+% Supplemental Material for "Shape versus circuit: why graphene geometric
+% diodes and Tesla valves do not make terahertz rectennas".
+% Draft 2026-11-10. Numbers from results/*.md and results/checks/.
+\documentclass[aps,prapplied,onecolumn,superscriptaddress,floatfix]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thesection}{S\arabic{section}}
+\newcommand{\vF}{v_{F}}
+\newcommand{\um}{\,\mu\mathrm{m}}
+\newcommand{\nm}{\,\mathrm{nm}}
+
+\begin{document}
+\title{Supplemental Material: Shape versus circuit: why graphene geometric diodes and Tesla valves do not make terahertz rectennas}
+\author{Todd Chapman}
+\date{\today}
+\maketitle
+
+This supplement lists the acceptance tests that each solver passed before it
+was used, the closing convergence checks, and the numerical parameters of the
+production runs. Every test is a program in the public repository and prints
+the measured number against its target; the test names below are those of the
+code, with the plasmonic tests prefixed P to distinguish them from the
+ballistic ones.
+
+\section{Ballistic solver}
+
+\begin{table}[h]
+\caption{Acceptance tests of the trajectory solver at dc (200\,000 particles
+per run). All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.52\textwidth}p{0.36\textwidth}}
+Test & What is checked & Target \\
+\hline
+T1 & specular straight channel, no field & transmission exactly 1 \\
+T2 & diffuse-wall channel, length to width 0.5 to 16 & two-dimensional free-molecular transmission factors~\cite{richley1964numerical} 0.804, 0.683, 0.541, 0.400, 0.274, 0.179 \\
+T3 & asymmetric funnel, no field, $p=1$ and $0.3$, $\lambda=700\nm$ & $W_{S}T_{SD}=W_{D}T_{DS}$ within 3.5 standard errors \\
+T4 & the same funnel with the field on, both injection sides at one total energy & $N_{S}T_{SD}=N_{D}T_{DS}$ \\
+T5 & mirror-symmetric constriction under bias & asymmetry 1 \\
+T6 & zero bias & zero injection weight and zero current \\
+T7 & three-stage side-loop valve, diffuse walls & trapped, leaked and Dirac-cut fraction below $10^{-3}$ \\
+T8 & ballistic $1\um$ channel at $10^{12}$ cm$^{-2}$ & Sharvin conductance 8.74 mS within 1 \% \\
+T9 & $10\um$ channel, $\lambda=300\nm$ & $T=\ell_{1}/(L+\ell_{1})$, $\ell_{1}=\pi\lambda/2$, within 5 \% \\
+T10 & chord tolerance 0.05 against 0.005 nm & same transmission \\
+T11 & funnel of $100/10/40\nm$ (lead, neck, drain) at zero field & $T=0.0995$ against the neck-to-lead ratio 0.100 (information) \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\begin{table}[h]
+\caption{Acceptance tests of the time-dependent solver and the two-sided
+estimator ($10^{6}$ particles per side; T16 $4\times10^{6}$, T17
+$2\times10^{6}$). Currents in $\mu$A for the clean specular funnel at
+$0.1$~V. All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.47\textwidth}p{0.41\textwidth}}
+Test & What is checked & Result \\
+\hline
+T12 & integration of $\hbar\dot{\bm k}=\bm F$ without energy re-imposition, static field, against the dc solver & $T(+0.1)=0.14141$ (reference $0.14130$), $T(-0.1)=0.04148$, $A=1.622$ (reference $1.624$) \\
+T13 & two-sided equilibrium estimator against the bias-window estimator; zero bias & $188.7\pm0.6$ against $189.2\pm0.5$; $-0.15\pm0.66$ at $V=0$ \\
+T14 & quasi-static anchor at 300 MHz: rectified current and $|Y_{1}|$ against the static curve & $17.78\pm0.59$ against $18.27\pm0.18$; $1.589\pm0.013$ against $1.580$ mS \\
+T15 & straight control at 3 GHz and 1 THz & $-0.80\pm0.57$ and $-0.20\pm0.62$; trapped plus leaked below $2\times10^{-6}$ \\
+T16 & chord cap $\vF/40f$ against $\vF/160f$, 500 nm drop, 1 THz & $6.32\pm0.30$ against $5.55\pm0.32$ \\
+T17 & Dirac cut against a classical turning point, 500 nm drop, 1 THz & $5.94\pm0.45$ against $5.69\pm0.45$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The quasi-static anchor is at 300 MHz and not at a few gigahertz because of
+the slow-drift population described in the main text. The equilibrium
+injection of the two-sided estimator samples the kinetic distribution down
+to zero energy, and between $10^{-3}$ and $7\times10^{-3}$ of the injected
+electrons are driven below the 2 meV cut that stands in for the Dirac
+point; these would return to their own contact and carry no current. In the
+harmonic estimator a drain-injected electron removed by the cut must be
+booked as returned, otherwise $|Y_{1}|$ at the anchor is $6\%$ low. Five
+operating points recomputed with a classical turning point in place of the
+cut agree with the production values within one standard error.
+
+\section{Viscous solver}
+
+\begin{table}[h]
+\caption{Acceptance tests of the steady Navier-Stokes solver. All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.44\textwidth}p{0.44\textwidth}}
+Test & What is checked & Result \\
+\hline
+H1 & Poiseuille flow, no slip and Navier slip $S=0.5$, 2, $\infty$ & exact to $10^{-12}$ \\
+H2 & Brinkman-Poiseuille flow, $\mathrm{Da}=10$, $S=0.5$; Brinkman plug flow & velocity error $O(h^{2.7})$, $1.2\times10^{-6}$ at $h=25\nm$; plug flow exact \\
+H3 & Stokes reciprocity of a side-loop valve, three $(\mathrm{Da},S)$ & $D-1=2\times10^{-12}$ to $2\times10^{-11}$; wall flux exactly zero \\
+H4 & Kovasznay flow~\cite{kovasznay1948laminar}, $\mathrm{Re}=40$ & velocity error $O(h^{2.9})$, $2.2\times10^{-5}$ at $h=25\nm$ \\
+H5 & backward-facing step~\cite{armaly1983experimental,erturk2008numerical}, expansion ratio 2 & reattachment at 2.90 step heights ($\mathrm{Re}=100$) and 4.96 ($\mathrm{Re}=200$) \\
+H6 & side-loop valve as a classical no-slip device & $D=0.9993$, 1.0037, 1.0197 at $\mathrm{Re}=25$, 50, 100 \\
+H7 & mesh convergence, side-loop valve, $\mathrm{Re}=10$ & $D-1=1.01$, 1.10, $1.14\times10^{-2}$ at wall spacing 20, 14, 10 nm \\
+H8 & mirror-symmetric constriction, $\mathrm{Re}=10$ & $D-1=7\times10^{-6}$ \\
+H9 & $(D-1)/\mathrm{Re}$ at $\mathrm{Re}=0.05$ to 0.2; mirrored and re-meshed device & constant to 2 \%; directional solver bias $6\times10^{-7}$ \\
+U1 & units & Poiseuille and Brinkman resistances equal the Gurzhi and Drude formulas to $10^{-12}$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+Below $\mathrm{Re}\approx1$ the diodicity is under the discretisation floor of
+about $3\times10^{-5}$ and is reported as a bound. For the classical valve
+with no-slip walls the steady branch continued from Stokes flow ends at a
+fold near $\mathrm{Re}=85$; this is outside the range relevant to graphene.
+
+\begin{table}[h]
+\caption{Mesh convergence of the classical Tesla valve ($175\nm$ channel, no
+damping): $D-1$ at wall spacings of 20 nm (16\,703 nodes, the production
+mesh), 14 nm (25\,447 nodes) and 10 nm (38\,449 nodes).}
+\label{tab:mesh}
+\begin{ruledtabular}
+\begin{tabular}{llccc}
+Wall condition & $\mathrm{Re}$ & 20 nm & 14 nm & 10 nm \\
+\hline
+perfect slip & 3 & 0.0119 & 0.0118 & 0.0124 \\
+perfect slip & 10 & 0.234 & 0.232 & 0.243 \\
+perfect slip & 30 & 1.472 & 1.510 & 1.619 \\
+slip length $0.5\,W$ & 3 & 0.0068 & 0.0068 & 0.0072 \\
+slip length $0.5\,W$ & 10 & 0.151 & 0.151 & 0.159 \\
+slip length $0.5\,W$ & 30 & 1.145 & 1.177 & 1.257 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+Table~\ref{tab:mesh} shows that the diodicity of the classical valve
+changes by less than $3\%$ between the two coarser meshes and by $5$ to
+$7\%$ between the two finer ones; the pressure drop itself converges only
+at first order because of the re-entrant corners at the loop junctions. The
+values quoted in the main text are from the 20 nm mesh and are good to
+about $10\%$.
+
+\section{Plasmonic solver}
+
+\begin{table}[h]
+\caption{Acceptance tests of the perturbation solver (P1 to P9, P15 to P17)
+and of the time-domain solver (P10 to P14). All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.42\textwidth}p{0.46\textwidth}}
+Test & What is checked & Result \\
+\hline
+P1 & static limit against the viscous solver & relative difference $5\times10^{-4}$ \\
+P2 & linear plasmon response of a channel against $1/\cos kL$ & errors $7\times10^{-9}$ to $1.2\times10^{-5}$ \\
+P3 & position and width of the first plasmon resonance, with friction, viscosity and viscoelastic viscosity & position 0.1568 (exact 0.1571); widths within 1 \% \\
+P4 & photoresponse against the Dyakonov-Shur closed form~\cite{dyakonov1996detection} and an independent quadrature & errors $2\times10^{-7}$ to $2\times10^{-4}$ \\
+P5 & funnel, quasi-static rectified current: curvature of the steady solution against perturbation & $2.206\times10^{-2}$ against $2.210\times10^{-2}$ \\
+P6 & time domain against perturbation at small amplitude & ratios 0.9997 and 0.9994 \\
+P7 & symmetric termination: dc current of a symmetric constriction and of a channel relative to the funnel & $6\times10^{-7}$ and $10^{-8}$ against $1.6\times10^{-3}$ \\
+P8 & mesh convergence of the funnel response on three meshes & last change 2.0 \% and 1.1 \% at reduced frequency 1 and 3 \\
+P9 & units & plasma speed, gate overdrive, resistance and frequency units against hand values \\
+P10 & time-domain efficiency against the time-discrete perturbation law & ratios 1.0033 and 1.0038 \\
+P11 & dc load correction from a deliberately wrong bias seed & 1.0016 (short circuit), 1.0017 (open circuit) \\
+P12 & time step: 60 against 120 steps per period at $100$~K & efficiency ratio 0.991 \\
+P13 & power bookkeeping & absorbed power within 0.2 \% of the linear value \\
+P14 & P10 for the symmetric termination & ratio 0.998 \\
+P15 & contact resistance: $I_{\mathrm{sc}}(R_{\mathrm{dc}}+2R_{c})=V_{\mathrm{oc}}$; port relations; passivity & $7\times10^{-15}$; $4\times10^{-16}$; absorbed fraction 0.39 \\
+P16 & invariance under co-scaling of density, gate distance, width and scattering times at fixed nondimensional groups & nondimensional response identical to round-off \\
+P17 & units and closure at a second operating point & closed forms to $2\times10^{-16}$; Dirac against shallow-water response ratio 0.970 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The time-domain runs start from the perturbative state of the
+time-discretised operator, which removes a start-up transient that would
+otherwise exceed the rectified signal at small amplitude; the dc load
+current is held at the small-signal prediction and corrected with the dc
+Thevenin relation. The level of the square law carries the 60-step
+time-discretisation bias ($+0.6\%$, $+4.5\%$ and $-0.5\%$ at 0.1, 0.3 and
+1 THz) and the $2\%$ mesh uncertainty of P8; the ratios to the square law
+quoted in the main text are taken against the time-discrete law, so the
+bias cancels. The shape of the response is converged in the time step: at
+$100$~K the efficiency ratio between 60 and 120 steps per period is 0.991
+(P12), and at $300$~K the ratio of the efficiency to the square law changes
+from 0.992, 1.054, 1.101 to 1.004, 1.058, 1.109 at amplitudes 0.1, 0.5, 0.7
+of the voltage unit at 0.3 THz, and from 1.144 to 1.145 at 0.7 at 0.1 THz.
+
+\section{Production parameters}
+
+Ballistic dc: 400\,000 trajectories per bias point in 64 batches. Ballistic
+ac: $10^{6}$ trajectories per contact and point ($4\times10^{6}$ at
+$\lambda=700\nm$ and at the smaller amplitude), chords limited to $40\nm$, to
+$\vF/40f$ and to one twentieth of the field region. Viscous: Taylor-Hood
+meshes with $20\nm$ wall spacing ($23\,000$ to $55\,000$ triangles),
+Newton residual below $10^{-10}$. Plasmonic small signal: wall spacing
+$14\nm$ for the $175\nm$ devices and $80\nm$ ($18\,601$ nodes) for the
+$1\um$ funnel, 25 frequencies from 10 GHz to 3 THz. Plasmonic large signal:
+the same $1\um$ mesh, 60 steps per period, eight amplitudes from $0.01$ to
+$0.7$ of the voltage unit.
+
+\bibliography{refs,refs_detectors}
+
+\end{document}

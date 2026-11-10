@@ -1,0 +1,20 @@
+label,key,class,f_Hz,T_K,NEP_W_rtHz,note
+Vicarelli 2012 (bilayer),vicarelli2012graphene,fet,3.0e11,300,3.0e-8,spot-normalised; Johnson estimate
+Spirito 2014,spirito2014high,fet,3.58e11,300,2.0e-9,spot-normalised; Johnson estimate
+Zak 2014,zak2014antenna,fet,6.0e11,300,5.15e-10,optical; abstract only
+Generalov 2017,generalov2017graphene,fet,4.0e11,300,1.30e-10,optical; Johnson estimate
+Bandurin 2018 (APL),bandurin2018dual,fet,1.3e11,300,6.0e-10,delivered to antenna; Johnson estimate
+Bandurin 2018 (Nat. Commun.),bandurin2018resonant,fet,1.3e11,10,2.0e-13,delivered to antenna; Johnson estimate
+Ludwig 2024,ludwig2024terahertz,fet,4.0e11,300,1.01e-10,optical; Johnson estimate
+Ludwig 2024,ludwig2024terahertz,fet,1.0e12,300,4.79e-10,optical; Johnson estimate
+Cai 2014,cai2014sensitive,pte,2.5e12,300,1.1e-9,incident on device; noise measured
+Tong 2015,tong2015antenna,pte,1.9e12,300,1.7e-9,optical; noise measured
+Castilla 2019,castilla2019fast,pte,2.52e12,300,8.0e-11,spot-normalised; Johnson estimate
+Viti 2020,viti2020hbn,pte,2.8e12,300,1.6e-10,spot-normalised; Johnson estimate
+Viti 2020,viti2020hbn,pte,2.8e12,77,1.8e-11,spot-normalised; Johnson estimate
+Asgari 2021,asgari2021chip,pte,2.8e12,300,6.0e-10,spot-normalised; Johnson estimate
+Auton 2017,auton2017terahertz,ballistic,4.5e11,300,3.4e-11,extrinsic; abstract only; frequency of the quoted value not verified (range 0.07 to 0.69 THz)
+VDI Schottky WR3.4,vdi2026detectors,incumbent,2.75e11,300,1.2e-11,vendor typical
+VDI Schottky WR1.5,vdi2026detectors,incumbent,6.25e11,300,2.03e-11,vendor typical
+VDI Schottky WR1.0,vdi2026detectors,incumbent,9.25e11,300,2.71e-11,vendor typical
+VDI Schottky WR0.8,vdi2026detectors,incumbent,1.15e12,300,2.03e-10,vendor typical

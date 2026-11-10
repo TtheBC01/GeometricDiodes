@@ -1,0 +1,115 @@
+\section{Rectification at dc}
+\label{sec:dc}
+
+\subsection{Ballistic: the funnel rectifies, the Tesla valve does not}
+
+Figure~\ref{fig:ballistic-dc} shows the asymmetry at $0.1$~V and the
+resistance of all six devices for three edge specularities and three mean
+free paths. In the clean specular limit the funnel gives $A=1.62\pm0.02$
+($1.25$ at $0.05$~V), close to the $1.66$ measured at
+$80\ \mu$A~\cite{nguyen2021geometric}; the agreement is
+conditional, because at the mean free path estimated for these
+devices~\cite{nguyen2021geometric}, $700\nm$, the same model gives $1.09$, and
+$1.06$ with fully diffuse edges. The uniform-field assumption and the choice
+of $\lambda$ and $p$ therefore matter at the factor-of-two level in $A-1$,
+and we do not claim a quantitative fit. What the comparison establishes is
+the mechanism and the scale: electrons accelerated toward the neck by the
+bias arrive with more kinetic energy and more transverse modes than those
+decelerated toward it.
+
+No Tesla geometry rectifies in this model. All 54 points of the three
+side-loop variants lie between $0.93$ and $1.08$ with standard errors of
+$0.01$ to $0.05$, and sixteen of the eighteen points of the classical valve
+are within two standard errors of one. The two exceptions are in the clean
+specular limit, where the classical valve gives $A=0.93\pm0.02$ at $0.05$~V
+and $0.89\pm0.01$ at $0.1$~V: the wrong sign, the blocking direction being
+the easier one, and gone as soon as edges are partly diffuse or bulk
+scattering is present. The straight control gives $0.99\pm0.01$. Meanwhile
+the loops cost resistance in both directions, $1.4$ to $22$~k$\Omega$ against
+$0.5$ to $2$~k$\Omega$ for the funnel [Fig.~\ref{fig:ballistic-dc}(b)]. The
+result follows from the structure of the problem rather than from the
+parameters: at fixed potential landscape the transmission is reciprocal for
+any shape, and the Tesla loops do nothing to the way the bias landscape acts
+on the mode count at a constriction, which is what the funnel exploits.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig2_ballistic_dc.pdf}
+\caption{Ballistic transport at dc. (a) Asymmetry $A=I(+V)/|I(-V)|$ at
+$0.1$~V for the funnel, four Tesla-valve geometries and the straight control,
+for edge specularities $p$ and mean free paths $\lambda$; error bars are one
+standard error from 64 batches of 400\,000 trajectories in total. The dotted
+line marks the measured value for the funnel~\cite{nguyen2021geometric}. (b)
+Forward resistance of the same devices.}
+\label{fig:ballistic-dc}
+\end{figure*}
+
+\subsection{Viscous: the Tesla valve works, beyond the reach of the Fermi liquid}
+
+In the electron fluid the picture reverses in principle and not in practice.
+Figure~\ref{fig:viscous}(a) shows the diodicity of the $175\nm$ classical
+valve and of the funnel against Reynolds number without damping. The valve is
+a genuine Tesla valve: with slip walls $D-1$ is $0.15$ to $0.23$ at $\Rey=10$
+and $1.1$ to $1.5$ at $\Rey=30$, growing close to $\Rey^{2}$, the signature of
+an inertial loss present in one direction only. The fields
+[Fig.~\ref{fig:viscous}(c) and \ref{fig:viscous}(d)] show its origin: in the
+forward direction the loops are stagnant, in the reverse direction each
+carries a stream that re-enters the main channel against the flow. As a
+check on the geometry, the same valve treated as a classical no-slip fluid
+device gives $D=1.05$ at $\Rey=50$ and $1.23$ at $\Rey=100$;
+three-dimensional simulations of multistage valves give $1.02$ to $1.03$
+and $1.10$ to $1.15$ at the same Reynolds
+numbers~\cite{liosis2025diodicity}, a duct of finite depth adding wall
+friction that the two-dimensional flow lacks. The diodicity of the valve is
+converged with respect to the mesh to about $10\%$ (Supplemental
+Material), which is immaterial for what follows. The funnel is a diode of the
+opposite sign, the forward direction being the harder one: its asymmetry is
+that of the exits, a jet from the abrupt shoulder against a diffuser along
+the taper, and it is the stronger of the two below $\Rey\approx3$
+($|D-1|=1.2\times10^{-2}$ at $\Rey=3$ with slip) but saturates near $0.15$.
+
+Three facts decide the matter. First, the experiment of
+Ref.~\cite{geurs2020rectification} used currents of at most a few
+microamperes ($6.3\ \mu$A for the device that showed the effect), for
+which we estimate $\Rey\approx0.04$ to $0.2$ at $10^{12}\percm$ and
+$\nu=0.1$ to $0.02$~m$^{2}$/s; the authors quote no Reynolds number. For
+$\Rey$ up to $0.3$ every geometry, wall condition and damping gives
+$|D-1|<3\times10^{-5}$, three orders of magnitude below the reported five
+per cent, which was observed for holes in a single-loop valve as a ratio of
+four-terminal resistances. Steady incompressible
+electron hydrodynamics does not reproduce that observation; whatever
+produces it is not the inertial Tesla mechanism, and we do not explain it.
+The candidates that Eq.~\eqref{eq:ns} excludes are the compressibility of the
+gated fluid and electron heating. Second, the Reynolds number is bounded.
+The drift speed in a channel of width $w$ is $u=\Rey\,\nu/w$, and keeping it
+below $0.3\,\vF$, where a Fermi-liquid description is still tenable, caps
+$\Rey$ at $0.5$ to $2.6$ in a $175\nm$ channel and at $3$ to $15$ in a
+$1\um$ channel for $\nu=0.1$ to $0.02$~m$^{2}$/s [shaded in
+Fig.~\ref{fig:viscous}]. Third, the low viscosity needed for a large
+Reynolds number comes with weak slip relative to the width and strong
+relative damping. Figure~\ref{fig:viscous}(b) shows the valve scaled to
+$1\um$: each factor of four in $\Da$ costs a factor two to three, and a
+slip length of $0.4\um$ instead of perfect slip a factor twenty. Inside the
+admissible window the diodicity is $10^{-3}$ to $3\times10^{-2}$, at a
+resistance of $0.3$ to $1.6$~k$\Omega$; the $175\nm$ valve costs $10$ to
+$86$~k$\Omega$ for less.
+
+The steady-flow diodicity is also slow. It is established over the viscous
+and convective times of the channel, $10$ to $20$~ps at $1\um$, so the
+picture of this subsection applies below some tens of gigahertz. Above that
+the gate makes the fluid compressible, and the question has to be asked of a
+different model.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig3_viscous_dc.pdf}
+\caption{Steady viscous flow. (a) Diodicity $|D-1|$ of the $175\nm$ classical
+Tesla valve and of the funnel without damping, for three wall conditions;
+filled symbols: reverse direction harder ($D>1$), open symbols: forward
+harder. The bar marks the diodicity reported in
+Ref.~\cite{geurs2020rectification} at our estimate of its Reynolds number; grey: below the discretisation floor;
+orange: drift speed above $0.3\,\vF$. (b) The valve scaled to a $1\um$
+channel, with momentum-relaxation damping $\Da$ and finite slip length; the
+two shaded ranges are the drift-speed limits for $\nu=0.1$ and
+$0.02$~m$^{2}$/s. (c), (d) Speed in the $175\nm$ valve at $\Rey=30$ with
+perfect slip for forward and reverse flow.}
+\label{fig:viscous}
+\end{figure*}

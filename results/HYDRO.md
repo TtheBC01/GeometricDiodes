@@ -6,6 +6,14 @@
 > geometry was run afterwards; see `CLASSIC.md`, which revises verdict
 > points 2 and 4 below. Points 1, 3 and 5 stand.
 
+> **Source check (added 2026-11-10, `paper/refs_verification.md`).** Geurs
+> et al. (arXiv:2008.04862, still a preprint) report D of about 1.05 for
+> *holes* in a single-loop valve as a ratio of four-terminal resistances,
+> at 6.3 uA, and quote no Reynolds number. The "Geurs operating point
+> Re = 0.05 to 0.3" used below is our own estimate; 6.3 uA is Re 0.04 to
+> 0.2 for nu = 0.1 to 0.02 m^2/s at 1e12 cm^-2. The bound |D - 1| < 3e-5
+> holds for every Re <= 0.3, so verdict 1 is unchanged.
+
 Model: steady incompressible Navier-Stokes with Brinkman damping and Navier
 slip on Taylor-Hood P2/P1 meshes (`src/hydro/`, plan in
 `plans/hydro_tesla.md`). Current bias, developed inlet profile, do-nothing

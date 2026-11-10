@@ -1,0 +1,57 @@
+\section{Second-order plasmonic response}
+\label{app:perturbation}
+
+In units of the contact width $W$, the plasma speed $s_{0}$ and the gated
+density $n_{0}$, Eqs.~\eqref{eq:cont} and \eqref{eq:mom} contain the
+friction $\Gamma=W/s_{0}\taumr$, the plasma Reynolds number
+$\Rey_{s}=s_{0}W/\nu$, the collision time $s_{0}\tauee/W$ and the
+quantum-capacitance fraction $q$, with the closure
+$h(n)=2(1-q)(\sqrt{n}-1)+q\ln n$ and $h''(1)=-(1+q)/2\equiv\kappa$. Writing
+$n=1+\mathrm{Re}(n_{1}e^{i\Omega t})+n_{20}$ and
+$\bm{u}=\mathrm{Re}(\bm{u}_{1}e^{i\Omega t})+\bm{u}_{20}$, the first order is
+\begin{align}
+i\Omega n_{1}+\nabla\cdot\bm{u}_{1}&=0,\\
+(i\Omega+\Gamma)\bm{u}_{1}+\nabla n_{1}-\nu(\Omega)\nabla^{2}\bm{u}_{1}&=0,
+\end{align}
+with $\nu(\Omega)=\Rey_{s}^{-1}/(1+i\Omega s_{0}\tauee/W)$, and the time
+average of the second order is
+\begin{align}
+\nabla\cdot\bm{u}_{20}&=-\tfrac12\mathrm{Re}\,\nabla\cdot(n_{1}\bm{u}_{1}^{*}),\\
+\Gamma\bm{u}_{20}+\nabla P-\Rey_{s}^{-1}\nabla^{2}\bm{u}_{20}
+&=-\tfrac12\mathrm{Re}\,(\bm{u}_{1}^{*}\cdot\nabla)\bm{u}_{1},
+\end{align}
+where $P=n_{20}+(\kappa/4)|n_{1}|^{2}$. The dc contact voltage is
+$P+c_{V}|n_{1}|^{2}$ with $c_{V}=1/8$ for the Dirac closure and zero for
+shallow water, and the dc particle current through a contact is the flux of
+$\bm{u}_{20}+\mathrm{Re}(n_{1}\bm{u}_{1}^{*})/2$. Each contact is an
+equipotential with one unknown voltage per order, closed by Kirchhoff's law
+for its termination: $R I_{c}+V_{c}=V_{a,c}$ for a source of resistance $R$,
+$I_{c}=0$ for an open contact. The same structure with a matched load at dc
+gives the rectified power. Voltages are in units of
+$V_{u}=m^{*}s_{0}^{2}/e$, resistances in units of
+$m^{*}s_{0}/e^{2}n_{0}W$ ($65\ \Omega$ for $W=4\um$), and frequency in units
+of $s_{0}/2\pi W$ ($0.142\THz$).
+
+A contact resistance $R_{c}$ enters as a change of the ports only: the
+source becomes a Thevenin source of resistance $\Rant+R_{c}$ and the drain
+one of zero amplitude and resistance $R_{c}$. In second order the dc
+problem is linear, so the short-circuit current and open-circuit voltage
+satisfy $I_{\mathrm{sc}}(\Rdc+2R_{c})=V_{\mathrm{oc}}$ exactly, which is
+one of the ladder tests. At the signal frequency the antenna does not see
+the device impedance plus $2R_{c}$, because the source and drain currents
+differ by the gate displacement current.
+
+\section{Saturation estimate on the density and gate grid}
+\label{app:knee}
+
+The peak efficiencies of Fig.~\ref{fig:operating}(b) are
+$\eta_{\mathrm{peak}}=2r^{2}(\Rant/\Rdc)\,(0.7)^{2}\,\mathcal{S}$, with $r$
+and $\Rdc$ from the small-signal solver at each grid point and
+$\mathcal{S}$ the ratio of the time-domain efficiency to the square law at
+$V_{a}=0.7\,V_{u}$ for the reference device ($0.86$, $0.89$, $0.60$ at
+$100$~K and $1.14$, $1.10$, $0.81$ at $300$~K for $0.1$, $0.3$, $1\THz$).
+The assumption that saturation occurs at a fixed $V_{a}/V_{u}$ was tested
+by a time-domain ladder at $(5\times10^{11}\percm,10\nm)$: $\mathcal{S}$
+agrees to $0.2\%$ at $300$~K and is $0.76$ instead of $0.89$ at $100$~K, so
+the $100$~K peak values at low density and thin gates are upper estimates
+by $10$ to $20\%$.

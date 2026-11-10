@@ -1,0 +1,198 @@
+\section{Devices and models}
+\label{sec:models}
+
+\subsection{Geometries}
+
+All devices are two-terminal planar channels with the source contact on the
+left and the drain on the right. The funnel [Fig.~\ref{fig:devices}(a)] has
+the dimensions of device D of Nguyen \textit{et al.}~\cite{nguyen2021geometric}:
+leads $2\um$ wide, a taper at 30 degrees to the axis down to a neck of
+$175\nm$, and an abrupt shoulder on the drain side; its measured asymmetry is
+$1.66$ at $80\ \mu$A. The classical Tesla valve [Fig.~\ref{fig:devices}(b)] is
+built from channel centre lines: a zig-zag main channel of width $175\nm$
+inclined at $\pm 25$ degrees, and at every vertex a loop that continues the
+arriving segment straight on, turns through a half circle of radius $175\nm$
+and rejoins the main channel against the stream. Flow from left to right
+follows the zig-zag; flow from right to left is split into the four loops. We
+also keep three earlier variants in which the loops are attached to one side
+of a straight channel, because they illustrate that the conclusion does not
+depend on the details of the valve, and a straight $175\nm$ channel between
+the same leads as a control. For the terahertz calculations each shape is
+also scaled so that its narrowest width is $1\um$, with $4\um$ contacts,
+which brings the device resistance from kilohms to the hundred-ohm range of
+an antenna [Fig.~\ref{fig:devices}(c)].
+
+\subsection{Ballistic model}
+\label{sec:model-ballistic}
+
+The ballistic model is the semiclassical trajectory (Monte
+Carlo~\cite{jacoboni1983monte}) method of the geometric-diode
+literature~\cite{zhu2013graphene,stearns2021simulation,truccolo2024comprehensive}.
+Electrons with the Dirac dispersion $E=\hbar\vF|\bm{k}|$,
+$\vF=10^{6}$~m/s, are injected at the contacts with the flux-weighted cosine
+law, fly along classical trajectories, reflect from the walls specularly with
+probability $p$ and diffusely otherwise, and suffer isotropic
+momentum-relaxing collisions after exponentially distributed free paths of
+mean $\lambda$. The current is the Landauer expression
+\begin{equation}
+I=\frac{g e}{h}\int dE\,N(E)\,T(E;V)\,\bigl[f_{S}(E)-f_{D}(E)\bigr],
+\label{eq:landauer}
+\end{equation}
+with $g=4$, $N(E)=EW/\pi\hbar\vF$ the number of modes of the injecting contact
+of width $W$, $T$ the transmission probability estimated from the
+trajectories, and $f_{S,D}$ the Fermi functions of the contacts at
+electrochemical potentials $\EF$ and $\EF-eV$. Energies are sampled from the
+bias window $N|f_{S}-f_{D}|$, so the estimator has zero variance at zero bias.
+
+With no potential inside the device, flux conservation gives
+$N_{S}T_{SD}=N_{D}T_{DS}$ at every energy and Eq.~\eqref{eq:landauer} is odd
+in $V$ for any shape; the trajectories cannot rectify. Rectification enters
+through the potential energy $U(\bm{r};V)$ that the bias creates inside the
+channel~\cite{christen1996gauge}. We use the simplest assumption of the published
+simulations, a uniform field along the channel, $U=-eVx/L$ over the device
+length $L$, and integrate the curved flights in chords with a controlled
+sagitta. Self-consistent electrostatics is known to roughly halve the
+asymmetry of such diodes relative to the uniform-field value and to
+reverse it for shallow tapers~\cite{truccolo2024comprehensive}; we return
+to the field distribution in Sec.~\ref{sec:ballistic}. The figure of merit is the asymmetry $A=I(+V)/|I(-V)|$; writing
+$I=G_{1}V+G_{2}V^{2}$, $A\simeq 1+2(G_{2}/G_{1})V$, and a cosine drive of
+amplitude $V_{a}$ rectifies $\Idc=G_{2}V_{a}^{2}/2$ if the response is
+instantaneous. Carriers are electrons at density $n=1.4\times10^{12}\percm$
+($\EF=0.138$~eV) and $300$~K, the density we estimate from the gate voltage
+and lever arm reported for that device~\cite{nguyen2021geometric}; holes
+give the inverse asymmetry.
+
+The solver was validated on eleven tests before use: unit transmission of a
+specular channel, the free-molecular transmission factors of a diffuse
+channel~\cite{richley1964numerical}, the Sharvin
+conductance~\cite{sharvin1965possible}, the ballistic-to-diffusive crossover, reciprocity with and
+without the field, unit asymmetry of a mirror-symmetric constriction, and
+convergence of the chord integration. Classical trajectories require
+features well above the Fermi wavelength, $30\nm$ here.
+
+\subsection{Viscous model}
+\label{sec:model-viscous}
+
+Where electron-electron collisions are the fastest scattering process the
+electron liquid obeys the Navier-Stokes
+equation~\cite{gurzhi1968hydrodynamic,bandurin2016negative}. The dc model is
+steady incompressible flow with momentum relaxation,
+\begin{equation}
+\Rey\,(\bm{u}\cdot\nabla)\bm{u}=-\nabla p+\nabla^{2}\bm{u}-\Da\,\bm{u},
+\qquad \nabla\cdot\bm{u}=0,
+\label{eq:ns}
+\end{equation}
+in units of the lead width $W$ and the mean inlet speed, with
+\begin{equation}
+\Rey=\frac{I}{n e \nu},\qquad \Da=\frac{W^{2}}{\nu\taumr},\qquad
+S=\frac{\ell_{s}}{W}
+\end{equation}
+the Reynolds number, the damping (Gurzhi) number and the slip length
+$\ell_{s}$ of the Navier wall condition~\cite{kiselev2019boundary} in units
+of $W$. In two dimensions the Reynolds number depends on the current and not
+on the width. The device is current biased with a developed inlet profile,
+and the figure of merit is the diodicity $D=\Pi_{r}/\Pi_{f}$, the ratio of
+the pressure (voltage) drops for flow from drain to source and from source
+to drain. Equations~\eqref{eq:ns} are solved with Taylor-Hood
+elements~\cite{taylor1973numerical} on triangular
+meshes~\cite{geuzaine2009gmsh} with Newton iteration and a sparse direct
+solver~\cite{guennebaud2010eigen}; the wall condition
+$\bm{u}\cdot\bm{n}=0$ is imposed with length-weighted
+normals~\cite{engelman1982implementation}, which makes the discrete wall flux
+vanish exactly and removes a spurious diodicity of $10^{-5}$ that polygonal
+walls otherwise produce. Validation covers Poiseuille and Brinkman flow with
+slip, Stokes reciprocity ($D-1<10^{-10}$ at $\Rey=0$), the Kovasznay
+solution~\cite{kovasznay1948laminar}, the backward-facing
+step~\cite{armaly1983experimental,erturk2008numerical}, and the
+diodicity of the valve itself as a classical fluid device. The discretisation
+floor of $D-1$ is $3\times10^{-5}$.
+
+\subsection{Plasmonic model}
+\label{sec:model-plasmonic}
+
+At terahertz frequencies the fluid is compressible: a gate at distance $d$
+makes the local density follow the local electrochemical potential, and
+density waves propagate as plasmons. With the gradual-channel approximation
+and degenerate Dirac carriers the electrochemical potential is
+$\Phi(n)=e^{2}n/C_{g}+\hbar\vF\sqrt{\pi n}$, the hydrodynamic mass is
+$m^{*}(n)=\hbar\sqrt{\pi n}/\vF$~\cite{tomadin2013theory,svintsov2012hydrodynamic}, and because both
+depend on the density only the force per unit mass is the gradient of a
+single function $h(n)$ with $h'=\Phi'/m^{*}$. The model is
+\begin{align}
+\partial_{t}n+\nabla\cdot(n\bm{u})&=0,\label{eq:cont}\\
+\partial_{t}\bm{u}+(\bm{u}\cdot\nabla)\bm{u}+\frac{\bm{u}}{\taumr}
+&=-\nabla h(n)+\nu\nabla^{2}\bm{u},\label{eq:mom}
+\end{align}
+with the plasma speed $s(n)$ given by
+\begin{equation}
+s^{2}(n)=n\,h'(n)=\frac{e^{2}n}{C_{g}m^{*}(n)}+\frac{\vF^{2}}{2}.
+\label{eq:s2}
+\end{equation}
+The second term is the quantum capacitance~\cite{fang2007carrier}; its share $q=\vF^{2}/2s_{0}^{2}$
+of $s_{0}^{2}=s^{2}(n_{0})$ is $0.04$ at $n_{0}=10^{12}\percm$ under $30\nm$ of
+hBN and grows to $0.5$ at the thin-gate, low-density corner of
+Sec.~\ref{sec:operating}. Replacing $h$ by $s_{0}^{2}n/n_{0}$ gives the
+shallow-water model of Dyakonov and Shur~\cite{dyakonov1993shallow}. At
+frequencies above $1/\tauee$ the viscosity is taken in the viscoelastic form
+$\nu/(1+i\omega\tauee)$.
+
+The antenna is a Thevenin source of amplitude $V_{a}$ and resistance $\Rant$
+connected to lumped ports: each contact is an equipotential whose voltage and
+current satisfy Kirchhoff's law with the external circuit. Two terminations
+are used throughout. In the \emph{symmetric} one the antenna drives the two
+contacts in antiphase through $\Rant/2$ each and the gate sits at the
+midpoint; the circuit is then mirror symmetric and any dc response is due to
+the shape of the channel. In the \emph{Dyakonov-Shur} (DS) termination the
+antenna drives the source through $\Rant$ and the drain is tied to the gate;
+the terminations are then asymmetric and a uniform channel already
+rectifies~\cite{dyakonov1996detection}. The responsivity is the
+short-circuit dc current per available power,
+\begin{equation}
+\RI=\frac{I_{\mathrm{dc}}}{\Pav},\qquad \Pav=\frac{V_{a}^{2}}{8\Rant},
+\end{equation}
+and the Johnson-noise-limited noise-equivalent power is
+$\mathrm{NEP}=\sqrt{4\kB T/\Rdc}/\RI$ with $\Rdc$ the dc resistance of the
+device.
+
+Two solvers are used. For small signals the fields are expanded to second
+order about rest: the first order is a complex time-harmonic plasmon problem,
+and the time average of the second order is a Stokes-Brinkman problem for the
+dc flow, forced by products of first-order fields, whose port current or
+voltage is the rectified signal (Appendix~\ref{app:perturbation}). For finite amplitudes
+Eqs.~\eqref{eq:cont} and \eqref{eq:mom} are integrated in time with the
+second-order backward difference formula and Newton iteration, with a bias
+tee that separates the dc load from the antenna. Both use Taylor-Hood
+elements on the meshes of the viscous model. The validation ladder has
+seventeen tests: the static limit against the viscous solver, the plasmon
+dispersion, the Dyakonov-Shur closed form [Fig.~\ref{fig:small}(a)],
+reciprocity of the symmetric termination, mesh and time-step convergence,
+agreement of the two solvers at small amplitude, and invariance under
+co-scaling of the physical parameters at fixed nondimensional groups.
+
+\begin{table}
+\caption{Parameter sets. The ballistic model follows the experiment of
+Ref.~\cite{nguyen2021geometric}; the two plasmonic sets are representative of
+hBN-encapsulated graphene at the two temperatures and are labelled by them;
+they are assumptions, not fits. The $100$~K viscosity is of the order
+measured~\cite{bandurin2016negative,krishnakumar2017superballistic}; the
+$300$~K value is the kinetic estimate $\vF^{2}\tauee/4$. $W$ is the contact
+width.}
+\label{tab:params}
+\begin{ruledtabular}
+\begin{tabular}{lll}
+Model & Quantity & Value \\
+\hline
+Ballistic & $n$, $\EF$, $T$ & $1.4\times10^{12}\percm$, $0.138$ eV, 300 K \\
+ & specularity $p$ & 1, 0.5, 0 \\
+ & mean free path $\lambda$ & $\infty$, 700, 200 nm \\
+Viscous & $\Rey=1$ & $160\ \mu$A ($\nu=0.1$ m$^2$/s), $32\ \mu$A (0.02) \\
+ & $\Da$, $S$ & 0 to 128; 0 to $\infty$ \\
+Plasmonic & $n_{0}$, $d$, $\epsilon_{r}$ & $10^{12}\percm$, 30 nm, 3.8 \\
+ & $s_{0}$, gate overdrive & $3.6\,\vF$, 1.43 V \\
+ & ``100 K'': $\taumr$, $\tauee$, $\nu$ & 5 ps, 1 ps, 0.1 m$^2$/s \\
+ & ``300 K'': $\taumr$, $\tauee$, $\nu$ & 1 ps, 0.1 ps, 0.03 m$^2$/s \\
+ & $W/s_{0}\taumr$ ($W=4\um$) & 0.22 (100 K), 1.12 (300 K) \\
+ & antenna $\Rant$ & $75\ \Omega$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}

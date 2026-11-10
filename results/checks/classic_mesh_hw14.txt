@@ -1,0 +1,8 @@
+tesla_classic   25447 vertices   46594 tris  W_ref 2000 nm
+tesla_classic Da  0.00 S   inf Re   3.000 | Pi_f    5949.9698 Pi_r    6020.1830 | D-1 +1.180e-02 | flux err 2.7e-15 umax 13.54 14.39 
+tesla_classic Da  0.00 S   inf Re  10.000 | Pi_f    7427.5558 Pi_r    9147.8148 | D-1 +2.316e-01 | flux err 4.4e-16 umax 14.12 16.44 
+tesla_classic Da  0.00 S   inf Re  30.000 | Pi_f   11942.9811 Pi_r   29981.0358 | D-1 +1.510e+00 | flux err 8.7e-15 umax 17.69 26.38 
+tesla_classic Da  0.00 S  0.50 Re   3.000 | Pi_f    7174.9792 Pi_r    7223.9483 | D-1 +6.825e-03 | flux err 1.6e-15 umax 13.59 13.90 
+tesla_classic Da  0.00 S  0.50 Re  10.000 | Pi_f    8550.6361 Pi_r    9844.0833 | D-1 +1.513e-01 | flux err 1.3e-15 umax 14.04 15.55 
+tesla_classic Da  0.00 S  0.50 Re  30.000 | Pi_f   12864.8031 Pi_r   28000.9528 | D-1 +1.177e+00 | flux err 3.1e-15 umax 17.32 23.96 
+CSV written to results/checks/classic_mesh_hw14.csv

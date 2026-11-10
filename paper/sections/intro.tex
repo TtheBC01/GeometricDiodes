@@ -1,0 +1,98 @@
+\section{Introduction}
+\label{sec:intro}
+
+A rectenna converts radiation to direct current by feeding an antenna into a
+rectifier. Above a few hundred gigahertz the rectifier is the difficulty: the
+$RC$ time of a junction diode limits Schottky rectifiers to the low terahertz
+range, and the search for a junction-free, low-capacitance nonlinearity that
+works to $1\THz$ and beyond is long standing. Graphene has attracted two
+proposals of this kind, both of which rest on the shape of a channel rather
+than on a junction.
+
+The first is the geometric diode~\cite{moddel2012ultrahigh,zhu2013graphene,dragoman2013geometrically}: a channel
+that narrows asymmetrically, typically a funnel, whose dimensions are below the
+mean free path so that carriers are steered ballistically by the walls. With
+planar geometry and negligible capacitance it was proposed explicitly for
+terahertz and infrared rectennas~\cite{zhu2013graphene}. Encapsulated devices
+reach reported asymmetry ratios of $1.6$ to
+$2$~\cite{nguyen2021geometric,wang2024graphene}, and related four-terminal
+ballistic rectifiers have been used for detection and imaging up to
+$0.7\THz$~\cite{auton2016graphene,auton2017terahertz}. The second is the
+electronic Tesla valve. Tesla's valvular conduit~\cite{tesla1920valvular}
+rectifies fluid flow by inertia~\cite{nguyen2021early}, and in the temperature
+window where electron-electron collisions make the graphene electron liquid
+viscous~\cite{bandurin2016negative,krishnakumar2017superballistic} a Tesla-shaped
+channel has been reported to show a five per cent asymmetry of its
+four-terminal resistance~\cite{geurs2020rectification}. A shape that rectifies an electron
+fluid with no junction is an obvious rectenna candidate.
+
+What the shape can do is constrained from the outset. For an elastic
+two-terminal conductor the unitarity of the scattering matrix implies equal
+transmission in the two directions at every energy, so the linear response
+is symmetric whatever the shape. Rectification is a second-order effect,
+and a consistent theory of it requires the response of the potential
+landscape inside the device to the
+bias~\cite{christen1996gauge,sanchez2004magnetic,song1999formalism,lofgren2004symmetry}.
+The useful question is therefore not whether a shape rectifies but which
+nonlinearity it feeds, how strong that nonlinearity is at the power an antenna
+delivers, and how fast it is. A geometric diode in the ballistic regime feeds
+the bias-induced landscape; a Tesla valve in the viscous regime feeds the
+convective term of the Navier-Stokes equation; and at terahertz frequencies a
+gated graphene channel is a plasmonic cavity whose convective and
+density nonlinearities rectify by the mechanism of Dyakonov and
+Shur~\cite{dyakonov1993shallow,dyakonov1996detection}, which is the basis of
+most graphene terahertz detectors to
+date~\cite{vicarelli2012graphene,bandurin2018resonant}. These three
+mechanisms have been studied separately, with different geometries and
+different figures of merit. Whether a geometric shape, as opposed to the
+terminations of the channel, carries the terahertz response has not been
+tested with one device in all of them.
+
+This paper does that. We take one set of geometries
+(Fig.~\ref{fig:devices}): the funnel of the best-documented geometric
+diode~\cite{nguyen2021geometric}, the classical Tesla valve at the same
+minimum feature size, a straight control, and versions scaled to a $1\um$
+channel that a $75\ \Omega$ antenna can drive. We compute their rectification
+(i) in a semiclassical ballistic model of the kind used in the geometric-diode
+literature~\cite{zhu2013graphene,stearns2021simulation,truccolo2024comprehensive}, (ii) in
+steady viscous electron hydrodynamics, (iii) in the gated compressible
+(plasmonic) electron fluid from $10\GHz$ to $3\THz$, at small signal and at
+finite amplitude up to the gate overdrive, and (iv) in the ballistic model
+driven at terahertz frequencies. Each solver is validated against analytic
+limits and benchmarks before it is used; the acceptance tests are listed in
+the Supplemental Material.
+
+The answer is the same in every regime, and it is negative for the shape.
+The Tesla valve does not rectify ballistically, rectifies viscously only at
+Reynolds numbers the Fermi liquid cannot sustain, and contributes
+$10^{-5}$ to $10^{-3}\AW$ at terahertz frequencies. The funnel rectifies in
+all regimes, but its terahertz response of $0.1$ to $0.3\AW$ is the
+Dyakonov-Shur asymmetry of its terminations; the shape adds a factor of
+order one near a taper resonance and nothing elsewhere. The conversion
+efficiency of the plasmonic element is proportional to the incident power up
+to a saturation power set by the gate, and its peak is below one per cent at
+every operating point for which the fluid description holds. The ballistic
+shape asymmetry, driven at $1\THz$, falls to the same responsivity. As a
+detector the element is respectable; as a harvester it does not exist.
+
+Section~\ref{sec:models} describes the devices and the three models,
+Sec.~\ref{sec:dc} the dc results, Sec.~\ref{sec:plasmonic} the plasmonic
+element from small signal to saturation, Sec.~\ref{sec:ballistic} the
+ballistic element at terahertz frequencies, and Sec.~\ref{sec:discussion}
+compares the regimes, places the numbers against measured detectors and
+states the limitations.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig1_devices.pdf}
+\caption{Devices and frequency scales. (a) The funnel geometric diode,
+device D of Ref.~\cite{nguyen2021geometric}: $2\um$ leads, a 30 degree taper
+to a $175\nm$ neck and an abrupt shoulder; forward is the direction into the
+taper. (b) The classical four-loop Tesla valve at the same $175\nm$ channel
+width. (c) The gated funnel scaled to a $1\um$ neck with $4\um$ contacts, with
+the terminations used for the plasmonic response: the antenna, a Thevenin
+source of resistance $\Rant$, drives the source contact and the drain is tied
+to the gate. (d) Characteristic frequencies of the mechanisms studied, for the
+parameters of Table~\ref{tab:params}; the shaded band is the range of
+interest for a terahertz rectenna.}
+\label{fig:devices}
+\end{figure*}
