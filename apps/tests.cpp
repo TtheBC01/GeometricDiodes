@@ -1,4 +1,5 @@
-// Stage 0 / Stage 1 acceptance ladder. Every test prints the measured number,
+// Stage 0 / Stage 1 acceptance ladder (T1 to T11) and the Stage B2 ladder
+// (T12 to T16: time-dependent imposed field and two-sided estimator). Every test prints the measured number,
 // the target, and PASS/FAIL. Targets come from analytic results (Sharvin,
 // Datta ballistic-diffusive interpolation, reciprocity, detailed balance) or
 // from the independently computed 2D Clausing table in the feasibility report.
@@ -22,11 +23,14 @@ static std::string fmt(const char* f, double a, double b = 0, double c = 0, doub
 
 int main(int argc, char** argv) {
   long N = argc > 1 ? std::atol(argv[1]) : 200000;
+  long NB = argc > 2 ? std::atol(argv[2]) : 1000000;  // Stage B2 tests, particles per side
+  bool only_b2 = argc > 3 && std::string(argv[3]) == "b2";
   const double EF12 = EF_from_density(1e12);  // 0.1167 eV
   std::printf("GeometricDiodes acceptance ladder, N=%ld particles per run\n", N);
   std::printf("E_F(1e12 cm^-2)=%.4f eV, lambda_F=%.1f nm, kT(300K)=%.4f eV\n\n", EF12,
               fermi_wavelength(1e12), kBoltzmann * 300);
 
+  if (!only_b2) {
   // ---- T1: specular straight channel, field free: T = 1 exactly ----------
   {
     Boundary b = make_straight_channel(4000, 200);
@@ -171,6 +175,137 @@ int main(int argc, char** argv) {
       std::printf("[INFO] T11 Truccolo-like funnel, uniform field, E_F=0.2 eV: A(%.1f V)=%.3f  (paper: 1.05-1.15 at low bias) dirac=%.1e\n",
                   V, ip.I / std::fabs(im.I), im.stats.fraction(Fate::Dirac));
     }
+  }
+
+  }  // !only_b2
+
+  // =====================================================================
+  // Stage B2 ladder: imposed field in time, two-sided estimator
+  // =====================================================================
+  std::printf("\nStage B2 ladder, %ld particles per side\n", NB);
+  const double EF14 = EF_from_density(1.4e12);
+  FunnelParams fpD; Boundary funnel = make_funnel(fpD);
+  const double x_neck = fpD.Lc + 0.5 * (fpD.Wc - fpD.Wn) / std::tan(deg2rad(fpD.alpha_deg));
+  auto within = [](double a, double b, double err, double nsig, double rel) {
+    return std::fabs(a - b) < std::max(nsig * err, rel * std::fabs(b));
+  };
+
+  // ---- T12: non-conservative chord integration in a static field ----------
+  {
+    // kill-test reference (results/killtest.csv, funnel, p = 1, lambda = inf, 400k)
+    const double Tp_ref = 0.141297, Tp_err = 0.000479, Tm_ref = 0.0413975, Tm_err = 0.000354, A_ref = 189.457 / 116.69;
+    TransportParams p; p.EF = EF14; p.reimpose_energy = false;
+    p.V = 0.1;  auto ip = Transport(funnel, p).current(NB, 201);
+    p.V = -0.1; auto im = Transport(funnel, p).current(NB, 202);
+    double zp = std::fabs(ip.T - Tp_ref) / std::hypot(ip.T_err, Tp_err), zm = std::fabs(im.T - Tm_ref) / std::hypot(im.T_err, Tm_err);
+    double A = ip.I / std::fabs(im.I);
+    bool ok = zp < 3.5 && zm < 3.5 && std::fabs(A / A_ref - 1) < 0.01 + 3.5 * A * std::hypot(ip.T_err / ip.T, im.T_err / im.T) / A_ref;
+    check("T12 dk/dt = F integration (no energy re-imposition) reproduces the static kill test", ok,
+          fmt("T+=%.5f (ref %.5f, z=%.2f)", ip.T, Tp_ref, zp) + fmt(" T-=%.5f (z=%.2f) A=%.4f (ref %.4f)", im.T, zm, A, A_ref));
+  }
+
+  // ---- T13: two-sided equilibrium estimator against the bias window ------
+  {
+    TransportParams p; p.EF = EF14; p.V = 0.1;
+    Transport tr(funnel, p);
+    auto bw = tr.current(NB, 203);
+    auto ts = tr.ac_current(NB, 204);
+    double z = std::fabs(ts.Idc - bw.I) / std::hypot(ts.Idc_err, bw.I_err);
+    check("T13a two-sided equilibrium estimator = bias-window estimator at V = 0.1 V", z < 3.5,
+          fmt("I_2s=%.3f +- %.3f uA  I_bw=%.3f +- %.3f uA", ts.Idc * 1e6, ts.Idc_err * 1e6, bw.I * 1e6, bw.I_err * 1e6) + fmt("  z=%.2f", z));
+    p.V = 0; Transport t0(funnel, p);
+    auto z0 = t0.ac_current(NB, 205);
+    check("T13b two-sided estimator at V = 0 gives I = 0", std::fabs(z0.Idc) < 3.5 * z0.Idc_err,
+          fmt("I=%.3f +- %.3f uA  T_SD=%.5f T_DS=%.5f", z0.Idc * 1e6, z0.Idc_err * 1e6, z0.T_SD, z0.T_DS));
+  }
+
+  // ---- T14: quasi-static limit at 300 MHz ----------------------------------
+  // (the plan said 3 GHz; the taper feeds a slow-drift population into the
+  // source lead, 5 % of its electrons live longer than 20 ps, and at 3 GHz
+  // those already see the field change: the anchor sits a decade lower)
+  {
+    TransportParams p; p.EF = EF14;
+    double Ip[2], Im[2], eIp[2], eIm[2]; const double Vs[2] = {0.05, 0.1};
+    for (int i = 0; i < 2; ++i) {
+      p.V = Vs[i];  auto a = Transport(funnel, p).current(NB, 210 + i);  Ip[i] = a.I; eIp[i] = a.I_err;
+      p.V = -Vs[i]; auto c = Transport(funnel, p).current(NB, 220 + i);  Im[i] = c.I; eIm[i] = c.I_err;
+    }
+    // even and odd parts: E(V) = I2 V^2 + I4 V^4, O(V) = G1 V + I3 V^3
+    double E1 = 0.5 * (Ip[0] + Im[0]), E2 = 0.5 * (Ip[1] + Im[1]);
+    double O1 = 0.5 * (Ip[0] - Im[0]), O2 = 0.5 * (Ip[1] - Im[1]);
+    double v1 = Vs[0], v2 = Vs[1];
+    double I4 = (E2 / (v2 * v2) - E1 / (v1 * v1)) / (v2 * v2 - v1 * v1), I2 = E2 / (v2 * v2) - I4 * v2 * v2;
+    double I3 = (O2 / v2 - O1 / v1) / (v2 * v2 - v1 * v1), G1 = O2 / v2 - I3 * v2 * v2;
+    double eE1 = 0.5 * std::hypot(eIp[0], eIm[0]), eE2 = 0.5 * std::hypot(eIp[1], eIm[1]);
+    const double Va = 0.1;
+    // quasi-static dc for a cosine drive: <E(Va cos phi)> = I2 Va^2/2 + 3 I4 Va^4/8,
+    // a linear combination of E1 and E2 (error propagated through it)
+    auto qs_of = [&](double e1, double e2) {
+      double i4 = (e2 / (v2 * v2) - e1 / (v1 * v1)) / (v2 * v2 - v1 * v1), i2 = e2 / (v2 * v2) - i4 * v2 * v2;
+      return 0.5 * i2 * Va * Va + 0.375 * i4 * std::pow(Va, 4);
+    };
+    double Idc_qs = qs_of(E1, E2);
+    double eqs = std::hypot((qs_of(E1 + eE1, E2) - Idc_qs), (qs_of(E1, E2 + eE2) - Idc_qs));
+    double G_qs = G1 + 0.75 * I3 * Va * Va;
+    p.V = 0; p.f_Hz = 3e8; p.Va = Va;
+    auto ac = Transport(funnel, p).ac_current(NB, 230);
+    bool okI = within(ac.Idc, Idc_qs, std::hypot(ac.Idc_err, eqs), 3.5, 0.05);
+    check("T14a quasi-static limit: I_dc(300 MHz, Va 0.1) = I2 Va^2/2 + 3 I4 Va^4/8 from the static curve", okI,
+          fmt("I_dc=%.3f +- %.3f uA  qs=%.3f +- %.3f uA", ac.Idc * 1e6, ac.Idc_err * 1e6, Idc_qs * 1e6, eqs * 1e6) +
+              fmt("  I2=%.3f mA/V^2 I4=%.3f mA/V^4", I2 * 1e3, I4 * 1e3));
+    // |Y1| is the static conductance; the phase is the transit lag w tau and
+    // is reported against the mean flight time
+    double tau_mean = (ac.S.sum_time + ac.D.sum_time) / (ac.S.n + ac.D.n);
+    bool okY = within(std::abs(ac.Y1), G_qs, ac.I1_err / Va, 3.5, 0.05);
+    check("T14b |Y1| at 300 MHz = static conductance G1 + 3 I3 Va^2/4", okY,
+          fmt("Y1=%.4f%+.4fi mS +- %.4f  G_qs=%.4f mS", ac.Y1.real() * 1e3, ac.Y1.imag() * 1e3, ac.I1_err / Va * 1e3, G_qs * 1e3) +
+              fmt("  phase=%.3f rad, w*tau_mean=%.3f", std::arg(ac.Y1), 2 * kPi * p.f_Hz * 1e-15 * tau_mean));
+  }
+
+  // ---- T15: straight control under ac drive gives zero -------------------
+  {
+    Boundary ctrl = make_stepped_channel(2000, 1000, 175, 5490, 2000, 1000);
+    for (double f : {3e9, 1e12}) {
+      TransportParams p; p.EF = EF14; p.f_Hz = f; p.Va = 0.1;
+      auto ac = Transport(ctrl, p).ac_current(NB, 240 + (f > 1e11));
+      // the equilibrium injection samples the low-energy tail (weight ~ E), and
+      // a few 1e-3 of those are driven below the 2 meV Dirac cut by the field;
+      // they would have returned to their own contact, so they carry no current
+      double dirac = 0.5 * (ac.S.fraction(Fate::Dirac) + ac.D.fraction(Fate::Dirac));
+      double lost = 0.5 * (ac.S.fraction(Fate::Trapped) + ac.S.fraction(Fate::Leaked) + ac.D.fraction(Fate::Trapped) + ac.D.fraction(Fate::Leaked));
+      double heated = (ac.S.sum_heated + ac.D.sum_heated) / (ac.S.n + ac.D.n);
+      bool ok = std::fabs(ac.Idc) < 3.5 * ac.Idc_err && lost < 1e-4 && dirac < 1e-2 && heated < 1e-3;
+      check(fmt("T15 straight control at %.0f GHz: I_dc = 0, trapped+leaked < 1e-4, dirac < 1e-2, heated < 1e-3", f * 1e-9), ok,
+            fmt("I_dc=%.3f +- %.3f uA  trapped+leaked=%.1e dirac=%.1e", ac.Idc * 1e6, ac.Idc_err * 1e6, lost, dirac) +
+                fmt(" heated=%.1e  Y1=%.4f%+.4fi mS", heated, ac.Y1.real() * 1e3, ac.Y1.imag() * 1e3));
+    }
+  }
+
+  // ---- T16: chord cap in time, localised field at 1 THz -------------------
+  {
+    TransportParams p; p.EF = EF14; p.f_Hz = 1e12; p.Va = 0.1; p.field = FieldModel::Localised; p.ell_F = 500; p.x_F = x_neck;
+    long N4 = 4 * NB;
+    p.chords_per_period = 40;  auto a = Transport(funnel, p).ac_current(N4, 250);
+    p.chords_per_period = 160; auto c = Transport(funnel, p).ac_current(N4, 251);
+    bool ok = within(a.Idc, c.Idc, std::hypot(a.Idc_err, c.Idc_err), 3.5, 0.02);
+    check("T16 chord cap v_F/(40 f) vs v_F/(160 f), localised 500 nm field, 1 THz: same I_dc", ok,
+          fmt("I_dc=%.3f +- %.3f uA vs %.3f +- %.3f uA", a.Idc * 1e6, a.Idc_err * 1e6, c.Idc * 1e6, c.Idc_err * 1e6) +
+              fmt("  Y1=%.4f%+.4fi mS", a.Y1.real() * 1e3, a.Y1.imag() * 1e3));
+  }
+
+  // ---- T17: the Dirac cut does not set the ac result -----------------------
+  {
+    // the equilibrium injection feeds ~3e-3 of the electrons into the 2 meV
+    // cut; with the classical turning point instead, I_dc must not move
+    TransportParams p; p.EF = EF14; p.f_Hz = 1e12; p.Va = 0.1; p.field = FieldModel::Localised; p.ell_F = 500; p.x_F = x_neck;
+    auto a = Transport(funnel, p).ac_current(2 * NB, 260);
+    p.dirac_reflect = true;
+    auto c = Transport(funnel, p).ac_current(2 * NB, 261);
+    double z = std::fabs(a.Idc - c.Idc) / std::hypot(a.Idc_err, c.Idc_err);
+    double dir = 0.5 * (a.S.fraction(Fate::Dirac) + a.D.fraction(Fate::Dirac)), dir_c = 0.5 * (c.S.fraction(Fate::Dirac) + c.D.fraction(Fate::Dirac));
+    check("T17 Dirac cut vs classical turning point, localised 500 nm field, 1 THz: same I_dc", z < 3.5,
+          fmt("I_dc=%.3f +- %.3f uA (dirac %.1e) vs %.3f", a.Idc * 1e6, a.Idc_err * 1e6, dir, c.Idc * 1e6) +
+              fmt(" +- %.3f uA (dirac %.1e)  z=%.2f", c.Idc_err * 1e6, dir_c, z));
   }
 
   std::printf("\n%d passed, %d failed\n", n_pass, n_fail);

@@ -6,7 +6,10 @@ channel rectify better than a funnel under the same physics?** (the "kill
 test"), answered in `results/KILLTEST.md`. Stage H, the electron-hydrodynamic
 solver (`src/hydro/`, `plans/hydro_tesla.md`, `results/HYDRO.md`), asks the
 follow-up question the ballistic model cannot: does the Tesla shape rectify in
-the viscous electron-fluid window (20 to 100 K), and at what current.
+the viscous electron-fluid window (20 to 100 K), and at what current. Stages
+H2 to H4 (`results/THZ.md`) take the gated funnel to THz as a plasmonic
+rectenna element, and Stage B2 (`results/BALLISTIC_THZ.md`) closes the loop
+by driving the ballistic funnel of the kill test at THz.
 
 ## Physics model (Stage 0 + Stage 1)
 
@@ -93,6 +96,15 @@ standard errors. Results are reproducible for a given seed and batch count.
 | T9 | 10 um channel, lambda = 300 nm | `T = l1/(L + l1)`, `l1 = pi lambda/2` (Drude limit) |
 | T10 | chord tolerance 0.05 vs 0.005 nm | same T |
 | T11 | Truccolo-like funnel (Wc 100 / Wn 10 / Wd 40 nm) | T = Wn/Wc = 0.10 at zero field (info only) |
+| T12 | Stage B2: dk/dt = F integration without energy re-imposition, static field | kill-test T(+-0.1 V) and A within 3.5 sigma / 1 % |
+| T13 | two-sided equilibrium estimator at V = 0.1 and 0 V | = bias-window estimator; 0 |
+| T14 | quasi-static anchor at 300 MHz, V_a 0.1 V | I_dc = <I(V_a cos)> and |Y_1| = static conductance within 5 % |
+| T15 | straight control under ac drive, 3 GHz and 1 THz | I_dc = 0; trapped + leaked < 1e-4, dirac < 1e-2, heated < 1e-3 |
+| T16 | chord cap v_F/(40 f) vs v_F/(160 f), localised field, 1 THz | same I_dc within 3.5 sigma / 2 % |
+| T17 | Dirac cut vs classical turning point, localised field, 1 THz | same I_dc within 3.5 sigma |
+
+T12 to T17 take 1e6 particles per side and about three minutes
+(`./build/gd_tests 200000 1000000 b2` runs them alone).
 
 ## Geometries in the kill test
 
@@ -257,3 +269,31 @@ gate (the Dyakonov-Shur configuration, which rectifies any channel); `ds` is
 the ideal-source / open-drain detector of the DS papers. Density is P1
 (Taylor-Hood) with the density gradient integrated by parts, which gives
 second-order dispersion accuracy and keeps the quasi-static limit stable.
+
+## Stage B2: the ballistic funnel under THz drive
+
+Plan: `plans/ballistic_thz.md`; results: `results/BALLISTIC_THZ.md`, data in
+`results/bthz/`. The Stage 1 solver gains a time-dependent imposed potential
+U(x, t) = -e V_a cos(2 pi f t) g(x), with g the Stage 1 uniform ramp or a drop
+of length l_F localised at the neck, non-conservative chord flights
+(dk/dt = F, no energy re-imposition, chords capped at v_F / (40 f)), and a
+two-sided equilibrium-injection estimator that gives the dc current and the
+first harmonic of the drain current in a moving landscape (`src/transport.*`,
+`apps/bthz.cpp`, ladder T12 to T17). Device D funnel, p = 1, lambda = inf and
+700 nm, 0.3 GHz to 1 THz. Result: under the uniform field the ballistic
+rectification dies in two steps, a third of it between 1 and 10 GHz through
+a slow-drift population the taper feeds into the source lead (5 % of source
+electrons fly longer than 20 ps), the rest at the transit roll-off with its
+zero at 300 GHz; at 1 THz it is 0.05 A/W. Confining the drop to the neck
+keeps it alive: 0.37 A/W at 1 THz for a 500 nm drop, 0.45 A/W for a
+neck-width drop, equal to the hydrodynamic funnel's Dyakonov-Shur
+responsivity at 100 K and not above it, in the most favourable idealisation
+the model has. At lambda = 700 nm the THz response is a transit-time effect
+of 0.2 A/W with no quasi-static counterpart. Neither transport limit gives a
+shape-based THz rectenna; no self-consistent stage follows.
+
+    ./build/gd_tests 200000 1000000 b2                       # T12 to T17
+    ./build/gd_bthz --geo funnel_nguyenD --field local --ellF 500 --lambda inf --f 1e12 --V 0.1 --N 1000000 --out results/bthz/points.csv
+    ./tools/ballistic_thz_runs.sh B1                         # then B2u B2l B3 B0 B5, and B4 3e11 local 500
+    .venv/bin/python tools/ballistic_thz_plot.py results/bthz
+    .venv/bin/python tools/ballistic_thz_tables.py results/bthz > results/bthz/tables_B2.md

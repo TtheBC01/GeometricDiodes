@@ -295,7 +295,10 @@ Reading:
    the transit-time question outside this model (0.5 ps across the neck,
    i.e. a roll-off near 300 GHz if the field must be quasi-static over the
    transit): it is the remaining route to a shape-based rectenna and the
-   natural Stage B2.
+   natural Stage B2. (Done, 2026-11-09, `BALLISTIC_THZ.md`: the ballistic
+   asymmetry survives to 1 THz only with the drop confined to the neck, and
+   then at 0.37 to 0.45 A/W in the clean limit, equal to the DS figures
+   here, not above them.)
 4. **What this stage decides.** In the hydrodynamic-plasmonic picture a
    graphene geometric-diode rectenna at 1 THz is possible on paper at the
    10 to 100 pW/Hz^1/2 level, but the rectification is the Dyakonov-Shur

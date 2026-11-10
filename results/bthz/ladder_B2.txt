@@ -1,0 +1,16 @@
+GeometricDiodes acceptance ladder, N=200000 particles per run
+E_F(1e12 cm^-2)=0.1167 eV, lambda_F=35.4 nm, kT(300K)=0.0259 eV
+
+
+Stage B2 ladder, 1000000 particles per side
+[PASS] T12 dk/dt = F integration (no energy re-imposition) reproduces the static kill test T+=0.14141 (ref 0.14130, z=0.19) T-=0.04148 (z=0.20) A=1.6217 (ref 1.6236)
+[PASS] T13a two-sided equilibrium estimator = bias-window estimator at V = 0.1 V I_2s=188.714 +- 0.637 uA  I_bw=189.229 +- 0.464 uA  z=0.65
+[PASS] T13b two-sided estimator at V = 0 gives I = 0              I=-0.153 +- 0.657 uA  T_SD=0.08763 T_DS=0.08772
+[PASS] T14a quasi-static limit: I_dc(300 MHz, Va 0.1) = I2 Va^2/2 + 3 I4 Va^4/8 from the static curve I_dc=17.782 +- 0.593 uA  qs=18.272 +- 0.178 uA  I2=3.889 mA/V^2 I4=-31.233 mA/V^4
+[PASS] T14b |Y1| at 300 MHz = static conductance G1 + 3 I3 Va^2/4 Y1=1.5892+0.0229i mS +- 0.0129  G_qs=1.5800 mS  phase=0.014 rad, w*tau_mean=0.015
+[PASS] T15 straight control at 3 GHz: I_dc = 0, trapped+leaked < 1e-4, dirac < 1e-2, heated < 1e-3 I_dc=-0.798 +- 0.571 uA  trapped+leaked=1.5e-06 dirac=1.4e-03 heated=0.0e+00  Y1=1.3086-0.0282i mS
+[PASS] T15 straight control at 1000 GHz: I_dc = 0, trapped+leaked < 1e-4, dirac < 1e-2, heated < 1e-3 I_dc=-0.197 +- 0.622 uA  trapped+leaked=5.0e-07 dirac=7.9e-04 heated=0.0e+00  Y1=0.0749-0.1768i mS
+[PASS] T16 chord cap v_F/(40 f) vs v_F/(160 f), localised 500 nm field, 1 THz: same I_dc I_dc=6.320 +- 0.301 uA vs 5.551 +- 0.318 uA  Y1=-1.2217-3.5854i mS
+[PASS] T17 Dirac cut vs classical turning point, localised 500 nm field, 1 THz: same I_dc I_dc=5.942 +- 0.452 uA (dirac 2.9e-03) vs 5.689 +- 0.451 uA (dirac 1.8e-04)  z=0.40
+
+9 passed, 0 failed
