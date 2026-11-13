@@ -326,3 +326,25 @@ the drift limit.
     make build/gd_dc_gate build/gd_dc_gate_ref && ./build/gd_thz_tests T18,T19,T20
     tools/dc_gate_runs.sh D1        # then D2 to D4
     .venv/bin/python tools/dc_gate_ref.py && .venv/bin/python tools/dc_gate_tables.py && .venv/bin/python tools/dc_gate_plot.py
+
+## Stage B8: the short funnel with the field computed
+
+Plan `plans/ballistic_selfconsistent.md`, results
+`results/BALLISTIC_SELFCONSISTENT.md`. A particle simulation in which the
+field comes from the electrons' own charge, a gate and metal contacts
+(`src/pic.*`, `src/fft2d.*`). The 0.55 um funnel of Stage B7 at 1 THz and
+the room-temperature mean free path gives 0.12 A/W per absorbed watt, not
+0.70, and 0.023 A/W for one device on a 75 ohm antenna: the static
+asymmetry is 1.05 because a quarter of the bias drops at the contacts and
+the rest is centred on the neck. Under a 30 nm gate at 1 THz a straight
+strip with its drain tied to the gate rectifies more than the funnel
+shape. Extension: 0.10 A/W at a 100 nm mean free path, and no usable
+rectification with half-diffuse walls (at most 0.04 A/W, sign reversed),
+so the result is one for near-specular edges. The paper (third draft)
+and `OVERVIEW.md` carry these numbers.
+
+    make build/gd_bpic build/gd_pic_tests && ./build/gd_pic_tests        # T22 to T30
+    tools/pic_convergence.sh && tools/pic_nseries.sh                     # decision point, numerical settings
+    tools/pic_runs.sh P1 P2 P3 P4 && tools/pic_checks.sh                 # core set, about 4 hours on 10 cores
+    tools/pic_ext.sh P5 P6 P6c                                           # extension, about 2 hours
+    .venv/bin/python tools/pic_tables.py && .venv/bin/python tools/pic_plot.py

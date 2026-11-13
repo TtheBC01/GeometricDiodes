@@ -1,0 +1,7 @@
+strip strip mode gated d 30 nm lambda 700 nm f 3e+12 Hz V 0.1: I_dc -1.7936 +- 0.0243 uA (S -1.7933, D -1.7938, vol -1.7877)
+  Y1 2.97321 +3.93865i mS, P_abs 14.86195 uW, R_abs -0.1207 A/W, R_1 -0.0680 A/W; E_kin 0.11113 -> 0.11747 eV; particles 7966798 (weight 0.00053 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.48756 fs, 8041 steps, 350.3 s (push 323.1, field 26.5)
+G3 funnel mode gated d 30 nm lambda 700 nm f 3e+12 Hz V 0.1: I_dc 0.8121 +- 0.0259 uA (S 0.8128, D 0.8113, vol 0.8664)
+  Y1 3.34537 +3.53594i mS, P_abs 16.72227 uW, R_abs 0.0486 A/W, R_1 0.0298 A/W; E_kin 0.11113 -> 0.12223 eV; particles 7960033 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.48756 fs, 8041 steps, 362.8 s (push 335.1, field 26.8)
+done

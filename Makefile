@@ -3,9 +3,15 @@ CXX      ?= clang++
 CXXFLAGS ?= -std=c++20 -O2 -Wall -Wextra -Wpedantic -Isrc -isystem /opt/homebrew/include/eigen3
 LDFLAGS  ?= -lpthread
 
+# Stage B8: the particle solver uses vDSP's FFT on macOS and a plain one elsewhere
+ifeq ($(shell uname),Darwin)
+CXXFLAGS += -DGD_USE_ACCELERATE
+LDFLAGS  += -framework Accelerate
+endif
+
 SRC  := $(wildcard src/*.cpp) $(wildcard src/hydro/*.cpp)
 OBJ  := $(patsubst src/%.cpp,build/%.o,$(SRC))
-APPS := build/gd_tests build/gd_killtest build/gd_geom build/gd_hydro_mesh build/gd_hydro_tests build/gd_hydro_sweep build/gd_hydro_fields build/gd_thz_tests build/gd_thz_sweep build/gd_thz_power build/gd_bthz build/gd_dc_gate build/gd_dc_gate_ref
+APPS := build/gd_tests build/gd_killtest build/gd_geom build/gd_hydro_mesh build/gd_hydro_tests build/gd_hydro_sweep build/gd_hydro_fields build/gd_thz_tests build/gd_thz_sweep build/gd_thz_power build/gd_bthz build/gd_dc_gate build/gd_dc_gate_ref build/gd_bpic build/gd_pic_tests
 
 all: $(APPS)
 

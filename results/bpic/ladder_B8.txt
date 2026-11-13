@@ -1,0 +1,47 @@
+Stage B8 ladder: N = 2000000, h = 5 nm, filter = 1.5 cells, FFT backend vDSP
+T22a  PASS  FFT backends differ by at most 7.1e-14 on a 128 x 32 random array; forward then inverse returns the input to 8.3e-16
+T22b  PASS  point charge over the gate: largest relative error 3.0e-12 over the grid
+T22c  PASS  charged disc over the gate: U(0) = 1.32195 eV, closed form 1.32195 (infinite sheet 1.42856), error 1.4e-07
+      plate 400 x 400 nm, gate at 10 nm, h = 10 nm: charge 3860.13 e/eV; ideal 3360.02; with Palmer's fringing 4012.90 (ratio 0.962); metal residual 1.4e-15 eV
+T23a  PASS  plate 400 x 400 nm, gate at 10 nm, h = 5 nm: charge 3893.42 e/eV; ideal 3360.02; with Palmer's fringing 4012.90 (ratio 0.970); metal residual 3.3e-15 eV
+      coplanar strips 100 nm wide, 100 nm apart, h = 10 nm: 0.3211 e/eV per nm from lengths 800 and 1600 nm; infinite-strip formula 0.3283 (ratio 0.978)
+T23b  PASS  coplanar strips 100 nm wide, 100 nm apart, h = 5 nm: 0.3251 e/eV per nm from lengths 800 and 1600 nm; infinite-strip formula 0.3283 (ratio 0.990)
+T24   PASS  static screening: particle response, kernel, and U_tot / U_ext against 1 / (1 + nu G(q))
+      (a) interaction off, wavelength 200 nm: dn / (-nu U_ext) = 0.9800 (target 3 %)  [75 s]
+      (a) interaction off, wavelength 400 nm: dn / (-nu U_ext) = 0.9799 (target 3 %)  [72 s]
+      (b) eps_r 40, gate 30 nm, wavelength 200 nm (nu G = 1.21): U_tot/U_ext = 0.4558, expected 0.4533 (ratio 1.005, target 3 %); U_ind / (G dn) = 1.0003 (target 1 %)  [86 s]
+      (b) eps_r 40, gate 30 nm, wavelength 400 nm (nu G = 1.77): U_tot/U_ext = 0.3578, expected 0.3608 (ratio 0.992, target 3 %); U_ind / (G dn) = 1.0001 (target 1 %)  [87 s]
+      (c) gate  30 nm, wavelength 200 nm (nu G = 12.7): U_ind / (G dn) = 1.0003 (target 1 %); U_ind/U_ext ratio to theory 1.0017 (target 1 %);
+          U_tot/U_ext = 0.0714 at 1.0-2.5 ps, 0.0698 at 3.5-5.0 ps, expected 0.0730 (ratios 0.978, 0.956; target 10 % early)  [189 s]
+      (c) gate  30 nm, wavelength 400 nm (nu G = 18.7): U_ind / (G dn) = 1.0001 (target 1 %); U_ind/U_ext ratio to theory 1.0003 (target 1 %);
+          U_tot/U_ext = 0.0506 at 1.0-2.5 ps, 0.0487 at 3.5-5.0 ps, expected 0.0509 (ratios 0.994, 0.958; target 10 % early)  [189 s]
+      (c) gate 300 nm, wavelength 200 nm (nu G = 15.0): U_ind / (G dn) = 1.0004 (target 1 %); U_ind/U_ext ratio to theory 1.0027 (target 1 %);
+          U_tot/U_ext = 0.0601 at 1.0-2.5 ps, 0.0581 at 3.5-5.0 ps, expected 0.0626 (ratios 0.960, 0.928; target 10 % early)  [190 s]
+      (c) gate 300 nm, wavelength 400 nm (nu G = 30.6): U_ind / (G dn) = 0.9991 (target 1 %); U_ind/U_ext ratio to theory 1.0006 (target 1 %);
+          U_tot/U_ext = 0.0311 at 1.0-2.5 ps, 0.0303 at 3.5-5.0 ps, expected 0.0317 (ratios 0.982, 0.956; target 10 % early)  [189 s]
+T25   PASS  plasma-wave speed against v_F (1 + c) / sqrt(1 + 2 c), target 3 %
+      gate  30 nm, wavelength  400 nm: speed 3.149 v_F, collisionless theory 3.175 (ratio 0.992), from 7 zero crossings
+      gate  30 nm, wavelength  200 nm: speed 2.621 v_F, collisionless theory 2.666 (ratio 0.983), from 7 zero crossings
+      gate 300 nm, wavelength  200 nm: speed 2.833 v_F, collisionless theory 2.871 (ratio 0.987), from 7 zero crossings
+T26   PASS  interaction off reproduces Stage B7 (G3, 700 nm)
+      uniform, static +0.1 V     I =  103.431 +- 0.054 uA (volume  102.143), Stage B7  103.672 +- 0.106  [68 s]
+      uniform, static -0.1 V     I =  -66.427 +- 0.062 uA (volume  -65.421), Stage B7  -66.569 +- 0.083  [50 s]
+      neck drop, static +0.1 V   I =   79.770 +- 0.057 uA (volume   78.953), Stage B7   79.846 +- 0.095  [53 s]
+      neck drop, static -0.1 V   I =  -70.821 +- 0.059 uA (volume  -69.976), Stage B7  -70.604 +- 0.089  [62 s]
+      uniform, 1 THz             I =    2.916 +- 0.049 uA (volume    2.942), Stage B7    3.026 +- 0.100  [81 s]
+      neck drop, 1 THz           I =    2.632 +- 0.039 uA (volume    2.657), Stage B7    2.780 +- 0.105  [65 s]
+T27   PASS  conductance with the interaction on
+      strip 546 x 500 nm, gate  30 nm: G = 5.1245 (5 mV), 5.0394 (10 mV), extrapolated 5.2096 +- 0.0088 mS; Sharvin 5.1769 mS (ratio 1.0063)  [301 s]
+      strip 546 x 500 nm, gate 300 nm: G = 5.1158 (5 mV), 5.0427 (10 mV), extrapolated 5.1890 +- 0.0094 mS; Sharvin 5.1769 mS (ratio 1.0023)  [297 s]
+      G3, interaction off, uniform ramp: G = 0.9006 +- 0.0027 mS  [116 s]
+      G3, interaction on, 30 nm gate   : G = 0.9010 +- 0.0033 mS  [173 s]
+      G3, interaction on, 300 nm gate  : G = 0.9075 +- 0.0023 mS  [172 s]
+      G3 ratios to the interaction-free value: 1.0004 (30 nm), 1.0076 (300 nm); target 3 % at this bias
+T28   PASS  charge bookkeeping error 3.7e-13 electrons; contact potential residual 6.0e-16 eV; I_dc plane 0.506 +- 0.059, volume 0.527 uA;
+      absorbed power 3.6530 uW from <V I>, 3.6532 uW from the first harmonic; Y1 = 0.7306 +0.3406i mS; leaked particles 0
+T29   PASS  null tests
+      no drive, gate  30 nm: I_dc = +0.033 +- 0.040 uA; mean kinetic energy 0.11109 -> 0.11113 eV (+0.04 %) in 20 ps  [117 s]
+      no drive, gate 300 nm: I_dc = +0.030 +- 0.042 uA; mean kinetic energy 0.11109 -> 0.11108 eV (-0.00 %) in 20 ps  [116 s]
+      mirror-symmetric device, 1 THz, shape-only drive: I_dc = -0.083 +- 0.065 uA  [101 s]
+
+11 passed, 0 failed

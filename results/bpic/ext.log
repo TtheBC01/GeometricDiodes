@@ -1,0 +1,80 @@
+G3 funnel mode sym d 300 nm lambda 100 nm f 0 Hz V 0.1: I_dc 44.6154 +- 0.0292 uA (S 44.6139, D 44.6168, vol 44.2390)
+  Y1 0.00000 +0.00000i mS, P_abs 4.46119 uW, R_abs 10.0008 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11837 eV; particles 4006518 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 139.6 s (push 121.2, field 17.8)
+G3 funnel mode sym d 300 nm lambda 100 nm f 0 Hz V -0.1: I_dc -43.6993 +- 0.0273 uA (S -43.6949, D -43.7037, vol -43.3190)
+  Y1 0.00000 +0.00000i mS, P_abs 4.36954 uW, R_abs -10.0009 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11907 eV; particles 3991694 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 140.4 s (push 122.1, field 17.7)
+G3 funnel mode sym d 300 nm lambda 100 nm f 1e+12 Hz V 0.1: I_dc 0.2209 +- 0.0150 uA (S 0.2216, D 0.2203, vol 0.2179)
+  Y1 0.41270 +0.11962i mS, P_abs 2.06343 uW, R_abs 0.1071 A/W, R_1 0.0125 A/W; E_kin 0.11113 -> 0.11448 eV; particles 7999347 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 440.3 s (push 408.0, field 31.3)
+G3 funnel mode sym d 30 nm lambda 100 nm f 0 Hz V 0.1: I_dc 44.6270 +- 0.0258 uA (S 44.6305, D 44.6236, vol 44.1873)
+  Y1 0.00000 +0.00000i mS, P_abs 4.46262 uW, R_abs 10.0002 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11861 eV; particles 4027805 (weight 0.00080 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 135.3 s (push 117.3, field 17.5)
+G3 funnel mode sym d 30 nm lambda 100 nm f 0 Hz V -0.1: I_dc -43.7573 +- 0.0290 uA (S -43.7561, D -43.7585, vol -43.3160)
+  Y1 0.00000 +0.00000i mS, P_abs 4.37580 uW, R_abs -9.9998 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11893 eV; particles 3969601 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 135.8 s (push 117.8, field 17.5)
+G3 funnel mode sym d 30 nm lambda 100 nm f 1e+12 Hz V 0.1: I_dc 0.2211 +- 0.0151 uA (S 0.2221, D 0.2200, vol 0.2203)
+  Y1 0.44451 +0.63437i mS, P_abs 2.22246 uW, R_abs 0.0995 A/W, R_1 0.0124 A/W; E_kin 0.11113 -> 0.11473 eV; particles 7999053 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 446.3 s (push 413.3, field 32.0)
+G3 funnel mode sym d 300 nm lambda inf nm f 0 Hz V 0.1: I_dc 99.3857 +- 0.0299 uA (S 99.3879, D 99.3836, vol 98.6165)
+  Y1 0.00000 +0.00000i mS, P_abs 9.93864 uW, R_abs 9.9999 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11622 eV; particles 4011940 (weight 0.00080 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 133.6 s (push 115.4, field 17.6)
+G3 funnel mode sym d 300 nm lambda inf nm f 0 Hz V -0.1: I_dc -90.9914 +- 0.0569 uA (S -90.9939, D -90.9888, vol -90.0736)
+  Y1 0.00000 +0.00000i mS, P_abs 9.09932 uW, R_abs -9.9998 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11828 eV; particles 3978619 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 134.2 s (push 116.0, field 17.6)
+G3 funnel mode sym d 300 nm lambda inf nm f 1e+12 Hz V 0.1: I_dc 0.4993 +- 0.0182 uA (S 0.4998, D 0.4988, vol 0.5321)
+  Y1 0.76736 -0.27721i mS, P_abs 3.83668 uW, R_abs 0.1301 A/W, R_1 0.0268 A/W; E_kin 0.11113 -> 0.11347 eV; particles 7994440 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 420.1 s (push 388.3, field 30.8)
+G3 funnel mode sym d 30 nm lambda inf nm f 0 Hz V 0.1: I_dc 99.2288 +- 0.0283 uA (S 99.2269, D 99.2308, vol 98.3870)
+  Y1 0.00000 +0.00000i mS, P_abs 9.92289 uW, R_abs 10.0000 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11658 eV; particles 4043096 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 135.4 s (push 117.6, field 17.3)
+G3 funnel mode sym d 30 nm lambda inf nm f 0 Hz V -0.1: I_dc -90.2241 +- 0.0455 uA (S -90.2269, D -90.2213, vol -89.2547)
+  Y1 0.00000 +0.00000i mS, P_abs 9.02252 uW, R_abs -9.9999 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11820 eV; particles 3941104 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 132.2 s (push 114.5, field 17.2)
+G3 funnel mode sym d 30 nm lambda inf nm f 1e+12 Hz V 0.1: I_dc 0.5910 +- 0.0168 uA (S 0.5909, D 0.5911, vol 0.6250)
+  Y1 0.81451 +0.21891i mS, P_abs 4.07243 uW, R_abs 0.1451 A/W, R_1 0.0315 A/W; E_kin 0.11113 -> 0.11370 eV; particles 7991563 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 434.9 s (push 403.5, field 30.5)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0926 +- 0.0221 uA (S -0.0925, D -0.0928, vol -0.0873)
+  Y1 0.65005 -0.14088i mS, P_abs 3.25013 uW, R_abs -0.0285 A/W, R_1 -0.0051 A/W; E_kin 0.11113 -> 0.11378 eV; particles 7997791 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 413.3 s (push 381.8, field 30.5)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 82.0821 +- 0.0273 uA (S 82.0854, D 82.0787, vol 81.4200)
+  Y1 0.00000 +0.00000i mS, P_abs 8.20842 uW, R_abs 9.9997 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11757 eV; particles 4008400 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 142.2 s (push 123.9, field 17.7)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V -0.1: I_dc -81.6405 +- 0.0271 uA (S -81.6386, D -81.6425, vol -80.9516)
+  Y1 0.00000 +0.00000i mS, P_abs 8.16392 uW, R_abs -10.0002 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11838 eV; particles 3987594 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 138.7 s (push 120.4, field 17.8)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.1252 +- 0.0155 uA (S -0.1242, D -0.1262, vol -0.1176)
+  Y1 0.68422 +0.36789i mS, P_abs 3.42097 uW, R_abs -0.0366 A/W, R_1 -0.0068 A/W; E_kin 0.11113 -> 0.11401 eV; particles 7996652 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 429.7 s (push 397.5, field 31.3)
+G3 funnel mode sym d 30 nm lambda 700 nm f 0 Hz V 0.1: I_dc 82.0047 +- 0.0343 uA (S 82.0058, D 82.0036, vol 81.2751)
+  Y1 0.00000 +0.00000i mS, P_abs 8.20042 uW, R_abs 10.0001 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11793 eV; particles 4035154 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 137.8 s (push 119.5, field 17.7)
+G3 funnel mode sym d 30 nm lambda 700 nm f 0 Hz V -0.1: I_dc -81.6895 +- 0.0249 uA (S -81.6840, D -81.6950, vol -80.9353)
+  Y1 0.00000 +0.00000i mS, P_abs 8.16876 uW, R_abs -10.0002 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.11815 eV; particles 3959152 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 5187 steps, 133.6 s (push 115.4, field 17.6)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.05: I_dc 0.0986 +- 0.0176 uA (S 0.0976, D 0.0997, vol 0.0988)
+  Y1 0.69961 -0.18104i mS, P_abs 0.87449 uW, R_abs 0.1128 A/W, R_1 0.0214 A/W; E_kin 0.11113 -> 0.11180 eV; particles 7999152 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 436.8 s (push 404.2, field 31.6)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.2: I_dc 2.5635 +- 0.0163 uA (S 2.5645, D 2.5625, vol 2.6242)
+  Y1 0.64129 -0.10032i mS, P_abs 12.82549 uW, R_abs 0.1999 A/W, R_1 0.0350 A/W; E_kin 0.11113 -> 0.12154 eV; particles 7987756 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 5200 steps, 251.4 s (push 232.4, field 18.1)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.05: I_dc 0.0990 +- 0.0155 uA (S 0.1005, D 0.0975, vol 0.0989)
+  Y1 0.74010 +0.32293i mS, P_abs 0.92510 uW, R_abs 0.1070 A/W, R_1 0.0213 A/W; E_kin 0.11113 -> 0.11180 eV; particles 7998750 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 431.2 s (push 398.9, field 31.3)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.2: I_dc 2.6592 +- 0.0193 uA (S 2.6568, D 2.6616, vol 2.7296)
+  Y1 0.68074 +0.40588i mS, P_abs 13.61447 uW, R_abs 0.1953 A/W, R_1 0.0361 A/W; E_kin 0.11113 -> 0.12245 eV; particles 7979616 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 5200 steps, 237.0 s (push 219.0, field 17.2)
+done P5 P6
+control symmetric mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0182 +- 0.0170 uA (S 0.0184, D 0.0180, vol 0.0182)
+  Y1 0.45943 -0.17228i mS, P_abs 2.29706 uW, R_abs 0.0079 A/W, R_1 0.0010 A/W; E_kin 0.11112 -> 0.11327 eV; particles 7998932 (weight 0.00060 e), leaked 0
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 432.0 s (push 378.8, field 52.1)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0664 +- 0.0126 uA (S -0.0666, D -0.0661, vol -0.0602)
+  Y1 0.65034 -0.14070i mS, P_abs 3.25159 uW, R_abs -0.0204 A/W, R_1 -0.0036 A/W; E_kin 0.11113 -> 0.11377 eV; particles 7997771 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 421.8 s (push 390.3, field 30.6)
+control symmetric mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0524 +- 0.0246 uA (S -0.0522, D -0.0526, vol -0.0502)
+  Y1 0.50381 +0.44885i mS, P_abs 2.51895 uW, R_abs -0.0208 A/W, R_1 -0.0029 A/W; E_kin 0.11112 -> 0.11360 eV; particles 7998271 (weight 0.00060 e), leaked 1
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 408.8 s (push 355.8, field 52.0)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.1426 +- 0.0160 uA (S -0.1427, D -0.1426, vol -0.1357)
+  Y1 0.68453 +0.36770i mS, P_abs 3.42256 uW, R_abs -0.0417 A/W, R_1 -0.0077 A/W; E_kin 0.11113 -> 0.11399 eV; particles 7996655 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 442.2 s (push 410.7, field 30.6)
+done P6c
