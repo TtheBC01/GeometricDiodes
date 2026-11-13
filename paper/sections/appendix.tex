@@ -55,3 +55,38 @@ by a time-domain ladder at $(5\times10^{11}\percm,10\nm)$: $\mathcal{S}$
 agrees to $0.2\%$ at $300$~K and is $0.76$ instead of $0.89$ at $100$~K, so
 the $100$~K peak values at low density and thin gates are upper estimates
 by $10$ to $20\%$.
+
+\section{Steady gated flow in one dimension}
+\label{app:gated}
+
+In a gradual channel of width $W(x)$ carrying the current $I$ the
+continuity equation gives $n u W=I$. Without the convective and viscous
+terms the steady form of Eq.~\eqref{eq:mom} is $\Gamma u=-h'(n)\,dn/dx$ in
+the units of Appendix~\ref{app:perturbation}, so that
+\begin{equation}
+n\,h'(n)\,\frac{dn}{dx}=-\frac{\Gamma I}{W(x)} .
+\end{equation}
+With $G'(n)=n h'(n)$, i.e. $G=n^{2}/2$ for shallow water and
+$G=\tfrac23(1-q)n^{3/2}+qn$ for the Dirac closure, integration from the
+driven contact, where $n=n_{s}$, to the contact tied to the gate, where
+$n=1$, gives Eq.~\eqref{eq:1d}. The voltage of the driven contact is
+$\Phi(n_{s})$ with $\Phi=(1-q)(n-1)+2q(\sqrt{n}-1)$ in units of $V_{u}$.
+The width enters only through $\int dx/W$, which is unchanged when the
+channel is turned end for end, so exchanging the contacts cannot produce
+an asymmetry. Reversing the current changes the sign of the right-hand
+side; expanding to second order with $G''(1)=(1-q)/2$ and
+$\Phi''(1)=-q/2$,
+\begin{equation}
+V=\rho I-\tfrac14(\rho I)^{2},\qquad \rho=\Gamma\int_{0}^{L}\frac{dx}{W},
+\end{equation}
+and the ratio of the two voltage magnitudes is $1+\rho|I|/2=1+V/2V_{u}$,
+which is Eq.~\eqref{eq:dpol} with $U_{0}=(1-q)V_{u}$ and $q=0.039$; for
+shallow water the coefficient of $(\rho I)^{2}$ is $\tfrac12$ and the ratio
+is $1+V/U_{0}$. In a uniform channel the convective term can be kept: the
+equation becomes $(nh'-j^{2}/n^{2})\,dn/dx=-\Gamma j$ with $j=I/W$, with the
+integral $G(n)+j^{2}/n$, and the two-dimensional solver reproduces this
+closed form to $1.1\times10^{-4}$ for both closures and both signs up to
+$V=0.3\,U_{0}$. In a channel of varying width the convective term brings in
+$dW/dx$, and with it the inertial shape term of Sec.~\ref{sec:dc}, which is
+second order in the current.
+

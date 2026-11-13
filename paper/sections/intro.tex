@@ -13,18 +13,40 @@ The first is the geometric diode~\cite{moddel2012ultrahigh,zhu2013graphene,drago
 that narrows asymmetrically, typically a funnel, whose dimensions are below the
 mean free path so that carriers are steered ballistically by the walls. With
 planar geometry and negligible capacitance it was proposed explicitly for
-terahertz and infrared rectennas~\cite{zhu2013graphene}. Encapsulated devices
-reach reported asymmetry ratios of $1.6$ to
-$2$~\cite{nguyen2021geometric,wang2024graphene}, and related four-terminal
+terahertz and infrared rectennas, and the proposal came with a measurement:
+a $0.5\um$ diode with a $75\nm$ neck in a bow-tie antenna gave a rectified
+current at zero bias under $28\THz$ illumination~\cite{zhu2013graphene}.
+Encapsulated devices reach reported dc asymmetry ratios of $1.6$ to
+$2$~\cite{nguyen2021geometric,wang2024graphene}. Related four-terminal
 ballistic rectifiers have been used for detection and imaging up to
-$0.7\THz$~\cite{auton2016graphene,auton2017terahertz}. The second is the
-electronic Tesla valve. Tesla's valvular conduit~\cite{tesla1920valvular}
-rectifies fluid flow by inertia~\cite{nguyen2021early}, and in the temperature
-window where electron-electron collisions make the graphene electron liquid
-viscous~\cite{bandurin2016negative,krishnakumar2017superballistic} a Tesla-shaped
-channel has been reported to show a five per cent asymmetry of its
-four-terminal resistance~\cite{geurs2020rectification}. A shape that rectifies an electron
-fluid with no junction is an obvious rectenna candidate.
+$0.7\THz$~\cite{auton2016graphene,auton2017terahertz} and recently at
+$3\THz$~\cite{shi2026ballistic}, and funnel-shaped rectifiers of chemical
+vapor deposited graphene respond at zero bias from $0.49$ to
+$0.68\THz$~\cite{hemmetter2026enhanced}; geometric diodes of silicon
+nanowires have been measured with a flat response to
+$40\GHz$~\cite{custer2020ratcheting}. On the side of theory, a
+time-dependent particle simulation of a diode of about $100\nm$ found that
+its rectification persists into the terahertz range and disappears above
+about $5\THz$, a cut-off the authors place near the Drude damping
+rate~\cite{stearns2020high}, and self-consistent simulations of ballistic
+funnelling in graphene resonators find nonlinear response from below $10$ to
+tens of terahertz~\cite{do2025nonlinear}. What these results leave open is
+what sets the upper frequency of a given geometric diode, and whether the
+long devices with wide leads, which show the best dc asymmetry, share the
+speed of the short ones.
+
+The second proposal is the electronic Tesla valve. Tesla's valvular
+conduit~\cite{tesla1920valvular} rectifies fluid flow by
+inertia~\cite{nguyen2021early}, and in the temperature window where
+electron-electron collisions make the graphene electron liquid
+viscous~\cite{bandurin2016negative,krishnakumar2017superballistic} a
+Tesla-shaped channel has been reported to show a five per cent asymmetry of
+its four-terminal resistance~\cite{geurs2020rectification}. A compressible
+hydrodynamic simulation of a graphene Tesla valve gave a diodicity of
+$1.07$~\cite{gungor2022modeling}, and in a GaAs electron gas a Tesla valve
+has reached a diodicity of about $40$ above a threshold
+current~\cite{sarypov2026electron}. A shape that rectifies an electron fluid
+with no junction is an obvious rectenna candidate.
 
 What the shape can do is constrained from the outset. For an elastic
 two-terminal conductor the unitarity of the scattering matrix implies equal
@@ -32,55 +54,82 @@ transmission in the two directions at every energy, so the linear response
 is symmetric whatever the shape. Rectification is a second-order effect,
 and a consistent theory of it requires the response of the potential
 landscape inside the device to the
-bias~\cite{christen1996gauge,sanchez2004magnetic,song1999formalism,lofgren2004symmetry}.
-The useful question is therefore not whether a shape rectifies but which
-nonlinearity it feeds, how strong that nonlinearity is at the power an antenna
-delivers, and how fast it is. A geometric diode in the ballistic regime feeds
-the bias-induced landscape; a Tesla valve in the viscous regime feeds the
-convective term of the Navier-Stokes equation; and at terahertz frequencies a
-gated graphene channel is a plasmonic cavity whose convective and
-density nonlinearities rectify by the mechanism of Dyakonov and
+bias~\cite{christen1996gauge,sanchez2004magnetic,song1999formalism,lofgren2004symmetry};
+an asymmetric lowering of a barrier by the bias has indeed been proposed as
+the origin of rectification in geometric diodes in place of ballistic
+steering~\cite{bai2021asymmetric}. The useful question is therefore not
+whether a shape rectifies but which nonlinearity it feeds, how strong that
+nonlinearity is at the power an antenna delivers, and how fast it is. A
+geometric diode in the ballistic regime feeds the bias-induced landscape; a
+Tesla valve in the viscous regime feeds the convective term of the
+Navier-Stokes equation; and at terahertz frequencies a gated graphene
+channel is a plasmonic cavity whose convective and density nonlinearities
+rectify by the mechanism of Dyakonov and
 Shur~\cite{dyakonov1993shallow,dyakonov1996detection}, which is the basis of
 most graphene terahertz detectors to
-date~\cite{vicarelli2012graphene,bandurin2018resonant}. These three
-mechanisms have been studied separately, with different geometries and
-different figures of merit. Whether a geometric shape, as opposed to the
-terminations of the channel, carries the terahertz response has not been
-tested with one device in all of them.
+date~\cite{vicarelli2012graphene,bandurin2018resonant}. For field-effect
+detectors of this kind the conversion efficiency is known to be quadratic
+in the amplitude at small signal, to saturate when the amplitude reaches
+the gate swing~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear},
+and to have an absolute maximum of the order of ten per cent, reached below
+threshold~\cite{kachorovskii2013performance}; a silicon transistor rectenna
+has delivered $13.6\%$ at $263\GHz$~\cite{khan2022cmos}. These mechanisms
+have been studied separately, with different geometries and different
+figures of merit. Whether a geometric shape, as opposed to the terminations
+of the channel and its connection to the gate, carries the response has not
+been tested with one set of devices in all of them.
 
 This paper does that. We take one set of geometries
 (Fig.~\ref{fig:devices}): the funnel of the best-documented geometric
 diode~\cite{nguyen2021geometric}, the classical Tesla valve at the same
-minimum feature size, a straight control, and versions scaled to a $1\um$
-channel that a $75\ \Omega$ antenna can drive. We compute their rectification
-(i) in a semiclassical ballistic model of the kind used in the geometric-diode
+minimum feature size, a straight control, versions scaled to a $1\um$
+channel that a $75\ \Omega$ antenna can drive, and four shorter funnels
+down to $0.5\um$. We compute their rectification (i) in a semiclassical
+ballistic model of the kind used in the geometric-diode
 literature~\cite{zhu2013graphene,stearns2021simulation,truccolo2024comprehensive}, (ii) in
-steady viscous electron hydrodynamics, (iii) in the gated compressible
-(plasmonic) electron fluid from $10\GHz$ to $3\THz$, at small signal and at
-finite amplitude up to the gate overdrive, and (iv) in the ballistic model
-driven at terahertz frequencies. Each solver is validated against analytic
-limits and benchmarks before it is used; the acceptance tests are listed in
-the Supplemental Material.
+steady viscous electron hydrodynamics, without and with the gate, (iii) in
+the gated compressible (plasmonic) electron fluid from $10\GHz$ to $3\THz$,
+at small signal and at finite amplitude up to the gate overdrive, (iv)
+in the ballistic model driven from $0.3\GHz$ to $30\THz$, and (v), for
+the shortest funnel, in a particle simulation that computes the field
+from the charge of the electrons, a gate and the contacts. Each solver is
+validated against analytic limits and benchmarks before it is used; the
+acceptance tests are listed in the Supplemental Material.
 
-The answer is the same in every regime, and it is negative for the shape.
-The Tesla valve does not rectify ballistically, rectifies viscously only at
-Reynolds numbers the Fermi liquid cannot sustain, and contributes
-$10^{-5}$ to $10^{-3}\AW$ at terahertz frequencies. The funnel rectifies in
-all regimes, but its terahertz response of $0.1$ to $0.3\AW$ is the
-Dyakonov-Shur asymmetry of its terminations; the shape adds a factor of
-order one near a taper resonance and nothing elsewhere. The conversion
-efficiency of the plasmonic element is proportional to the incident power up
-to a saturation power set by the gate, and its peak is below one per cent at
+The answer separates cleanly into shape and circuit, and it differs
+between the two devices. The Tesla valve does not rectify ballistically,
+rectifies viscously only at Reynolds numbers the graphene Fermi liquid
+cannot sustain, and contributes $10^{-5}$ to $10^{-3}\AW$ at terahertz
+frequencies. In the electron fluid the funnel does no better as a shape:
+with the gate included, a steady current sees a percent-level asymmetry
+that is the same for every channel and belongs to the gate connection, and
+the terahertz response of $0.1$ to $0.3\AW$ is the Dyakonov-Shur asymmetry
+of the terminations, with a conversion efficiency below one per cent at
 every operating point for which the fluid description holds. The ballistic
-shape asymmetry, driven at $1\THz$, falls to the same responsivity. As a
-detector the element is respectable; as a harvester it does not exist.
+funnel is different. Its shape does rectify at terahertz frequencies, on
+conditions. The first is its length: the response is a function of the
+reduced frequency $fL/\vF$ and is gone when the flight through the device
+takes longer than about two periods. The $6\um$ device of the dc
+experiments fails that condition at $1\THz$; a $0.55\um$ funnel meets it.
+The second is the field. With an imposed potential, the simplest
+assumption of simulations of geometric diodes, the short funnel appears to give several
+times the current per absorbed watt of the plasmonic element; with the
+potential computed it gives a sixth of that, about what the plasmonic
+element gives at room temperature. The third is the edges: with
+half-diffuse walls the response is gone. And when the gate is closer than
+the device is long, the gate connection again rectifies more than the
+shape. As a detector the short funnel with specular edges is where the
+plasmonic element and the best measured graphene detectors are. As a harvester
+neither element exists: no mechanism studied here converts as much as one
+per cent of the incident power.
 
-Section~\ref{sec:models} describes the devices and the three models,
+Section~\ref{sec:models} describes the devices and the models,
 Sec.~\ref{sec:dc} the dc results, Sec.~\ref{sec:plasmonic} the plasmonic
 element from small signal to saturation, Sec.~\ref{sec:ballistic} the
-ballistic element at terahertz frequencies, and Sec.~\ref{sec:discussion}
-compares the regimes, places the numbers against measured detectors and
-states the limitations.
+ballistic element at terahertz frequencies, its scaling with length and
+the short funnel with a computed field, and
+Sec.~\ref{sec:discussion} compares the regimes, places the numbers against
+measured detectors and states the limitations.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig1_devices.pdf}
@@ -93,6 +142,7 @@ the terminations used for the plasmonic response: the antenna, a Thevenin
 source of resistance $\Rant$, drives the source contact and the drain is tied
 to the gate. (d) Characteristic frequencies of the mechanisms studied, for the
 parameters of Table~\ref{tab:params}; the shaded band is the range of
-interest for a terahertz rectenna.}
+interest for a terahertz rectenna. The shorter funnels of
+Sec.~\ref{sec:length} are drawn in Fig.~\ref{fig:length}(a).}
 \label{fig:devices}
 \end{figure*}

@@ -18,3 +18,6 @@ VDI Schottky WR3.4,vdi2026detectors,incumbent,2.75e11,300,1.2e-11,vendor typical
 VDI Schottky WR1.5,vdi2026detectors,incumbent,6.25e11,300,2.03e-11,vendor typical
 VDI Schottky WR1.0,vdi2026detectors,incumbent,9.25e11,300,2.71e-11,vendor typical
 VDI Schottky WR0.8,vdi2026detectors,incumbent,1.15e12,300,2.03e-10,vendor typical
+Qin 2017,qin2017room,fet,3.3e11,300,5.1e-11,estimated; power reference not verified; abstract only
+Shi 2026,shi2026ballistic,ballistic,3.0e12,4,2.0e-11,spot-normalised; Johnson estimate; 20 to 30 pW/rtHz at 4 K (6 V/W at 300 K)
+Hemmetter 2026,hemmetter2026enhanced,ballistic,6.0e11,300,2.92e-8,total beam power; Johnson estimate; 1.9e-9 with isotropic normalisation

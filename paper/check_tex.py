@@ -11,7 +11,7 @@ def expand(path):
     return re.sub(r"\\input\{([^}]+)\}", lambda m: expand(os.path.join(here, m.group(1) + ".tex")), s)
 
 bad = 0
-bib = "".join(open(os.path.join(here, b)).read() for b in ("refs.bib", "refs_detectors.bib") if os.path.exists(os.path.join(here, b)))
+bib = "".join(open(os.path.join(here, b)).read() for b in ("refs.bib", "refs_detectors.bib", "refs_prior.bib") if os.path.exists(os.path.join(here, b)))
 bibkeys = set(re.findall(r"@\w+\{([^,\s]+),", bib))
 for name in ("main.tex", "supplement.tex"):
     s = expand(os.path.join(here, name))

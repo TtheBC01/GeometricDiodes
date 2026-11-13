@@ -278,6 +278,39 @@ since:
 
 Open:
 
+- Second draft, 2026-11-11. The prior-work search (`prior_work.md`) and
+  Stages B7 and H5 (`results/BALLISTIC_SHORT.md`, `results/HYDRO_GATE.md`)
+  are now in the manuscript. Title: "Shape versus circuit: graphene
+  geometric diodes and Tesla valves as terahertz rectifiers" (a working
+  title; the old one claimed more than the results support). Changes:
+  abstract and introduction rewritten; Sec. III gains the gated steady
+  flow (new Fig. 4, Appendix C) and the GaAs Tesla valve; Sec. IV
+  attributes the efficiency law to Kachorovskii et al.; Sec. V gains the
+  length scaling and the short funnel (new Table II, new Fig. 9);
+  discussion, verdict table, detector table, conclusion and limitations
+  rewritten; 24 references added (`refs_prior.bib`); supplement gains the
+  two new ladders and a mesh table. 23 pages plus a 4-page supplement,
+  clean build. `OVERVIEW.md` revised to match.
+- Still open from the prior-work record: the DRC paper of Stearns and
+  Moddel was read as abstract and poster only; Qin et al. and Dragoman and
+  Aldrigo as abstracts only. The length is now 14 pages over the 12
+  planned and nothing has been cut.
+- Third draft, 2026-11-12. Stage B8 (`results/BALLISTIC_SELFCONSISTENT.md`)
+  is in the manuscript: the 0.55 um funnel with the field computed gives
+  0.12 A/W per absorbed watt at 1 THz, not 0.70; 0.10 A/W at 100 nm; lost
+  with half-diffuse edges; under a 30 nm gate the circuit term is larger.
+  Changes: abstract, introduction, discussion, verdict and detector
+  tables, limitations and conclusion rewritten for the weaker result; new
+  Sec. II C (model with a computed field), Sec. V D retitled "with an
+  imposed field" and shortened, new Sec. V E and Fig. 10
+  (`fig11_selfconsistent`); the synthesis figure (now Fig. 11) shows the
+  computed-field funnel; the size criterion lost its second condition
+  (L below the mean free path), which the computed field does not
+  support; supplement gains Tables S4 and S5. No new references. 26 pages
+  plus a 6-page supplement, clean build. `OVERVIEW.md` revised to match.
+- Not computed and worth stating to a referee: wall specularities between
+  0.5 and 1; the 6 um device with a computed field (plan run P7); the
+  cause of the strip's sign reversal at 3 THz.
 - Author affiliation and contact in `main.tex`.
 - Unverified details listed at the end of `refs_verification.md` and
   `literature_detectors.md`: the backward-facing-step literature bands,

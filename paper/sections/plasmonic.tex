@@ -27,7 +27,13 @@ where friction and viscosity damp the plasmon. Below $100\GHz$ the
 shape-only response is the curvature of the steady current-voltage relation
 of Sec.~\ref{sec:dc}; a ladder test ties the two solvers together there.
 The sign of the DS response follows the termination: exchanging the roles of
-source and drain reverses it.
+source and drain reverses it. That the shape of a channel modifies the
+response set by its boundary conditions, rather than replacing it, is in
+line with what is known for silicon and graphene field-effect detectors: a
+non-uniform channel changes the responsivity by about ten per
+cent~\cite{zhang2021terafet}, and a Corbino geometry, which concentrates
+the field at the inner contact, raises it
+substantially~\cite{khavronin2020singularity}.
 
 The $175\nm$ funnel [Fig.~\ref{fig:small}(c)] has a dc resistance of
 $1.9$~k$\Omega$ and absorbs only $15$ to $80\%$ of the available power, but
@@ -77,6 +83,18 @@ Open symbols mark a negative sign. The shaded band is $0.3$ to $1\THz$.}
 
 A detector is judged by responsivity and noise, a harvester by conversion
 efficiency $\eta=P_{\mathrm{dc}}/\Pav$ at the power the antenna supplies.
+The framework is that of Kachorovskii
+\textit{et al.}~\cite{kachorovskii2013performance} for field-effect
+detectors, who define the same ratio with respect to the absorbed power,
+find it quadratic in the amplitude at small signal, and show that it has an
+absolute maximum of the order of ten per cent, reached below threshold where
+the voltage scale is the thermal one; the change from quadratic to linear
+response at an amplitude equal to the gate swing is established in theory
+and experiment~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}.
+What is specific to graphene is that a gapless monolayer has no
+subthreshold regime: the only voltage scale of the gated fluid is the gate
+overdrive, and the question is how large the pure-number prefactor is in a
+real geometry with a real antenna.
 In second-order perturbation the device is a dc Thevenin source with
 open-circuit voltage $V_{\mathrm{oc}}=r\,V_{a}^{2}/V_{u}$ and resistance
 $\Rdc$, where $V_{u}=m^{*}s_{0}^{2}/e$ is the natural voltage unit of the
@@ -91,7 +109,8 @@ For the $1\um$ funnel $r\approx0.1$ and $\eta/\Pav$ is $1.0$ to
 $2.4$~W$^{-1}$. Since $V_{a}$ cannot usefully exceed $V_{u}$, where the
 channel is depleted on the negative half cycle, Eq.~\eqref{eq:eta} already
 bounds the efficiency below one per cent; what the nonlinear solver decides
-is where the law fails and how.
+is where the law fails and how. The prefactor $2r^{2}\Rant/\Rdc$ is
+$0.004$ to $0.009$ at $0.1$ and $0.3\THz$.
 
 Figure~\ref{fig:large} shows the time-domain results for the DS-terminated
 $1\um$ funnel. The efficiency meets the perturbative law to $0.3\%$ at the
@@ -180,7 +199,13 @@ displacement current, so the ac drain current is not the negative of the
 source current, and a resistance at the drain lifts it off the gate
 potential at the signal frequency: the boundary condition that makes the
 Dyakonov-Shur mechanism work is partly removed. Matching the antenna to the
-new impedance recovers little.
+new impedance recovers little. That a lower access resistance raises the
+photoresponse of graphene detectors strongly, by up to a factor twenty for
+a tenfold reduction, has been measured and described with a
+series-resistance model~\cite{castello2024impact}, and that the shunt
+between gate and drain at the signal frequency is what makes a transistor
+mix is the basis of the distributed self-mixing
+picture~\cite{lisauskas2009rational}; the present result connects the two.
 
 For detection the same lever is worth having
 [Fig.~\ref{fig:operating}(d)]. The Johnson-limited NEP of the $1\um$ funnel

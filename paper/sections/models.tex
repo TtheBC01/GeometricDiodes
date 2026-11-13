@@ -7,7 +7,8 @@ All devices are two-terminal planar channels with the source contact on the
 left and the drain on the right. The funnel [Fig.~\ref{fig:devices}(a)] has
 the dimensions of device D of Nguyen \textit{et al.}~\cite{nguyen2021geometric}:
 leads $2\um$ wide, a taper at 30 degrees to the axis down to a neck of
-$175\nm$, and an abrupt shoulder on the drain side; its measured asymmetry is
+$175\nm$, and an abrupt shoulder on the drain side, $6\um$ from end to end,
+with the contacts on the two ends; its measured two-terminal asymmetry is
 $1.66$ at $80\ \mu$A. The classical Tesla valve [Fig.~\ref{fig:devices}(b)] is
 built from channel centre lines: a zig-zag main channel of width $175\nm$
 inclined at $\pm 25$ degrees, and at every vertex a loop that continues the
@@ -20,7 +21,11 @@ depend on the details of the valve, and a straight $175\nm$ channel between
 the same leads as a control. For the terahertz calculations each shape is
 also scaled so that its narrowest width is $1\um$, with $4\um$ contacts,
 which brings the device resistance from kilohms to the hundred-ohm range of
-an antenna [Fig.~\ref{fig:devices}(c)].
+an antenna [Fig.~\ref{fig:devices}(c)]. Four further funnels, from a
+half-scale copy of device D down to a $0.5\um$ device with the proportions
+of the diode measured at $28\THz$~\cite{zhu2013graphene}, are used for the
+length scaling of Sec.~\ref{sec:length} and listed in
+Table~\ref{tab:short}.
 
 \subsection{Ballistic model}
 \label{sec:model-ballistic}
@@ -60,7 +65,11 @@ amplitude $V_{a}$ rectifies $\Idc=G_{2}V_{a}^{2}/2$ if the response is
 instantaneous. Carriers are electrons at density $n=1.4\times10^{12}\percm$
 ($\EF=0.138$~eV) and $300$~K, the density we estimate from the gate voltage
 and lever arm reported for that device~\cite{nguyen2021geometric}; holes
-give the inverse asymmetry.
+give the inverse asymmetry. The model has no length of its own: with the
+bias, $\EF$ and $\kB T$ fixed, the transmission depends only on the shape
+and on $\lambda/L$, and under a drive of frequency $f$ only on those and on
+$fL/\vF$, while currents and conductances scale with the width. This is
+used, and tested, in Sec.~\ref{sec:length}.
 
 The solver was validated on eleven tests before use: unit transmission of a
 specular channel, the free-molecular transmission factors of a diffuse
@@ -69,6 +78,61 @@ conductance~\cite{sharvin1965possible}, the ballistic-to-diffusive crossover, re
 without the field, unit asymmetry of a mirror-symmetric constriction, and
 convergence of the chord integration. Classical trajectories require
 features well above the Fermi wavelength, $30\nm$ here.
+
+\subsection{Ballistic model with a computed field}
+\label{sec:model-pic}
+
+For the shortest funnel the potential is computed instead of imposed, in
+a particle simulation of the kind applied to geometric diodes in
+Refs.~\cite{stearns2020high,stearns2021simulation}. The graphene sheet
+lies in a uniform dielectric of permittivity $3.8$ at a distance $d$ above
+a grounded gate plane; $d$ is $30\nm$, the gate of the plasmonic model
+below, or $300\nm$, an oxide back gate that leaves a device of this size
+nearly ungated. The contacts are metal strips in the plane of the sheet,
+$200\nm$ long and as wide as the leads, held at potentials $V_{S}(t)$ and
+$V_{D}(t)$. All electrons of the device, about $2900$, are represented by
+$4$ to $8\times10^{6}$ sample particles that move together, with the
+trajectories, wall reflection, scattering and equilibrium injection at the
+contacts of the model above. At every time step of $2.5$~fs their charge
+is assigned to a grid of $5\nm$ spacing and the potential energy
+\begin{equation}
+U(\bm{r})=\frac{e^{2}}{4\pi\epsilon}\sum_{\bm{r}'}\delta N(\bm{r}')
+\left[\frac{1}{|\bm{r}-\bm{r}'|}-\frac{1}{\sqrt{|\bm{r}-\bm{r}'|^{2}+4d^{2}}}\right]
+\label{eq:kernel}
+\end{equation}
+is evaluated by fast Fourier transform; $\delta N$ is the electron number
+at a grid node in excess of the uniform background that makes the undriven
+sheet neutral, the second term is its image in the gate, and the sum
+includes the charge on the contacts, which is solved for at every step so
+that the strips are equipotentials. The particles are then advanced in
+the gradient of the interpolated potential. This is the electrostatics of
+a thin sheet in three dimensions; it goes over to the local gate
+capacitance of the plasmonic model for small $d$ and to the ungated sheet
+for large $d$, and it contains the plasma waves of the collisionless gas.
+
+The currents at the source, the drain and the gate include the
+displacement current, so the admittance $Y_{1}$ at the drive frequency and
+the absorbed power $P_{\mathrm{abs}}=\langle V_{S}I_{S}+V_{D}I_{D}\rangle$
+are results of the calculation. With the gate present the terminations
+matter, as in the plasmonic model, and two are used: a drive that leaves
+only the shape, $V_{S}=-V_{D}=(V_{a}/2)\cos\omega t$, under which a
+mirror-symmetric device gives no rectified current by symmetry, and the
+drain tied to the gate, $V_{S}=V_{a}\cos\omega t$ and $V_{D}=0$, under
+which a straight channel already rectifies.
+
+Nine tests were passed before use (Supplemental Material), among them the
+capacitance of the contact strips, the static screening of a weak
+potential, the speed of the gated plasma wave, which is $0.98$ to $0.99$
+of the collisionless value of $3.90\,\vF$ under the $30\nm$ gate, the
+results of the imposed-field model for the same device when the
+interaction is switched off, and a linear conductance that the interaction
+leaves unchanged within $1\%$. The sample particles collide with each
+other through the grid, which relaxes the Fermi distribution towards a
+classical one; in the open device a particle is replaced by a contact
+within about a picosecond, and the rectified current at the operating
+point of Sec.~\ref{sec:pic} does not change between $4$ and
+$16\times10^{6}$ particles, while it is too large by up to $40\%$ with
+$10^{6}$.
 
 \subsection{Viscous model}
 \label{sec:model-viscous}
@@ -162,12 +226,16 @@ voltage is the rectified signal (Appendix~\ref{app:perturbation}). For finite am
 Eqs.~\eqref{eq:cont} and \eqref{eq:mom} are integrated in time with the
 second-order backward difference formula and Newton iteration, with a bias
 tee that separates the dc load from the antenna. Both use Taylor-Hood
-elements on the meshes of the viscous model. The validation ladder has
-seventeen tests: the static limit against the viscous solver, the plasmon
+elements on the meshes of the viscous model. The steady states of
+Eqs.~\eqref{eq:cont} and \eqref{eq:mom} under a dc current, used in
+Sec.~\ref{sec:gated}, are obtained with the same discretisation by Newton
+iteration. The validation ladder has twenty tests: the static limit against the viscous solver, the plasmon
 dispersion, the Dyakonov-Shur closed form [Fig.~\ref{fig:small}(a)],
 reciprocity of the symmetric termination, mesh and time-step convergence,
-agreement of the two solvers at small amplitude, and invariance under
-co-scaling of the physical parameters at fixed nondimensional groups.
+agreement of the two solvers at small amplitude, invariance under
+co-scaling of the physical parameters at fixed nondimensional groups, and,
+for the steady states, a closed form for the gated channel and the
+incompressible limit against the viscous solver.
 
 \begin{table}
 \caption{Parameter sets. The ballistic model follows the experiment of
@@ -185,7 +253,7 @@ Quantity & Value \\
 \multicolumn{2}{l}{\textit{Ballistic}} \\
 $n$, $\EF$, $T$ & $1.4\times10^{12}\percm$, $0.138$ eV, 300 K \\
 specularity $p$ & 1, 0.5, 0 \\
-mean free path $\lambda$ & $\infty$, 700, 200 nm \\
+mean free path $\lambda$ & $\infty$, 700, 200, 100 nm \\
 \multicolumn{2}{l}{\textit{Viscous}} \\
 current at $\Rey=1$ & $160\ \mu$A ($\nu=0.1$ m$^2$/s), $32\ \mu$A (0.02) \\
 $\Da$, $S$ & 0 to 128; 0 to $\infty$ \\

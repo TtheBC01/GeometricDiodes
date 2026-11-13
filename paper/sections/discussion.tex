@@ -1,86 +1,151 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{One answer in three regimes}
+\subsection{Shape and circuit, regime by regime}
 
 Table~\ref{tab:verdict} and Fig.~\ref{fig:synthesis} collect the results.
-The Tesla valve fails in every regime, and for one reason. Its asymmetry is
-an inertial loss: it needs a fluid, and a Reynolds number of order ten. The
-ballistic electron gas is not a fluid, so the loops only add resistance.
-The viscous electron liquid is one, but its Reynolds number is capped by
-the Fermi velocity at values where the valve gives a per cent or less. At
-terahertz frequencies the valve is long compared with the plasmon
-wavelength and its resistance is two orders of magnitude from an antenna.
+The Tesla valve fails in graphene in every regime, and for one reason. Its
+asymmetry is an inertial loss: it needs a fluid, and a Reynolds number of
+order ten. The ballistic electron gas is not a fluid, so the loops only add
+resistance. The viscous electron liquid is one, but in graphene its
+Reynolds number is capped by the Fermi velocity at values where the valve
+gives a per cent or less, and the gate adds an asymmetry that is the same
+for a straight strip. At terahertz frequencies the valve is long compared
+with the plasmon wavelength and its resistance is two orders of magnitude
+from an antenna. The one electronic Tesla valve with a large
+diodicity~\cite{sarypov2026electron} works in another material, above a
+threshold current, in a regime that is not the steady laminar flow of this
+paper.
 
-The funnel rectifies in every regime, by a different mechanism in each, and
-the shape is essential in none of the fast ones. At dc in the ballistic
-regime the shape and the bias landscape together give an asymmetry of up
-to $1.6$; that response is limited to a few gigahertz when the field fills
-the leads. In the viscous regime the funnel is a weak exit-loss diode. At
-terahertz frequencies the gated funnel's rectification is that of its
-terminations: tying the drain to the gate and driving the source produces
-$0.1$ to $0.3\AW$ in a funnel, as it would in a plain channel of the same
-impedance, while the symmetric drive that leaves only the shape produces a
-comparable response only near a taper resonance at low temperature, and
-that response saturates first at large signal. The ballistic shape
-mechanism with a neck-confined field reaches the same $0.2$ to $0.45\AW$ at
-$1\THz$ in its most favourable idealisation. Neither transport limit
-gives a shape-based rectifier that outperforms the circuit asymmetry of a
-gated channel.
+The funnel rectifies in every regime, and what does the rectifying differs.
+In the electron fluid it is the circuit. In steady flow the shape leaves an
+inertial asymmetry of less than $10^{-3}$ inside the drift limit at the
+parameters of Table~\ref{tab:params}, the same with and without the gate,
+while the connection of one contact to the gate
+produces a per cent at $43$~mV in any channel. At terahertz frequencies the
+gated funnel's rectification is that of its terminations: tying the drain
+to the gate and driving the source produces $0.1$ to $0.3\AW$ in a funnel,
+as it would in a plain channel of the same impedance, while the symmetric
+drive that leaves only the shape produces a comparable response only near a
+taper resonance at low temperature, and that response saturates first at
+large signal.
+
+In the ballistic gas it is the shape, together with the potential that the
+bias lays over it, and the first condition for it to work at a frequency
+$f$ is one of size:
+\begin{equation}
+L\lesssim0.4\,\frac{\vF}{f} .
+\label{eq:criterion}
+\end{equation}
+This is the half-response point of Fig.~\ref{fig:length}(b), for a field
+spread over the device; with the field computed the $0.55\um$ funnel is at
+half response at $0.5\,\vF/L$. At $1\THz$ the criterion gives $0.4\um$.
+The $6\um$ funnel on which the dc asymmetry of geometric diodes is best
+documented is fifteen times too long, and its response at $1\THz$ exists
+only if the potential drop is confined to the neck. A statement that
+geometric diodes are or are not terahertz rectifiers has no content
+without the length, and the dc asymmetry of a long device is no guide: the
+best dc asymmetry at $\lambda=700\nm$ in Table~\ref{tab:short} belongs to
+devices between $0.55$ and $2\um$, and only the shortest of them still
+responds at $1\THz$ in a uniform field.
+
+Length is necessary and not sufficient. The $0.55\um$ funnel meets the
+criterion, and with an imposed potential it appears to give $0.7\AW$ per
+absorbed watt whatever the profile. With the potential computed it gives
+$0.12\AW$ at the room-temperature mean free path, because the bias does
+not go where either imposed profile puts it: a quarter is spent at the
+contacts and the rest is centred on the neck. This is a caution beyond the
+present device. A uniform field is a common assumption of simulations of
+geometric diodes; self-consistent electrostatics was already known to
+roughly halve the static asymmetry~\cite{truccolo2024comprehensive}, and
+here it reduces a static asymmetry of $1.56$ to $1.05$ and the terahertz
+response sixfold. Three further conditions follow from
+Sec.~\ref{sec:pic}. The mean free path is the least of them: from no
+scattering to $100\nm$ the response per absorbed watt changes from $0.13$
+to $0.10\AW$. The edges are the strictest: with half of the wall
+reflections diffuse the response is lost. And the gate must be far: under
+a gate at $30\nm$ a straight strip with its drain tied to the gate
+rectifies twice the current of the funnel shape at $1\THz$, so that the
+circuit takes over in the ballistic gas as it did in the fluid.
+Shape-based rectification at terahertz frequencies, then, exists in one
+of the three transport limits, in devices of half a micrometre and below
+with specular edges and a distant gate, and at its best it equals the
+circuit term of the plasmonic element at room temperature.
 
 \begin{table*}
 \caption{Rectification by geometry and regime. $A$: ballistic asymmetry at
-$0.1$~V; $D$: viscous diodicity; $\RI$: current responsivity into a
-$75\ \Omega$ source. ``Shape only'' is the symmetric termination; DS has
-the drain tied to the gate.}
+$0.1$~V; $D$: asymmetry of the voltage in steady flow; $\RI$: current
+responsivity into a $75\ \Omega$ source; $R_{\mathrm{abs}}$: per absorbed
+watt, Eq.~\eqref{eq:rabs} for the imposed fields and
+Eq.~\eqref{eq:computed} for the computed one. ``Shape only'' is the symmetric termination; DS
+has the drain tied to the gate.}
 \label{tab:verdict}
 \begin{ruledtabular}
-\begin{tabular}{L{0.14\textwidth}L{0.30\textwidth}L{0.26\textwidth}L{0.23\textwidth}}
+\begin{tabular}{L{0.15\textwidth}L{0.31\textwidth}L{0.24\textwidth}L{0.23\textwidth}}
 Regime & Funnel & Classical Tesla valve & What limits it \\
 \hline
-Ballistic, dc & $A=1.62$ clean; $1.06$ to $1.09$ at $\lambda=700\nm$ & $A=0.89$ to $1.08$, no systematic sign & reciprocity; needs the bias landscape \\
-Viscous, dc & $|D-1|\leq10^{-2}$ within the drift limit & $10^{-3}$ to $3\times10^{-2}$ within the drift limit & drift speed below $0.3\,\vF$ caps $\Rey$ \\
+Ballistic, dc & $A=1.6$ to $1.9$ clean; $1.1$ to $1.6$ at $\lambda=700\nm$, by length and field profile & $A=0.89$ to $1.08$, no systematic sign & reciprocity; needs the bias landscape \\
+Viscous, dc, no gate & $|D-1|\leq10^{-2}$ within the drift limit & $10^{-3}$ to $3\times10^{-2}$ within the drift limit & drift speed below $0.3\,\vF$ caps $\Rey$ \\
+Viscous, dc, gated & contacts exchanged: $<10^{-3}$; polarity reversed: $0.48\,V/U_{0}$ & the same polarity term; exchange $<10^{-3}$ & the polarity term is the gate, in any channel \\
 Plasmonic, shape only & $10^{-4}$ to $0.13\AW$; $0.22\AW$ at taper resonance & $10^{-5}$ to $10^{-3}\AW$; $0.02\AW$ at resonance & plasmon damping; saturates first \\
 Plasmonic, DS & $0.07$ to $0.34\AW$; $\eta<1\%$ & $0.02$ to $0.1\AW$ at $6$ to $11$~k$\Omega$ & $r^{2}$; gate overdrive; contacts \\
-Ballistic, THz & $0.05\AW$ (uniform field); $0.2$ to $0.45\AW$ (drop at neck) & none ($A=1$ at dc) & transit time; where the drop sits \\
+Ballistic, $1\THz$, $6\um$ & $\RI=0.05\AW$ (uniform field); $0.2$ to $0.45\AW$ (drop at neck) & none ($A=1$ at dc) & length: $fL/\vF=6$ \\
+Ballistic, $1\THz$, $0.55\um$, imposed field & $R_{\mathrm{abs}}=0.7\AW$, either profile; $0.14$ to $0.42\AW$ with rough edges or $\lambda=100\nm$ & none & the field is not computed \\
+Ballistic, $1\THz$, $0.55\um$, computed field & $R_{\mathrm{abs}}=0.12\AW$; $0.10\AW$ at $\lambda=100\nm$; $|R_{\mathrm{abs}}|\leq0.04\AW$ with half-diffuse edges; $\RI=0.012$ to $0.026\AW$ & not computed & contact drops; edges; under a $30\nm$ gate the circuit term is larger; $\eta\sim10^{-4}$ \\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig8_synthesis.pdf}
-\caption{Synthesis. (a) Current responsivity into a $75\ \Omega$ source
-against frequency for every mechanism: the plasmonic $1\um$ funnel with the
-Dyakonov-Shur termination and with the symmetric drive that isolates the
-shape, the Tesla valve, and the ballistic funnel with a uniform field and
-with the potential drop confined to the neck. Solid lines: $100$~K
-parameters or the clean ballistic limit; dashed: $300$~K or
-$\lambda=700\nm$. (b) Noise-equivalent power of the simulated elements,
-which is Johnson limited and assumes ideal coupling, against measured
-graphene terahertz detectors (Table~\ref{tab:detectors}).}
+\caption{Synthesis. (a) Current responsivity against frequency for every
+mechanism: the plasmonic $1\um$ funnel with the Dyakonov-Shur termination
+and with the symmetric drive that isolates the shape, the Tesla valve, the
+$6\um$ ballistic funnel with a uniform field and with the potential drop
+confined to the neck, all into a $75\ \Omega$ source, and the $0.55\um$
+ballistic funnel with the field computed (gate at $300\nm$, shape-only
+drive), for one device on the same source and per absorbed watt. Solid
+lines: $100$~K parameters or the clean ballistic limit; dashed: $300$~K
+or $\lambda=700\nm$. Points consistent with zero are not drawn. (b)
+Noise-equivalent power of the simulated elements, which is Johnson
+limited and assumes ideal coupling, against measured graphene terahertz
+detectors (Table~\ref{tab:detectors}); the ballistic array is that of
+Sec.~\ref{sec:pic}.}
 \label{fig:synthesis}
 \end{figure*}
 
-\subsection{What the element is good for}
+\subsection{What the elements are good for}
 
 Table~\ref{tab:detectors} and Fig.~\ref{fig:synthesis}(b) place the
-simulated element against measured graphene terahertz detectors. At room
+simulated elements against measured graphene terahertz detectors. At room
 temperature the best reported devices have noise-equivalent powers of $100$
 to $130\pWrtHz$ referred to the optical power at
-$0.4\THz$~\cite{generalov2017graphene,ludwig2024terahertz} and $80$ to
+$0.4\THz$~\cite{generalov2017graphene,ludwig2024terahertz}, with an
+estimate of $51\pWrtHz$ at $0.33\THz$ for an epitaxial bilayer
+device~\cite{qin2017room}, and $80$ to
 $160\pWrtHz$ referred to a diffraction-limited spot at $2.5$ to
 $2.8\THz$~\cite{castilla2019fast,viti2020hbn}; most others lie between
 $0.5$ and
 $2$~nW/Hz$^{1/2}$~\cite{spirito2014high,zak2014antenna,bandurin2018dual,tong2015antenna},
 the first devices were at tens of
-nW/Hz$^{1/2}$~\cite{vicarelli2012graphene}, and a four-terminal ballistic
-rectifier has been reported at $34\pWrtHz$~\cite{auton2017terahertz}. The
+nW/Hz$^{1/2}$~\cite{vicarelli2012graphene}, and four-terminal ballistic
+rectifiers of encapsulated graphene have been reported at
+$34\pWrtHz$ below $0.7\THz$~\cite{auton2017terahertz} and, at $3\THz$ and
+$4$~K, at $20$ to $30\pWrtHz$~\cite{shi2026ballistic}; funnel rectifiers of
+chemical vapor deposited graphene, with a mean free path below the device
+size, are at $29$~nW/Hz$^{1/2}$~\cite{hemmetter2026enhanced}. The
 Johnson-limited $60\pWrtHz$ of the DS-terminated $1\um$ funnel at $300$~K,
 or $150\pWrtHz$ with $300\ \Omega\um$ contacts, is therefore where the best
 measured devices already are, and its voltage responsivity of $50$~V/W is
 within their range of $1$ to $100$~V/W. The idealised model holds no hidden
 order of magnitude; the comparison supports the model rather than
-promising an improvement. At low temperature, encapsulated devices reach
+promising an improvement. The matched array of $0.55\um$ ballistic funnels
+is at $130\pWrtHz$ at $1\THz$ and room temperature, twice the figure of
+the plasmonic element at that temperature and again where the best
+measured room-temperature devices are; it assumes nineteen devices matched
+to the antenna, specular edges and no parasitic capacitance, and it is
+four times the value reported for the encapsulated ballistic
+rectifiers~\cite{auton2017terahertz}. At low temperature, encapsulated devices reach
 $0.2\pWrtHz$ at $10$~K and
 $0.13\THz$~\cite{bandurin2018resonant,gayduchenko2021tunnel} and
 $18\pWrtHz$ at $77$~K and $2.8\THz$~\cite{viti2020hbn}; the simulated $17$
@@ -95,16 +160,16 @@ is photothermoelectric~\cite{cai2014sensitive,castilla2019fast,ludwig2024teraher
 which the model does not contain. The room-temperature incumbent is better
 than any of these: commercial zero-bias Schottky detectors have typical
 noise-equivalent powers of $5$ to $27\pWrtHz$ from $0.22$ to
-$1.1\THz$~\cite{vdi2026detectors}, which the simulated graphene funnel
-reaches only at $100$~K.
+$1.1\THz$~\cite{vdi2026detectors}, which the simulated plasmonic funnel
+reaches only at $100$~K and the simulated ballistic array does not reach.
 
 \begin{table*}
 \caption{Measured graphene terahertz detectors and the simulated element.
 Responsivity and NEP as stated by the authors; the last column gives the
 power to which they are referred: the power in a diffraction-limited spot,
 the full optical beam power, the power delivered to the antenna, an
-extrinsic figure, the waveguide input, or the available power with ideal
-coupling. NEPs are estimated from Johnson noise except the one marked with
+extrinsic figure, the waveguide input, or, for this work, the available
+power with ideal coupling or the power absorbed by a matched array. NEPs are estimated from Johnson noise except the one marked with
 a double dagger, which was measured; the commercial values are typical
 specifications. Entries marked with a dagger were read from the abstract
 only.}
@@ -124,56 +189,114 @@ Reference & Device and mechanism & $f$ (THz) & $T$ (K) & Responsivity & NEP (pW/
 \cite{castilla2019fast} & photothermoelectric p-n junction & 2.5 & 300 & 105 V/W & 80 & spot \\
 \cite{viti2020hbn} & photothermoelectric and plasma wave & 2.8 & 300; 77 & 49; 180 V/W & 160; 18 & spot \\
 \cite{auton2017terahertz}$^{\dagger}$ & four-terminal ballistic rectifier & up to 0.69 & 300 & 764 V/W & 34 & extrinsic \\
+\cite{qin2017room}$^{\dagger}$ & epitaxial bilayer FET & 0.33 & 300 & 30 V/W & 51 & not verified \\
+\cite{shi2026ballistic} & four-terminal ballistic rectifier & 3.0 & 4; 300 & 77; 6 V/W & 20 to 30 (4 K) & spot \\
+\cite{hemmetter2026enhanced} & CVD four-terminal funnel rectifier & 0.49 to 0.68 & 300 & 0.77 V/W & $2.9\times10^{4}$ & optical \\
 \cite{vdi2026detectors} & commercial zero-bias Schottky & 0.22 to 1.1 & 300 & 750 to 2200 V/W & 5 to 27 & waveguide \\
 \hline
 This work & $1\um$ funnel, DS, simulated & 0.3 to 1 & 300 & 0.09 A/W, 52 V/W & 60; 150 with contacts & available \\
 This work & same & 0.3 to 1 & 100 & 0.21 to 0.34 A/W, 36 to 58 V/W & 17 to 27 & available \\
 This work & same, $5\times10^{10}\percm$ & 0.3 & 100 & & 0.9 & available \\
+This work & $0.55\um$ ballistic funnel, computed field, matched array, simulated & 1 & 300 & 0.12 A/W & 130 & absorbed \\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
 
-For energy conversion the conclusion does not depend on such comparisons.
-The efficiency of the plasmonic element is bounded by the pure number
-$r^{2}\Rant/\Rdc$ of Eq.~\eqref{eq:eta} at an amplitude equal to the gate
-overdrive. That number is of order $10^{-2}$ and no density or gate
-distance in the hydrodynamic window raises it; a low density or a thin
-gate moves the power at which the bound is reached from a milliwatt to a
-microwatt, which is useful for matching a detector's dynamic range to its
-signal, and nothing more. Realistic contacts of $100$ to
-$300\ \Omega\um$ cost a further factor two to five. A rectenna made of
-such elements has no harvesting regime.
+For energy conversion the conclusion does not depend on such comparisons,
+and its framework is not new. The efficiency of a field-effect detector is
+quadratic in the amplitude up to the gate swing and has its maximum, of the
+order of ten per cent, below threshold~\cite{kachorovskii2013performance};
+silicon transistor rectennas work there and have reached $13.6\%$ at
+$263\GHz$~\cite{khan2022cmos}. What the present calculation adds is the
+graphene case. A gapless monolayer has no subthreshold regime, the voltage
+scale of its gated fluid is the gate overdrive, and the efficiency at an
+amplitude equal to the overdrive is the pure number $r^{2}\Rant/\Rdc$ of
+Eq.~\eqref{eq:eta}. For a funnel on a real antenna that number is of order
+$10^{-2}$, and no density or gate distance in the hydrodynamic window
+raises it; a low density or a thin gate moves the power at which the bound
+is reached from a milliwatt to a microwatt, which is useful for matching a
+detector's dynamic range to its signal, and nothing more. Realistic
+contacts of $100$ to $300\ \Omega\um$ cost a further factor two to five.
+The ballistic funnel has a lower voltage scale, the Fermi energy, and a
+lower efficiency still: $10^{-4}$ at $13\ \mu$W per device, the largest
+amplitude computed. A conversion efficiency of $58\%$ at
+$0.9\THz$ has been predicted by simulation for a graphene
+rectenna~\cite{dragoman2016graphene}, but its rectifier is a Schottky
+junction between graphene and a semiconductor, not a geometric or plasmonic
+element. Within the mechanisms studied here a graphene rectenna has no
+harvesting regime.
 
 A designer who wants a graphene terahertz detector from these shapes
-should therefore read the results as follows. Use the funnel as a matched
-horn, not as a diode: its value is the impedance it presents and the
-taper resonance. Terminate the channel asymmetrically, since that is where
-the rectification comes from. Put the saturation knee at the expected
-power by choice of density and gate distance. Spend the fabrication effort
-on the contacts, because a resistive drain contact removes the asymmetry
-it is supposed to serve. Do not add Tesla loops.
+should therefore read the results as follows. In a gated device of a
+micrometre or more, use the funnel as a matched horn, not as a diode: its
+value is the impedance it presents and the taper resonance. Terminate the
+channel asymmetrically, since that is where the rectification comes from,
+put the saturation knee at the expected power by choice of density and
+gate distance, and spend the fabrication effort on the contacts, because a
+resistive drain contact removes the asymmetry it is supposed to serve. If
+the device is to rectify by its shape, make it short, by
+Eq.~\eqref{eq:criterion}: half a micrometre for $1\THz$, leads included.
+Spend the effort on the edges before the mobility, since a mean free path
+of $100\nm$ costs a fifth of the response and half-diffuse edges cost all
+of it; keep the gate farther away than the device is long, or accept that
+the gate connection does the rectifying; and provide for the impedance,
+since one such funnel is a kilohm. Expect no more than the circuit term
+gives. Do not judge a geometric diode for terahertz use by its dc
+asymmetry, nor by a simulation with an imposed field. Do not add Tesla
+loops.
 
 \subsection{Limitations}
 
-Every idealisation in this work favours the device, which is the right
-direction for a negative result but should be stated. There is no
-experiment here: the solvers are validated against analytic limits and one
-measured number, and the agreement with that number holds in the clean
-limit only. The ballistic model imposes its potential; the dependence of
-the terahertz result on the length of the drop is a statement of what a
-self-consistent calculation would have to decide, and since no drop length
-gives the shape mechanism an advantage we have not pursued it. The
-plasmonic model uses a local gate capacitance, which is least accurate for
-the $175\nm$ neck under a $30\nm$ gate; it has ideal contacts except where
-stated, perfect coupling to an antenna represented by its resistance, and
-Johnson noise only. It contains no electron heating, and so none of the
-photothermoelectric response that contributes to measured graphene
-detectors; the fluid description is quantitative to about $0.3\THz$ at
-$100$~K and $1\THz$ at $300$~K, where $\omega\tauee=1$, and indicative
-beyond. The two terahertz models describe different idealised devices, a
-gated fluid at $10^{12}\percm$ and an ungated ballistic channel at
-$1.4\times10^{12}\percm$, compared through their responsivity into the
-same source; no model of the crossover between them is offered. Finally,
-the reported Tesla-valve rectification at low
-current~\cite{geurs2020rectification} is not reproduced by steady
-incompressible hydrodynamics and remains unexplained by this work.
+There is no experiment here: the solvers are validated against analytic
+limits and one measured number, and the agreement with that number depends
+on the field profile and on the mean free path at the level of a factor of
+several (Sec.~\ref{sec:dc}). Most idealisations favour the device. That is
+the safe direction for the negative results, on the Tesla valve and on the
+conversion efficiency, and the unsafe one for the positive result on the
+short ballistic funnel, which computing the field reduced sixfold and
+which remains an upper estimate.
+
+The ballistic model of the $6\um$ device and of the length scaling
+imposes its potential and has no displacement current. For the $6\um$
+device the terahertz result depends entirely on the length of the drop,
+and the scaling curve of Fig.~\ref{fig:length}(b) was confirmed with a
+computed field for one device only, through its roll-off. For the
+$0.55\um$ funnel the field is computed, in a model with limits of its
+own. The dielectric is uniform. The contacts are ideal equipotential
+strips that absorb and inject without resistance and without doping the
+graphene beneath them; a quarter of the bias drops at the contact planes
+within three grid cells, and since the rectified current goes roughly as
+the square of what remains at the neck, a different contact would change
+the result. The electrons are classical particles in a classical field,
+with five to seven modes in the neck, and they interact through the
+common field only; short-range electron-electron scattering enters
+through the $100\nm$ bound. Two wall specularities were computed, and the
+response is lost between them. The antenna is a voltage source, with its
+$75\ \Omega$ entering through the computed admittance; the matched array
+is an idealisation, and no array or antenna was modelled. Rectified
+currents below about $0.05\ \mu$A are not resolved. Two results of
+Sec.~\ref{sec:pic} are reported without an explanation: the reversal of
+the strip's current near the plasma resonance at $3\THz$, where three
+frequencies do not resolve the resonance, and the rise of the funnel's
+current above the square law at $0.2$~V. No model of the crossover between
+the ballistic and the fluid limit is offered: the two terahertz models
+describe the same gate and nearly the same density, $1.4\times10^{12}$
+and $10^{12}\percm$, in opposite limits of the electron-electron
+scattering rate, and a real device at room temperature lies between
+them.
+
+The plasmonic and the gated steady-flow models use a local gate
+capacitance, which is least accurate for the $175\nm$ neck under a $30\nm$
+gate; they have ideal contacts except where stated, perfect coupling to an
+antenna represented by its resistance, and Johnson noise only. They contain
+no electron heating, and so none of the photothermoelectric response that
+contributes to measured graphene detectors; the fluid description is
+quantitative to about $0.3\THz$ at $100$~K and $1\THz$ at $300$~K, where
+$\omega\tauee=1$, and indicative beyond. The low-bias shape term of the
+gated steady flow is bounded, not resolved. Finally, two experiments on
+electronic Tesla valves are outside what the models reproduce: the
+rectification reported in graphene at low
+current~\cite{geurs2020rectification} is not obtained from steady
+hydrodynamics with or without the gate, and the large diodicity above
+threshold in GaAs~\cite{sarypov2026electron} belongs to a regime of
+unsteady, heated flow that was not computed.

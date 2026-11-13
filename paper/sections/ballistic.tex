@@ -6,8 +6,12 @@ limit the ballistic funnel of Sec.~\ref{sec:dc} has a curvature
 $G_{2}=3.8$~mA/V$^{2}$; if it responded instantaneously, a cosine drive of
 $0.1$~V across the device would rectify $18\ \mu$A, which is $0.87\AW$ of
 the available power of a $75\ \Omega$ source, two to ten times the plasmonic
-figures. Whether it does respond is a transit-time question, and we ask it
-of the same model.
+figures. Whether it does respond is a transit-time question. It has been
+asked before of a diode of about $100\nm$, with a time-dependent particle
+simulation that found rectification into the terahertz range and none
+above about $5\THz$~\cite{stearns2020high}; we ask it of the device with
+the documented dc asymmetry, then of its length, and for the shortest
+device we compute the field as well.
 
 The imposed potential is made time dependent, $U(x,t)=-eV_{a}\cos(\omega
 t)\,g(x)$, and the flights integrate $\hbar\dot{\bm{k}}=-\nabla U$ without
@@ -33,9 +37,28 @@ the straight control at every frequency, and at $300$~MHz it reproduces the
 rectified current and the admittance computed from the static curve
 (Supplemental Material). The results are reported as the transfer
 $S_{B}(f)=\Idc(f)/\Idc(0)$, with $\Idc(0)$ the quasi-static value for the
-same field profile, and as responsivity.
+same field profile, and as responsivity in two forms. $\RI$ is the current
+of one device per available power of the $75\ \Omega$ source, with the
+mismatch taken from the first-harmonic admittance. The ballistic devices
+have resistances of $0.6$ to $4$~k$\Omega$, far from the antenna, so we
+also give the current per watt absorbed at the static conductance $G$,
+\begin{equation}
+R_{\mathrm{abs}}=\frac{2\,\Idc}{V_{a}^{2}G},
+\label{eq:rabs}
+\end{equation}
+which is what $N=1/(\Rant G)$ devices in parallel would give on a matched
+antenna if their impedance did not change with frequency. The plasmonic
+funnel of Sec.~\ref{sec:plasmonic} absorbs $87$ to $100\%$ of the available
+power above $0.1\THz$, so its $\RI$ is to be compared with
+$R_{\mathrm{abs}}$. We do not normalise by the power that the model itself
+absorbs at the drive frequency: with an imposed field and no displacement
+current its conduction admittance falls, vanishes and changes sign with
+frequency, and a responsivity so defined diverges where it does. For
+the one device whose field is computed (Sec.~\ref{sec:pic}) the absorbed
+power is a result, and $R_{\mathrm{abs}}$ there is the rectified current
+over it.
 
-\subsection{Uniform field: two roll-offs}
+\subsection{The $6\um$ funnel in a uniform field: two roll-offs}
 
 With the uniform field the response dies in two steps
 [Fig.~\ref{fig:ballistic-thz}(a)]. The transfer is $0.98\pm0.04$ at
@@ -58,8 +81,8 @@ $\tau_{\mathrm{tr}}=3.6$~ps, and is $0.05\pm0.04$ at $1\THz$, i.e.
 $0.05\AW$. At a mean free path of $700\nm$ the quasi-static responsivity is
 only $0.15\AW$ to begin with; it is $0.04\AW$ at $30\GHz$ and zero at
 $1\THz$. With the field
-model in which the dc asymmetry was established, the ballistic funnel is
-not a terahertz rectifier.
+model in which the dc asymmetry was established, the $6\um$ funnel is not
+a terahertz rectifier.
 
 \subsection{Field confined to the neck}
 
@@ -76,11 +99,10 @@ $300\GHz$ and $0.38\pm0.04$ at $1\THz$. The decline between $10$ and
 $100\GHz$ is not what the $0.5$~ps crossing of the field region would
 suggest; the transfer is set by the whole flight between the contacts. At
 $1\THz$ the transfer is $0.51$ for a drop of one neck width, $0.38$ for
-$500\nm$ and zero for $1600\nm$. The corresponding responsivities are
-$0.45\pm0.04$ and $0.37\pm0.04\AW$: this is the most the shape mechanism
-gives at $1\THz$ in this model, with infinite mean free path, specular
-walls and a drop of favourable length, and it equals the Dyakonov-Shur
-response of the plasmonic funnel at $100$~K rather than exceeding it. The
+$500\nm$ and zero for $1600\nm$. The corresponding responsivities of one device are
+$0.45\pm0.04$ and $0.37\pm0.04\AW$, as much as the Dyakonov-Shur response
+of the plasmonic funnel at $100$~K; per absorbed watt the $500\nm$ drop
+gives $0.72\pm0.07\AW$, about twice that. The
 amplitude dependence is that of the dc curve: at $300\GHz$ the rectified
 current follows $V_{a}^{2}$ to $0.1$~V and is $0.40$ and $0.24$ of the
 square law at $0.2$ and $0.3$~V.
@@ -90,19 +112,25 @@ not simply the static asymmetry carried up in frequency. At $\lambda=700\nm$
 the static asymmetry of the confined-field models is reversed ($A=0.94$ to
 $0.97$), the rectified current passes through zero between $30$ and
 $100\GHz$, and it returns with the sign of the clean funnel, $0.20\AW$ at
-$300\GHz$ and $0.24\AW$ at $1\THz$. With half-diffuse walls ($p=0.5$) in the
+$300\GHz$ and $0.24\AW$ at $1\THz$ ($0.66$ and $0.75\AW$ per absorbed
+watt). With half-diffuse walls ($p=0.5$) in the
 clean limit the static asymmetry of the $500\nm$ drop is $1.01$, and the
 responsivity at $1\THz$ is nevertheless $0.45\pm0.04\AW$ ($0.31\AW$ for the
 neck-width drop). There is, then, a transit-time rectification of the
 funnel with a neck-confined field that is robust against edge roughness
-and bulk scattering, of $0.2$ to $0.45\AW$. It does not depend on the
-treatment of the few electrons that reach the Dirac point: replacing their
-removal by a classical turning point changes no result by more than one
-standard error.
+and bulk scattering, of $0.2$ to $0.45\AW$ for one device. It does not
+depend on the treatment of the few electrons that reach the Dirac point:
+replacing their removal by a classical turning point changes no result by
+more than one standard error. It does depend on the confinement of the
+field, which this model assumes and cannot test: at $1\THz$ and
+$\lambda=700\nm$ the $6\um$ device gives $0.00\pm0.04\AW$ per absorbed
+watt with the uniform field and $0.75\pm0.05\AW$ with the $500\nm$ drop.
+For this device the terahertz response is decided by electrostatics that
+the model does not contain.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig7_ballistic_thz.pdf}
-\caption{The ballistic funnel under an ac drive of amplitude $0.1$~V. (a)
+\caption{The $6\um$ ballistic funnel under an ac drive of amplitude $0.1$~V. (a)
 Rectified current relative to its quasi-static value for the uniform field
 (clean limit and $\lambda=700\nm$) and for a potential drop of $500\nm$ at
 the neck; the dotted line is the transit factor for a flight of $3.6$~ps
@@ -111,4 +139,318 @@ $1\THz$ against the length of the drop; open symbols: uniform field. (c)
 Fraction of electrons with a flight time longer than $t$ in the static
 device at $0.1$~V. Error bars are one standard error.}
 \label{fig:ballistic-thz}
+\end{figure*}
+
+\subsection{Length scaling}
+\label{sec:length}
+
+The two roll-offs of the $6\um$ device are properties of its size. The
+model has no length of its own (Sec.~\ref{sec:model-ballistic}): a copy of
+the device at half scale has half the current at every bias, and under a
+drive at twice the frequency it has half the rectified current. Both
+statements were tested, as was the equivalence with scattering at fixed
+$\lambda/L$: the static current of device D at $0.1$~V and twice that of its
+half-scale copy are $188.0$ and $188.6\ \mu$A, and the rectified current
+at $10\GHz$ and twice that of the copy at $20\GHz$ are $11.9\pm0.4$ and
+$12.1\pm0.5\ \mu$A. The
+frequency response of a given shape is therefore a function of the reduced
+frequency $fL/\vF$, and the question whether a ballistic funnel rectifies
+at $1\THz$ becomes the question how long it is.
+
+Table~\ref{tab:short} and Fig.~\ref{fig:length}(a) define five devices: the
+$6\um$ funnel (G0), its half-scale copy (G1), the same taper and neck with
+the leads cut to $250\nm$ (G2), a $0.55\um$ funnel with a $100\nm$ neck
+(G3), and a $0.50\um$ funnel with the shoulder and neck of the diode
+measured at $28\THz$ in Ref.~\cite{zhu2013graphene}, for which we assume a
+45 degree taper (G4). Mirror-symmetric versions of G2 to G4 serve as
+controls; at $0.1$, $1$ and $10\THz$ and for both field profiles all 22
+control points are zero within $2.1$ standard errors. The confined drop is
+one neck width long in every device.
+
+With a uniform field and no scattering the five transfer functions fall on
+one curve [Fig.~\ref{fig:length}(b)]: above $fL/\vF=0.2$ they agree within
+about $0.2$, the response is half its quasi-static value near
+$fL/\vF=0.4$, and it is zero from about $1.7$ on; for device D it remains
+zero within $0.04$ out to $fL/\vF=30$. The frequency of half response is
+thus $0.4\,\vF/L$: $60\GHz$ for the $6\um$ device and $0.7\THz$ for the
+$0.55\um$ one, and the response is gone at $280\GHz$ and at $3\THz$. The
+same scaling with the size of the scatterer over the Fermi velocity was
+found for the ratchet current of Dirac electrons on asymmetric
+antidots~\cite{ermann2011relativistic}. Below $fL/\vF=0.2$ the curves
+differ, and the difference identifies the gigahertz step of the $6\um$
+device. Devices G0 and G1, with leads as long as the taper, share a
+plateau at $0.67$ between $fL/\vF=0.03$ and $0.3$; G2 and G3, with short
+leads, are still at $0.94$ and $0.90$ at $0.06$, and G4 lies between. The slow population
+belongs to the leads, as inferred above from the flight times. Scattering
+lowers the cut-off when the device is longer than the mean free path and
+not otherwise: for G3 at $\lambda=700\nm$ ($\lambda/L=1.3$) the transfer
+is that of the clean device, $0.76$ and $0.32$ at $0.3$ and $1\THz$,
+while for G2 ($\lambda/L=0.34$) it is $0.41$ against $0.75$ at
+$fL/\vF=0.2$. A cut-off near the Drude damping rate, as reported for the
+simulated diode of Ref.~\cite{stearns2020high}, and a cut-off at the
+flight time are the two limits of the same behaviour.
+
+\begin{table*}
+\caption{Funnels used for the length scaling. Shoulder width, neck width
+and lead lengths (source, drain) in nm; $L$ is the length between the
+contacts. $A$ is the static asymmetry at $0.1$~V with a uniform field for
+no scattering and for mean free paths of $700$ and $100\nm$; $R$ is the
+resistance at $\lambda=700\nm$ and $N=1/(\Rant G)$ the number of devices in
+parallel that matches $75\ \Omega$. G4 has the shoulder and neck of the
+diode of Ref.~\cite{zhu2013graphene} with an assumed 45 degree taper; the
+others have the 30 degree taper of device D.}
+\label{tab:short}
+\begin{ruledtabular}
+\begin{tabular}{llcccccccc}
+ & Description & Shoulder/neck & Leads & $L$ ($\mu$m) & $A$, clean & $A$, 700 nm & $A$, 100 nm & $R$ (k$\Omega$) & $N$ \\
+\hline
+G0 & device D of Ref.~\cite{nguyen2021geometric} & 2000/175 & 2000, 2420 & 6.00 & 1.61 & 1.10 & & 0.95 & 13 \\
+G1 & G0 at half scale & 1000/88 & 1000, 1210 & 3.00 & 1.61 & 1.13 & 1.06 & 1.50 & 20 \\
+G2 & G0 with short leads & 2000/175 & 250, 250 & 2.08 & 1.91 & 1.55 & 1.33 & 0.77 & 10 \\
+G3 & short funnel & 500/100 & 100, 100 & 0.55 & 1.83 & 1.56 & 1.28 & 1.16 & 15 \\
+G4 & proportions of Ref.~\cite{zhu2013graphene} & 400/75 & 169, 169 & 0.50 & 1.60 & 1.30 & 1.15 & 1.54 & 21 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+
+\subsection{A short funnel at $1\THz$ with an imposed field}
+\label{sec:short}
+
+For the $0.55\um$ funnel the reduced frequency at $1\THz$ is $0.55$, and
+the device is shorter than the room-temperature mean free path. At
+$\lambda=700\nm$ and $1\THz$ the imposed-field model gives
+\begin{equation}
+R_{\mathrm{abs}}=
+\begin{cases}
+0.70\pm0.02\AW & \text{uniform field},\\
+0.71\pm0.03\AW & \text{drop at the neck},
+\end{cases}
+\label{eq:imposed}
+\end{equation}
+and $\RI=0.17$ and $0.14\AW$ for one device of $1.2$~k$\Omega$ on the
+$75\ \Omega$ antenna [Fig.~\ref{fig:length}(c)]; G4 gives $0.57\pm0.03$ and
+$0.70\pm0.02\AW$ per absorbed watt. Two things have changed with respect to
+the $6\um$ device. The two profiles, which differed by the whole effect at
+$6\um$, agree within the statistical error [Fig.~\ref{fig:length}(d)]. And
+the result holds at the mean free path of encapsulated graphene at room
+temperature, not only in the clean limit, in which the same device gives
+$0.95\pm0.05$ and $0.83\pm0.06\AW$. Taken at face value this is two to
+three times the response of the plasmonic funnel at $100$~K and eight
+times its $0.09\AW$ at $300$~K.
+
+In the same model the edges and scattering cost a factor of up to five.
+With half-diffuse walls ($p=0.5$) the figures at $1\THz$ and
+$\lambda=700\nm$ are $0.42\AW$ (uniform) and $0.14\AW$ (confined); with a
+mean free path of $100\nm$, which is also a rough bound for the effect of
+electron-electron collisions at $300$~K, they are $0.22\pm0.04$ and
+$0.42\pm0.04\AW$. With the confined drop the static asymmetry of G3 falls
+below one when scattering is strong ($A=0.81$ at $100\nm$, $0.90$ with
+half-diffuse walls at $700\nm$), while at $1\THz$ the current has the sign
+of the clean funnel in every case, as for the $6\um$ device. The measured
+devices bear the dependence on the mean free path out in order of
+magnitude: the diode of Ref.~\cite{zhu2013graphene}, with a measured mean
+free path of about $45\nm$, had a zero-bias dc responsivity of $0.12\AW$,
+against $0.71\AW$ for G4 at $100\nm$ and $1.33\AW$ at $700\nm$ in the
+quasi-static limit of the uniform-field model, and the rectifiers of
+chemical vapor deposited graphene of Ref.~\cite{hemmetter2026enhanced},
+with mean free paths of at most $65\nm$, have a responsivity of $0.8$~V/W
+referred to the beam power, against hundreds of V/W for encapsulated
+ballistic rectifiers~\cite{auton2017terahertz}. The amplitude dependence
+is a square law with a low ceiling: with the uniform field the rectified
+current of G3 follows $V_{a}^{2}$ up to $0.1$~V and is $0.80$ and $0.57$ of
+the law at $0.2$ and $0.3$~V, and with the confined drop it is already
+$19\%$ below the law at $0.1$~V. The scale is the Fermi energy,
+$\EF/e=0.14$~V, a tenth of the gate overdrive that limits the plasmonic
+element.
+
+Above $1\THz$ the two field profiles separate again. With the uniform field
+the response of G3 and G4 is zero at $3\THz$, as the scaling requires. With
+the drop confined to the neck it is $0.85\pm0.03$ and $1.03\pm0.03\AW$ at
+$3\THz$ and has fallen by an order of magnitude at $10\THz$, to
+$0.05\pm0.03$ and $0.09\pm0.03\AW$ at $\lambda=700\nm$ ($0.23\pm0.04\AW$
+for G4 at $100\nm$); at $30\THz$ no device, profile or mean free path gives
+a current distinguishable from zero. The response at $28\THz$ measured
+for a diode of the size of G4~\cite{zhu2013graphene} is not reproduced. At
+that frequency the photon energy, $116$~meV, is close to the Fermi energy
+and a classical trajectory in a classical field is not an adequate
+description; interband absorption, which the model lacks, is the natural
+candidate for what was measured.
+
+The agreement of the two profiles in Eq.~\eqref{eq:imposed} suggests that
+for a device this short the field does not matter. The next subsection
+tests that by computing it, and finds that it does.
+
+\subsection{The short funnel with the field computed}
+\label{sec:pic}
+
+We take the $0.55\um$ funnel G3 into the model of
+Sec.~\ref{sec:model-pic}, in which the potential follows from the charge
+of the electrons, a gate and metal contacts. The operating point is that
+of Eq.~\eqref{eq:imposed}: $\lambda=700\nm$, $1\THz$, an amplitude of
+$0.1$~V between the contacts, the drive that leaves only the shape, and
+the gate at $300\nm$. The funnel rectifies $0.429\pm0.012\ \mu$A of an
+absorbed $3.44\ \mu$W,
+\begin{equation}
+R_{\mathrm{abs}}=\frac{\Idc}{P_{\mathrm{abs}}}=0.124\pm0.003\AW ,
+\label{eq:computed}
+\end{equation}
+and $\RI=0.023\AW$ for one device on the $75\ \Omega$ antenna, with an
+admittance of $0.69-0.17i$~mS. Under the $30\nm$ gate the figures are
+$0.132\pm0.003$ and $0.026\AW$, with $0.73+0.34i$~mS. The absorbed power
+is now a computed quantity; in the definition of Eq.~\eqref{eq:rabs}, for
+comparison, the values are $0.10$ and $0.11\AW$ against $0.70\AW$. The
+errors are statistical, from seven and six runs. Changes of the grid, the
+time step, the particle number and the length of the contacts move the
+current between $0.38$ and $0.49\ \mu$A, and the mirror-symmetric version
+of the device, which must give zero under this drive, gives currents of up
+to $0.06\ \mu$A in single runs at $0.3$ and $1\THz$ (the mean of six runs
+from $0.3$ to $3\THz$ is $0.01\pm0.02\ \mu$A); we take $0.05\ \mu$A as the
+floor of the method and quote $0.12\pm0.015\AW$. The computed field leaves a sixth of
+what either imposed field gave.
+
+The loss is already present at dc. The static asymmetry at $0.1$~V is
+$1.053$ under both gates, against $1.56$ and $1.13$ for the two imposed
+profiles, while the conductance, $0.86$~mS, is that of the uniform-field
+model: only the even part of the current-voltage curve has changed.
+Figure~\ref{fig:pic}(a) and \ref{fig:pic}(b) show why. About $61\%$ of the
+bias drops within $90\nm$ of the neck, centred on it; $14\%$ along the
+lead and the taper; and $25\%$ at the two contact planes, $6$ to $9\%$ at
+the source and $17$ to $19\%$ at the drain, where it contributes nothing
+to the asymmetry. The drop at the source is of the size expected for a
+ballistic contact, half of the current over the Sharvin conductance of
+the $500\nm$ lead, or $8\%$ of the bias. Neither imposed profile
+resembles this. The uniform ramp puts most of the bias along the taper,
+which is where its large asymmetry comes from, and the confined drop puts
+all of it at the neck: with $61\%$ there and a rectified current that goes
+as the square of the bias, the confined-drop model would give
+$0.9\ \mu$A in the quasi-static limit, and the computed curve gives
+$1.07\pm0.02\ \mu$A.
+
+The frequency dependence is that of the uniform-field model at a seventh
+to a ninth of its height [Fig.~\ref{fig:pic}(c)]. At $0.1\THz$ the
+rectified current is $1.04\pm0.01\ \mu$A, the quasi-static value of the
+computed static curve; it is $0.94$, $0.71$, $0.43$ and $0.15\ \mu$A at
+$0.3$, $0.6$, $1$ and $1.8\THz$, half at $0.9\THz$ or $fL/\vF=0.5$. The
+transit roll-off of Sec.~\ref{sec:length} thus survives the computation
+of the field. The agreement of the two imposed profiles at $1\THz$ does
+not: it was the crossing of a curve that falls with frequency and one
+that rises, and no sign of insensitivity to the field. Above $1\THz$ the
+gate matters. Under the $300\nm$ gate the absorbed power falls steadily,
+to $0.8\ \mu$W at $3\THz$, with $0.19\pm0.02\ \mu$A rectified there and
+nothing at $6\THz$. Under the $30\nm$ gate the device is a plasmonic
+cavity between two contacts that hold the potential, with a half-wave
+resonance near $3.6\THz$ and a full-wave one near $7\THz$ for the plasma
+speed of $3.9\,\vF$; the antisymmetric shape-only drive couples to the
+second, the absorbed power rises to $10.7\ \mu$W at $6\THz$, and the
+rectified current stays at $0.35$ to $0.50\ \mu$A up to $3\THz$.
+
+With a gate in the model, shape and circuit can be compared in the
+ballistic gas as they were in the fluid [Figs.~\ref{fig:pic}(d) and
+\ref{fig:pic}(e)]. The circuit term is the current of a straight strip
+of the same length and lead width with its drain tied to the gate, the
+Dyakonov-Shur termination, here without collisions. Under the $300\nm$
+gate it is $0.13$, $0.34$ and $0.01\ \mu$A at $0.3$, $1$ and $3\THz$,
+against $0.94$, $0.43$ and $0.19\ \mu$A for the shape term: the shape is
+the larger at each frequency. Under the $30\nm$ gate the strip gives
+$0.67$, $1.15$ and $-1.77\ \mu$A against $0.89$, $0.48$ and $0.50\ \mu$A.
+At $1\THz$ the circuit term is then more than twice the shape term,
+$0.20\AW$ per absorbed watt against $0.13\AW$, and the funnel with its
+drain tied to the gate, which has both, gives $1.01\ \mu$A, no more than
+the strip. At $3\THz$, near the half-wave resonance that this
+termination does excite, the funnel absorbs four times its
+low-frequency power and the strip's current is reversed; the run was
+repeated with a longer settling time and did not change, and we have not
+looked for the cause. With the gate closer than the device is long,
+then, the gate connection rectifies more than the shape at $1\THz$ in
+the ballistic gas as well.
+
+How much of the shape term survives in a real device is again a matter of
+scattering and of the edges, and here the computed field changes the
+answer of the imposed one in both directions [Fig.~\ref{fig:pic}(f)].
+The mean free path matters little. Per absorbed watt at $1\THz$ the
+funnel gives $0.130\pm0.005\AW$ with no scattering, $0.124$ at $700\nm$
+and $0.107\pm0.007\AW$ at $100\nm$ ($0.145$, $0.132$ and $0.099\AW$ under
+the $30\nm$ gate), where the uniform-field model lost a factor of three.
+Scattering does lower the static asymmetry, $1.09$, $1.05$ and $1.02$,
+and the quasi-static current, $2.1$, $1.1$ and $0.23\ \mu$A, but the
+current at $1\THz$ falls much less, $0.50$, $0.43$ and $0.22\ \mu$A: what
+a long mean free path adds to the static asymmetry is not available at
+$1\THz$, and at $100\nm$ the roll-off has moved above $1\THz$. The
+conductance halves at $100\nm$, so one device on the antenna does lose a
+factor of two, $\RI=0.012\AW$. The edges decide. With half-diffuse walls
+($p=0.5$, $\lambda=700\nm$) the static asymmetry is $1.005$ and the
+current at $1\THz$ is $-0.07\pm0.01\ \mu$A under the $300\nm$ gate and
+$-0.13\pm0.01\ \mu$A under the $30\nm$ gate, a sixth to a quarter of the
+specular current with the opposite sign; two independent runs agree, and
+the mirror-symmetric control with the same walls gives zero within the
+floor. The imposed fields had given $0.42$ and $0.14\AW$ for this case;
+the computed field gives at most $0.04\AW$ in magnitude. The shape
+rectification of the short funnel requires edges that reflect specularly.
+Only $p=1$ and $p=0.5$ were computed, so how specular is not known.
+
+The amplitude dependence differs from that of the imposed fields. At
+$0.05$~V the current is $0.10\pm0.02\ \mu$A under both gates, consistent
+with the square law through the $0.1$~V point. At $0.2$~V, which is above
+$\EF/e$, it is $2.56$ and $2.66\ \mu$A, $1.5$ and $1.4$ times the square
+law, where both imposed fields fell below it; the absorbed power follows
+$V_{a}^{2}$ within $7\%$, so $R_{\mathrm{abs}}$ rises to $0.20\AW$. Into a
+matched dc load the conversion efficiency estimated from the
+short-circuit current and the static conductance,
+$\eta=\Idc^{2}/(4GP_{\mathrm{abs}})$, is $2\times10^{-5}$ at $0.1$~V,
+where the device absorbs $3.4\ \mu$W, and $1.5\times10^{-4}$ at $0.2$~V
+and $13\ \mu$W. As a detector, $N=1/(\Rant\,\mathrm{Re}\,Y_{1})=19$
+devices in parallel with their reactance tuned out absorb the available
+power, and the Johnson noise of their static conductance gives a
+noise-equivalent power of $130\pWrtHz$ at $1\THz$ and $300$~K, twice that
+of the plasmonic funnel at the same temperature.
+
+The outcome for the short funnel is therefore narrower than the imposed
+fields suggested. A $0.55\um$ funnel with specular edges rectifies at
+$1\THz$ by its shape, at $0.10$ to $0.13\AW$ per absorbed watt for any
+mean free path from $100\nm$ up. That is the level of the plasmonic
+funnel at $300$~K, $0.09\AW$, and below its $0.21$ to $0.34\AW$ at
+$100$~K; it is not the factor of eight of Eq.~\eqref{eq:imposed}. With
+rough edges it is lost, and under a close gate the circuit term exceeds
+it.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig10_ballistic_length.pdf}
+\caption{Length scaling of the ballistic response at an ac amplitude of
+$0.1$~V. (a) The five funnels of Table~\ref{tab:short} to scale, and the
+two short ones enlarged. (b) Rectified current relative to its
+quasi-static value against the reduced frequency, for a uniform field and
+no scattering; the band marks the fall from half response to zero. (c)
+Responsivity of the $0.55\um$ funnel G3 at $\lambda=700\nm$: per absorbed
+watt, Eq.~\eqref{eq:rabs} (thick), and for one device on a $75\ \Omega$
+antenna (thin, open symbols). (d) Responsivity per absorbed watt at
+$1\THz$ against device length for the two field profiles. The blue band in
+(c) and (d) is the range of the plasmonic funnel of
+Sec.~\ref{sec:plasmonic}, $0.07$ to $0.34\AW$. Error bars are one standard
+error.}
+\label{fig:length}
+\end{figure*}
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig11_selfconsistent.pdf}
+\caption{The $0.55\um$ funnel G3 with the field computed; $\lambda=700\nm$
+and an amplitude of $0.1$~V except in (f). (a) Static potential energy at
+a bias of $0.1$~V with the gate at $300\nm$, in units of the bias;
+contours every $0.1$; the dotted rectangles are the contact strips. (b)
+The same along the axis for the two gate distances, against the two
+imposed profiles of Sec.~\ref{sec:short}; colours and line styles as in
+(c). (c) Rectified current against
+frequency under the drive that leaves only the shape, for the imposed
+fields and for the computed field with the gate at $300\nm$ (full
+symbols) and $30\nm$ (open symbols); points within two standard errors of
+zero are not drawn. (d), (e) Shape against circuit for the two gate
+distances: the funnel under the shape-only drive, a straight strip of the
+same length with its drain tied to the gate, the funnel with its drain
+tied to the gate, and the mirror-symmetric funnel under the shape-only
+drive, which must give zero. (f) Responsivity at $1\THz$ for no
+scattering, mean free paths of $700$ and $100\nm$, and half-diffuse
+walls: per absorbed watt for the computed field (diamonds, full and open
+as in (c)), and by Eq.~\eqref{eq:rabs} for the imposed fields (circles:
+uniform; squares: drop at the neck). The band is the range of the
+plasmonic funnel. Error bars are one standard error.}
+\label{fig:pic}
 \end{figure*}

@@ -1,6 +1,9 @@
 """All figures of the paper, drawn from the result files of this repository.
 usage: .venv/bin/python paper/make_figures.py [1 2 ... overview]     (no argument: all)
 Outputs paper/figs/figN_*.pdf and .png. Style and colour conventions: paper/figstyle.py.
+The file numbers are the order in which the figures were made. In the paper fig9 (steady
+gated flow) is Fig. 4, fig10 (length scaling of the ballistic response) is Fig. 9, fig11 (the
+short funnel with the field computed) is Fig. 10 and fig8 (synthesis) is Fig. 11.
 """
 import sys, os, math, csv
 import numpy as np
@@ -507,6 +510,31 @@ def fig7():
 
 
 # =============================================================================
+# Stage B8 data: the 0.55 um funnel with the computed field (tools/pic_common.py)
+# =============================================================================
+def pic():
+    """tools/pic_common.py with the working directory at the repository root (its paths are relative)."""
+    os.chdir(ROOT)
+    import pic_common
+    return pic_common
+
+
+def pic_g3(d, mode="sym"):
+    """Funnel G3, computed field, gate at d nm: one dict per frequency (THz) with I, e (uA), P (uW), Y, R (per
+    absorbed watt), R1 (one device on 75 ohm) and NEP of the conjugately matched array (W/Hz^1/2, Johnson noise
+    of the static conductance). The 1 THz shape-only point is the pooled decision value."""
+    c = pic(); dec = c.decision()[d]; G = c.static_fits()[d]["Gqs"]; out = []
+    for r in c.series("funnel", mode, d):
+        q = dict(f=r["f"], I=r["I"], e=r["e"], P=r["P"], Y=r["Y"])
+        if mode == "sym" and abs(r["f"] - 1) < 1e-6: q.update(I=dec["I"], e=dec["e"], P=dec["P"], Y=dec["Y"])
+        Pav = (c.VA * abs(1 + c.RANT * q["Y"])) ** 2 / (8 * c.RANT) * 1e6
+        q["R"] = q["I"] / q["P"]; q["eR"] = q["e"] / q["P"]; q["R1"] = q["I"] / Pav
+        q["NEP"] = math.sqrt(4 * kB * 300.0 * G / (c.RANT * q["Y"].real)) / abs(q["R"]) if q["Y"].real > 0 else float("nan")
+        out.append(q)
+    return out
+
+
+# =============================================================================
 # Figure 8: synthesis
 # =============================================================================
 def fig8():
@@ -528,14 +556,20 @@ def fig8():
             f = np.array([r["f_Hz"] for r in rs]); RI = np.array([r["RI_A_per_W"] for r in rs]); e = np.array([r["Idc_err_A"] / r["Pav_W"] for r in rs])
             sig = np.abs(RI) > 2 * e          # points consistent with zero are not drawn
             signed_loglog(ax, f[sig], RI[sig], c, ls, marker=m, ms=3.2, lw=1.1)
+    g3 = pic_g3(300)
+    o = [q for q in g3 if abs(q["I"]) > 2 * q["e"]]      # the 0.55 um funnel with the computed field (Stage B8)
+    signed_loglog(ax, [q["f"] * 1e12 for q in o], [q["R"] for q in o], BLACK, "--", marker="D", ms=3.4, lw=1.5, zorder=3)
+    signed_loglog(ax, [q["f"] * 1e12 for q in o], [q["R1"] for q in o], BLACK, "--", marker="D", ms=2.2, lw=0.7, zorder=3)
     ax.axvspan(3e11, 1e12, color="#e3f4ee", zorder=0)
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(2e8, 3.6e12); ax.set_ylim(3e-6, 3)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(2e8, 3.6e12); ax.set_ylim(3e-6, 6)
     ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"responsivity $|R_I|$ (A/W), 75 $\Omega$ source")
     h = [Line2D([], [], color=BLUE, marker="o", ms=3, label="plasmonic funnel, drain to gate"),
          Line2D([], [], color=GREEN, marker="o", ms=3, label="plasmonic funnel, shape only"),
          Line2D([], [], color=VERM, marker="o", ms=3, label="plasmonic Tesla valve, shape only"),
-         Line2D([], [], color=PURPLE, marker="o", ms=3, label="ballistic funnel, uniform field"),
-         Line2D([], [], color=DPURPLE, marker="s", ms=3, label="ballistic funnel, 500 nm drop at neck"),
+         Line2D([], [], color=PURPLE, marker="o", ms=3, label=r"ballistic funnel, 6 $\mu$m, uniform field"),
+         Line2D([], [], color=DPURPLE, marker="s", ms=3, label=r"ballistic funnel, 6 $\mu$m, 500 nm drop at neck"),
+         Line2D([], [], color=BLACK, ls="--", marker="D", ms=3.4, lw=1.5, label=r"ballistic funnel, 0.55 $\mu$m: per absorbed watt"),
+         Line2D([], [], color=BLACK, ls="--", marker="D", ms=2.2, lw=0.7, label=r"ballistic funnel, 0.55 $\mu$m: one device"),
          Line2D([], [], color=GREY, ls="-", label="100 K, or clean"), Line2D([], [], color=GREY, ls="--", label=r"300 K, or $\lambda=700$ nm")]
     ax.legend(handles=h, loc="upper center", fontsize=6.2, ncol=1, handlelength=2.2, labelspacing=0.3, bbox_to_anchor=(0.5, -0.17))
     panel(ax, "a", x=-0.17)
@@ -556,6 +590,8 @@ def fig8():
     for st, ls2 in (("300K", "--"),):
         rows = load_csv(os.path.join(T, f"D2_{st}_n1e12_d30_Rc300.csv"))
         ax.plot([r["f_Hz"] for r in rows], [r["NEP_W_per_rtHz"] for r in rows], color=SKY, ls=ls2, lw=1.2, marker="o", ms=3, mec="white", mew=0.3)
+    o = [q for q in g3 if q["I"] > 3 * q["e"]]
+    ax.plot([q["f"] * 1e12 for q in o], [q["NEP"] for q in o], color=BLACK, ls="--", lw=1.2, marker="D", ms=3, mec="white", mew=0.3)
     lit = load_csv(os.path.join(ROOT, "paper", "literature_detectors.csv"), text=("label", "class", "note", "key"))
     cls = {"fet": ("D", BLACK, "measured: graphene FET / plasmonic"), "pte": ("^", ORANGE, "measured: photothermoelectric"),
            "ballistic": ("s", PURPLE, "measured: ballistic rectifier / geometric diode"), "incumbent": ("x", GREY, "commercial room-temperature detectors")}
@@ -568,14 +604,297 @@ def fig8():
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(5e10, 6e12)
     ax.set_ylim(1e-13, max(3e-9, 3 * max([r["NEP_W_rtHz"] for r in lit] + [1e-9])))
     ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"NEP (W/Hz$^{1/2}$)")
-    h = [Line2D([], [], color=BLUE, ls="-", label="simulated funnel, 100 K"), Line2D([], [], color=BLUE, ls="--", label="simulated funnel, 300 K"),
+    h = [Line2D([], [], color=BLUE, ls="-", label="simulated plasmonic funnel, 100 K"), Line2D([], [], color=BLUE, ls="--", label="simulated plasmonic funnel, 300 K"),
          Line2D([], [], color=SKY, ls="--", marker="o", ms=3, label=r"300 K with 300 $\Omega\,\mu$m contacts"),
-         Line2D([], [], color=BLUE, ls=":", marker="o", ms=3, label=r"100 K, $5\times10^{10}$ cm$^{-2}$")]
+         Line2D([], [], color=BLUE, ls=":", marker="o", ms=3, label=r"100 K, $5\times10^{10}$ cm$^{-2}$"),
+         Line2D([], [], color=BLACK, ls="--", marker="D", ms=3, label=r"simulated 0.55 $\mu$m ballistic funnel array, 300 K")]
     h += [Line2D([], [], color=c, marker=m, ms=4.6, ls="none", label=lab) for k, (m, c, lab) in cls.items() if k in seen]
     if lit: h += [Line2D([], [], color=GREY, marker="D", mfc="white", ms=4.6, ls="none", label="open symbol: measured below 200 K")]
     ax.legend(handles=h, loc="upper center", fontsize=6.2, handlelength=2.2, labelspacing=0.3, bbox_to_anchor=(0.5, -0.17))
     panel(ax, "b", x=-0.17)
     save(fig, "fig8_synthesis")
+
+
+# =============================================================================
+# Figure 9 (Fig. 4 of the paper): steady flow with the gate
+# =============================================================================
+def fig9():
+    D = os.path.join(RES, "dcgate")
+    def rows(fn):
+        out = []
+        for r in csv.DictReader(open(os.path.join(D, fn + ".csv"))):
+            out.append({k: (v if k in ("geo", "set", "closure") else float(v)) for k, v in r.items()})
+        return out
+    allr = rows("D1") + rows("D2") + rows("D3"); d4 = rows("D4")
+    refd = {(r["geo"], r["set"], r["slip"], r["hw"], round(r["Re"], 6)): r["D_inc"] for r in rows("ref")}
+    ref_of = lambda r: refd.get((r["geo"], r["set"], r["slip"], r["hw"], round(r["Re"], 6)), float("nan"))
+    MK = {"chan": "x", "symcon": "+", "funnel": "o", "funnel_w1000": "s", "tesla_classic": "^", "tesla_classic_w1000": "v"}
+    NAME = {"chan": "straight channel", "symcon": "symmetric constriction", "funnel": r"funnel, 175 nm", "funnel_w1000": r"funnel, 1 $\mu$m",
+            "tesla_classic": "Tesla valve, 175 nm", "tesla_classic_w1000": r"Tesla valve, 1 $\mu$m"}
+    CF = {"chan": GREY, "symcon": GREY, "funnel": BLUE, "funnel_w1000": BLUE, "tesla_classic": VERM, "tesla_classic_w1000": VERM}   # flip: circuit
+    CS = {"symcon": GREY, "funnel": GREEN, "funnel_w1000": GREEN, "tesla_classic": VERM, "tesla_classic_w1000": VERM}              # swap: shape
+    fig, axes = plt.subplots(1, 3, figsize=(COL2, 3.0), gridspec_kw=dict(wspace=0.50))
+    fig.subplots_adjust(bottom=0.385)
+
+    def pts(ax, x, y, inside, marker, color, filled, ms=3.6):
+        line = marker in "x+"
+        for sel, a in ((inside, 1.0), (~inside, 0.28)):
+            if not sel.any(): continue
+            ax.plot(x[sel], y[sel], ls="none", marker=marker, ms=ms + (1.0 if line else 0), color=color, mfc=color if (filled and not line) else "white",
+                    mew=0.8, alpha=a, zorder=4)
+
+    ax = axes[0]
+    sel = [r for r in allr if r["set"] == "300K" and math.isinf(r["slip"])]
+    one = sorted([r for r in sel if r["geo"] == "chan"], key=lambda r: r["v_target"])
+    ax.plot([r["v_target"] for r in one], [r["D_1d_flip"] - 1 for r in one], color=BLACK, lw=0.9, ls=(0, (4, 2)), zorder=2)
+    for geo in MK:
+        sub = sorted([r for r in sel if r["geo"] == geo], key=lambda r: r["v_target"])
+        x = np.array([r["v_target"] for r in sub]); inside = np.array([r["umax_vF"] <= 0.3 for r in sub])
+        pts(ax, x, np.array([abs(r["D_flip0"] - 1) for r in sub]), inside, MK[geo], CF[geo], True)
+        if geo == "chan": continue
+        ys = np.array([abs(r["D_swap_dn"] - 1) for r in sub])
+        ax.plot(x, ys, color=CS[geo], lw=0.6, alpha=0.6, zorder=3)
+        pts(ax, x, ys, inside, MK[geo], CS[geo], False)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(7e-4, 0.42); ax.set_ylim(5e-9, 1.5)
+    ax.set_xlabel(r"bias $V/U_{0}$"); ax.set_ylabel(r"asymmetry $|D-1|$")
+    ax.text(0.00085, 1.0e-2, "polarity reversed", fontsize=6.0, color=BLUE, va="bottom", ha="left")
+    ax.text(0.38, 1.2e-8, "contacts exchanged", fontsize=6.0, color=GREEN, va="bottom", ha="right")
+    ax.set_yticks([1e-8, 1e-6, 1e-4, 1e-2, 1])
+    panel(ax, "a", x=-0.27)
+
+    ax = axes[1]
+    lo, hi = 1e-8, 1
+    ax.fill_between([lo, hi], [lo / 2, hi / 2], [lo * 2, hi * 2], color=SHADE, lw=0, zorder=0)
+    ax.plot([lo, hi], [lo, hi], color=GREY, lw=0.6, zorder=1)
+    for geo in ("funnel", "funnel_w1000", "tesla_classic", "tesla_classic_w1000"):
+        for slip_inf in (True, False):
+            sub = [r for r in allr if r["geo"] == geo and math.isinf(r["slip"]) == slip_inf and not math.isnan(ref_of(r))]
+            if not sub: continue
+            X = np.array([abs(ref_of(r) - 1) for r in sub]); Y = np.array([abs(r["D_swap_dn"] - 1) for r in sub])
+            pts(ax, X, Y, np.array([r["umax_vF"] <= 0.3 for r in sub]), MK[geo], CS[geo], slip_inf, ms=3.4)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(lo, hi); ax.set_ylim(lo, hi)
+    ax.set_xticks([1e-8, 1e-6, 1e-4, 1e-2, 1]); ax.set_yticks([1e-8, 1e-6, 1e-4, 1e-2, 1])
+    ax.set_xlabel(r"$|D-1|$ without the gate"); ax.set_ylabel(r"$|D-1|$ with the gate")
+    panel(ax, "b", x=-0.27)
+
+    ax = axes[2]
+    for geo, c in (("funnel", GREEN), ("tesla_classic", VERM)):
+        for vv, ls, fill in ((0.01, "-", True), (0.03, "--", False)):
+            sub = sorted([r for r in d4 if r["geo"] == geo and abs(r["v_target"] - vv) < 1e-9], key=lambda r: r["hw"])
+            if not sub: continue
+            ax.plot([r["hw"] for r in sub], [abs(r["D_swap_dn"] - 1) for r in sub], color=c, ls=ls, lw=1.0, marker=MK[geo], ms=3.8,
+                    mfc=c if fill else "white", mew=0.8)
+    sub = sorted([r for r in d4 if r["geo"] == "funnel" and abs(r["v_target"] - 0.03) < 1e-9], key=lambda r: r["hw"])
+    ax.plot([r["hw"] for r in sub], [abs(r["D_flip0"] - r["D_1d_flip"]) for r in sub], color=BLUE, ls="--", lw=1.0, marker="o", ms=3.8, mfc="white", mew=0.8)
+    h = np.array([9.0, 30.0]); ax.plot(h, 1.2e-7 * h ** 2, color=GREY, lw=0.7, ls=":")
+    ax.axhline(0.0528 * 0.03 ** 2, color=GREEN, lw=0.6, ls=(0, (1, 2)))
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(8.5, 33); ax.set_ylim(5e-8, 6e-4)
+    ax.set_xticks([10, 14, 20, 28]); ax.set_xticklabels(["10", "14", "20", "28"]); ax.xaxis.set_minor_formatter(NullFormatter())
+    ax.tick_params(axis="x", which="minor", bottom=False, top=False)
+    ax.set_xlabel("wall mesh size (nm)"); ax.set_ylabel(r"$|D-1|$")
+    panel(ax, "c", x=-0.27)
+
+    h = [Line2D([], [], color=GREY, marker=MK[g], ls="none", ms=4.6 if MK[g] in "x+" else 3.8, mfc="white" if MK[g] in "x+" else GREY, mew=0.8, label=NAME[g]) for g in MK]
+    h += [Line2D([], [], color=BLACK, lw=0.9, ls=(0, (4, 2)), label="one-dimensional closed form"),
+          Line2D([], [], color=BLUE, marker="o", ls="none", ms=3.8, label="polarity reversed (circuit): funnel"),
+          Line2D([], [], color=GREEN, marker="o", ls="none", ms=3.8, mfc="white", mew=0.8, label="contacts exchanged (shape): funnel"),
+          Line2D([], [], color=VERM, marker="^", ls="none", ms=3.8, label="Tesla valve: filled, polarity; open, contacts"),
+          Line2D([], [], color=GREY, lw=1.0, ls="-", label=r"(c) $V/U_{0}=0.01$"), Line2D([], [], color=GREY, lw=1.0, ls="--", label=r"(c) $V/U_{0}=0.03$"),
+          Line2D([], [], color=BLUE, lw=1.0, ls="--", marker="o", ms=3.8, mfc="white", mew=0.8, label="(c) funnel: polarity term minus closed form"),
+          Line2D([], [], color=GREY, lw=0.7, ls=":", label=r"(c) slope $h^{2}$"),
+          Line2D([], [], color=GREEN, lw=0.6, ls=(0, (1, 2)), label="(c) inertial term of the funnel at 0.03")]
+    fig.legend(handles=h, loc="lower center", ncol=3, fontsize=6.2, bbox_to_anchor=(0.5, -0.02), columnspacing=1.4, handlelength=2.2, labelspacing=0.35)
+    save(fig, "fig9_gated_dc")
+
+
+# =============================================================================
+# Figure 10 (Fig. 9 of the paper): length scaling of the ballistic response
+# =============================================================================
+def fig10():
+    import short_funnel_common as sf
+    cwd = os.getcwd(); os.chdir(ROOT)
+    try: static, ac = sf.load_all()
+    finally: os.chdir(cwd)
+    RAMP = {"G0": "#d2b5e3", "G1": "#b48ad0", "G2": "#9461b8", "G3": "#3d1560", "G4": "#6f3b9a"}
+    MK = {"G0": "o", "G1": "v", "G2": "D", "G3": "s", "G4": "^"}
+    LAB = {"G0": r"G0, 6.0 $\mu$m", "G1": r"G1, 3.0 $\mu$m", "G2": r"G2, 2.1 $\mu$m", "G3": r"G3, 0.55 $\mu$m", "G4": r"G4, 0.50 $\mu$m"}
+    SHAPE = {"G0": dict(), "G1": dict(Wc=1000, Lc=1000, Wn=87.5, Wd=1000, Ld=1210), "G2": dict(Lc=250, Ld=250),
+             "G3": dict(Wc=500, Lc=100, Wn=100, Wd=500, Ld=100), "G4": dict(Wc=400, Lc=169, alpha=45, Wn=75, Wd=400, Ld=169)}
+    fig = plt.figure(figsize=(COL2, 5.0))
+    gs = fig.add_gridspec(2, 2, wspace=0.27, hspace=0.42, left=0.085, right=0.985, top=0.965, bottom=0.085)
+
+    ax = fig.add_subplot(gs[0, 0])
+    NECK = {"G0": 175, "G1": 88, "G2": 175, "G3": 100, "G4": 75}
+    x0 = 0.0; xs = {}
+    for g in sf.DEV:
+        loops, xn, L = funnel_loops(**SHAPE[g])
+        draw_domain(ax, loops, fc=RAMP[g], ec=BLACK, lw=0.5, dx=x0)
+        W = loops[0][:, 1].max() * 2; xs[g] = (x0, L)
+        ax.text(x0 + L / 2, -W / 2 - 200, g, fontsize=7, ha="center", va="top")
+        x0 += L + 560
+    xmax = x0 - 560
+    ax.plot([0, 1000], [1500, 1500], color=BLACK, lw=1.2, solid_capstyle="butt"); ax.text(1150, 1500, r"1 $\mu$m", fontsize=7, va="center")
+    ax.annotate("", xy=(5500, 1500), xytext=(3700, 1500), arrowprops=dict(arrowstyle="->", lw=0.7, color=GREY))
+    ax.text(5650, 1500, "forward", fontsize=6.8, va="center", color=GREY)
+    # second row: the two short devices enlarged five times
+    k = 5.0; yc = -3600.0; x1 = 3500.0
+    for g in ("G3", "G4"):
+        loops, xn, L = funnel_loops(**SHAPE[g])
+        draw_domain(ax, loops, fc=RAMP[g], ec=BLACK, lw=0.5, scale=k, dx=x1, dy=yc)
+        W = loops[0][:, 1].max() * 2
+        ax.text(x1 + k * L / 2, yc - k * W / 2 - 200, f"{g}: neck {NECK[g]} nm", fontsize=6.6, ha="center", va="top")
+        x1 += k * L + 3000
+    ax.plot([0, 1250], [yc + 1000, yc + 1000], color=BLACK, lw=1.2, solid_capstyle="butt"); ax.text(0, yc + 780, "250 nm", fontsize=7, va="top")
+    ax.text(0, yc - 100, "enlarged\nfive times", fontsize=6.6, va="top", color=GREY)
+    ax.set_xlim(-250, xmax + 250); ax.set_ylim(yc - 2100, 1900); ax.set_aspect("equal"); ax.axis("off")
+    panel(ax, "a", x=-0.02, y=0.97)
+
+    ax = fig.add_subplot(gs[0, 1])
+    ax.axvspan(0.4, 1.7, color=SHADE, zorder=0)
+    for g in sf.DEV:
+        rows = ac.get((g, "uniform", "inf")); fit = sf.static_fit(static.get((g, "uniform", "inf")))
+        o = [sf.figures(r, fit) for r in rows]; x = [r["f_Hz"] * sf.LEN[g] * 1e-9 / sf.VF for r in rows]
+        ax.errorbar(x, [q["S"] for q in o], [q["eS"] for q in o], color=RAMP[g], marker=MK[g], ms=3.6, lw=1.1, mec="white", mew=0.3, label=LAB[g])
+    ax.axhline(0, color=GREY, lw=0.5); ax.set_xscale("log"); ax.set_xlim(1.5e-3, 40); ax.set_ylim(-0.25, 1.15)
+    ax.set_xlabel(r"reduced frequency $fL/v_{F}$"); ax.set_ylabel(r"$I_{\rm dc}(f)$ / quasi-static value")
+    ax.legend(loc="lower left", fontsize=6.3, handlelength=1.8, labelspacing=0.3)
+    panel(ax, "b", x=-0.15)
+
+    ax = fig.add_subplot(gs[1, 0])
+    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0); ax.text(0.0092, 0.205, "plasmonic funnel", fontsize=6.0, color=BLUE, va="bottom")
+    ax.axvspan(0.3, 1.0, color="#e3f4ee", zorder=0, alpha=0.6)
+    for fm, c, m in (("uniform", PURPLE, "o"), ("local", DPURPLE, "s")):
+        rows = ac[("G3", fm, "700")]; fit = sf.static_fit(static[("G3", fm, "700")])
+        o = [sf.figures(r, fit) for r in rows]; f = [r["f_Hz"] / 1e12 for r in rows]
+        ax.errorbar(f, [q["R_abs"] for q in o], [q["eR_abs"] for q in o], color=c, ls="--", marker=m, ms=3.8, lw=1.3, mec="white", mew=0.3)
+        ax.plot(f, [q["R_single"] for q in o], color=c, ls="--", lw=0.7, marker=m, ms=2.4, mfc="white", mew=0.5)
+    ax.axhline(0, color=GREY, lw=0.5); ax.set_xscale("log"); ax.set_xlim(0.008, 40); ax.set_ylim(-0.15, 2.45)
+    ax.set_xlabel("frequency (THz)"); ax.set_ylabel("responsivity (A/W)")
+    ax.text(0.0092, 1.25, r"G3, 0.55 $\mu$m" + "\n" + r"$\lambda=700$ nm", fontsize=6.6, va="top")
+    h = [Line2D([], [], color=PURPLE, ls="--", marker="o", ms=3.8, lw=1.3, label="uniform field, per absorbed watt"),
+         Line2D([], [], color=DPURPLE, ls="--", marker="s", ms=3.8, lw=1.3, label="drop at the neck, per absorbed watt"),
+         Line2D([], [], color=GREY, ls="--", marker="o", ms=2.4, lw=0.7, mfc="white", mew=0.5, label=r"thin: one device on 75 $\Omega$")]
+    ax.legend(handles=h, loc="upper right", fontsize=6.2, handlelength=2.6, labelspacing=0.3)
+    panel(ax, "c", x=-0.15)
+
+    ax = fig.add_subplot(gs[1, 1])
+    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0)
+    for fm, c, m in (("uniform", PURPLE, "o"), ("local", DPURPLE, "s")):
+        for lam, ls in (("inf", "-"), ("700", "--")):
+            P = []
+            for g in sf.DEV:
+                rows = [r for r in ac.get((g, fm, lam), []) if abs(r["f_Hz"] - 1e12) < 1]; fit = sf.static_fit(static.get((g, fm, lam)))
+                if rows and fit:
+                    q = sf.figures(rows[0], fit); P.append((sf.LEN[g] / 1e3, q["R_abs"], q["eR_abs"]))
+            P.sort()
+            ax.errorbar([a[0] for a in P], [a[1] for a in P], [a[2] for a in P], color=c, ls=ls, marker=m, ms=3.8, lw=1.2, mec="white", mew=0.3)
+    ax.axhline(0, color=GREY, lw=0.5); ax.set_xscale("log"); ax.set_xlim(0.42, 7.5); ax.set_ylim(-0.15, 1.55)
+    ax.set_xticks([0.5, 1, 2, 3, 6]); ax.set_xticklabels(["0.5", "1", "2", "3", "6"]); ax.xaxis.set_minor_formatter(NullFormatter())
+    ax.tick_params(axis="x", which="minor", bottom=False, top=False)
+    ax.set_xlabel(r"device length $L$ ($\mu$m)"); ax.set_ylabel("responsivity at 1 THz (A/W)")
+    ax.text(7.1, 0.205, "plasmonic funnel", fontsize=6.0, color=BLUE, va="center", ha="right")
+    h = [Line2D([], [], color=PURPLE, marker="o", ms=3.8, lw=1.2, label="uniform field"), Line2D([], [], color=DPURPLE, marker="s", ms=3.8, lw=1.2, label="drop at the neck"),
+         Line2D([], [], color=GREY, ls="-", label="no scattering"), Line2D([], [], color=GREY, ls="--", label=r"$\lambda=700$ nm")]
+    ax.legend(handles=h, loc="upper right", fontsize=6.2, handlelength=2.4, labelspacing=0.3, ncol=2, columnspacing=1.2)
+    panel(ax, "d", x=-0.15)
+    save(fig, "fig10_ballistic_length")
+
+
+# =============================================================================
+# Figure 11 (Fig. 10 of the paper): the short funnel with the field computed
+# =============================================================================
+def fig11():
+    from matplotlib.colors import LinearSegmentedColormap
+    c = pic(); sf = c.b7
+    static, ac = sf.load_all(); dec = c.decision()
+    L, XF, ELL = c.L, c.XF, c.ELL
+    fig = plt.figure(figsize=(COL2, 4.75))
+    gs = fig.add_gridspec(2, 3, wspace=0.50, hspace=0.50, left=0.075, right=0.985, top=0.955, bottom=0.115)
+    FT = [0.1, 0.3, 1, 3, 6]
+
+    def faxis(ax):
+        ax.set_xscale("log"); ax.set_xlim(0.07, 9); ax.set_xticks(FT); ax.set_xticklabels([f"{v:g}" for v in FT])
+        ax.xaxis.set_minor_formatter(NullFormatter()); ax.tick_params(axis="x", which="minor", bottom=False, top=False)
+        ax.set_xlabel("frequency (THz)")
+
+    # (a) static potential, gate at 300 nm
+    ax = fig.add_subplot(gs[0, 0])
+    x, y, m = c.load_map(f"{c.R}/P1_d300_V0.1.txt"); u = m["mean"] / 0.1
+    cmap = LinearSegmentedColormap.from_list("pg", ["#1b7837", "#a6dba0", "#eeeeee", "#c2a5cf", "#762a83"])
+    pm = ax.pcolormesh(x, y, u, cmap=cmap, vmin=-0.5, vmax=0.5, shading="nearest", rasterized=True)
+    ax.contour(x, y, u, levels=np.arange(-0.4, 0.41, 0.1), colors=BLACK, linewidths=0.3, alpha=0.6)
+    ax.plot([0, 100, XF, XF, L, L, XF, XF, 100, 0, 0], [250, 250, 50, 250, 250, -250, -250, -50, -250, -250, 250], color=BLACK, lw=0.8)
+    for x0 in (-200, L): ax.plot([x0, x0 + 200, x0 + 200, x0, x0], [-250, -250, 250, 250, -250], color=BLACK, lw=0.5, ls=":")
+    ax.text(-100, 0, "source", ha="center", va="center", fontsize=6.0, color="white", rotation=90)
+    ax.text(L + 100, 0, "drain", ha="center", va="center", fontsize=6.0, color="white", rotation=90)
+    ax.set_xlim(-210, L + 210); ax.set_ylim(-265, 265); ax.set_aspect("equal")
+    ax.set_xlabel("$x$ (nm)"); ax.set_ylabel("$y$ (nm)"); ax.set_xticks([0, 250, 500]); ax.set_yticks([-250, 0, 250])
+    cb = fig.colorbar(pm, ax=ax, orientation="horizontal", location="top", fraction=0.08, pad=0.04, ticks=[-0.5, 0, 0.5])
+    cb.set_label("potential energy / $eV$", fontsize=6.6, labelpad=2); cb.ax.tick_params(labelsize=6.2, length=2); cb.outline.set_linewidth(0.4)
+    panel(ax, "a", x=-0.36, y=1.32)
+
+    # (b) potential along the axis against the imposed profiles
+    ax = fig.add_subplot(gs[0, 1])
+    ax.axvspan(-200, 0, color=SHADE, lw=0); ax.axvspan(L, L + 200, color=SHADE, lw=0)
+    xr = np.linspace(-200, L + 200, 900)
+    ax.plot(xr, np.clip(0.5 - xr / L, -0.5, 0.5), color=PURPLE, lw=1.0, label="imposed: uniform")
+    ax.plot(xr, np.clip(0.5 - (xr - (XF - ELL / 2)) / ELL, -0.5, 0.5), color=DPURPLE, lw=1.0, label="imposed: at the neck")
+    for d, ls, lw in ((300, "-", 1.5), (30, "--", 1.0)):
+        x, y, m = c.load_map(f"{c.R}/P1_d{d}_V0.1.txt")
+        ax.plot(x, c.axis(x, y, m["mean"]) / 0.1, color=BLACK, ls=ls, lw=lw, label=f"computed, gate {d} nm")
+    ax.axvline(XF, color=GREY, lw=0.5, ls=":"); ax.text(XF + 12, 0.30, "neck", fontsize=6.2, color=GREY, ha="left")
+    ax.set_xlim(-200, L + 200); ax.set_ylim(-0.6, 0.6); ax.set_xticks([0, 250, 500]); ax.set_yticks([-0.5, 0, 0.5])
+    ax.set_xlabel("$x$ on the axis (nm)"); ax.set_ylabel("potential energy / $eV$")
+    panel(ax, "b", x=-0.30)
+
+    # (c) rectified current against frequency, shape-only drive
+    ax = fig.add_subplot(gs[0, 2])
+    for fm, col, mk in (("uniform", PURPLE, "o"), ("local", DPURPLE, "s")):
+        rs = [r for r in ac[("G3", fm, "700")] if abs(r["Idc_A"]) > 2 * r["Idc_err_A"] and r["f_Hz"] > 0.6e11]
+        ax.errorbar([r["f_Hz"] / 1e12 for r in rs], [r["Idc_A"] * 1e6 for r in rs], [r["Idc_err_A"] * 1e6 for r in rs], color=col, marker=mk, ms=3.2, lw=1.0, mec="white", mew=0.3)
+    for d, ls, mfc in ((300, "-", BLACK), (30, "--", "white")):
+        rs = [q for q in pic_g3(d) if abs(q["I"]) > 2 * q["e"]]
+        ax.errorbar([q["f"] for q in rs], [q["I"] for q in rs], [q["e"] for q in rs], color=BLACK, ls=ls, marker="D", ms=3.2, lw=1.2, mfc=mfc, mec=BLACK, mew=0.6)
+    faxis(ax); ax.set_yscale("log"); ax.set_ylim(0.08, 150); ax.set_ylabel(r"rectified current ($\mu$A)")
+    h = [Line2D([], [], color=PURPLE, marker="o", ms=3.2, lw=1.0, label="imposed: uniform"), Line2D([], [], color=DPURPLE, marker="s", ms=3.2, lw=1.0, label="imposed: at the neck"),
+         Line2D([], [], color=BLACK, marker="D", ms=3.2, lw=1.2, label="computed, gate 300 nm"),
+         Line2D([], [], color=BLACK, ls="--", marker="D", mfc="white", ms=3.2, lw=1.2, label="computed, gate 30 nm")]
+    ax.legend(handles=h, loc="upper right", fontsize=5.6, handlelength=2.2, labelspacing=0.25, borderaxespad=0.2)
+    panel(ax, "c", x=-0.30)
+
+    # (d), (e) shape against circuit
+    SER = (("funnel", "sym", BLACK, "D", "-", "funnel, shape only"), ("strip", "gated", BLUE, "o", "-", "strip, drain to gate"),
+           ("funnel", "gated", ORANGE, "s", "-", "funnel, drain to gate"), ("symmetric", "sym", GREY, "x", "none", "mirror-symmetric control"))
+    for k, d in enumerate(c.GATES):
+        ax = fig.add_subplot(gs[1, k]); ax.axhline(0, color=GREY, lw=0.5)
+        for geo, mode, col, mk, ls, lab in SER:
+            if geo == "funnel": rs = pic_g3(d, mode)
+            else: rs = [dict(f=r["f"], I=r["I"], e=r["e"]) for r in c.series(geo, mode, d)]
+            if geo == "funnel" and mode == "sym": rs = [q for q in rs if 0.25 < q["f"] < 3.5]
+            ax.errorbar([q["f"] for q in rs], [q["I"] for q in rs], [q["e"] for q in rs], color=col, marker=mk, ms=3.6, lw=1.1, ls=ls,
+                        mec=col if mk == "x" else "white", mew=0.9 if mk == "x" else 0.3, label=lab)
+        ax.set_xscale("log"); ax.set_xlim(0.2, 4.5); ax.set_xticks([0.3, 1, 3]); ax.set_xticklabels(["0.3", "1", "3"])
+        ax.xaxis.set_minor_formatter(NullFormatter()); ax.tick_params(axis="x", which="minor", bottom=False, top=False)
+        ax.set_xlabel("frequency (THz)"); ax.set_ylim(-2.1, 1.75); ax.set_ylabel(r"rectified current ($\mu$A)")
+        ax.text(0.04, 0.95, f"gate at {d} nm", transform=ax.transAxes, fontsize=6.6, va="top")
+        if k == 0: ax.legend(loc="lower left", fontsize=5.6, handlelength=1.8, labelspacing=0.25, borderaxespad=0.3)
+        panel(ax, "de"[k], x=-0.30)
+
+    # (f) mean free path and walls at 1 THz
+    ax = fig.add_subplot(gs[1, 2])
+    keys = [k for k, *_ in c.CASES]; xs = np.arange(len(keys))
+    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0); ax.axhline(0, color=GREY, lw=0.5)
+    for fm, col, mk, off in (("uniform", PURPLE, "o", -0.24), ("local", DPURPLE, "s", 0.24)):
+        ax.plot(xs + off, [c.b7_case(k)[fm]["Rs"] for k in keys], mk, color=col, ms=3.6, mec="white", mew=0.3, ls="none")
+    for d, mfc, off in ((300, BLACK, -0.08), (30, "white", 0.08)):
+        v = [c.ext_ac(k, d) for k in keys]
+        ax.errorbar(xs + off, [q["R"] for q in v], [q["eR"] for q in v], fmt="D", color=BLACK, ms=3.4, mfc=mfc, mec=BLACK, mew=0.6, lw=0.8)
+    ax.set_xticks(xs); ax.set_xticklabels(["clean", "700", "100", "700,\n$p=0.5$"]); ax.set_xlim(-0.55, len(keys) - 0.45)
+    ax.tick_params(axis="x", which="both", top=False)
+    ax.set_xlabel("mean free path (nm)"); ax.set_ylabel("responsivity at 1 THz (A/W)"); ax.set_ylim(-0.12, 1.08)
+    ax.text(-0.5, 0.275, "plasmonic funnel", fontsize=5.8, color=BLUE, va="center", ha="left")
+    panel(ax, "f", x=-0.30)
+    save(fig, "fig11_selfconsistent")
 
 
 # =============================================================================
@@ -608,7 +927,7 @@ def fig_overview():
     save(fig, "overview_devices")
 
 
-FIGS = {1: fig1, 2: fig2, 3: fig3, 4: fig4, 5: fig5, 6: fig6, 7: fig7, 8: fig8}
+FIGS = {1: fig1, 2: fig2, 3: fig3, 4: fig4, 5: fig5, 6: fig6, 7: fig7, 8: fig8, 9: fig9, 10: fig10, 11: fig11}
 
 if __name__ == "__main__":
     args = sys.argv[1:]

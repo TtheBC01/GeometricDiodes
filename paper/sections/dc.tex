@@ -10,8 +10,16 @@ free paths. In the clean specular limit the funnel gives $A=1.62\pm0.02$
 $80\ \mu$A~\cite{nguyen2021geometric}; the agreement is
 conditional, because at the mean free path estimated for these
 devices~\cite{nguyen2021geometric}, $700\nm$, the same model gives $1.09$, and
-$1.06$ with fully diffuse edges. The uniform-field assumption and the choice
-of $\lambda$ and $p$ therefore matter at the factor-of-two level in $A-1$,
+$1.06$ with fully diffuse edges. The assumed field matters as much as the
+scattering. If the same bias is taken to drop over the taper and neck alone,
+with the leads cut to $250\nm$ (device G2 of Table~\ref{tab:short}), the
+asymmetry at $\lambda=700\nm$ is $1.55$ and the clean value $1.91$; if it
+drops over $500\nm$ centred on the neck of the full device it is $0.96$,
+the reverse sign. The experiment has its contacts at the ends of the
+$6\um$ shape and is a two-terminal measurement, so none of these profiles
+is excluded by its geometry; self-consistent electrostatics is what would
+decide between them~\cite{truccolo2024comprehensive}. The choice of field
+profile, $\lambda$ and $p$ therefore moves $A-1$ by a factor of several,
 and we do not claim a quantitative fit. What the comparison establishes is
 the mechanism and the scale: electrons accelerated toward the neck by the
 bias arrive with more kinetic energy and more transverse modes than those
@@ -30,7 +38,9 @@ $0.5$ to $2$~k$\Omega$ for the funnel [Fig.~\ref{fig:ballistic-dc}(b)]. The
 result follows from the structure of the problem rather than from the
 parameters: at fixed potential landscape the transmission is reciprocal for
 any shape, and the Tesla loops do nothing to the way the bias landscape acts
-on the mode count at a constriction, which is what the funnel exploits.
+on the mode count at a constriction, which is what the funnel exploits. It agrees with the experiment, which
+reports that the rectification of the valve disappears outside the viscous
+regime~\cite{geurs2020rectification}.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig2_ballistic_dc.pdf}
@@ -66,6 +76,11 @@ opposite sign, the forward direction being the harder one: its asymmetry is
 that of the exits, a jet from the abrupt shoulder against a diffuser along
 the taper, and it is the stronger of the two below $\Rey\approx3$
 ($|D-1|=1.2\times10^{-2}$ at $\Rey=3$ with slip) but saturates near $0.15$.
+This is the convective (Bernoulli) nonlinearity proposed for wedge-shaped
+channels as a signature of electron
+hydrodynamics~\cite{hui2021beyond} and recently measured in Venturi-shaped
+GaAs devices~\cite{monari2026electron}; with equal lead widths on the two
+sides, as here, it is quadratic in the current.
 
 Three facts decide the matter. First, the experiment of
 Ref.~\cite{geurs2020rectification} used currents of at most a few
@@ -79,12 +94,17 @@ four-terminal resistances. Steady incompressible
 electron hydrodynamics does not reproduce that observation; whatever
 produces it is not the inertial Tesla mechanism, and we do not explain it.
 The candidates that Eq.~\eqref{eq:ns} excludes are the compressibility of the
-gated fluid and electron heating. Second, the Reynolds number is bounded.
+gated fluid, taken up in Sec.~\ref{sec:gated}, and electron heating. Second, the Reynolds number is bounded.
 The drift speed in a channel of width $w$ is $u=\Rey\,\nu/w$, and keeping it
 below $0.3\,\vF$, where a Fermi-liquid description is still tenable, caps
 $\Rey$ at $0.5$ to $2.6$ in a $175\nm$ channel and at $3$ to $15$ in a
 $1\um$ channel for $\nu=0.1$ to $0.02$~m$^{2}$/s [shaded in
-Fig.~\ref{fig:viscous}]. Third, the low viscosity needed for a large
+Fig.~\ref{fig:viscous}]. The bound is not new: the Reynolds number of the
+graphene electron liquid scales as the drift speed over the Fermi velocity
+times the size of the flow over the electron-electron mean free path, and
+values of order ten have been judged the most that can be
+expected~\cite{muller2009graphene,lucas2018hydrodynamics}. What is added
+here is what a Tesla valve delivers inside it. Third, the low viscosity needed for a large
 Reynolds number comes with weak slip relative to the width and strong
 relative damping. Figure~\ref{fig:viscous}(b) shows the valve scaled to
 $1\um$: each factor of four in $\Da$ costs a factor two to three, and a
@@ -93,11 +113,22 @@ admissible window the diodicity is $10^{-3}$ to $3\times10^{-2}$, at a
 resistance of $0.3$ to $1.6$~k$\Omega$; the $175\nm$ valve costs $10$ to
 $86$~k$\Omega$ for less.
 
-The steady-flow diodicity is also slow. It is established over the viscous
-and convective times of the channel, $10$ to $20$~ps at $1\um$, so the
-picture of this subsection applies below some tens of gigahertz. Above that
-the gate makes the fluid compressible, and the question has to be asked of a
-different model.
+These statements are for graphene, for steady laminar flow and below the
+drift limit, and an experiment in another material shows what lies outside
+them. In a GaAs electron gas at $4$~K, with channels of $2.5$ and $5\um$,
+the forward and reverse characteristics of a Tesla valve coincide up to
+about $300\ \mu$A and then separate, the reverse resistance rising to a
+diodicity of about $40$; the authors estimate a Reynolds number of at
+least $7$ and attribute the effect to the onset of
+turbulence~\cite{sarypov2026electron}. Below the threshold this is the
+reciprocity found here at low Reynolds number. Above it, the steady
+solution of Eq.~\eqref{eq:ns} gives $D-1$ of order $0.1$ at $\Rey=7$ to
+$10$ with slip walls and less without, two orders of magnitude short, so
+the large diodicity is not the steady inertial loss computed in this
+section. Unsteady flow, the heating of the electrons that the authors
+report and a drift speed that is a sizeable fraction of the Fermi velocity
+are all outside Eq.~\eqref{eq:ns}, and we make no statement about that
+regime.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig3_viscous_dc.pdf}
@@ -113,3 +144,108 @@ $0.02$~m$^{2}$/s. (c), (d) Speed in the $175\nm$ valve at $\Rey=30$ with
 perfect slip for forward and reverse flow.}
 \label{fig:viscous}
 \end{figure*}
+
+\subsection{With the gate: a circuit term and no shape term}
+\label{sec:gated}
+
+Equation~\eqref{eq:ns} has no gate. In a gated device the density follows
+the local potential, so a bias opens the channel at one end and closes it at
+the other, and a second nonlinearity appears that owes nothing to inertia.
+We computed the steady states of Eqs.~\eqref{eq:cont} and \eqref{eq:mom} for
+both funnels, both Tesla valves, a straight channel and a mirror-symmetric
+constriction, with a current source at one contact and the other contact
+tied to the gate, for the two parameter sets of Table~\ref{tab:params} and
+biases from $1.4$ to $430$~mV ($10^{-3}$ to $0.3$ of the gate overdrive
+$U_{0}=e n_{0}/C_{g}=1.43$~V).
+
+A two-terminal device with a gate can be reversed in two ways, and they
+measure different things. Reversing the polarity of the source, with the
+gate connection where it was, changes the sign of the bias relative to the
+gate. Exchanging the contacts, so that the gate is tied to the other end
+and the same current is sent through the shape in the other direction,
+leaves the bias relative to the gate as it was and reverses only the flow
+through the geometry. The first operation tests the circuit, the second the
+shape. In a gradual channel of width $W(x)$, without inertia and viscosity,
+the steady equations integrate to (Appendix~\ref{app:gated})
+\begin{equation}
+G(n_{s})-G(1)=\Gamma I\int_{0}^{L}\frac{dx}{W(x)},\qquad
+G'(n)=n\,h'(n),
+\label{eq:1d}
+\end{equation}
+in the units of Appendix~\ref{app:perturbation}, with $I$ the current and
+$n_{s}$ the density at the driven contact. The shape enters through the
+integral, which is the linear resistance, and through nothing else:
+exchanging the contacts gives no asymmetry at all, and reversing the
+polarity gives the same asymmetry for every shape,
+\begin{equation}
+D_{\mathrm{pol}}-1=\frac{V}{2V_{u}}=0.48\,\frac{V}{U_{0}}
+\label{eq:dpol}
+\end{equation}
+to first order in the bias $V$ for the Dirac closure ($V/U_{0}$ for shallow
+water), the harder polarity being the one that depletes the channel.
+
+The two-dimensional solutions bear this out
+[Fig.~\ref{fig:gated}(a)]. Under reversal of the polarity all six devices
+lie on one curve, $1.45\%$ at $43$~mV, within $2\%$ of the closed form
+wherever the drift speed is below $0.3\,\vF$ ($4\%$ for the $1\um$ Tesla
+valve at its largest bias, where inertia enters). Under exchange of the
+contacts the asymmetry is at most $4\times10^{-4}$ at any computed point
+inside the drift limit and, growing there as the square of the current,
+stays below $10^{-3}$ up to the limit; where it is above the discretisation
+floor it is the
+inertial term of the previous subsection, unchanged by the gate
+[Fig.~\ref{fig:gated}(b)]: at $21$ of the $23$ points at which the
+incompressible diodicity exceeds $10^{-4}$ the gated solution agrees with
+it within a factor two at the same Reynolds number, damping, wall condition
+and mesh, and the two exceptions are one point outside the drift limit and
+one at the floor of its mesh. At low bias the exchange asymmetry on the production meshes is
+linear in the bias, which Eq.~\eqref{eq:1d} forbids. It is numerical: for
+the funnel its coefficient falls by a factor of forty-five as the wall mesh
+is refined from $28$ to $10\nm$, while the quadratic, inertial coefficient
+does not move [Fig.~\ref{fig:gated}(c)]. We therefore report the low-bias
+shape term of a gated channel as a bound, $7\times10^{-6}$ at $14$~mV for
+the funnel and $1.5\times10^{-7}$ for the Tesla valve.
+
+Three things follow. A gated channel of any shape, a straight strip
+included, shows an asymmetry of a per cent at some tens of millivolts when
+its polarity is reversed, and a measurement or a simulation that reverses
+the polarity will find it in a Tesla valve without the valve having
+anything to do with it. The compressible simulation of
+Ref.~\cite{gungor2022modeling}, which gives a diodicity of $1.07$ for a
+graphene Tesla valve with a $10\nm$ channel at $50$~mV, is not reproduced
+here as an effect of the shape: at $50$~mV the exchange asymmetry of our
+valve is below $10^{-5}$, and the polarity term of Eq.~\eqref{eq:dpol} is
+$1.7\%$ for any channel under our gate. Second, the circuit term is not
+offered as an explanation of the measurement of
+Ref.~\cite{geurs2020rectification}, which is a ratio of four-terminal
+resistances and is reported to vanish outside the viscous regime; that
+observation remains unexplained by the gated model as well. Third, the
+result depends on the monolayer: the plasma speed under a $30\nm$ gate is
+$3.6\,\vF$, so the drift limit keeps the flow below a tenth of the wave
+speed. In bilayer graphene, where the flow can be driven to the wave
+speed, a nozzle does show a polarity-dependent resistance of hydrodynamic
+origin~\cite{geurs2025supersonic}, which is outside the present model.
+
+The steady-flow asymmetries are also slow. The inertial one is established over the viscous
+and convective times of the channel, $10$ to $20$~ps at $1\um$, so the
+picture of this section applies below some tens of gigahertz. Above that
+the response of a gated channel is carried by plasma waves, and the question
+has to be asked of the time-dependent form of the gated model.
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig9_gated_dc.pdf}
+\caption{Steady flow with the gate, $n_{0}=10^{12}\percm$ under $30\nm$ of
+hBN. (a) Asymmetry of the voltage against bias for the $300$~K parameters
+and slip walls, under reversal of the polarity (filled symbols) and under
+exchange of the contacts (open symbols and crosses); the dashed line
+follows from Eq.~\eqref{eq:1d}. The symmetric constriction under exchange
+of the contacts measures the asymmetry of its unstructured mesh. (b)
+Exchange asymmetry with the gate against the diodicity of the
+incompressible model of Eq.~\eqref{eq:ns} at the same Reynolds number,
+damping, wall condition and mesh, for both parameter sets; filled: slip
+walls, open: no slip; the band is a factor two. (c) Refinement of the wall
+mesh for the $175\nm$ funnel and Tesla valve at $300$~K. Faint symbols in
+(a) and (b): drift speed above $0.3\,\vF$.}
+\label{fig:gated}
+\end{figure*}
+

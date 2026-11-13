@@ -1,6 +1,6 @@
-% Supplemental Material for "Shape versus circuit: why graphene geometric
-% diodes and Tesla valves do not make terahertz rectennas".
-% Draft 2026-11-10. Numbers from results/*.md and results/checks/.
+% Supplemental Material for "Shape versus circuit: graphene geometric
+% diodes and Tesla valves as terahertz rectifiers".
+% Draft 2026-11-12. Numbers from results/*.md and results/checks/.
 \documentclass[aps,prapplied,onecolumn,superscriptaddress,floatfix]{revtex4-2}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
@@ -11,9 +11,11 @@
 \newcommand{\vF}{v_{F}}
 \newcommand{\um}{\,\mu\mathrm{m}}
 \newcommand{\nm}{\,\mathrm{nm}}
+\newcommand{\THz}{\,\mathrm{THz}}
+\newcommand{\GHz}{\,\mathrm{GHz}}
 
 \begin{document}
-\title{Supplemental Material: Shape versus circuit: why graphene geometric diodes and Tesla valves do not make terahertz rectennas}
+\title{Supplemental Material: Shape versus circuit: graphene geometric diodes and Tesla valves as terahertz rectifiers}
 \author{Todd Chapman}
 \date{\today}
 \maketitle
@@ -23,7 +25,8 @@ was used, the closing convergence checks, and the numerical parameters of the
 production runs. Every test is a program in the public repository and prints
 the measured number against its target; the test names below are those of the
 code, with the plasmonic tests prefixed P to distinguish them from the
-ballistic ones.
+ballistic ones. Tests T22 to T30 belong to the particle simulation with a
+computed field, which is used for the $0.55\um$ funnel only.
 
 \section{Ballistic solver}
 
@@ -78,6 +81,122 @@ harmonic estimator a drain-injected electron removed by the cut must be
 booked as returned, otherwise $|Y_{1}|$ at the anchor is $6\%$ low. Five
 operating points recomputed with a classical turning point in place of the
 cut agree with the production values within one standard error.
+
+\begin{table}[ht]
+\caption{Acceptance tests of the shape and scale options used for the
+length scaling ($10^{6}$ particles per side). G3 is the $0.55\um$ funnel of
+the main text. Currents in $\mu$A at $0.1$~V. All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.47\textwidth}p{0.41\textwidth}}
+Test & What is checked & Result \\
+\hline
+T18a & scale invariance, static: device D against twice the current of its half-scale copy, $\pm0.1$~V & $188.0$ against $188.6$ and $-117.4$ against $-117.6$; $A=1.602$ against $1.603$ \\
+T18b & the same under ac drive: $10\GHz$ against $20\GHz$, $300\GHz$ against $600\GHz$ & $11.9\pm0.4$ against $12.1\pm0.5$; $0.3\pm0.5$ against $-0.4\pm0.4$; admittances equal within two standard errors \\
+T19 & scale invariance with scattering: $\lambda=700\nm$ against $350\nm$ at half scale & static $108.3\pm0.6$ against $110.0\pm0.5$ (2.3 standard errors); ac $2.27\pm0.23$ against $1.82\pm0.23$ \\
+T20 & mirror-symmetric controls of G2, G3 and G4 at $0.1$, $1$ and $10\THz$ & zero; worst case 1.3 standard errors \\
+T21 & chord cap $\vF/40f$ against $\vF/160f$, G3, drop at the neck, $\lambda=700\nm$, $3\THz$ & $3.13\pm0.10$ against $3.20\pm0.10$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+Test T21 was first run at $30\THz$, where it passed trivially because the
+response is zero there; the value in the table is from the repeat at
+$3\THz$. In the production runs of the mirror-symmetric controls all 22
+points are zero within 2.1 standard errors.
+
+\section{Ballistic solver with a computed field}
+
+\begin{table}[ht]
+\caption{Acceptance tests of the particle simulation with the computed
+field. G3 is the $0.55\um$ funnel; currents in $\mu$A at an amplitude of
+$0.1$~V. All pass, T24 and T26 in the modified form described in the
+text.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.42\textwidth}p{0.46\textwidth}}
+Test & What is checked & Result \\
+\hline
+T22 & interaction kernel: a point charge with its image in the gate; a charged disc over the gate & closed forms to $3\times10^{-12}$ and $1.4\times10^{-7}$ \\
+T23 & contacts as equipotentials: capacitance of a plate over the gate, and of two coplanar strips without a gate & $0.970$ of the plate formula with fringing; $0.990$ of the elliptic-integral value \\
+T24 & static screening of a weak sinusoidal potential in a uniform sheet & kernel $1.000\pm0.001$; density response of the particles $0.980$ of the density of states; loop at weak coupling $1.005$ and $0.992$ of $1/(1+\nu G)$; at production coupling the total potential is $0.96$ to $0.99$ of theory at $1.0$ to $2.5$~ps and $0.93$ to $0.96$ at $3.5$ to $5.0$~ps \\
+T25 & speed of the gated plasma wave in a wide strip & $0.983$ to $0.992$ of the collisionless value \\
+T26 & interaction off, imposed field: G3 against the trajectory solver, static at $\pm0.1$~V and at $1\THz$, both profiles & four of six values within $1.3$ standard errors, two static values at $2.0$ ($0.2$ to $0.3\%$ of the current); $1\THz$: $2.92\pm0.05$ against $3.03\pm0.10$ and $2.63\pm0.04$ against $2.78\pm0.11$ \\
+T27 & linear conductance: a straight strip against the Sharvin value; G3 with the interaction on against off & $1.006$ and $1.002$; $1.0004$ and $1.0076$ \\
+T28 & conservation: total charge; contact potentials; absorbed power from $\langle VI\rangle$ against the first harmonic & $4\times10^{-13}$ electrons; $6\times10^{-16}$~eV; agreement to $0.01\%$ \\
+T29 & null tests: no drive, both gates, 20 ps; mirror-symmetric G3 under the shape-only drive at $1\THz$ & $+0.03\pm0.04$, kinetic energy drift $0.04\%$ and $0.00\%$; $-0.08\pm0.07$ \\
+T30 & convergence of the rectified current of G3 at $1\THz$ & converged from $4\times10^{6}$ particles (Table~\ref{tab:picconv}) \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The screening test T24 could not be met at $3\%$ at the coupling of the
+production runs: the total potential is the difference of an applied and
+an induced potential that cancel to one part in $14$ to $30$, which
+amplifies a $0.2\%$ interpolation loss and the relaxation described
+below. The test was therefore split into the kernel, the particles
+alone, the closed loop at weak coupling (each to $3\%$) and the loop at
+production coupling in an early window (to $10\%$). T26 was required to
+pass at two standard errors and passes at $2.5$.
+
+The sample particles interact through the grid at short range as well as
+through the mean field, and these collisions relax the Fermi distribution
+towards a classical one. In a closed box the static density response is
+$30\%$ too large after $5$~ps at $1.4$ particles per nm$^{2}$ and $4$ to
+$7\%$ too large at $19$ per nm$^{2}$, the density of a run of G3 with
+$4\times10^{6}$ particles. In the open device a particle stays about a
+picosecond before a contact replaces it, and the rectified current does
+not change from $4$ to $16\times10^{6}$ particles
+(Table~\ref{tab:picconv}); it is this relaxation, not numerical heating,
+that sets the smallest usable particle number. Below $4\times10^{6}$ the
+scatter between seeds also exceeds the batch errors.
+
+\begin{table}[ht]
+\caption{Rectified current of the $0.55\um$ funnel ($\mu$A) at
+$\lambda=700\nm$, $1\THz$ and $0.1$~V under the shape-only drive, against
+the numerical settings. Entries separated by commas are independent
+seeds. The production setting is $8\times10^{6}$ particles, a $5\nm$
+grid, a time step of $2.5$~fs, a Gaussian low-pass of $1.5$ cells on the
+kernel and contacts $200\nm$ long; the variations in the lower part are
+at $4\times10^{6}$ particles, with errors of $0.04$ to $0.05$.}
+\label{tab:picconv}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+Setting & Gate at $300\nm$ & Gate at $30\nm$ \\
+\hline
+$1\times10^{6}$ particles & $0.60\pm0.07$ & $0.55\pm0.04$ \\
+$2\times10^{6}$ & $0.42\pm0.03$, $0.61\pm0.06$ & $0.63\pm0.03$, $0.45\pm0.06$ \\
+$4\times10^{6}$ & $0.47$, $0.41$, $0.49$ ($\pm0.04$) & $0.46$, $0.45$, $0.52$ ($\pm0.05$) \\
+$8\times10^{6}$ & $0.42\pm0.03$, $0.40\pm0.02$ & $0.49\pm0.02$, $0.52\pm0.02$ \\
+$16\times10^{6}$ & $0.42\pm0.02$, $0.44\pm0.02$ & $0.46\pm0.01$ \\
+\hline
+grid $2.5\nm$ & $0.38$ & $0.52$ \\
+time step $1.25$~fs & $0.44$ & $0.48$ \\
+low-pass $0.75$ cells & $0.46$ & $0.43$ \\
+low-pass $3$ cells & $0.58$ & $0.62$ \\
+contacts $100\nm$ long & $0.44$ & $0.49$ \\
+contacts $400\nm$ long & $0.47$ & $0.53$ \\
+\hline
+all runs with the production settings and $4\times10^{6}$ particles or more & $0.429\pm0.012$ (7 runs) & $0.483\pm0.013$ (6 runs) \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+A low-pass of three cells leaves the current $30\%$ too large: the field
+has to be resolved to $7.5\nm$ or better. The mirror-symmetric funnel
+under the shape-only drive, which must give no rectified current, gives
+$-0.003\pm0.017$, $+0.056\pm0.028$ and $+0.025\pm0.028\ \mu$A at $0.3$,
+$1$ and $3\THz$ under the $300\nm$ gate and $-0.051\pm0.028$,
+$+0.038\pm0.022$ and $-0.093\pm0.052\ \mu$A under the $30\nm$ gate; the
+weighted mean is $+0.008\pm0.023\ \mu$A, and $\chi^{2}$ against zero is
+$14.4$ for the six runs, so the batch errors are too small by about
+$1.5$ or there is a floor of about $0.05\ \mu$A, which is what the main
+text assumes. With half-diffuse walls the same control gives
+$+0.018\pm0.017$ and $-0.052\pm0.025\ \mu$A at $1\THz$. Two runs at
+$3\THz$ under the $30\nm$ gate with the drain tied to the gate, whose
+source-plane and drain-plane currents differed by $0.19$ and
+$0.12\ \mu$A after a settling time of $3$~ps, were repeated with $10$~ps:
+the strip gives $-1.794\pm0.024$ against $-1.770\pm0.026\ \mu$A and the
+funnel $+0.812\pm0.026$ against $+0.780\pm0.033\ \mu$A, with the two
+planes then in agreement.
 
 \section{Viscous solver}
 
@@ -136,7 +255,8 @@ about $10\%$.
 
 \begin{table}[ht]
 \caption{Acceptance tests of the perturbation solver (P1 to P9, P15 to P17)
-and of the time-domain solver (P10 to P14). All pass.}
+and of the time-domain solver (P10 to P14). All pass. In the code the steady
+gated tests P18 to P20 below are numbered T18 to T20.}
 \begin{ruledtabular}
 \begin{tabular}{lp{0.42\textwidth}p{0.46\textwidth}}
 Test & What is checked & Result \\
@@ -176,12 +296,73 @@ $100$~K the efficiency ratio between 60 and 120 steps per period is 0.991
 from 0.992, 1.054, 1.101 to 1.004, 1.058, 1.109 at amplitudes 0.1, 0.5, 0.7
 of the voltage unit at 0.3 THz, and from 1.144 to 1.145 at 0.7 at 0.1 THz.
 
+\begin{table}[ht]
+\caption{Acceptance tests of the steady gated solver, with the gate
+overdrive $U_{0}$ as the unit of bias. All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.47\textwidth}p{0.41\textwidth}}
+Test & What is checked & Result \\
+\hline
+P18 & uniform gated channel, steady voltage against the one-dimensional closed form with inertia, both closures, both signs, up to $0.3\,U_{0}$ & worst relative error $1.1\times10^{-4}$ \\
+P19 & mirror-symmetric constriction at $0.1\,U_{0}$: asymmetry under exchange of the contacts against asymmetry under reversal of polarity & $3.8\times10^{-6}$ against $4.96\times10^{-2}$ \\
+P20 & incompressible limit: funnel, slip walls, $\mathrm{Re}=10$, Mach number $10^{-3}$, against the viscous solver on the same mesh & $D=0.83845$ against $0.83843$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\begin{table}[ht]
+\caption{Mesh convergence of the steady gated flow in the $175\nm$ funnel
+($300$~K parameters, slip walls): asymmetry under exchange of the contacts
+at two biases, its linear coefficient $a$ and quadratic coefficient $b$ in
+$D-1=a\,(V/U_{0})+b\,(V/U_{0})^{2}$ from those two points, and the asymmetry
+under reversal of polarity at $V/U_{0}=0.03$, for which the closed form is
+$1.4521\times10^{-2}$.}
+\label{tab:gatedmesh}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+Wall spacing & exchange, $0.01$ & exchange, $0.03$ & $a$ & $b$ & polarity, $0.03$ \\
+\hline
+28 nm & $-1.0\times10^{-4}$ & $-3.3\times10^{-4}$ & $-9.7\times10^{-3}$ & $-0.044$ & $1.4246\times10^{-2}$ \\
+20 nm & $-4.0\times10^{-5}$ & $-1.5\times10^{-4}$ & $-3.5\times10^{-3}$ & $-0.049$ & $1.4434\times10^{-2}$ \\
+14 nm & $-1.9\times10^{-5}$ & $-8.9\times10^{-5}$ & $-1.4\times10^{-3}$ & $-0.051$ & $1.4498\times10^{-2}$ \\
+10 nm & $-7.4\times10^{-6}$ & $-5.4\times10^{-5}$ & $-2.1\times10^{-4}$ & $-0.053$ & $1.4535\times10^{-2}$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The linear coefficient $a$ of Table~\ref{tab:gatedmesh} is forbidden by
+the one-dimensional argument of the main text and falls with the mesh size,
+while the quadratic, inertial coefficient $b$ is stable; the low-bias
+exchange asymmetry is therefore reported as a bound. For the Tesla valve
+the exchange asymmetry at $V/U_{0}=0.01$ falls from $2\times10^{-6}$ to
+$1.5\times10^{-7}$ between wall spacings of 20 and 10 nm. The
+mirror-symmetric constriction of P19 has an unstructured mesh that is not
+itself mirror symmetric, so its exchange asymmetry measures the
+discretisation floor. One production point did not converge, the straight
+channel at $100$~K and $0.3\,U_{0}$, where the drift speed would exceed the
+Fermi velocity several times over; it is not used.
+
 \section{Production parameters}
 
 Ballistic dc: 400\,000 trajectories per bias point in 64 batches. Ballistic
 ac: $10^{6}$ trajectories per contact and point ($4\times10^{6}$ at
 $\lambda=700\nm$ and at the smaller amplitude), chords limited to $40\nm$, to
-$\vF/40f$ and to one twentieth of the field region. Viscous: Taylor-Hood
+$\vF/40f$ and to one twentieth of the field region. Length scaling: static
+curves at $\pm0.05$ and $\pm0.1$~V with $2\times10^{6}$ trajectories per
+side ($4\times10^{6}$ with scattering), frequency sweeps from $10\GHz$ to
+$30\THz$ with $10^{6}$ ($4\times10^{6}$) per side, stopped where $fL/\vF$
+exceeds about 20; 174 sweep points, 22 controls. Computed field: grid
+spacing $5.013\nm$, chosen so that both contact planes lie on node
+columns, time step $2.5$~fs, $8\times10^{6}$ particles for the driven
+runs and $4\times10^{6}$ for the static runs and at $0.1\THz$; averages
+over at least $10$~ps and six periods (20 periods for the runs of
+Fig.~10(f)) after a settling time of $3$~ps or more; the rectified
+current is the mean of the currents through the source plane and the
+drain plane; 66 runs. Steady gated flow: wall
+spacing $20\nm$ for the $175\nm$ devices and $80\nm$ for the $1\um$
+devices, seven biases from $10^{-3}$ to $0.3$ of the gate overdrive, four
+steady solutions per point (two polarities for each of the two gate
+connections), 112 points. Viscous: Taylor-Hood
 meshes with $20\nm$ wall spacing ($23\,000$ to $55\,000$ triangles),
 Newton residual below $10^{-10}$. Plasmonic small signal: wall spacing
 $14\nm$ for the $175\nm$ devices and $80\nm$ ($18\,601$ nodes) for the
@@ -189,6 +370,6 @@ $1\um$ funnel, 25 frequencies from 10 GHz to 3 THz. Plasmonic large signal:
 the same $1\um$ mesh, 60 steps per period, eight amplitudes from $0.01$ to
 $0.7$ of the voltage unit.
 
-\bibliography{refs,refs_detectors}
+\bibliography{refs,refs_detectors,refs_prior}
 
 \end{document}

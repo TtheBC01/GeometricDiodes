@@ -156,3 +156,51 @@ Separately, 8 rows carry a correction or caveat to a *claim* (marked **CLAIM**).
    10.1126/science.aay8663. A room-temperature geometric diode in a material
    other than graphene, in the reference list of Nguyen et al. 2021; relevant
    to the claim that shape alone does not rectify usefully.
+
+
+## Addendum of 2026-11-11: `refs_prior.bib` (24 entries)
+
+Added after the prior-work search (`prior_work.md`). Bibliographic records
+are from doi.org content negotiation (Crossref BibTeX) and the arXiv API,
+fetched on 2026-11-11; nothing was filled from memory. Article numbers that
+the record carries outside the `pages` field were added by hand from the
+Crossref JSON. "Search" in the last column means the reading was done by the
+prior-work search of 2026-11-10 and not repeated; "re-read" means read again
+at the source on 2026-11-11.
+
+| Key | Record | What was read, and the statement the manuscript rests on it |
+|---|---|---|
+| `stearns2020high` | Crossref: 2020 Device Research Conference, pp. 1-2 | **Abstract and the authors' poster of the same title (author archive), re-read; the two-page paper itself is paywalled and was not read.** Time-dependent particle-in-cell Monte Carlo with a Poisson solve; Z-shaped diode of about 100 nm; cut-off "near graphene's damping parameter" (abstract); no rectification above 5 THz and weakening above 1 THz (poster). Exact dimensions and mean free path not verified. The companion paper `stearns2021simulation` (Nanomaterials 11, 2361) is dc only and must not be cited for the cut-off. |
+| `shi2026ballistic` | Crossref: Small Science 6 (4), 2026; article number e202500654 from the DOI, not in the Crossref record | **Full text (Europe PMC), re-read.** Four-terminal cross-junction rectifier, not a two-terminal funnel; channel widths 100 and 40 nm; 3.0 THz; 77 V/W at 4 K and 6 V/W at room temperature (sample B); NEP 20 to 30 pW/Hz^1/2 computed from Johnson noise from the 4 K data, referred to a diffraction-limited area. **CLAIM caveat:** the abstract attributes 20 pW/Hz^1/2 to room temperature; the body's NEP data are at 4 K. The manuscript and Table III use the 4 K attribution. |
+| `hemmetter2026enhanced` | Crossref: Discover Electronics 3 (1), 2026; article number 128 from the publisher page | **Full text, re-read.** Four-terminal "single funnel" and "triple funnel" rectifiers of CVD graphene on a bow-tie; 0.49 to 0.68 THz, zero bias, room temperature; 0.77 V/W against beam power (11.8 V/W with the isotropic-radiator normalisation that the abstract quotes); NEP 29.2 nW/Hz^1/2 un-normalised (1.9 normalised), Johnson estimate; mean free path at most 65 nm; input arm below 100 nm, no neck width given. The manuscript uses the un-normalised values. |
+| `qin2017room` | Crossref: Carbon 116, 760-765 (2017) | **Abstract only.** 30 V/W and 51 pW/Hz^1/2, "estimated", 0.33 THz, room temperature, bilayer graphene on SiC. Power reference not verified; marked with a dagger in Table III. |
+| `dragoman2016graphene` | Crossref: Appl. Phys. Lett. 109, 113105 (2016) | **Abstract only; device details from the same authors' open-access review (Nanomaterials 13, 595 (2023)), read in full.** Simulation, no fabricated device; the rectifier is a graphene/n-GaAs Schottky junction under a graphene bow-tie; 58.43 % at 897 GHz. The manuscript says "predicted by simulation" and "Schottky junction", nothing more. |
+| `kachorovskii2013performance` | Crossref: Appl. Phys. Lett. 102, 223505 (2013); arXiv:1302.7089 | **Abstract re-read (arXiv); full text by the search.** Conversion efficiency Q defined against the dissipated THz power; absolute maximum "on the order of 10%"; maximal responsivity in the subthreshold regime. The manuscript does not quote the small-signal prefactor. |
+| `gutin2012plasmonic`, `rudin2014theory`, `but2014nonlinear` | Crossref | Search (abstracts). Cited together for the change from quadratic to linear response at high intensity. |
+| `khan2022cmos` | Crossref: IEEE RFIC 2022, pp. 291-294 | Search (full text). 13.6 % at 263 GHz is in the title. |
+| `sarypov2026electron` (in `refs.bib`) | arXiv:2603.16443, accepted in Phys. Rev. Lett. | Search and second check (abstract page and full text). Diodicity about 40 above about 300 uA; Re at least 7; turbulence; GaAs, 2.5 and 5 um, 4 K; heating to about 100 K. |
+| `lucas2018hydrodynamics`, `muller2009graphene` | Crossref | Search (review Sec. 4.3.1 via ar5iv; PRL full text). Reynolds number scales as drift speed over Fermi velocity times flow size over the electron-electron length; order ten at most. |
+| `hui2021beyond`, `monari2026electron` | Crossref; arXiv:2607.24386 with journal reference | Search (abstracts, Hui full text). Bernoulli nonlinearity in wedge and Venturi shapes; Monari is an experiment in GaAs. |
+| `gungor2022modeling` | Crossref: Materials 15, 4141 (2022) | **Full text read on 2026-11-10/11** (recorded in `plans/hydro_dcgate.md`): 10 nm channel, 50 mV, 1 ps pulses, diodicity 1.0655, qualitative comparison with Geurs et al. |
+| `geurs2025supersonic` | arXiv:2509.16321, no journal reference | Search (full text). Bilayer-graphene nozzle driven to the wave speed. |
+| `do2025nonlinear` | Crossref: ACS Nano 19, 14150-14160 (2025). **Title corrected:** the published title is "Nonlinear Optical Resonances from Ballistic Electron Funnelling"; `prior_work.md` has the preprint title. | Search (abstract). |
+| `bai2021asymmetric` | Crossref: Commun. Phys. 4, 236 (2021). **Title corrected** relative to `prior_work.md`, which has the preprint title. | Search (abstract). |
+| `ermann2011relativistic` | Crossref: Eur. Phys. J. B 79, 357-362 (2011) | Search (full text). Ratchet current flat below omega r / v_F = 1 and falling above. |
+| `custer2020ratcheting` | Crossref: Science 368, 177-180 (2020) | Search (full text). Flat response from 100 MHz to 40 GHz. |
+| `zhang2021terafet`, `khavronin2020singularity` | Crossref | Search (abstract; Khavronin partly full text). |
+| `castello2024impact`, `lisauskas2009rational` | Crossref; arXiv:2412.07279 | Search (Castello full text; Lisauskas not re-read). |
+
+Two already-cited papers were re-read in full on 2026-11-11 for facts the
+revised manuscript uses:
+
+- `nguyen2021geometric`: device D is 6 um end to end (Table 1), with Cr/Au
+  edge contacts on the two ends, measured two-terminal; asymmetry 1.66 at
+  80 uA. The mean free path of about 0.7 um is derived from the electron
+  mobility at a low "threshold" density, and the paper's own model uses
+  0.25 um. The abstract quotes 1.58 (device B), the body 1.66 (device D).
+- `zhu2013graphene`: neck 75 nm, shoulder 400 nm, rectenna diode 500 nm
+  long, no taper angle stated (our G4 assumes 45 degrees); measured mean
+  free path about 45 nm; zero-bias dc responsivity 0.12 A/W for the
+  stand-alone diode (0.0285 A/W for the rectenna diode); 28 THz, zero bias,
+  190 pA measured against 270 pA estimated; the only speed limit discussed
+  is RC.

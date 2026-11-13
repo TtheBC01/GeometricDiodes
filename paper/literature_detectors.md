@@ -61,6 +61,14 @@ Entries read but kept out of the main table (same rules apply):
 - Skoblin 2018, Appl. Phys. Lett. 112, 063501, 10.1063/1.5009629 (abstract only): split-gate thermoelectric graphene bolometer, 94 GHz, 4-100 K, optical responsivity about 700 V/W; no NEP in the abstract.
 - Yang 2017, Appl. Phys. Lett. 111, 021102, 10.1063/1.4993434 (abstract only): flexible graphene FET, 487 GHz, RT, above 2 V/W, estimated NEP below 3 nW/Hz^1/2 (unit as indexed reads nW/Hz).
 
+### Rows added on 2026-11-11 (after the prior-work search)
+
+| # | Reference | Device | Frequency | T | Responsivity | NEP | Power reference | How read |
+|---|---|---|---|---|---|---|---|---|
+| 21 | Shi, Viti, Watanabe, Taniguchi, Vitiello, Small Science 6, e202500654 (2026), doi:10.1002/smsc.202500654 | hBN-encapsulated four-terminal cross-junction ballistic rectifier, bow-tie antenna, channel 100 nm (A) and 40 nm (B) | 3.0 THz | 4 K (NEP data); 300 K | sample B: 77 V/W at 4 K, 6 V/W at room temperature | 20 to 30 pW/Hz^1/2, Johnson estimate, from the 4 K data | diffraction-limited area lambda^2/4 (1/20 of the beam power through the cryostat window) | full text (Europe PMC). The abstract attributes 20 pW/Hz^1/2 to room temperature; the body does not support that. |
+| 22 | Hemmetter et al., Discover Electronics 3, 128 (2026), doi:10.1007/s44291-026-00280-1 | CVD-graphene four-terminal single- and triple-funnel rectifiers, 150 um bow-tie | 0.49 to 0.68 THz | 300 K | 0.21 (single) and 0.77 V/W (triple) against beam power; 3.3 and 11.8 V/W with isotropic-radiator normalisation | 108 and 29.2 nW/Hz^1/2 un-normalised; 6.8 and 1.9 normalised; Johnson estimate | total available beam power, or isotropic normalisation | full text. Mean free path at most 65 nm. |
+| 23 | Qin et al., Carbon 116, 760 (2017), doi:10.1016/j.carbon.2017.02.037 | bilayer graphene (epitaxial on SiC) FET, gate length 145 nm | 0.33 THz | 300 K | 30 V/W | 51 pW/Hz^1/2, "estimated" | not verified | abstract only |
+
 ## 2. What the table says
 
 **Room temperature, class (a), FET / plasmonic.** With an antenna and silicon
