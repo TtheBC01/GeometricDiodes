@@ -1,0 +1,12 @@
+symcon set 300K slip inf mesh hw 20 hm 120 (46377 nodes): R = 11.745982 / 11.745982 R_unit = 1526.7 ohm, U_0 = 1.4286 V, s_0 = 3.570 v_F, Gamma 0.5602, 1/Re_s 4.202e-03, q 0.0392 (3.4 s)
+   V/U_0     I (uA)       Re  swap_dn - 1  swap_up - 1    flip0 - 1 1-D flip - 1    u/v_F       s
+  0.0300     28.071    0.584   4.5484e-07   4.8138e-07   1.4549e-02   1.4521e-02   0.1145    18.0
+funnel set 300K slip inf mesh hw 20 hm 120 (42411 nodes): R = 9.171851 / 9.171851 R_unit = 1192.1 ohm, U_0 = 1.4286 V, s_0 = 3.570 v_F, Gamma 0.5602, 1/Re_s 4.202e-03, q 0.0392 (2.8 s)
+   V/U_0     I (uA)       Re  swap_dn - 1  swap_up - 1    flip0 - 1 1-D flip - 1    u/v_F       s
+  0.0300     35.950    0.748  -1.5049e-04  -1.5896e-04   1.4434e-02   1.4521e-02   0.1504    16.0
+funnel_w1000 set 300K slip inf mesh hw 80 hm 480 (18601 nodes): R = 8.913647 / 8.913647 R_unit = 579.3 ohm, U_0 = 1.4286 V, s_0 = 3.570 v_F, Gamma 1.1204, 1/Re_s 2.101e-03, q 0.0392 (1.1 s)
+   V/U_0     I (uA)       Re  swap_dn - 1  swap_up - 1    flip0 - 1 1-D flip - 1    u/v_F       s
+  0.0300     73.982    1.539  -1.9185e-05  -2.0070e-05   1.4507e-02   1.4521e-02   0.0484     6.6
+tesla_classic set 300K slip inf mesh hw 20 hm 120 (63464 nodes): R = 45.012064 / 45.012064 R_unit = 5850.6 ohm, U_0 = 1.4286 V, s_0 = 3.570 v_F, Gamma 0.5602, 1/Re_s 4.202e-03, q 0.0392 (4.3 s)
+   V/U_0     I (uA)       Re  swap_dn - 1  swap_up - 1    flip0 - 1 1-D flip - 1    u/v_F       s
+  0.0300      7.325    0.152  -5.5237e-06  -5.7269e-06   1.4521e-02   1.4521e-02   0.0315    21.9

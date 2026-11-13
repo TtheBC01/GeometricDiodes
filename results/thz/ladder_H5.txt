@@ -1,0 +1,17 @@
+[PASS] T18    uniform gated channel, steady V(I) against the 1-D closed form:
+         shallow water v +0.03: V 0.029566 closed form 0.029566 (err 2.5e-07)
+         shallow water v -0.03: V -0.030468 closed form -0.030468 (err 2.9e-07)
+         shallow water v +0.10: V 0.095546 closed form 0.095547 (err 2.4e-06)
+         shallow water v -0.10: V -0.105741 closed form -0.105741 (err 4.0e-06)
+         shallow water v +0.30: V 0.266817 closed form 0.266821 (err 1.6e-05)
+         shallow water v -0.30: V -0.378664 closed form -0.378707 (err 1.1e-04)
+         graphene      v +0.03: V 0.028599 closed form 0.028599 (err 2.4e-07)
+         graphene      v -0.03: V -0.029015 closed form -0.029015 (err 2.6e-07)
+         graphene      v +0.10: V 0.093927 closed form 0.093927 (err 2.4e-06)
+         graphene      v -0.10: V -0.098598 closed form -0.098599 (err 3.3e-06)
+         graphene      v +0.30: V 0.272446 closed form 0.272451 (err 1.7e-05)
+         graphene      v -0.30: V -0.320033 closed form -0.320051 (err 5.5e-05)
+[PASS] T19    symmetric constriction at V = 0.1 U_0: swap asymmetry 3.76e-06, flip asymmetry 4.9623e-02 (ratio 7.6e-05)
+[PASS] T20    funnel, slip, Re 10: gated solver D 0.83845 (density drop 2.1e-04) vs Stage H D 0.83843 (rel diff 2.8e-05)
+
+3 passed, 0 failed (149.7 s)

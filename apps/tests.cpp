@@ -24,7 +24,8 @@ static std::string fmt(const char* f, double a, double b = 0, double c = 0, doub
 int main(int argc, char** argv) {
   long N = argc > 1 ? std::atol(argv[1]) : 200000;
   long NB = argc > 2 ? std::atol(argv[2]) : 1000000;  // Stage B2 tests, particles per side
-  bool only_b2 = argc > 3 && std::string(argv[3]) == "b2";
+  bool only_b7 = argc > 3 && std::string(argv[3]) == "b7";
+  bool only_b2 = (argc > 3 && std::string(argv[3]) == "b2") || only_b7;
   const double EF12 = EF_from_density(1e12);  // 0.1167 eV
   std::printf("GeometricDiodes acceptance ladder, N=%ld particles per run\n", N);
   std::printf("E_F(1e12 cm^-2)=%.4f eV, lambda_F=%.1f nm, kT(300K)=%.4f eV\n\n", EF12,
@@ -190,6 +191,7 @@ int main(int argc, char** argv) {
     return std::fabs(a - b) < std::max(nsig * err, rel * std::fabs(b));
   };
 
+  if (!only_b7) {
   // ---- T12: non-conservative chord integration in a static field ----------
   {
     // kill-test reference (results/killtest.csv, funnel, p = 1, lambda = inf, 400k)
@@ -306,6 +308,87 @@ int main(int argc, char** argv) {
     check("T17 Dirac cut vs classical turning point, localised 500 nm field, 1 THz: same I_dc", z < 3.5,
           fmt("I_dc=%.3f +- %.3f uA (dirac %.1e) vs %.3f", a.Idc * 1e6, a.Idc_err * 1e6, dir, c.Idc * 1e6) +
               fmt(" +- %.3f uA (dirac %.1e)  z=%.2f", c.Idc_err * 1e6, dir_c, z));
+  }
+  }  // !only_b7
+
+  // ======================= Stage B7: short funnels ==========================
+  // (plans/ballistic_short.md) The model has no intrinsic length: a device
+  // scaled by s at frequency f / s, with lambda and ell_F scaled by s, must
+  // give the same transmissions, hence currents in the ratio s (the width).
+  std::printf("\nStage B7 ladder, %ld particles per side\n", NB);
+  auto scaled = [](double sc) { FunnelParams q; q.Wc *= sc; q.Lc *= sc; q.Wn *= sc; q.Wd *= sc; q.Ld *= sc; return q; };
+  FunnelParams fpH = scaled(0.5); Boundary half = make_funnel(fpH);
+
+  // ---- T18: scale invariance in the clean limit -----------------------------
+  {
+    // static: asymmetry of the two-sided currents at +-0.1 V
+    TransportParams p; p.EF = EF14;
+    double I0[2], e0[2], I1[2], e1[2];
+    for (int k = 0; k < 2; ++k) {
+      p.V = k == 0 ? 0.1 : -0.1;
+      auto a = Transport(funnel, p).ac_current(NB, 300 + k); I0[k] = a.Idc; e0[k] = a.Idc_err;
+      auto c = Transport(half, p).ac_current(NB, 302 + k);   I1[k] = 2 * c.Idc; e1[k] = 2 * c.Idc_err;
+    }
+    double z = std::max(std::fabs(I0[0] - I1[0]) / std::hypot(e0[0], e1[0]), std::fabs(I0[1] - I1[1]) / std::hypot(e0[1], e1[1]));
+    check("T18a scale invariance, static: Device D vs half scale (currents x2), +-0.1 V", z < 3.5,
+          fmt("I(+)=%.2f vs %.2f uA, I(-)=%.2f vs %.2f uA", I0[0] * 1e6, I1[0] * 1e6, I0[1] * 1e6, I1[1] * 1e6) +
+              fmt("  A=%.4f vs %.4f  z=%.2f", I0[0] / std::fabs(I0[1]), I1[0] / std::fabs(I1[1]), z));
+    for (double f : {1e10, 3e11}) {
+      TransportParams q; q.EF = EF14; q.Va = 0.1;
+      q.f_Hz = f;     auto a = Transport(funnel, q).ac_current(2 * NB, 310);
+      q.f_Hz = 2 * f; auto c = Transport(half, q).ac_current(2 * NB, 311);
+      double zz = std::fabs(a.Idc - 2 * c.Idc) / std::hypot(a.Idc_err, 2 * c.Idc_err);
+      double zy = std::abs(a.Y1 - 2.0 * c.Y1) / std::hypot(a.I1_err, 2 * c.I1_err) * q.Va;
+      check(fmt("T18b scale invariance, ac: Device D at %.0f GHz vs half scale at twice the frequency", f * 1e-9), zz < 3.5 && zy < 4.5,
+            fmt("I_dc=%.3f +- %.3f vs %.3f +- %.3f uA", a.Idc * 1e6, a.Idc_err * 1e6, 2 * c.Idc * 1e6, 2 * c.Idc_err * 1e6) + fmt(" (z=%.2f)", zz) +
+                fmt("  Y1=%.4f%+.4fi vs %.4f%+.4fi mS", a.Y1.real() * 1e3, a.Y1.imag() * 1e3, 2 * c.Y1.real() * 1e3, 2 * c.Y1.imag() * 1e3) + fmt(" (z=%.2f)", zy));
+    }
+  }
+
+  // ---- T19: scale invariance with scattering --------------------------------
+  {
+    TransportParams p; p.EF = EF14; p.V = 0.1;
+    p.lambda_mfp = 700; auto a = Transport(funnel, p).ac_current(NB, 320);
+    p.lambda_mfp = 350; auto c = Transport(half, p).ac_current(NB, 321);
+    double z = std::fabs(a.Idc - 2 * c.Idc) / std::hypot(a.Idc_err, 2 * c.Idc_err);
+    TransportParams q; q.EF = EF14; q.Va = 0.1;
+    q.lambda_mfp = 700; q.f_Hz = 1e10; auto a2 = Transport(funnel, q).ac_current(4 * NB, 322);
+    q.lambda_mfp = 350; q.f_Hz = 2e10; auto c2 = Transport(half, q).ac_current(4 * NB, 323);
+    double z2 = std::fabs(a2.Idc - 2 * c2.Idc) / std::hypot(a2.Idc_err, 2 * c2.Idc_err);
+    check("T19 scale invariance with scattering: Device D, 700 nm vs half scale, 350 nm (static +0.1 V; 10 vs 20 GHz)", z < 3.5 && z2 < 3.5,
+          fmt("static %.2f +- %.2f vs %.2f +- %.2f uA", a.Idc * 1e6, a.Idc_err * 1e6, 2 * c.Idc * 1e6, 2 * c.Idc_err * 1e6) + fmt(" (z=%.2f)", z) +
+              fmt("; ac %.3f +- %.3f vs %.3f +- %.3f uA", a2.Idc * 1e6, a2.Idc_err * 1e6, 2 * c2.Idc * 1e6, 2 * c2.Idc_err * 1e6) + fmt(" (z=%.2f)", z2));
+  }
+
+  // ---- T20: symmetric controls of the new shapes give zero ------------------
+  {
+    struct Sh { const char* name; double Wc, Lc, al, Wn; };
+    for (Sh sh : {Sh{"G2", 2000, 250, 30, 175}, Sh{"G3", 500, 100, 30, 100}, Sh{"G4", 400, 169, 45, 75}}) {
+      Boundary sym = make_symmetric_constriction(sh.Wc, sh.Lc, sh.al, sh.Wn, 0);
+      double worst = 0; std::string det;
+      for (double f : {1e11, 1e12, 1e13}) {
+        TransportParams p; p.EF = EF14; p.f_Hz = f; p.Va = 0.1;
+        auto ac = Transport(sym, p).ac_current(NB, 330 + (int)std::log10(f));
+        double z = std::fabs(ac.Idc) / ac.Idc_err; worst = std::max(worst, z);
+        det += fmt(" %.1f THz: %.3f +- %.3f uA;", f * 1e-12, ac.Idc * 1e6, ac.Idc_err * 1e6);
+      }
+      check(std::string("T20 symmetric control of ") + sh.name + " at 0.1, 1 and 10 THz: I_dc = 0", worst < 3.5, det + fmt(" worst z=%.2f", worst));
+    }
+  }
+
+  // ---- T21: chord cap at the highest reduced frequency -----------------------
+  {
+    FunnelParams g3; g3.Wc = 500; g3.Lc = 100; g3.Wn = 100; g3.Wd = 500; g3.Ld = 100;
+    Boundary b3 = make_funnel(g3);
+    // 3 THz with the 700 nm mean free path: the highest frequency at which a short device still rectifies
+    // (at 30 THz, the planned point, the response is zero and the comparison tests nothing)
+    TransportParams p; p.EF = EF14; p.f_Hz = 3e12; p.Va = 0.1; p.field = FieldModel::Localised; p.ell_F = 100; p.lambda_mfp = 700;
+    p.x_F = g3.Lc + 0.5 * (g3.Wc - g3.Wn) / std::tan(deg2rad(g3.alpha_deg));
+    p.chords_per_period = 40;  auto a = Transport(b3, p).ac_current(4 * NB, 340);
+    p.chords_per_period = 160; auto c = Transport(b3, p).ac_current(4 * NB, 341);
+    bool ok = within(a.Idc, c.Idc, std::hypot(a.Idc_err, c.Idc_err), 3.5, 0.03);
+    check("T21 chord cap v_F/(40 f) vs v_F/(160 f), G3, one-neck-width drop, 700 nm, 3 THz: same I_dc", ok,
+          fmt("I_dc=%.4f +- %.4f uA vs %.4f +- %.4f uA", a.Idc * 1e6, a.Idc_err * 1e6, c.Idc * 1e6, c.Idc_err * 1e6));
   }
 
   std::printf("\n%d passed, %d failed\n", n_pass, n_fail);

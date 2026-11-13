@@ -1,0 +1,17 @@
+GeometricDiodes acceptance ladder, N=200000 particles per run
+E_F(1e12 cm^-2)=0.1167 eV, lambda_F=35.4 nm, kT(300K)=0.0259 eV
+
+
+Stage B2 ladder, 1000000 particles per side
+
+Stage B7 ladder, 1000000 particles per side
+[PASS] T18a scale invariance, static: Device D vs half scale (currents x2), +-0.1 V I(+)=188.01 vs 188.59 uA, I(-)=-117.40 vs -117.63 uA  A=1.6015 vs 1.6033  z=0.65
+[PASS] T18b scale invariance, ac: Device D at 10 GHz vs half scale at twice the frequency I_dc=11.948 +- 0.447 vs 12.126 +- 0.463 uA (z=0.28)  Y1=1.8483+0.9172i vs 1.8431+0.9279i mS (z=0.82)
+[PASS] T18b scale invariance, ac: Device D at 300 GHz vs half scale at twice the frequency I_dc=0.334 +- 0.477 vs -0.374 +- 0.423 uA (z=1.11)  Y1=-1.3933-0.0311i vs -1.3987-0.0870i mS (z=1.96)
+[PASS] T19 scale invariance with scattering: Device D, 700 nm vs half scale, 350 nm (static +0.1 V; 10 vs 20 GHz) static 108.28 +- 0.57 vs 110.04 +- 0.54 uA (z=2.25); ac 2.265 +- 0.228 vs 1.818 +- 0.230 uA (z=1.38)
+[PASS] T20 symmetric control of G2 at 0.1, 1 and 10 THz: I_dc = 0  0.1 THz: -0.161 +- 0.655 uA; 1.0 THz: 0.035 +- 0.593 uA; 10.0 THz: -0.769 +- 0.612 uA; worst z=1.26
+[PASS] T20 symmetric control of G3 at 0.1, 1 and 10 THz: I_dc = 0  0.1 THz: 0.061 +- 0.245 uA; 1.0 THz: -0.171 +- 0.234 uA; 10.0 THz: -0.119 +- 0.229 uA; worst z=0.73
+[PASS] T20 symmetric control of G4 at 0.1, 1 and 10 THz: I_dc = 0  0.1 THz: -0.011 +- 0.173 uA; 1.0 THz: -0.107 +- 0.174 uA; 10.0 THz: -0.118 +- 0.173 uA; worst z=0.68
+[PASS] T21 chord cap v_F/(40 f) vs v_F/(160 f), G3, one-neck-width drop, 700 nm, 3 THz: same I_dc I_dc=3.1339 +- 0.0983 uA vs 3.1978 +- 0.1005 uA
+
+8 passed, 0 failed

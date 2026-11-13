@@ -1,6 +1,8 @@
 // Acceptance ladder for the Stage H2 solvers (plans/hydro_thz.md, sec. 3), T1-T9,
 // the Stage H3 large-signal ladder (plans/hydro_largesignal.md, sec. 4), T10-T14,
 // and the Stage H4 operating-point ladder (plans/hydro_density.md, sec. 4), T15-T17.
+#include "dc_gate_common.hpp"
+#include "hydro/diode.hpp"
 #include "generators.hpp"
 #include "thz_geo.hpp"
 #include "thz_power_common.hpp"
@@ -490,6 +492,62 @@ int main(int argc, char** argv) {
                             "n_max %.4f vs %.4f; tail %.1e/%.1e, corr %.1e/%.1e; small-signal eta %.4e", ea, eb, ea / eb, a.tr.n_min, b.tr.n_min,
                             a.tr.n_max, b.tr.n_max, a.tail, b.tail, a.corr, b.corr, eta_small1 * 0.09));
     }
+  }
+
+  // ===================== Stage H5: steady gated flow ========================
+  // (plans/hydro_dcgate.md)
+  // T18: uniform channel with the gate tied to the grounded contact against the
+  //      one-dimensional closed form F(n_0) - F(1) = Gamma j L (inertia included),
+  //      both closures, both signs of the current, up to V = 0.3 U_0.
+  if (want("T18")) {
+    Mesh m = channel_mesh(L, g_hw);
+    double worst = 0; std::string det;
+    for (int kind = 0; kind < 2; ++kind) {
+      ThzParams p; p.Gamma = 0.28; p.nu = 0.0084;
+      if (kind == 0) p.closure.kind = Closure::ShallowWater; else { p.closure.kind = Closure::Graphene; p.closure.q = 0.04; }
+      double U0 = 1 - p.closure.q;
+      for (double v : {0.03, 0.1, 0.3}) {
+        double I = v * U0 / (p.Gamma * L);
+        for (int sgn : {+1, -1}) {
+          SteadyPoint a = steady_point(m, p, 0, sgn * I);
+          double ref = p.closure.Phi(gated_channel_n0(p.closure, p.Gamma * L, sgn * I));
+          double err = std::fabs(a.V / ref - 1); worst = std::max(worst, a.ok ? err : 1.0);
+          det += fmt("\n         %s v %+.2f: V %.6f closed form %.6f (err %.1e)", kind == 0 ? "shallow water" : "graphene     ", sgn * v, a.V, ref, err);
+        }
+      }
+    }
+    report("T18", worst < 1e-2, "uniform gated channel, steady V(I) against the 1-D closed form:" + det);
+  }
+
+  // T19: mirror-symmetric constriction: swapping the driven contact changes
+  //      nothing beyond the asymmetry of the unstructured mesh; the polarity
+  //      flip on the same mesh sets the scale.
+  if (!quick && want("T19")) {
+    Boundary b = make_symmetric_constriction(2000, 6000, 30, 175, 500);
+    Mesh m = Mesh::load(ensure_mesh(b, "h_symcon", 20, 120), 2000);
+    ThzParams p; p.Gamma = 0.5; p.nu = 0.01; p.closure.q = 0.04;
+    double Ie = 1e-7, R = steady_point(m, p, 0, Ie).V / Ie, I = 0.1 * (1 - p.closure.q) / R;
+    SteadyPoint a = steady_point(m, p, 0, I), bb = steady_point(m, p, 0, -I), c = steady_point(m, p, 1, I);
+    double swap = c.V / a.V - 1, flip = std::fabs(bb.V) / a.V - 1;
+    report("T19", a.ok && bb.ok && c.ok && std::fabs(swap) < 1e-3 * std::fabs(flip),
+           fmt("symmetric constriction at V = 0.1 U_0: swap asymmetry %.2e, flip asymmetry %.4e (ratio %.1e)", swap, flip, swap / flip));
+  }
+
+  // T20: incompressible limit. Funnel, perfect slip, no damping, Re = 10: the
+  //      swap-contacts diodicity of the gated solver at Mach 1e-3 against
+  //      Stage H on the same mesh.
+  if (!quick && want("T20")) {
+    FunnelParams fp; fp.Lc = 6000; fp.Ld = 6000;
+    Boundary b = make_funnel(fp);
+    Mesh m = Mesh::load(ensure_mesh(b, "h_funnel", 20, 120), 2000);
+    const double Res = 1e4, M = 1e-3;
+    ThzParams p; p.Gamma = 0; p.nu = 1 / Res; p.closure.kind = Closure::ShallowWater;
+    SteadyPoint a = steady_point(m, p, 0, M), c = steady_point(m, p, 1, M);
+    double D2 = c.V / a.V;
+    std::vector<DiodePoint> dp = diodicity_sweep(m, 0.0, std::numeric_limits<double>::infinity(), {1.0, 3.0, 10.0});
+    double D = dp.back().D;
+    report("T20", a.ok && c.ok && dp.back().ok && std::fabs(D2 / D - 1) < 0.02,
+           fmt("funnel, slip, Re 10: gated solver D %.5f (density drop %.1e) vs Stage H D %.5f (rel diff %.1e)", D2, a.nmax - a.nmin, D, D2 / D - 1));
   }
 
   double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();

@@ -197,3 +197,7 @@ heating of T_e), Navier-Stokes only (no Knudsen corrections when
 l_ee ~ W), Fermi-liquid only, B = 0, steady. The first two are the
 candidates for the Geurs signal that this model excludes; the last is the
 THz question.
+
+Added 2026-11-11: the first of these was run in Stage H5 (`HYDRO_GATE.md`).
+With the gate the shape term is unchanged; the gate adds an asymmetry of
+0.48 V / U_0 under a polarity flip that is the same for every shape.

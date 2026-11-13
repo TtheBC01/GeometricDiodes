@@ -300,3 +300,29 @@ shape-based THz rectenna; no self-consistent stage follows.
     ./tools/ballistic_thz_runs.sh B1                         # then B2u B2l B3 B0 B5, and B4 3e11 local 500
     .venv/bin/python tools/ballistic_thz_plot.py results/bthz
     .venv/bin/python tools/ballistic_thz_tables.py results/bthz > results/bthz/tables_B2.md
+
+## Stage B7: short funnels and the length scaling of the ballistic THz response
+
+Plan `plans/ballistic_short.md`, results `results/BALLISTIC_SHORT.md`. The
+ballistic model has no intrinsic length, so the Stage B2 roll-off is a
+function of f L / v_F: half response near 0.4, nothing above 1.7. A 0.55 um
+funnel at the room-temperature mean free path gives 0.70 A/W per absorbed
+watt at 1 THz under both field models (0.17 and 0.14 A/W for one device on
+a 75 ohm antenna), twice the best plasmonic figure. Stage B2's "not a THz
+rectifier" holds for the 6 um device only.
+
+    make build/gd_tests && ./build/gd_tests 200000 1000000 b7
+    tools/short_funnel_runs.sh S1   # then S2 to S5
+    .venv/bin/python tools/short_funnel_tables.py && .venv/bin/python tools/short_funnel_plot.py
+
+## Stage H5: steady flow with the gate
+
+Plan `plans/hydro_dcgate.md`, results `results/HYDRO_GATE.md`. With the
+gate, reversing the polarity of any channel gives an asymmetry of
+0.48 V / U_0 (1.45 % at 43 mV) whatever its shape; reversing by swapping
+the contacts leaves only the inertial term of Stage H, below 4e-4 inside
+the drift limit.
+
+    make build/gd_dc_gate build/gd_dc_gate_ref && ./build/gd_thz_tests T18,T19,T20
+    tools/dc_gate_runs.sh D1        # then D2 to D4
+    .venv/bin/python tools/dc_gate_ref.py && .venv/bin/python tools/dc_gate_tables.py && .venv/bin/python tools/dc_gate_plot.py

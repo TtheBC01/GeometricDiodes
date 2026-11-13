@@ -1,5 +1,13 @@
 # Stage B2 results: the ballistic funnel under THz drive (2026-11-09)
 
+> **Revised by Stage B7 (added 2026-11-11, `BALLISTIC_SHORT.md`).** The model
+> has no intrinsic length, so every curve below is a function of
+> f L / v_F and the verdict "not a THz rectifier" holds for this 6 um
+> device only. A 0.55 um funnel at the 700 nm mean free path gives 0.70 A/W
+> per absorbed watt at 1 THz under both field models. The responsivities
+> below are for one device on a 75 ohm antenna; per absorbed watt the
+> neck-confined figure of this device at 1 THz and 700 nm is 0.75 A/W.
+
 Plan: `plans/ballistic_thz.md` (figure `plans/ballistic_thz.png`). Code:
 `src/transport.*` (time-dependent imposed potential, two-sided estimator),
 `apps/bthz.cpp` (`gd_bthz`), ladder T12 to T16 in `apps/tests.cpp`. Runs:

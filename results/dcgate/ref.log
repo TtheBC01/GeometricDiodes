@@ -1,0 +1,112 @@
+./build/gd_dc_gate_ref --geo symcon --set 300K --slip inf --hw 20 --hm 120 --Re 0.0194674112696,0.0584022338087,0.194674112696,0.584022338087,1.94674112696,3.89348225391,5.84022338087 --out results/dcgate/ref.csv
+symcon 300K slip inf Re 0.0195 Da 133.33: D_inc - 1 = 1.6538e-10
+symcon 300K slip inf Re 0.0584 Da 133.33: D_inc - 1 = 4.9656e-10
+symcon 300K slip inf Re 0.1947 Da 133.33: D_inc - 1 = 1.6706e-09
+symcon 300K slip inf Re 0.5840 Da 133.33: D_inc - 1 = 5.4169e-09
+symcon 300K slip inf Re 1.9467 Da 133.33: D_inc - 1 = 3.3639e-08
+symcon 300K slip inf Re 3.8935 Da 133.33: D_inc - 1 = 1.7555e-07
+symcon 300K slip inf Re 5.8402 Da 133.33: D_inc - 1 = 5.5988e-07
+./build/gd_dc_gate_ref --geo symcon --set 100K --slip inf --hw 20 --hm 120 --Re 0.0044614248543,0.0133842745629,0.044614248543,0.133842745629,0.44614248543,0.892284970859,1.33842745629 --out results/dcgate/ref.csv
+symcon 100K slip inf Re 0.0045 Da 8.00: D_inc - 1 = 1.1970e-10
+symcon 100K slip inf Re 0.0134 Da 8.00: D_inc - 1 = 3.5913e-10
+symcon 100K slip inf Re 0.0446 Da 8.00: D_inc - 1 = 1.1976e-09
+symcon 100K slip inf Re 0.1338 Da 8.00: D_inc - 1 = 3.6072e-09
+symcon 100K slip inf Re 0.4461 Da 8.00: D_inc - 1 = 1.2566e-08
+symcon 100K slip inf Re 0.8923 Da 8.00: D_inc - 1 = 2.8715e-08
+symcon 100K slip inf Re 1.3384 Da 8.00: D_inc - 1 = 5.2073e-08
+./build/gd_dc_gate_ref --geo funnel --set 300K --slip inf --hw 20 --hm 120 --Re 0.0249310467821,0.0747931403464,0.249310467821,0.747931403464,2.49310467821,4.98620935643,7.47931403464 --out results/dcgate/ref.csv
+funnel 300K slip inf Re 0.0249 Da 133.33: D_inc - 1 = -5.0755e-06
+funnel 300K slip inf Re 0.0748 Da 133.33: D_inc - 1 = -1.5254e-05
+funnel 300K slip inf Re 0.2493 Da 133.33: D_inc - 1 = -5.1876e-05
+funnel 300K slip inf Re 0.7479 Da 133.33: D_inc - 1 = -1.8279e-04
+funnel 300K slip inf Re 2.4931 Da 133.33: D_inc - 1 = -1.6244e-03
+funnel 300K slip inf Re 4.9862 Da 133.33: D_inc - 1 = -9.4936e-03
+funnel 300K slip inf Re 7.4793 Da 133.33: D_inc - 1 = -2.7134e-02
+./build/gd_dc_gate_ref --geo funnel_w1000 --set 300K --slip inf --hw 80 --hm 480 --Re 0.0513064629586,0.153919388876,0.513064629586,1.53919388876,5.13064629586,10.2612925917,15.3919388876 --out results/dcgate/ref.csv
+funnel_w1000 300K slip inf Re 0.0513 Da 533.33: D_inc - 1 = -6.4029e-07
+funnel_w1000 300K slip inf Re 0.1539 Da 533.33: D_inc - 1 = -1.9209e-06
+funnel_w1000 300K slip inf Re 0.5131 Da 533.33: D_inc - 1 = -6.4020e-06
+funnel_w1000 300K slip inf Re 1.5392 Da 533.33: D_inc - 1 = -1.9185e-05
+funnel_w1000 300K slip inf Re 5.1306 Da 533.33: D_inc - 1 = -6.3174e-05
+funnel_w1000 300K slip inf Re 10.2613 Da 533.33: D_inc - 1 = -1.2271e-04
+funnel_w1000 300K slip inf Re 15.3919 Da 533.33: D_inc - 1 = -1.8525e-04
+./build/gd_dc_gate_ref --geo funnel --set 300K --slip 0 --hw 20 --hm 120 --Re 0.0182867076404,0.0548601229211,0.182867076404,0.548601229211,1.82867076404,3.65734152808,5.48601229211 --out results/dcgate/ref.csv
+funnel 300K slip 0 Re 0.0183 Da 133.33: D_inc - 1 = 3.5472e-07
+funnel 300K slip 0 Re 0.0549 Da 133.33: D_inc - 1 = 1.0654e-06
+funnel 300K slip 0 Re 0.1829 Da 133.33: D_inc - 1 = 3.3815e-06
+funnel 300K slip 0 Re 0.5486 Da 133.33: D_inc - 1 = 5.4855e-06
+funnel 300K slip 0 Re 1.8287 Da 133.33: D_inc - 1 = -1.5804e-04
+funnel 300K slip 0 Re 3.6573 Da 133.33: D_inc - 1 = -1.4628e-03
+funnel 300K slip 0 Re 5.4860 Da 133.33: D_inc - 1 = -4.9644e-03
+./build/gd_dc_gate_ref --geo funnel_w1000 --set 300K --slip 0 --hw 80 --hm 480 --Re 0.0463551547874,0.139065464362,0.463551547874,1.39065464362,4.63551547874,9.27103095748,13.9065464362 --out results/dcgate/ref.csv
+funnel_w1000 300K slip 0 Re 0.0464 Da 533.33: D_inc - 1 = 7.8800e-08
+funnel_w1000 300K slip 0 Re 0.1391 Da 533.33: D_inc - 1 = 2.1036e-07
+funnel_w1000 300K slip 0 Re 0.4636 Da 533.33: D_inc - 1 = 6.6386e-07
+funnel_w1000 300K slip 0 Re 1.3907 Da 533.33: D_inc - 1 = 1.7762e-06
+funnel_w1000 300K slip 0 Re 4.6355 Da 533.33: D_inc - 1 = -1.2104e-06
+funnel_w1000 300K slip 0 Re 9.2710 Da 533.33: D_inc - 1 = -4.7270e-05
+funnel_w1000 300K slip 0 Re 13.9065 Da 533.33: D_inc - 1 = -1.7471e-04
+./build/gd_dc_gate_ref --geo funnel --set 100K --slip inf --hw 20 --hm 120 --Re 0.00476546165353,0.0142963849606,0.0476546165353,0.142963849606,0.476546165353,0.953092330706,1.42963849606 --out results/dcgate/ref.csv
+funnel 100K slip inf Re 0.0048 Da 8.00: D_inc - 1 = -2.0417e-06
+funnel 100K slip inf Re 0.0143 Da 8.00: D_inc - 1 = -6.1262e-06
+funnel 100K slip inf Re 0.0477 Da 8.00: D_inc - 1 = -2.0455e-05
+funnel 100K slip inf Re 0.1430 Da 8.00: D_inc - 1 = -6.2268e-05
+funnel 100K slip inf Re 0.4765 Da 8.00: D_inc - 1 = -2.4182e-04
+funnel 100K slip inf Re 0.9531 Da 8.00: D_inc - 1 = -7.0869e-04
+funnel 100K slip inf Re 1.4296 Da 8.00: D_inc - 1 = -1.6211e-03
+./build/gd_dc_gate_ref --geo funnel_w1000 --set 100K --slip inf --hw 80 --hm 480 --Re 0.0531135110726,0.159340533218,0.531135110726,1.59340533218,5.31135110726,10.6227022145,15.9340533218 --out results/dcgate/ref.csv
+funnel_w1000 100K slip inf Re 0.0531 Da 32.00: D_inc - 1 = -4.4307e-06
+funnel_w1000 100K slip inf Re 0.1593 Da 32.00: D_inc - 1 = -1.3371e-05
+funnel_w1000 100K slip inf Re 0.5311 Da 32.00: D_inc - 1 = -4.7572e-05
+funnel_w1000 100K slip inf Re 1.5934 Da 32.00: D_inc - 1 = -2.2090e-04
+funnel_w1000 100K slip inf Re 5.3114 Da 32.00: D_inc - 1 = -3.3206e-03
+funnel_w1000 100K slip inf Re 10.6227 Da 32.00: D_inc - 1 = -1.6174e-02
+funnel_w1000 100K slip inf Re 15.9341 Da 32.00: D_inc - 1 = -2.8607e-02
+./build/gd_dc_gate_ref --geo funnel --set 100K --slip 0 --hw 20 --hm 120 --Re 0.00292364355467,0.00877093066402,0.0292364355467,0.0877093066402,0.292364355467,0.584728710935,0.877093066402 --out results/dcgate/ref.csv
+funnel 100K slip 0 Re 0.0029 Da 8.00: D_inc - 1 = 9.8372e-08
+funnel 100K slip 0 Re 0.0088 Da 8.00: D_inc - 1 = 2.9603e-07
+funnel 100K slip 0 Re 0.0292 Da 8.00: D_inc - 1 = 9.8595e-07
+funnel 100K slip 0 Re 0.0877 Da 8.00: D_inc - 1 = 2.9072e-06
+funnel 100K slip 0 Re 0.2924 Da 8.00: D_inc - 1 = 7.7354e-06
+funnel 100K slip 0 Re 0.5847 Da 8.00: D_inc - 1 = 2.5756e-06
+funnel 100K slip 0 Re 0.8771 Da 8.00: D_inc - 1 = -2.8352e-05
+./build/gd_dc_gate_ref --geo funnel_w1000 --set 100K --slip 0 --hw 80 --hm 480 --Re 0.0365975708565,0.10979271257,0.365975708565,1.0979271257,3.65975708565,7.31951417131,10.979271257 --out results/dcgate/ref.csv
+funnel_w1000 100K slip 0 Re 0.0366 Da 32.00: D_inc - 1 = 2.4858e-07
+funnel_w1000 100K slip 0 Re 0.1098 Da 32.00: D_inc - 1 = 7.3632e-07
+funnel_w1000 100K slip 0 Re 0.3660 Da 32.00: D_inc - 1 = 2.0066e-06
+funnel_w1000 100K slip 0 Re 1.0979 Da 32.00: D_inc - 1 = -5.8221e-06
+funnel_w1000 100K slip 0 Re 3.6598 Da 32.00: D_inc - 1 = -4.5075e-04
+funnel_w1000 100K slip 0 Re 7.3195 Da 32.00: D_inc - 1 = -3.3234e-03
+funnel_w1000 100K slip 0 Re 10.9793 Da 32.00: D_inc - 1 = -9.3055e-03
+./build/gd_dc_gate_ref --geo tesla_classic --set 300K --slip inf --hw 20 --hm 120 --Re 0.00508005712892,0.0152401713868,0.0508005712892,0.152401713868,0.508005712892,1.01601142578,1.52401713868 --out results/dcgate/ref.csv
+tesla_classic 300K slip inf Re 0.0051 Da 133.33: D_inc - 1 = -2.4415e-07
+tesla_classic 300K slip inf Re 0.0152 Da 133.33: D_inc - 1 = -7.3216e-07
+tesla_classic 300K slip inf Re 0.0508 Da 133.33: D_inc - 1 = -2.4290e-06
+tesla_classic 300K slip inf Re 0.1524 Da 133.33: D_inc - 1 = -6.9842e-06
+tesla_classic 300K slip inf Re 0.5080 Da 133.33: D_inc - 1 = -1.1811e-05
+tesla_classic 300K slip inf Re 1.0160 Da 133.33: D_inc - 1 = 5.1596e-05
+tesla_classic 300K slip inf Re 1.5240 Da 133.33: D_inc - 1 = 2.6340e-04
+./build/gd_dc_gate_ref --geo tesla_classic_w1000 --set 300K --slip inf --hw 114 --hm 686 --Re 0.0104016656322,0.0312049968965,0.104016656322,0.312049968965,1.04016656322,2.08033312643,3.12049968965 --out results/dcgate/ref.csv
+tesla_classic_w1000 300K slip inf Re 0.0104 Da 533.33: D_inc - 1 = -2.0413e-07
+tesla_classic_w1000 300K slip inf Re 0.0312 Da 533.33: D_inc - 1 = -6.1382e-07
+tesla_classic_w1000 300K slip inf Re 0.1040 Da 533.33: D_inc - 1 = -2.0476e-06
+tesla_classic_w1000 300K slip inf Re 0.3120 Da 533.33: D_inc - 1 = -6.1428e-06
+tesla_classic_w1000 300K slip inf Re 1.0402 Da 533.33: D_inc - 1 = -2.0419e-05
+tesla_classic_w1000 300K slip inf Re 2.0803 Da 533.33: D_inc - 1 = -4.0455e-05
+tesla_classic_w1000 300K slip inf Re 3.1205 Da 533.33: D_inc - 1 = -5.9727e-05
+./build/gd_dc_gate_ref --geo tesla_classic --set 100K --slip inf --hw 20 --hm 120 --Re 0.000848028939513,0.00254408681854,0.00848028939513,0.0254408681854,0.0848028939513,0.169605787903,0.254408681854 --out results/dcgate/ref.csv
+tesla_classic 100K slip inf Re 0.0008 Da 8.00: D_inc - 1 = -6.1531e-08
+tesla_classic 100K slip inf Re 0.0025 Da 8.00: D_inc - 1 = -1.8458e-07
+tesla_classic 100K slip inf Re 0.0085 Da 8.00: D_inc - 1 = -6.1502e-07
+tesla_classic 100K slip inf Re 0.0254 Da 8.00: D_inc - 1 = -1.8387e-06
+tesla_classic 100K slip inf Re 0.0848 Da 8.00: D_inc - 1 = -5.8869e-06
+tesla_classic 100K slip inf Re 0.1696 Da 8.00: D_inc - 1 = -1.0179e-05
+tesla_classic 100K slip inf Re 0.2544 Da 8.00: D_inc - 1 = -1.1285e-05
+./build/gd_dc_gate_ref --geo tesla_classic_w1000 --set 100K --slip inf --hw 114 --hm 686 --Re 0.0102687706429,0.0308063119288,0.102687706429,0.308063119288,1.02687706429,2.05375412859,3.08063119288 --out results/dcgate/ref.csv
+tesla_classic_w1000 100K slip inf Re 0.0103 Da 32.00: D_inc - 1 = -4.8178e-07
+tesla_classic_w1000 100K slip inf Re 0.0308 Da 32.00: D_inc - 1 = -1.4472e-06
+tesla_classic_w1000 100K slip inf Re 0.1027 Da 32.00: D_inc - 1 = -4.7930e-06
+tesla_classic_w1000 100K slip inf Re 0.3081 Da 32.00: D_inc - 1 = -1.3476e-05
+tesla_classic_w1000 100K slip inf Re 1.0269 Da 32.00: D_inc - 1 = -1.0678e-05
+tesla_classic_w1000 100K slip inf Re 2.0538 Da 32.00: D_inc - 1 = 2.0217e-04
+tesla_classic_w1000 100K slip inf Re 3.0806 Da 32.00: D_inc - 1 = 8.4987e-04

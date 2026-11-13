@@ -3,7 +3,11 @@
 // the two-sided equilibrium estimator. One CSV row per invocation (appended),
 // optional exit-energy histogram.
 //
-// usage: gd_bthz --geo funnel_nguyenD|straight_control --field uniform|local
+// usage: gd_bthz --geo funnel_nguyenD|straight_control|funnel|symmetric --field uniform|local
+//                [--Wc --Lc --alpha --Wn --Wd --Ld nm/deg] [--scale s] [--label name]
+//                (Stage B7: `funnel` takes its dimensions from the flags, default Device D;
+//                 `symmetric` is the mirror-symmetric constriction with the same Wc, Lc, alpha, Wn;
+//                 --scale multiplies every length of the shape, not ellF or lambda)
 //                [--ellF nm] [--lambda nm|inf] [--p spec] --f Hz --V volts
 //                [--N per side] [--cpp chords per period] [--seed s]
 //                [--out csv] [--hist path]
@@ -24,6 +28,7 @@ int main(int argc, char** argv) {
   std::string geo = "funnel_nguyenD", field = "uniform", out = "results/bthz/points.csv", hist, thist;
   double ellF = 500, lambda = std::numeric_limits<double>::infinity(), spec = 1.0, f = 0, V = 0.1;
   long N = 1000000; int cpp = 40; uint64_t seed = 101; bool reflect = false;
+  FunnelParams fq; double scale = 1.0; std::string label;
   for (int i = 1; i < argc; ++i) {
     std::string a = argv[i];
     auto next = [&]() -> std::string { if (i + 1 >= argc) { std::fprintf(stderr, "missing value for %s\n", a.c_str()); std::exit(2); } return argv[++i]; };
@@ -41,6 +46,14 @@ int main(int argc, char** argv) {
     else if (a == "--hist") hist = next();
     else if (a == "--thist") thist = next();
     else if (a == "--reflect") reflect = true;
+    else if (a == "--Wc") fq.Wc = std::atof(next().c_str());
+    else if (a == "--Lc") fq.Lc = std::atof(next().c_str());
+    else if (a == "--alpha") fq.alpha_deg = std::atof(next().c_str());
+    else if (a == "--Wn") fq.Wn = std::atof(next().c_str());
+    else if (a == "--Wd") fq.Wd = std::atof(next().c_str());
+    else if (a == "--Ld") fq.Ld = std::atof(next().c_str());
+    else if (a == "--scale") scale = std::atof(next().c_str());
+    else if (a == "--label") label = next();
     else { std::fprintf(stderr, "unknown option %s\n", a.c_str()); return 2; }
   }
   const double n_cm2 = 1.4e12;
@@ -48,6 +61,12 @@ int main(int argc, char** argv) {
   if (geo == "funnel_nguyenD") {
     FunnelParams fp; b = make_funnel(fp);
     xF = fp.Lc + 0.5 * (fp.Wc - fp.Wn) / std::tan(deg2rad(fp.alpha_deg));  // neck plane, 3580.5 nm
+  } else if (geo == "funnel" || geo == "symmetric") {
+    fq.Wc *= scale; fq.Lc *= scale; fq.Wn *= scale; fq.Wd *= scale; fq.Ld *= scale;
+    double Lt = 0.5 * (fq.Wc - fq.Wn) / std::tan(deg2rad(fq.alpha_deg));
+    if (geo == "funnel") b = make_funnel(fq);
+    else b = make_symmetric_constriction(fq.Wc, fq.Lc, fq.alpha_deg, fq.Wn, 0);
+    xF = fq.Lc + Lt;   // neck plane (the mirror plane of the symmetric control)
   } else if (geo == "straight_control") {
     b = make_stepped_channel(2000, 1000, 175, 5490, 2000, 1000);
     xF = 0.5 * b.bbox_max().x;  // device midpoint: keeps the control mirror symmetric
@@ -90,12 +109,13 @@ int main(int argc, char** argv) {
   if (fresh)
     csv << "geo,field,ellF_nm,xF_nm,lambda_nm,p,f_Hz,V_V,N_side,Idc_A,Idc_err_A,Ibw_A,Ibw_err_A,ReY1_S,ImY1_S,I1_err_A,"
            "T_SD,T_DS,Phi_S_eV,Phi_D_eV,f_dirac,f_trapped,f_heated,Ek_exit_max_eV,mean_time_fs,mean_time_tx_fs,"
-           "Pav_W,RI_A_per_W,cpp,seconds,reflect\n";
+           "Pav_W,RI_A_per_W,cpp,seconds,reflect,L_nm,Wc_nm,Wn_nm,shape\n";
   csv.precision(8);
-  csv << geo << "," << field << "," << ellF << "," << xF << "," << lambda << "," << spec << "," << f << "," << V << "," << N << ","
+  csv << (label.empty() ? geo : label) << "," << field << "," << ellF << "," << xF << "," << lambda << "," << spec << "," << f << "," << V << "," << N << ","
       << ac.Idc << "," << ac.Idc_err << "," << Ibw << "," << Ibw_err << "," << ac.Y1.real() << "," << ac.Y1.imag() << "," << ac.I1_err << ","
       << ac.T_SD << "," << ac.T_DS << "," << ac.Phi_S << "," << ac.Phi_D << "," << f_dirac << "," << f_trap << "," << f_heat << ","
-      << Ekmax << "," << mt << "," << mtx << "," << Pav << "," << RI << "," << cpp << "," << secs << "," << (reflect ? 1 : 0) << "\n";
+      << Ekmax << "," << mt << "," << mtx << "," << Pav << "," << RI << "," << cpp << "," << secs << "," << (reflect ? 1 : 0) << ","
+      << b.bbox_max().x << "," << fq.Wc << "," << fq.Wn << "," << geo << "\n";
 
   if (!hist.empty()) {
     std::ofstream h(hist);
@@ -122,7 +142,7 @@ int main(int argc, char** argv) {
     }
   }
 
-  std::printf("%-16s %-7s%s ellF %5.0f lambda %5s p %.1f f %9.3g V %5.3f N %ld | Idc %9.4f +- %.4f uA", geo.c_str(), field.c_str(), reflect ? "*" : "", ellF,
+  std::printf("%-16s %-7s%s ellF %5.0f lambda %5s p %.1f f %9.3g V %5.3f N %ld | Idc %9.4f +- %.4f uA", (label.empty() ? geo : label).c_str(), field.c_str(), reflect ? "*" : "", ellF,
               std::isinf(lambda) ? "inf" : std::to_string((int)lambda).c_str(), spec, f, V, N, ac.Idc * 1e6, ac.Idc_err * 1e6);
   if (f <= 0 && V != 0) std::printf(" | bias-window %9.4f +- %.4f uA", Ibw * 1e6, Ibw_err * 1e6);
   if (f > 0) std::printf(" | Y1 %.4f%+.4fi mS | R_I %.3f A/W (P_av %.1f uW)", ac.Y1.real() * 1e3, ac.Y1.imag() * 1e3, RI, Pav * 1e6);

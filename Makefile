@@ -5,7 +5,7 @@ LDFLAGS  ?= -lpthread
 
 SRC  := $(wildcard src/*.cpp) $(wildcard src/hydro/*.cpp)
 OBJ  := $(patsubst src/%.cpp,build/%.o,$(SRC))
-APPS := build/gd_tests build/gd_killtest build/gd_geom build/gd_hydro_mesh build/gd_hydro_tests build/gd_hydro_sweep build/gd_hydro_fields build/gd_thz_tests build/gd_thz_sweep build/gd_thz_power build/gd_bthz
+APPS := build/gd_tests build/gd_killtest build/gd_geom build/gd_hydro_mesh build/gd_hydro_tests build/gd_hydro_sweep build/gd_hydro_fields build/gd_thz_tests build/gd_thz_sweep build/gd_thz_power build/gd_bthz build/gd_dc_gate build/gd_dc_gate_ref
 
 all: $(APPS)
 
