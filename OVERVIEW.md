@@ -16,8 +16,10 @@ The answer this project arrives at has two parts.
 - **As a detector, sometimes yes, but weakly.** A funnel can turn
   terahertz radiation into a DC signal by its shape, but only if it is very
   short (about half a micrometre for a frequency of one terahertz) and its
-  edges are smooth. Even then the shape does no better than a simpler
-  effect that comes from how the device is wired.
+  edges are reasonably smooth. Edges of graphene cut in the usual way have
+  been measured to be anywhere from smooth enough to far too rough. Even
+  at its best the shape does no better than a simpler effect that comes
+  from how the device is wired.
 - **As a power source, no.** Neither shape converts as much as 1 % of the
   incoming power, in any of the cases we studied. The Tesla valve does
   nothing useful in graphene.
@@ -88,14 +90,19 @@ search is in [paper/prior_work.md](paper/prior_work.md).
 
 ## What we found
 
-**1. The funnel does rectify a steady current, but our model matches the
-experiment only under favourable assumptions.** In the billiard-ball
-picture, a perfectly clean funnel passes 1.6 times more current one way
-than the other. A published experiment on the same shape measured 1.66.
-With a realistic amount of scattering inside the graphene the simulated
-figure is anywhere between 0.96 and 1.55, depending on where along the
-device the applied voltage is assumed to drop. Our model does not calculate
-that, so we do not claim to reproduce the measurement.
+**1. The funnel does rectify a steady current, weakly.** In the
+billiard-ball picture, a perfectly clean funnel passes 1.6 times more
+current one way than the other at a tenth of a volt. With a realistic
+amount of scattering inside the graphene the simulated figure is anywhere
+between 0.96 and 1.55, depending on where along the device the applied
+voltage is assumed to drop. When the simulation calculates that itself,
+most of the voltage falls at the narrowest point and the figure is 1.02.
+A published experiment on the same shape reported 1.66, but at about
+1.5 volts; at a tenth of a volt its curve shows about 1.03 to 1.04. Our
+1.02 does not conflict with that, and it does not confirm the model
+either: the measured device has about fifteen times the resistance of the
+simulated one, so most of what limits its current is something the
+simulation leaves out.
 
 **2. The Tesla valve does nothing when electrons act like billiard balls.**
 Current is the same in both directions, within the noise of the simulation.
@@ -135,7 +142,7 @@ valve contributes ten to twenty times less than the funnel at every
 frequency.
 
 **6. A very short funnel does rectify terahertz radiation by its shape,
-but only weakly, and only if its edges are smooth.** In the billiard-ball
+but only weakly, and only if its edges are smooth enough.** In the billiard-ball
 picture the funnel's one-way behaviour takes time to act, because electrons
 need time to cross the device. What matters is how far an electron gets
 during one swing of the radiation. The funnel from the published experiment
@@ -154,13 +161,33 @@ a quarter of the voltage is used up at the two contacts, and the rest
 falls evenly on both sides of the narrowest point, which helps the one-way
 effect much less than either assumption did.
 
-The same simulation showed two more things. If the edges of the funnel are
-rough, so that half of the electrons hitting them bounce off in a random
-direction, the effect disappears. And if the gate is close to the graphene
+The same simulation showed three more things. The first is that the effect
+depends on how smooth the edges of the funnel are. An electron that hits
+a perfectly smooth edge bounces off like a ball off a cushion. At a rough
+edge it may leave in a random direction instead. A rough edge is not
+equally rough for every electron: one that strikes it at a slant is
+reflected more cleanly than one that hits it head-on, in the way a
+slightly rough floor still shows a reflection when you look along it. The
+electrons that matter meet the sloping walls of the funnel at a slant. We
+simulated edges of that kind. If half of the electrons that hit the edge
+head-on bounce off cleanly, half of the effect is left. If only one in
+five does, nothing is left. Measurements of real graphene edges made by
+etching, the usual way of cutting graphene into shape, range from almost
+no clean bounces to eight in ten. So a funnel made the usual way could
+keep most of the shape effect or none of it, depending on how good its
+edges turn out. (An earlier version of this overview said that etched
+edges would leave nothing. That was based on a cruder model of the edge,
+in which the slant made no difference, and on fewer measurements.)
+
+The second is that if the gate is close to the graphene
 (30 nanometres), a plain straight strip wired as in point 5 gives twice the
-signal of the funnel shape. So the length of the device decides whether a
-"geometric diode" can work at terahertz frequencies at all, its edges decide
-whether it does, and how well a long one works with a steady current says
+signal of the funnel shape. The third is that the metal contacts matter
+in an unexpected way. A contact that turns back three electrons in four
+costs little, as long as it treats all directions alike. A contact with
+the same electrical resistance that lets through only electrons arriving
+nearly head-on removes the effect. So the length of the device decides whether a
+"geometric diode" can work at terahertz frequencies at all, its edges and
+contacts decide whether it does, and how well a long one works with a steady current says
 little about either. One measurement in the literature, at 28 terahertz, is
 not reproduced by our model at all. That frequency is beyond what the model
 can describe.
@@ -179,8 +206,9 @@ from earlier work by others. Our contribution is the numbers for graphene.
 is a much less demanding job than harvesting power from it. On paper, the
 long wired funnel is about as sensitive as the best graphene terahertz
 detectors that have been built and measured at room temperature. The short
-funnel, if about twenty of them with smooth edges could be connected to one
-antenna without losses, would be about half as sensitive as that. Both are
+funnel, if about twenty of them with perfectly smooth edges could be
+connected to one antenna without losses, would be about half as sensitive
+as that. Both are
 well short of commercial detectors based on conventional diodes.
 
 ## The bottom line
@@ -188,9 +216,10 @@ well short of commercial detectors based on conventional diodes.
 Shape alone can make a graphene terahertz *detector*. It does not make a
 power source.
 
-- A **funnel half a micrometre long with smooth edges** rectifies terahertz
-  radiation by its shape, about as well as the wiring effect and no
-  better. A **long funnel** only does so because of how it is wired, or by
+- A **funnel half a micrometre long with smooth edges** rectifies
+  terahertz radiation by its shape, about as well as the wiring effect and
+  no better. With the smoother of the etched edges that have been measured
+  it keeps half or more of that; with the rougher ones, nothing. A **long funnel** only does so because of how it is wired, or by
   acting as a horn.
 - No funnel we studied is an energy harvester.
 - The **Tesla valve** is neither a detector nor a harvester in graphene.
@@ -205,7 +234,9 @@ can overstate the effect several times over.
 ## What to keep in mind
 
 - **This is simulation, not experiment.** The models are checked against
-  theory and against one measured number, but no device was built.
+  theory, but no device was built. The one measurement we can compare
+  with, on the long funnel, agrees with the simulation and is too weak a
+  test to confirm it (point 1).
 - **The models are idealised, and nearly always in the device's favour.**
   Perfect contacts, a perfect antenna connection and smooth edges were
   assumed unless stated. A real device should do worse. That makes the
@@ -213,10 +244,16 @@ can overstate the effect several times over.
   short funnel, an upper estimate. That estimate has already come down
   once, when an assumption was replaced by a calculation.
 - **The short-funnel result has not been checked against an experiment.**
-  The simulation that calculates the voltage still treats the contacts as
-  ideal, and a quarter of the voltage is lost there, so a different
-  contact could change the answer. We tried only perfectly smooth and
-  half-rough edges, so we do not know how smooth the edges need to be.
+  We tried two kinds of imperfect contact in the simulation that
+  calculates the voltage. A contact that turns back three electrons in
+  four, whatever their direction, costs surprisingly little. A contact
+  with the same electrical resistance that lets through only electrons
+  arriving nearly head-on removes the effect. We do not know which kind
+  a real metal contact is closer to. How a real graphene edge reflects
+  electrons that hit it at a slant has not been measured as far as we
+  know; we used a standard formula for rough surfaces. The handful of
+  measurements of etched edges we found disagree widely, and our search
+  was limited.
 - **Some physics is left out.** In particular, real graphene detectors also
   respond because the radiation heats the electrons. That effect is not in
   our models. A mechanism outside the three we studied could behave

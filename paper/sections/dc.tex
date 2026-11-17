@@ -6,24 +6,60 @@
 Figure~\ref{fig:ballistic-dc} shows the asymmetry at $0.1$~V and the
 resistance of all six devices for three edge specularities and three mean
 free paths. In the clean specular limit the funnel gives $A=1.62\pm0.02$
-($1.25$ at $0.05$~V), close to the $1.66$ measured at
-$80\ \mu$A~\cite{nguyen2021geometric}; the agreement is
-conditional, because at the mean free path estimated for these
-devices~\cite{nguyen2021geometric}, $700\nm$, the same model gives $1.09$, and
-$1.06$ with fully diffuse edges. The assumed field matters as much as the
-scattering. If the same bias is taken to drop over the taper and neck alone,
-with the leads cut to $250\nm$ (device G2 of Table~\ref{tab:short}), the
-asymmetry at $\lambda=700\nm$ is $1.55$ and the clean value $1.91$; if it
-drops over $500\nm$ centred on the neck of the full device it is $0.96$,
-the reverse sign. The experiment has its contacts at the ends of the
-$6\um$ shape and is a two-terminal measurement, so none of these profiles
-is excluded by its geometry; self-consistent electrostatics is what would
-decide between them~\cite{truccolo2024comprehensive}. The choice of field
-profile, $\lambda$ and $p$ therefore moves $A-1$ by a factor of several,
-and we do not claim a quantitative fit. What the comparison establishes is
-the mechanism and the scale: electrons accelerated toward the neck by the
-bias arrive with more kinetic energy and more transverse modes than those
-decelerated toward it.
+($1.25$ at $0.05$~V); at the mean free path estimated for these
+devices~\cite{nguyen2021geometric}, $700\nm$, the same model gives $1.09$,
+and $1.06$ with fully diffuse edges. The assumed field matters as much as
+the scattering. If the same bias is taken to drop over the taper and neck
+alone, with the leads cut to $250\nm$ (device G2 of
+Table~\ref{tab:short}), the asymmetry at $\lambda=700\nm$ is $1.55$ and
+the clean value $1.91$; if it drops over $500\nm$ centred on the neck of
+the full device it is $0.96$, the reverse sign. The experiment has its
+contacts at the ends of the $6\um$ shape and is a two-terminal
+measurement, so none of these profiles is excluded by its geometry. The
+choice of field profile, $\lambda$ and $p$ moves $A-1$ by a factor of
+several and can reverse it.
+
+Computing the field removes that choice. In the model of
+Sec.~\ref{sec:model-pic}, with $\lambda=700\nm$, specular edges, ideal
+contacts and the gate at $300\nm$, device D has
+\begin{equation}
+A=1.0174\pm0.0008
+\label{eq:deviceD}
+\end{equation}
+at $0.1$~V [Fig.~\ref{fig:ballistic-dc}(a)], and $1.0172\pm0.0014$ with
+half the number of particles; its resistance is $0.93$~k$\Omega$, with a
+difference of $2.5\%$ between the two particle numbers that we have not
+traced. The potential is that of neither assumption
+(Fig.~\ref{fig:deviceD}). Of the bias, $55\%$ falls on the $500\nm$
+centred on the neck, where a uniform field puts $8\%$; the two leads take
+$9\%$ and $15\%$, the taper up to that region $15\%$, and $3\%$ falls at
+each contact plane. The asymmetry lies between those of the two imposed
+profiles, as the potential does, and $A-1$ is a fifth of the
+uniform-field value at the same mean free path. Self-consistent
+electrostatics was known to roughly halve the asymmetry of such
+diodes~\cite{truccolo2024comprehensive}; for this shape it does more.
+
+The comparison with the measurement has to be made at equal bias. The
+asymmetry of $1.66$ reported for this device~\cite{nguyen2021geometric} is
+the ratio of the voltages at $\pm80\ \mu$A, a current that the device
+carries at about $1.5$~V. That is fifteen times the bias of the
+calculations and about ten times $\EF/e$, so the nearness of the clean
+uniform-field value of $1.62$ at $0.1$~V to it has no significance. At
+$0.1$~V the published curve gives an asymmetry of $1.03$ to $1.04$, which
+we read from the figure with an uncertainty of $0.02$
+[Fig.~\ref{fig:ballistic-dc}(a)]; for an asymmetry this weak the ratio of
+voltages at fixed current and the ratio of currents at fixed voltage
+coincide. The computed $1.017$ is consistent with it, and that is not a
+validation of the model. The measured device has a resistance of $12$ to
+$20$~k$\Omega$ against $0.93$~k$\Omega$ in the model, so most of its
+resistance lies in what the model does not contain, which may be the
+contacts, a density below our estimate, disorder, or all of them; and an
+asymmetry this close to one would follow from many models. We claim no
+quantitative agreement with the experiment. What the calculations
+establish is the mechanism and the scale: electrons accelerated toward
+the neck by the bias arrive with more kinetic energy and more transverse
+modes than those decelerated toward it, and how much that rectifies
+depends on where the bias drops.
 
 No Tesla geometry rectifies in this model. All 54 points of the three
 side-loop variants lie between $0.93$ and $1.08$ with standard errors of
@@ -47,11 +83,26 @@ regime~\cite{geurs2020rectification}.
 \caption{Ballistic transport at dc. (a) Asymmetry $A=I(+V)/|I(-V)|$ at
 $0.1$~V for the funnel, four Tesla-valve geometries and the straight control,
 for edge specularities $p$ and mean free paths $\lambda$; error bars are one
-standard error from 64 batches of 400\,000 trajectories in total. The dotted
-line marks the measured value for the funnel~\cite{nguyen2021geometric}. (b)
-Forward resistance of the same devices.}
+standard error from 64 batches of 400\,000 trajectories in total. The
+black diamond is the funnel with the field computed,
+Eq.~\eqref{eq:deviceD}; the grey bar is the asymmetry measured for the
+funnel at $0.1$~V, read from the curve of
+Ref.~\cite{nguyen2021geometric}. (b) Forward resistance of the same
+devices in the imposed uniform field.}
 \label{fig:ballistic-dc}
 \end{figure*}
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{\figpath/fig13_deviceD.pdf}
+\caption{Device D with the field computed: static potential energy at a
+bias of $0.1$~V in units of the bias, for $\lambda=700\nm$, specular
+edges, ideal contacts and the gate at $300\nm$. (a) Map, with contours
+every $0.1$ drawn after smoothing over $45\nm$; the bars are the contact
+planes. (b) On the axis, against the two imposed profiles of the text.
+The profile at the reversed bias differs from the one shown by less
+than $0.04$, and by $0.001$ away from the neck.}
+\label{fig:deviceD}
+\end{figure}
 
 \subsection{Viscous: the Tesla valve works, beyond the reach of the Fermi liquid}
 

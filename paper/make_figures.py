@@ -1,9 +1,11 @@
 """All figures of the paper, drawn from the result files of this repository.
 usage: .venv/bin/python paper/make_figures.py [1 2 ... overview]     (no argument: all)
 Outputs paper/figs/figN_*.pdf and .png. Style and colour conventions: paper/figstyle.py.
-The file numbers are the order in which the figures were made. In the paper fig9 (steady
-gated flow) is Fig. 4, fig10 (length scaling of the ballistic response) is Fig. 9, fig11 (the
-short funnel with the field computed) is Fig. 10 and fig8 (synthesis) is Fig. 11.
+The file numbers are the order in which the figures were made. In the paper fig13 (the 6 um
+funnel with the field computed) is Fig. 3, fig3 to fig7 are Figs. 4, 6, 7, 8 and 9, fig9
+(steady gated flow) is Fig. 5, fig10 (length scaling of the ballistic response) is Fig. 10,
+fig11 (the short funnel with the field computed) is Fig. 11, fig12 (the short funnel between
+contacts that reflect) is Fig. 12 and fig8 (synthesis) is Fig. 13.
 """
 import sys, os, math, csv
 import numpy as np
@@ -136,10 +138,15 @@ def fig2():
             ax.text(k, -0.095, p, transform=ax.get_xaxis_transform(), ha="center", va="top", fontsize=7)
     axes[0].axhline(1, color=GREY, lw=0.7, ls="--", zorder=1)
     axes[0].set_ylabel(r"asymmetry $A=I(+V)/|I(-V)|$ at 0.1 V"); axes[0].set_ylim(0.82, 1.72)
-    axes[0].plot([-0.6, 0.3], [1.66, 1.66], color=GREY, lw=0.7, ls=":")
-    axes[0].text(0.4, 1.66, "measured 1.66 (Nguyen et al., device D)", fontsize=6.5, va="center", color=GREY)
+    axes[0].axhspan(1.01, 1.06, xmin=0.0, xmax=2.9 / 9.2, color="#cfcfcf", lw=0, zorder=0)
+    axes[0].annotate("measured at 0.1 V", xy=(1.36, 1.062), xytext=(1.25, 1.33), fontsize=6.5, ha="center", va="bottom", color=GREY,
+                     arrowprops=dict(arrowstyle="-", lw=0.5, color=GREY, shrinkA=1, shrinkB=0))
+    import deviced_results as dd
+    os.chdir(ROOT); q = dd.pair("P7.csv")
+    axes[0].errorbar([1 + off[0]], [q["A"]], [q["eA"]], color=BLACK, marker="D", ms=4.2, ls="none", mec="white", mew=0.5, zorder=4, label="funnel, field computed")
     hh, ll = axes[0].get_legend_handles_labels()
-    fig.legend(hh, ll, loc="upper center", ncol=3, fontsize=6.8, bbox_to_anchor=(0.5, 1.03), handletextpad=0.2, columnspacing=1.4)
+    hh, ll = [hh[0], hh[-1]] + hh[1:-1], [ll[0], ll[-1]] + ll[1:-1]
+    fig.legend(hh, ll, loc="upper center", ncol=4, fontsize=6.6, bbox_to_anchor=(0.5, 1.075), handletextpad=0.2, columnspacing=1.2)
     axes[1].set_yscale("log"); axes[1].set_ylabel(r"forward resistance $V/I(+V)$ (k$\Omega$)"); axes[1].set_ylim(0.3, 40)
     panel(axes[0], "a", x=-0.16, y=1.02); panel(axes[1], "b", x=-0.16, y=1.02)
     save(fig, "fig2_ballistic_dc")
@@ -809,7 +816,10 @@ def fig11():
     static, ac = sf.load_all(); dec = c.decision()
     L, XF, ELL = c.L, c.XF, c.ELL
     fig = plt.figure(figsize=(COL2, 4.75))
-    gs = fig.add_gridspec(2, 3, wspace=0.50, hspace=0.50, left=0.075, right=0.985, top=0.955, bottom=0.115)
+    g0 = fig.add_gridspec(2, 1, hspace=0.50, left=0.075, right=0.985, top=0.955, bottom=0.115)
+    gs = g0[0].subgridspec(1, 3, wspace=0.50)
+    gb = g0[1].subgridspec(1, 2, width_ratios=[1.0, 1.42], wspace=0.24)
+    gde = gb[0].subgridspec(1, 2, wspace=0.07); gfg = gb[1].subgridspec(1, 2, width_ratios=[1.0, 1.35], wspace=0.46)
     FT = [0.1, 0.3, 1, 3, 6]
 
     def faxis(ax):
@@ -866,7 +876,7 @@ def fig11():
     SER = (("funnel", "sym", BLACK, "D", "-", "funnel, shape only"), ("strip", "gated", BLUE, "o", "-", "strip, drain to gate"),
            ("funnel", "gated", ORANGE, "s", "-", "funnel, drain to gate"), ("symmetric", "sym", GREY, "x", "none", "mirror-symmetric control"))
     for k, d in enumerate(c.GATES):
-        ax = fig.add_subplot(gs[1, k]); ax.axhline(0, color=GREY, lw=0.5)
+        ax = fig.add_subplot(gde[0, k]); ax.axhline(0, color=GREY, lw=0.5)
         for geo, mode, col, mk, ls, lab in SER:
             if geo == "funnel": rs = pic_g3(d, mode)
             else: rs = [dict(f=r["f"], I=r["I"], e=r["e"]) for r in c.series(geo, mode, d)]
@@ -875,13 +885,15 @@ def fig11():
                         mec=col if mk == "x" else "white", mew=0.9 if mk == "x" else 0.3, label=lab)
         ax.set_xscale("log"); ax.set_xlim(0.2, 4.5); ax.set_xticks([0.3, 1, 3]); ax.set_xticklabels(["0.3", "1", "3"])
         ax.xaxis.set_minor_formatter(NullFormatter()); ax.tick_params(axis="x", which="minor", bottom=False, top=False)
-        ax.set_xlabel("frequency (THz)"); ax.set_ylim(-2.1, 1.75); ax.set_ylabel(r"rectified current ($\mu$A)")
-        ax.text(0.04, 0.95, f"gate at {d} nm", transform=ax.transAxes, fontsize=6.6, va="top")
-        if k == 0: ax.legend(loc="lower left", fontsize=5.6, handlelength=1.8, labelspacing=0.25, borderaxespad=0.3)
-        panel(ax, "de"[k], x=-0.30)
+        ax.set_xlabel("frequency (THz)"); ax.set_ylim(-2.1, 1.75)
+        if k == 0: ax.set_ylabel(r"rectified current ($\mu$A)")
+        else: ax.tick_params(axis="y", labelleft=False)
+        ax.text(0.05, 0.95, f"gate at {d} nm", transform=ax.transAxes, fontsize=6.4, va="top")
+        if k == 0: ax.legend(loc="lower left", fontsize=5.2, handlelength=1.5, labelspacing=0.22, borderaxespad=0.25, handletextpad=0.5)
+        panel(ax, "de"[k], x=-0.36 if k == 0 else -0.04)
 
     # (f) mean free path and walls at 1 THz
-    ax = fig.add_subplot(gs[1, 2])
+    ax = fig.add_subplot(gfg[0, 0])
     keys = [k for k, *_ in c.CASES]; xs = np.arange(len(keys))
     ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0); ax.axhline(0, color=GREY, lw=0.5)
     for fm, col, mk, off in (("uniform", PURPLE, "o", -0.24), ("local", DPURPLE, "s", 0.24)):
@@ -893,8 +905,126 @@ def fig11():
     ax.tick_params(axis="x", which="both", top=False)
     ax.set_xlabel("mean free path (nm)"); ax.set_ylabel("responsivity at 1 THz (A/W)"); ax.set_ylim(-0.12, 1.08)
     ax.text(-0.5, 0.275, "plasmonic funnel", fontsize=5.8, color=BLUE, va="center", ha="left")
-    panel(ax, "f", x=-0.30)
+    panel(ax, "f", x=-0.36)
+
+    # (g) the edges at 1 THz, computed field: one specularity for all angles, and a rough edge
+    import edges_results as er
+    ax = fig.add_subplot(gfg[0, 1])
+    ax.axhline(0, color=GREY, lw=0.5)
+    for d, ls, mfc in ((300, "-", GREY), (30, "--", "white")):
+        v = c.spec_scan(d)
+        ax.errorbar([q[0] for q in v], [q[1]["R"] for q in v], [q[1]["eR"] for q in v], color=GREY, ls=ls, marker="o", ms=2.8, mfc=mfc, mec=GREY, mew=0.6, lw=0.8)
+    for d, ls, mfc in ((300, "-", BLACK), (30, "--", "white")):
+        v = er.rough_scan(d); top = c.spec_scan(d)[-1][1]
+        x = [er.head_on(h) for h, q in v] + [1.0]; y = [q["R"] for h, q in v] + [top["R"]]; e = [q["eR"] for h, q in v] + [top["eR"]]
+        o = np.argsort(x)
+        ax.errorbar(np.array(x)[o], np.array(y)[o], np.array(e)[o], color=BLACK, ls=ls, marker="D", ms=3.4, mfc=mfc, mec=BLACK, mew=0.6, lw=1.0)
+    ax.plot([0.0, 0.8], [0.147, 0.147], color=GREY, lw=0.9, solid_capstyle="butt")
+    for x0 in (0.0, 0.8): ax.plot([x0, x0], [0.143, 0.151], color=GREY, lw=0.9)
+    ax.text(0.40, 0.141, "measured, etched edges", fontsize=5.6, color=GREY, ha="center", va="top")
+    ax.text(0.33, 0.085, "rough\nedge", fontsize=5.8, color=BLACK, ha="center", va="center", linespacing=1.1)
+    ax.text(0.80, -0.022, "one $p$ for\nall angles", fontsize=5.8, color=GREY, ha="center", va="center", linespacing=1.1)
+    ax.set_xlim(-0.04, 1.05); ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1.0]); ax.set_ylim(-0.07, 0.158); ax.set_yticks([-0.05, 0, 0.05, 0.10, 0.15])
+    ax.set_xlabel("specularity of a head-on hit"); ax.set_ylabel("responsivity at 1 THz (A/W)")
+    panel(ax, "g", x=-0.36)
     save(fig, "fig11_selfconsistent")
+
+
+# =============================================================================
+# Figure 12: the short funnel between contacts that reflect (Stage B10, part A)
+# =============================================================================
+def fig12():
+    c = pic(); import contacts_results as cr
+    pooled, jn = cr.contact_points()
+    fig = plt.figure(figsize=(COL2, 2.55))
+    gs = fig.add_gridspec(1, 3, wspace=0.42, left=0.075, right=0.985, top=0.80, bottom=0.165)
+    Tg = np.linspace(0.2, 1.0, 300)
+    to_r = lambda t: 0.5 * cr.RSH_UM * (2 - np.clip(t, 1e-3, None)) / np.clip(t, 1e-3, None)
+    to_t = lambda r: cr.RSH_UM / (np.clip(r, 1e-3, None) + 0.5 * cr.RSH_UM)
+    for col, (key, ek, ylab) in enumerate((("I", "e", r"rectified current at 1 THz ($\mu$A)"), ("R", "eR", "responsivity at 1 THz (A/W)"))):
+        ax = fig.add_subplot(gs[0, col])
+        if key == "I": ax.axhspan(-cr.FLOOR, cr.FLOOR, color=SHADE, lw=0, zorder=0)
+        ax.axhline(0, color=GREY, lw=0.5)
+        for d, ls, full in ((300, "-", True), (30, "--", False)):
+            b = cr.base_ac(d); f = np.array([cr.series(t, d) for t in Tg])
+            ax.plot(Tg, b[key] * (f ** 3 if key == "I" else f * f), color=GREY, lw=0.9, ls=ls)
+            xs = [1.0] + [T for T in cr.TC if T in pooled[d]]
+            ys = [b[key]] + [pooled[d][T][key] for T in xs[1:]]; es = [b[ek]] + [pooled[d][T][ek] for T in xs[1:]]
+            ax.errorbar([t + (0.008 if full else -0.008) for t in xs], ys, es, fmt="D", color=BLACK, ms=3.4, mfc=BLACK if full else "white", mec=BLACK, mew=0.6, lw=0.8)
+            dj = sorted(jn[d])
+            ax.errorbar([cr.MATCH[j] + (0.008 if full else -0.008) for j in dj], [jn[d][j][key] for j in dj], [jn[d][j][ek] for j in dj], fmt="s", color=VERM, ms=3.2,
+                        mfc=VERM if full else "white", mec=VERM, mew=0.6, lw=0.8)
+        ax.set_xlim(1.05, 0.19); ax.set_xticks([1.0, 0.75, 0.5, 0.25]); ax.set_xlabel("contact transparency $T$"); ax.set_ylabel(ylab)
+        ax.tick_params(axis="x", which="both", top=False)
+        sec = ax.secondary_xaxis("top", functions=(to_r, to_t)); sec.set_xticks([50, 100, 150, 350])
+        sec.set_xlabel(r"contact resistance ($\Omega\,\mu$m)", fontsize=7.0, labelpad=3); sec.tick_params(labelsize=6.6)
+        if key == "I":
+            ax.set_ylim(-0.11, 0.53); ax.text(1.02, -0.025, "floor", fontsize=5.8, color=GREY, ha="left", va="center")
+        else:
+            ax.set_ylim(-0.045, 0.148); ax.set_yticks([0, 0.05, 0.10])
+            h = [Line2D([], [], color=BLACK, marker="D", ms=3.4, ls="none", label="one $T$ for all angles"),
+                 Line2D([], [], color=VERM, marker="s", ms=3.2, ls="none", label="collimating"),
+                 Line2D([], [], color=GREY, lw=0.9, label="series resistor")]
+            ax.legend(handles=h, loc="lower left", fontsize=5.6, handlelength=1.6, labelspacing=0.25, borderaxespad=0.3, handletextpad=0.5, bbox_to_anchor=(0.0, 0.02))
+        panel(ax, "ab"[col], x=-0.30, y=1.20)
+
+    # (c) the static potential on the axis behind reflecting contacts
+    ax = fig.add_subplot(gs[0, 2])
+    L, XF = c.L, c.XF
+    for T, col, lw, path, lab in ((1.0, BLACK, 1.5, f"{c.R}/P1_d300_V0.1.txt", "ideal contacts"), (0.5, BLUE, 1.1, f"{c.R}/P10s_T0.5_V0.1.txt", "$T=0.5$"),
+                                  (0.25, VERM, 1.1, f"{c.R}/P10s_T0.25_V0.1.txt", "$T=0.25$")):
+        x, y, m = c.load_map(path); u = c.axis(x, y, m["mean"]) / 0.1; k = (x >= 0) & (x <= L)
+        ax.plot(x[k], u[k], color=col, lw=lw, label=lab)
+    ax.axvline(XF, color=GREY, lw=0.5, ls=":"); ax.text(XF - 10, 0.44, "neck", fontsize=6.2, color=GREY, ha="right", va="center")
+    ax.set_xlim(0, L); ax.set_ylim(-0.56, 0.56); ax.set_xticks([0, 250, 500]); ax.set_yticks([-0.5, 0, 0.5])
+    ax.set_xlabel("$x$ on the axis (nm)"); ax.set_ylabel("potential energy / $eV$")
+    ax.legend(loc="lower left", fontsize=5.8, handlelength=1.6, labelspacing=0.25, borderaxespad=0.3)
+    panel(ax, "c", x=-0.30, y=1.20)
+    save(fig, "fig12_contacts")
+
+
+# =============================================================================
+# Figure 13: the 6 um funnel (device D) with the field computed (Stage B10, part B)
+# =============================================================================
+def fig13():
+    from matplotlib.colors import LinearSegmentedColormap
+    c = pic(); loops, XF, L = funnel_loops()
+    x, y, m = c.load_map(f"{c.R}/P7_V0.1.txt"); u = m["mean"] / 0.1
+    fig = plt.figure(figsize=(COL1, 3.55))
+    # (a) map
+    ax = fig.add_axes([0.155, 0.635, 0.80, 0.29])
+    cmap = LinearSegmentedColormap.from_list("pg", ["#1b7837", "#a6dba0", "#eeeeee", "#c2a5cf", "#762a83"])
+    X, Y = np.meshgrid(x, y)
+    half = np.where(X < 2000, 1000.0, np.where(X < XF, 1000.0 - (X - 2000) * (1000.0 - 87.5) / (XF - 2000), 1000.0))
+    inside = (np.abs(Y) <= half) & (X >= 0) & (X <= L)
+    pm = ax.pcolormesh(x / 1e3, y / 1e3, np.ma.masked_where(~inside, u), cmap=cmap, vmin=-0.5, vmax=0.5, shading="nearest", rasterized=True)
+    ker = np.exp(-0.5 * (np.arange(-18, 19) / 6.0) ** 2); ker /= ker.sum()      # 45 nm: the contours only, against the particle noise
+    def blur(a):
+        for ax_ in (0, 1): a = np.apply_along_axis(lambda v: np.convolve(np.pad(v, 18, mode="edge"), ker, mode="valid"), ax_, a)
+        return a
+    us = blur(np.where(inside, u, 0.0)) / np.maximum(blur(inside.astype(float)), 1e-9)     # averaged over the sheet only
+    ax.contour(x / 1e3, y / 1e3, np.ma.masked_where(~inside, us), levels=np.arange(-0.4, 0.41, 0.1), colors=BLACK, linewidths=0.3, alpha=0.6)
+    P = loops[0] / 1e3; ax.plot(list(P[:, 0]) + [P[0, 0]], list(P[:, 1]) + [P[0, 1]], color=BLACK, lw=0.7)
+    for x0 in (0, L / 1e3): ax.plot([x0, x0], [-1, 1], color=BLACK, lw=1.6, solid_capstyle="butt")
+    ax.set_xlim(-0.12, L / 1e3 + 0.12); ax.set_ylim(-1.12, 1.12); ax.set_aspect("equal", adjustable="box", anchor="W")
+    ax.set_xticks([0, 2, 4, 6]); ax.set_yticks([-1, 0, 1]); ax.tick_params(axis="x", labelbottom=False); ax.set_ylabel(r"$y$ ($\mu$m)")
+    cax = fig.add_axes([0.30, 0.945, 0.50, 0.018]); cb = fig.colorbar(pm, cax=cax, orientation="horizontal", ticks=[-0.5, 0, 0.5])
+    cax.xaxis.set_ticks_position("top"); cb.ax.tick_params(labelsize=6.2, length=2); cb.outline.set_linewidth(0.4)
+    fig.text(0.82, 0.954, "potential\nenergy / $eV$", fontsize=6.2, ha="left", va="center", linespacing=1.0)
+    ax.text(-0.42, 1.02, "(a)", transform=ax.transData, fontsize=8.5, fontweight="bold", va="bottom", ha="right", clip_on=False)
+    # (b) on the axis
+    ax = fig.add_axes([0.155, 0.115, 0.80, 0.455])
+    xr = np.linspace(0, L, 1200)
+    ax.plot(xr / 1e3, 0.5 - xr / L, color=PURPLE, lw=1.0, label="imposed: uniform")
+    ax.plot(xr / 1e3, np.clip(0.5 - (xr - (XF - 250)) / 500, -0.5, 0.5), color=DPURPLE, lw=1.0, label="imposed: 500 nm at the neck")
+    k = (x >= 0) & (x <= L)
+    ax.plot(x[k] / 1e3, c.axis(x, y, m["mean"], 40.0)[k] / 0.1, color=BLACK, lw=1.5, label="computed")
+    ax.axvline(XF / 1e3, color=GREY, lw=0.5, ls=":"); ax.text(XF / 1e3 + 0.08, 0.40, "neck", fontsize=6.2, color=GREY, ha="left")
+    ax.set_xlim(-0.12, L / 1e3 + 0.12); ax.set_ylim(-0.58, 0.58); ax.set_xticks([0, 2, 4, 6]); ax.set_yticks([-0.5, 0, 0.5])
+    ax.set_xlabel(r"$x$ ($\mu$m)"); ax.set_ylabel("potential energy / $eV$")
+    ax.legend(loc="lower left", fontsize=5.8, handlelength=1.8, labelspacing=0.25, borderaxespad=0.4)
+    ax.text(-0.185, 1.0, "(b)", transform=ax.transAxes, fontsize=8.5, fontweight="bold", va="bottom", ha="left")
+    save(fig, "fig13_deviceD")
 
 
 # =============================================================================
@@ -927,7 +1057,7 @@ def fig_overview():
     save(fig, "overview_devices")
 
 
-FIGS = {1: fig1, 2: fig2, 3: fig3, 4: fig4, 5: fig5, 6: fig6, 7: fig7, 8: fig8, 9: fig9, 10: fig10, 11: fig11}
+FIGS = {1: fig1, 2: fig2, 3: fig3, 4: fig4, 5: fig5, 6: fig6, 7: fig7, 8: fig8, 9: fig9, 10: fig10, 11: fig11, 12: fig12, 13: fig13}
 
 if __name__ == "__main__":
     args = sys.argv[1:]

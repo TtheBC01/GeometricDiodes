@@ -385,8 +385,152 @@ specular current with the opposite sign; two independent runs agree, and
 the mirror-symmetric control with the same walls gives zero within the
 floor. The imposed fields had given $0.42$ and $0.14\AW$ for this case;
 the computed field gives at most $0.04\AW$ in magnitude. The shape
-rectification of the short funnel requires edges that reflect specularly.
-Only $p=1$ and $p=0.5$ were computed, so how specular is not known.
+rectification of the short funnel does not survive walls that scatter
+half of all electrons diffusely.
+
+How specular the walls must be is shown in Fig.~\ref{fig:pic}(g). With
+one specularity for all angles, between $p=1$ and
+$p=0.5$ the current at $1\THz$ falls almost linearly, by $0.10$ to
+$0.12\ \mu$A for each tenth of the reflections that is made diffuse. It
+is $0.29\pm0.01$, $0.16\pm0.02$ and $0.10\pm0.02\ \mu$A at $p=0.9$,
+$0.8$ and $0.7$ under the $300\nm$ gate and $0.35\pm0.02$,
+$0.17\pm0.02$ and $0.08\pm0.01\ \mu$A under the $30\nm$ gate; the
+values at $p=0.7$ are no more than twice the floor. The absorbed power
+changes by $6\%$ over the scan, so the response per absorbed watt follows
+the current: $0.09$, $0.05$ and $0.03\AW$ under the $300\nm$ gate and
+$0.10$, $0.05$ and $0.02\AW$ under the $30\nm$ gate. One diffuse
+reflection in ten
+costs $30\%$ of the response, half is left at $p=0.84$, and the current
+passes through zero at $p=0.58$ and $0.63$ for the two gates, by linear
+interpolation.
+
+One specularity for all angles is not how a rough edge reflects, and for
+this device the difference is large. The walls of the taper are inclined
+at $30^{\circ}$ to the axis, so that an electron travelling along the axis
+meets them at $60^{\circ}$ from the normal, where Eq.~\eqref{eq:rough}
+gives the fourth root of the head-on specularity. With walls that follow
+Eq.~\eqref{eq:rough} the current at $1\THz$ under the $300\nm$ gate is
+$0.34\pm0.02$, $0.31\pm0.02$, $0.21\pm0.02$, $0.14\pm0.01$,
+$0.04\pm0.02$ and $-0.10\pm0.02\ \mu$A for $p_{0}=0.81$, $0.74$, $0.49$,
+$0.36$, $0.21$ and $0.05$, that is, for $h=1.1$, $1.3$, $2.0$, $2.4$,
+$3.0$ and $4.1\nm$; under the $30\nm$ gate it is $0.37\pm0.02$,
+$0.38\pm0.01$, $0.20\pm0.02$, $0.14\pm0.01$, $-0.02\pm0.01$ and
+$-0.18\pm0.02\ \mu$A [Fig.~\ref{fig:pic}(g)]. Per absorbed watt the
+funnel gives $0.10\AW$ at $p_{0}=0.81$, $0.06\AW$ at $0.49$ and
+$0.04\AW$ at $0.36$. The response is half its specular value at
+$p_{0}=0.50$ and $0.55$ for the two gates and passes through zero at
+$0.16$ and $0.23$, by linear interpolation, where one specularity for
+all angles required $0.84$ and about $0.6$. Placed on the scan of the
+single specularity, the five rough edges with a positive current under
+the $300\nm$ gate rectify like walls of $p=0.94$, $0.91$, $0.84$, $0.77$
+and $0.63$; Eq.~\eqref{eq:rough} at $60^{\circ}$ gives $0.95$, $0.93$,
+$0.84$, $0.78$ and $0.67$, and averaged over the cosine-law spread of
+hits of a gas at rest it gives $0.87$, $0.82$, $0.64$, $0.53$ and
+$0.39$. The oblique hits decide. The gas as a whole does not favour
+them: counted over all electrons, the fraction of specular reflections
+is the same on the sloping walls as on the others to within $0.005$. We
+attribute the result to the driven part of the distribution, which
+carries the rectified current and moves along the axis; the simulation
+does not identify those electrons separately. At $p_{0}=0.05$ the
+current is reversed, as it is for half-diffuse walls of a single
+specularity.
+
+Measured specularities of etched graphene edges span this range.
+Transverse magnetic focusing, in which the ratio of the second focusing
+peak to the first measures the reflection of electrons that meet the
+edge near normal incidence, gives $0.2$ to $0.5$ for graphene on
+hexagonal boron nitride with edges etched in an oxygen
+plasma~\cite{taychatanapat2013electrically}, and $0.8$ and $0.65$ at two
+carrier densities for an encapsulated twisted
+bilayer~\cite{berdyugin2020minibands}. Collimated focusing in an etched
+encapsulated device, fitted by ray tracing, gives fully diffuse
+reflection for electrons and two diffuse reflections in three for
+holes~\cite{barnard2017absorptive}, and the magnetoresistance of etched
+wires points to a specularity near zero~\cite{masubuchi2012boundary}.
+Read as head-on values, these place a funnel with etched edges anywhere
+between no shape rectification and four fifths of the specular
+response: an edge with $p_{0}$ of $0.5$ to $0.8$ keeps $0.06$ to
+$0.10\AW$, and an edge with $p_{0}$ of $0.2$ or less keeps nothing. The
+comparison has three weaknesses. Equation~\eqref{eq:rough} is the
+Kirchhoff result for a surface with Gaussian height statistics; it
+ignores the correlation length of the roughness and is least reliable
+towards grazing incidence~\cite{shao2017probing}, where it makes the
+edge most specular. No measurement on graphene that we know of resolves
+the angle of incidence, so the angle dependence is untested there. And
+the wire and collimator experiments do not select normal incidence, so
+that their low values imply edges at least as rough as a head-on reading
+of them suggests.
+
+The contacts are the remaining idealisation, and a quarter of the bias
+falls at them even when they are ideal. A contact that reflects might be
+expected to act as a resistor in series. For a contact of transparency
+$T$ that resistance is $(1-T)/T$ times the Sharvin resistance of the
+$500\nm$ lead, which leaves a share $s$ of the applied voltage on the
+device, $0.90$, $0.75$ and $0.50$ for $T=0.75$, $0.5$ and $0.25$; a
+square-law rectifier behind it gives $s^{3}$ of its current, since the
+rectified current is divided by the series resistance as well, and
+$s^{2}$ of its response per absorbed watt. The funnel loses much less
+[Figs.~\ref{fig:contacts}(a) and \ref{fig:contacts}(b)]. With one
+transparency for all angles the current at $1\THz$ under the $300\nm$
+gate is $0.35\pm0.02$, $0.36\pm0.01$ and $0.27\pm0.01\ \mu$A at $T=0.75$,
+$0.5$ and $0.25$, against $0.43\ \mu$A between ideal contacts and $0.31$,
+$0.18$ and $0.06\ \mu$A for the series resistor. The absorbed power
+falls in the same proportion, from $3.4$ to $2.2\ \mu$W, so the response
+per absorbed watt does not change: $0.107\pm0.005$, $0.125\pm0.005$ and
+$0.120\pm0.003\AW$. Under the $30\nm$ gate it is $0.123\pm0.004$,
+$0.115\pm0.004$ and $0.071\pm0.005\AW$, where the series resistor would
+leave $0.108$, $0.075$ and $0.034\AW$. The values at $T=0.5$ and $0.25$
+are means of two or three runs with different seeds, settling times or
+particle numbers (Supplemental Material), which agree within $0.4$
+standard errors; the mirror-symmetric funnel between contacts of $T=0.25$ gives
+$0.01\pm0.01$ and $-0.03\pm0.02\ \mu$A. One device on the antenna loses
+more, because its conductance falls: $\RI$ is $0.019$, $0.020$ and
+$0.015\AW$ under the $300\nm$ gate.
+
+The static curve shows the same departure from a series connection
+[Fig.~\ref{fig:contacts}(c)]. At $T=0.5$ and $0.25$ the two contact
+planes take $43$ to $44\%$ and $61$ to $63\%$ of the bias, close to the
+$43\%$ and $62\%$ of the series picture, yet the conductance is $0.70$
+and $0.44$ of its value between ideal contacts where the series picture
+gives $0.75$ and $0.51$, and the asymmetry is $1.065$ and $1.057$,
+above the $1.053$ of ideal contacts, where the series picture gives
+$1.030$ and $1.014$. The device is shorter than the mean free path, so
+an electron that a contact reflects returns to the neck without having
+lost its direction. Device and contacts then scatter as one object and
+their resistances do not add. We offer this as the likely reason and
+have not tested it separately.
+
+What a contact does with electrons that arrive obliquely matters more
+than its resistance. With the collimating contact of
+Eq.~\eqref{eq:collimate}, at the two junction widths that give a strip
+the conductance of $T=0.5$ and $0.25$, the current at $1\THz$ is
+$0.08\pm0.02$ and $0.04\pm0.01\ \mu$A under the $300\nm$ gate and
+$-0.05\pm0.02$ and $-0.06\pm0.02\ \mu$A under the $30\nm$ gate: at or
+near the floor, $9$ to $14$ standard errors below the contacts of the same
+conductance that do not select by angle, and no more than $0.03\AW$ in
+magnitude. The shape rectification of the short funnel therefore needs
+contacts that absorb at wide angles. Measured contact resistances do not
+say whether a contact does. The one-dimensional edge contacts to
+encapsulated graphene show about $150\ \Omega\um$ at a density of
+$2.5\times10^{12}\percm$~\cite{wang2013one}, a transparency near $0.4$
+in the first model and inside the range computed, while scalable edge
+contacts at about $2$~k$\Omega\um$~\cite{pandey2018all} correspond to a
+transparency below $0.1$ and are outside it. Chromium-gold edge contacts
+dope the graphene beside them $n$-type~\cite{handschin2017fabry}, which
+puts a junction in front of the contact for a hole channel and none for
+an electron channel.
+
+Three reservations apply to the contact runs. The model has no loss of
+energy to the lattice, and the driven gas is warmer the less its
+contacts absorb: its mean kinetic energy is $2.5\%$ above the
+equilibrium value between ideal contacts, $3$, $5$ and $7\%$ at
+$T=0.75$, $0.5$ and $0.25$, and $7$ and $14\%$, still rising after
+$20$ periods, between the collimating contacts. The two contact models
+are the extremes of angular selection that could be stated simply, and
+neither is a model of a metal edge. And the distance to the contacts was
+not separated from the transit time: with ideal contacts and leads of
+$300\nm$ in place of $100\nm$ the current is $0.54$ and $0.67$ of its
+value for the two gates, at $fL/\vF=0.95$ in place of $0.55$.
 
 The amplitude dependence differs from that of the imposed fields. At
 $0.05$~V the current is $0.10\pm0.02\ \mu$A under both gates, consistent
@@ -409,9 +553,13 @@ fields suggested. A $0.55\um$ funnel with specular edges rectifies at
 $1\THz$ by its shape, at $0.10$ to $0.13\AW$ per absorbed watt for any
 mean free path from $100\nm$ up. That is the level of the plasmonic
 funnel at $300$~K, $0.09\AW$, and below its $0.21$ to $0.34\AW$ at
-$100$~K; it is not the factor of eight of Eq.~\eqref{eq:imposed}. With
-rough edges it is lost, and under a close gate the circuit term exceeds
-it.
+$100$~K; it is not the factor of eight of Eq.~\eqref{eq:imposed}. Rough
+edges take from it according to their head-on specularity: half is left
+at $0.5$ and nothing at $0.2$, and etched edges have been measured on
+both sides of those marks. Contacts that reflect take little from it as
+long as they absorb at every angle, and all of it if they pass only
+electrons near normal incidence. Under a close gate the circuit term
+exceeds it.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig10_ballistic_length.pdf}
@@ -451,6 +599,32 @@ scattering, mean free paths of $700$ and $100\nm$, and half-diffuse
 walls: per absorbed watt for the computed field (diamonds, full and open
 as in (c)), and by Eq.~\eqref{eq:rabs} for the imposed fields (circles:
 uniform; squares: drop at the neck). The band is the range of the
-plasmonic funnel. Error bars are one standard error.}
+plasmonic funnel. (g) Responsivity per absorbed watt at $1\THz$ for the
+computed field against the specularity of a head-on hit at the Fermi wave
+vector: walls of one specularity $p$ for all angles (grey circles) and
+rough walls that follow Eq.~\eqref{eq:rough} (black diamonds); full
+symbols and solid lines for the gate at $300\nm$, open symbols and dashed
+lines for $30\nm$. The bar marks the range measured for etched
+edges~\cite{taychatanapat2013electrically,masubuchi2012boundary,barnard2017absorptive,berdyugin2020minibands}. Error bars are one
+standard error.}
 \label{fig:pic}
+\end{figure*}
+
+\begin{figure*}
+\includegraphics[width=\textwidth]{\figpath/fig12_contacts.pdf}
+\caption{The $0.55\um$ funnel G3 between contacts that reflect, with the
+field computed; $\lambda=700\nm$, specular edges, an amplitude of
+$0.1$~V and the drive that leaves only the shape. (a) Rectified current
+at $1\THz$ against the transparency $T$ of the two contacts: one
+transparency for all angles (black diamonds) and the collimating contact
+of Eq.~\eqref{eq:collimate} (red squares), placed at the transparency
+that gives a clean strip the same conductance; full symbols for the gate
+at $300\nm$, open symbols for $30\nm$. The upper axis is the contact
+resistance that a transfer-length measurement would report. The lines
+are a resistor in series with the funnel as it is between ideal contacts
+(solid: gate at $300\nm$; dashed: $30\nm$); the grey band is the floor of
+the method. (b) The same per absorbed watt. (c) Static potential energy
+on the axis at a bias of $0.1$~V, in units of the bias, with the gate at
+$300\nm$. Error bars are one standard error.}
+\label{fig:contacts}
 \end{figure*}

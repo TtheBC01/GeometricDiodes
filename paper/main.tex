@@ -1,6 +1,8 @@
 % Shape versus circuit: graphene geometric diodes and Tesla valves as
 % terahertz rectifiers.
-% Draft 2026-11-12 (third draft: the short ballistic funnel with the field
+% Draft 2026-11-16 (fifth draft: reflecting contacts and device D with the
+% field computed, Stage B10; fourth draft 2026-11-15, rough edges, Stage B9;
+% third draft 2026-11-12, the short ballistic funnel with the field
 % computed, Stage B8; second draft 2026-11-11 after the prior-work search and
 % Stages B7 and H5). Every number is taken from results/*.md of the repository (commit
 % to be tagged at submission); the figures are produced by
@@ -74,14 +76,25 @@ field, in a particle simulation with a gate, metal contacts and
 displacement current. At the room-temperature mean free path it rectifies
 $0.12\AW$ per absorbed watt at $1\THz$, a sixth of what the imposed
 fields give, because a quarter of the bias drops at the contacts. The
-figure is $0.10\AW$ at a mean free path of $100\nm$, the response is lost
-with half-diffuse edges, and under a gate at $30\nm$ a straight channel
-with its drain tied to the gate rectifies more than the funnel shape. In
-no regime does the conversion efficiency reach one per cent. A short
-graphene funnel with specular edges is a square-law detector at the level
-of the plasmonic element, with a noise-equivalent power of the order of
-$100$~pW/Hz$^{1/2}$ at room temperature; it is not an energy harvester,
-and the Tesla valve is neither.
+figure is $0.10\AW$ at a mean free path of $100\nm$. It depends on the
+edges. For a rough edge, which reflects oblique electrons more
+specularly than head-on ones, the response is half its specular value at
+a head-on specularity of $0.5$ and vanishes at $0.2$; values from zero
+to $0.8$ have been measured for etched edges. Contacts act by what they
+do with oblique electrons, not by their resistance: contacts that
+reflect three quarters of the arriving electrons at every angle leave
+$0.07$ to $0.12\AW$, where the same resistance in series would leave
+$0.03\AW$, and contacts of equal resistance that pass only electrons
+near normal incidence leave $0.03\AW$ or less, of either sign. Under a
+gate at $30\nm$ a straight
+channel with its drain tied to the gate rectifies more than the funnel
+shape. In no regime does the conversion efficiency reach one per cent. A
+short graphene funnel is a square-law detector at the level of the
+plasmonic element, with a noise-equivalent power of the order of
+$100$~pW/Hz$^{1/2}$ at room temperature, only if its edges are among the
+more specular of the etched edges that have been measured and its
+contacts absorb at wide angles; it is not an
+energy harvester, and the Tesla valve is neither.
 \end{abstract}
 
 \maketitle

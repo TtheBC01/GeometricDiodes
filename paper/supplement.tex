@@ -25,8 +25,10 @@ was used, the closing convergence checks, and the numerical parameters of the
 production runs. Every test is a program in the public repository and prints
 the measured number against its target; the test names below are those of the
 code, with the plasmonic tests prefixed P to distinguish them from the
-ballistic ones. Tests T22 to T30 belong to the particle simulation with a
-computed field, which is used for the $0.55\um$ funnel only.
+ballistic ones. Tests T22 to T32 belong to the particle simulation with a
+computed field, which is used for the $0.55\um$ funnel and for one static
+pair of runs of device D; T31 covers its rough walls and T32 the contacts
+that reflect.
 
 \section{Ballistic solver}
 
@@ -110,7 +112,8 @@ points are zero within 2.1 standard errors.
 \caption{Acceptance tests of the particle simulation with the computed
 field. G3 is the $0.55\um$ funnel; currents in $\mu$A at an amplitude of
 $0.1$~V. All pass, T24 and T26 in the modified form described in the
-text.}
+text and T32d with $8\times10^{6}$ particles but not with
+$2\times10^{6}$.}
 \begin{ruledtabular}
 \begin{tabular}{lp{0.42\textwidth}p{0.46\textwidth}}
 Test & What is checked & Result \\
@@ -124,6 +127,12 @@ T27 & linear conductance: a straight strip against the Sharvin value; G3 with th
 T28 & conservation: total charge; contact potentials; absorbed power from $\langle VI\rangle$ against the first harmonic & $4\times10^{-13}$ electrons; $6\times10^{-16}$~eV; agreement to $0.01\%$ \\
 T29 & null tests: no drive, both gates, 20 ps; mirror-symmetric G3 under the shape-only drive at $1\THz$ & $+0.03\pm0.04$, kinetic energy drift $0.04\%$ and $0.00\%$; $-0.08\pm0.07$ \\
 T30 & convergence of the rectified current of G3 at $1\THz$ & converged from $4\times10^{6}$ particles (Table~\ref{tab:picconv}) \\
+T31a & the rewritten wall routine with $h=0$ and $p=1$ against the earlier code, same seed & identical in every output column \\
+T31b & rough wall, $h=2.4\nm$: fraction of specular reflections at $0$, $30$, $60$ and $80^{\circ}$ for $k_{F}$ and $0.6\,k_{F}$; angles of the other electrons against $(1-p)\cos\theta'$; a cosine-law flux in gives a cosine-law flux out & all eight fractions within $2.7$ standard errors of Eq.~(3) of the main text; $\chi^{2}=16.8$ and $17.4$ on 18 bins; $\chi^{2}=20.9$, against $1.2\times10^{5}$ with cosine-law re-emission \\
+T31c & closed funnel with rough walls, no field, no scattering, $20$~ps, $10^{8}$ wall hits: particle share of four regions against their area, and $\langle\cos2\varphi\rangle$ in each & largest deviation $1.7$ standard errors; with cosine-law re-emission $179$ \\
+T32b & contacts that reflect: absorbed fraction at $0$, $10$, $25$, $50$ and $80^{\circ}$ for $k_{F}$ and $0.6\,k_{F}$, for a transparency of $0.5$ and for a junction of $38\nm$ & all twenty fractions within $2.7$ standard errors of $T$ and of Eq.~(4) of the main text \\
+T32c & conductance of a clean strip between two such contacts over its value between ideal ones, interaction off, $\pm5$~mV & $0.600\pm0.002$, $0.331\pm0.002$ and $0.143\pm0.001$ against $T/(2-T)=0.600$, $0.333$ and $0.143$; junctions of $7$ and $38\nm$: $0.331\pm0.002$ and $0.140\pm0.002$ against $0.325$ and $0.140$ \\
+T32d & the funnel between contacts of transparency $0.25$ and behind junctions of $38\nm$ with no drive, with the interaction (gate at $30\nm$) and without & currents $+0.02\pm0.02$, $-0.01\pm0.02$, $+0.02\pm0.02$ and $+0.02\pm0.02$; particle number constant to $0.02\%$; injection that is not reduced by $T$, the error the test is for, raises the particle number by $268\%$ \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
@@ -190,13 +199,107 @@ weighted mean is $+0.008\pm0.023\ \mu$A, and $\chi^{2}$ against zero is
 $14.4$ for the six runs, so the batch errors are too small by about
 $1.5$ or there is a floor of about $0.05\ \mu$A, which is what the main
 text assumes. With half-diffuse walls the same control gives
-$+0.018\pm0.017$ and $-0.052\pm0.025\ \mu$A at $1\THz$. Two runs at
+$+0.018\pm0.017$ and $-0.052\pm0.025\ \mu$A at $1\THz$, and with rough
+walls of $h=2.4\nm$ it gives $+0.020\pm0.020$ and $-0.034\pm0.023\ \mu$A;
+the funnel with those walls and no drive gives $+0.007\pm0.017\ \mu$A.
+The wall routine was rewritten for the rough edge. For $p=1$ it
+reproduces the earlier runs exactly (T31a); for a single $p$ below one it
+differs from the earlier code in the last bit of about one reflection in
+a thousand, so that trajectories diverge and only statistics can be
+compared: the point at $p=0.9$ under the $300\nm$ gate, run again, gives
+$0.290\pm0.018$ against $0.291\pm0.013\ \mu$A. A wall that re-emits the
+non-specular electrons by the cosine law, with the $p$ of
+Eq.~(3), is not reciprocal: in the closed funnel of T31c it
+raises the share of the particles in the lead beyond the neck from
+$0.245$ to $0.300$ and makes the velocity distribution anisotropic,
+which is why the density
+$[1-p(\theta')]\cos\theta'$ is used. Two runs at
 $3\THz$ under the $30\nm$ gate with the drain tied to the gate, whose
 source-plane and drain-plane currents differed by $0.19$ and
 $0.12\ \mu$A after a settling time of $3$~ps, were repeated with $10$~ps:
 the strip gives $-1.794\pm0.024$ against $-1.770\pm0.026\ \mu$A and the
 funnel $+0.812\pm0.026$ against $+0.780\pm0.033\ \mu$A, with the two
 planes then in agreement.
+
+\begin{table*}[ht]
+\caption{The $0.55\um$ funnel between contacts that reflect: rectified
+current $I_{\mathrm{dc}}$ ($\mu$A) and response per absorbed watt
+$R_{\mathrm{abs}}$ (A/W) at $\lambda=700\nm$, $1\THz$ and $0.1$~V under
+the shape-only drive, with specular walls. $R_{c}$ is the contact
+resistance that a transfer-length measurement would report. ``Series'' is
+the current of the funnel between ideal contacts behind a series
+resistance of $(1-T)/T$ times the Sharvin resistance of the lead at each
+contact, $s^{3}$ of the ideal value with $s$ the share of the voltage
+left on the device. The junctions of $7$ and $38\nm$ are set against the
+transparencies $0.5$ and $0.25$, which give a clean strip the same
+conductance. The last column is the rise of the mean kinetic energy per
+electron in the last period over its value before the drive, for the
+two gates.}
+\label{tab:contacts}
+\begin{ruledtabular}
+\begin{tabular}{lcccccccc}
+ & & \multicolumn{3}{c}{Gate at $300\nm$} & \multicolumn{3}{c}{Gate at $30\nm$} & \\
+Contact & $R_{c}$ ($\Omega\um$) & $I_{\mathrm{dc}}$ & series & $R_{\mathrm{abs}}$ & $I_{\mathrm{dc}}$ & series & $R_{\mathrm{abs}}$ & heating (\%) \\
+\hline
+ideal & $48$ & $0.429\pm0.012$ & & $0.124\pm0.003$ & $0.483\pm0.013$ & & $0.132\pm0.003$ & $2.5$ \\
+$T=0.75$ & $81$ & $0.345\pm0.017$ & $0.314$ & $0.107\pm0.005$ & $0.411\pm0.014$ & $0.354$ & $0.123\pm0.004$ & $3.2$, $3.4$ \\
+$T=0.5$ & $145$ & $0.358\pm0.013$ & $0.184$ & $0.125\pm0.005$ & $0.328\pm0.012$ & $0.207$ & $0.115\pm0.004$ & $4.5$, $4.6$ \\
+$T=0.25$ & $338$ & $0.266\pm0.007$ & $0.055$ & $0.120\pm0.003$ & $0.147\pm0.010$ & $0.062$ & $0.071\pm0.005$ & $7.4$, $7.0$ \\
+junction, $7\nm$ & $145$ & $+0.075\pm0.016$ & $0.184$ & $+0.027\pm0.006$ & $-0.049\pm0.019$ & $0.207$ & $-0.019\pm0.007$ & $6.5$, $6.4$ \\
+junction, $38\nm$ & $338$ & $+0.036\pm0.012$ & $0.055$ & $+0.017\pm0.005$ & $-0.061\pm0.016$ & $0.062$ & $-0.033\pm0.009$ & $14.2$, $12.6$ \\
+ideal, leads of $300\nm$ & $48$ & $0.231\pm0.014$ & & $0.088\pm0.005$ & $0.323\pm0.015$ & & $0.103\pm0.005$ & \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+
+Table~\ref{tab:contacts} lists the runs with contacts that reflect
+(Fig.~12 of the main text). Test T32d fails with $2\times10^{6}$
+particles, where the undriven funnel between such contacts shows
+currents of $0.08\pm0.03$ and $0.05\pm0.03\ \mu$A and, behind the
+junction, a rise of the kinetic energy of $1.6\%$; with $8\times10^{6}$,
+the number of the production runs, the rise is $0.5\%$ and the currents
+are zero within the errors. The rows for $T=0.5$ and $0.25$ pool
+independent runs. At $T=0.5$ a run with a settling time of $3$~ps and
+one with another seed and $10$~ps give $0.354\pm0.018$ and
+$0.362\pm0.019\ \mu$A under the $300\nm$ gate and $0.326\pm0.020$ and
+$0.329\pm0.015\ \mu$A under the $30\nm$ gate. At $T=0.25$ two seeds give
+$0.270\pm0.014$ and $0.265\pm0.014\ \mu$A, and a run with
+$16\times10^{6}$ particles $0.266\pm0.009\ \mu$A, under the $300\nm$
+gate, and two seeds $0.141\pm0.016$ and $0.151\pm0.014\ \mu$A under the
+$30\nm$ gate. The rows for $T=0.75$ and for the junctions are single
+runs. The controls are the mirror-symmetric funnel between contacts of
+$T=0.25$, which gives $+0.010\pm0.014$ and $-0.032\pm0.018\ \mu$A for
+the two gates, and the funnel with no drive under the $30\nm$ gate,
+which gives $+0.014\pm0.010\ \mu$A behind the $38\nm$ junctions and
+$+0.022\pm0.010\ \mu$A between contacts of $T=0.25$. The heating is
+steady after the settling time for the contacts of one transparency;
+behind the junctions the kinetic energy was still rising at the end of
+the run, from $4.9\%$ to $6.5\%$ and from $11.6\%$ to $14.2\%$ between
+the first and the last of the twenty periods under the $300\nm$ gate.
+In the static runs at $\pm0.1$~V under the $300\nm$ gate the conductance
+is $0.587$ and $0.375$~mS at $T=0.5$ and $0.25$, which is $0.70$ and
+$0.44$ of its value between ideal contacts, and the asymmetry is $1.065$
+and $1.057$.
+
+Device D with the field computed (Fig.~3 and Eq.~(11) of the main text)
+was run at $\pm0.1$~V with $\lambda=700\nm$, specular walls, ideal
+contacts and the gate at $300\nm$, on a grid of $7.5\nm$ with a time
+step of $3.75$~fs, a settling time of $15$~ps and an average over a
+further $15$~ps. With $5\times10^{7}$ particles the currents are
+$+108.69\pm0.06$ and $-106.83\pm0.06\ \mu$A, an asymmetry of
+$1.0174\pm0.0008$; with $2.5\times10^{7}$ they are $+111.41\pm0.11$ and
+$-109.53\pm0.09\ \mu$A, $1.0172\pm0.0014$. The difference of the forward
+and the reverse current is $1.86\pm0.09$ and $1.88\pm0.15\ \mu$A. The
+conductance, $1.078$ and $1.105$~mS, differs by $2.5\%$ between the two
+particle numbers, thirty times its statistical error, and we have not
+found the cause; if the error falls as the inverse of the particle
+number the limit is $1.05$~mS. The currents through the source plane
+and the drain plane agree to $0.06\ \mu$A, no particle was lost, and
+the particle number stayed within $0.02\%$ of its initial value. The
+mean kinetic energy was $3.5\%$ above its initial value in the first
+picosecond of the averaging window and $4.5\%$ in the last, in all four
+runs, so the gas had not reached a steady temperature; the model has no
+loss of energy to the lattice. The pair without scattering was not run.
 
 \section{Viscous solver}
 
@@ -356,9 +459,16 @@ spacing $5.013\nm$, chosen so that both contact planes lie on node
 columns, time step $2.5$~fs, $8\times10^{6}$ particles for the driven
 runs and $4\times10^{6}$ for the static runs and at $0.1\THz$; averages
 over at least $10$~ps and six periods (20 periods for the runs of
-Fig.~10(f)) after a settling time of $3$~ps or more; the rectified
-current is the mean of the currents through the source plane and the
-drain plane; 66 runs. Steady gated flow: wall
+Figs.~11(f) and 11(g) and for the contact runs) after a settling time of $3$~ps or more; the
+rectified current is the mean of the currents through the source plane
+and the drain plane; 72 runs with one specularity for all angles and 18
+with rough walls, and 25 with contacts that reflect or with longer
+leads, of which three have $16\times10^{6}$ particles. The points of Fig.~11(g) at specularities
+of $0.9$, $0.8$ and $0.7$ are single runs; those at $1$ and $0.5$ are
+pooled from seven or six and from two runs. The rough-wall points are
+single runs except that at $h=2.4\nm$, which pools two seeds
+($0.152\pm0.016$ and $0.125\pm0.018\ \mu$A under the $300\nm$ gate,
+$0.140\pm0.019$ and $0.145\pm0.020\ \mu$A under the $30\nm$ gate). Steady gated flow: wall
 spacing $20\nm$ for the $175\nm$ devices and $80\nm$ for the $1\um$
 devices, seven biases from $10^{-3}$ to $0.3$ of the gate overdrive, four
 steady solutions per point (two polarities for each of the two gate

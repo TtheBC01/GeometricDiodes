@@ -308,9 +308,54 @@ Open:
   (L below the mean free path), which the computed field does not
   support; supplement gains Tables S4 and S5. No new references. 26 pages
   plus a 6-page supplement, clean build. `OVERVIEW.md` revised to match.
-- Not computed and worth stating to a referee: wall specularities between
-  0.5 and 1; the 6 um device with a computed field (plan run P7); the
-  cause of the strip's sign reversal at 3 THz.
+- Revision of 2026-11-13: the wall-specularity scan (run P8) is in the
+  manuscript. Sec. V E has a new paragraph, Fig. 10 a panel (g) with the
+  bottom row rearranged to four panels, and the abstract, introduction,
+  discussion, verdict table, designer's advice, limitations and conclusion
+  now say that the response falls linearly with the diffuse fraction, is
+  half at a specularity of 0.84 and zero near 0.6, and that 0.2 to 0.5
+  has been measured for etched edges. Three references added to
+  `refs_prior.bib` (27 entries): Taychatanapat et al. 2013 (read in
+  full), Masubuchi et al. 2012 (abstract only) and Soffer 1967 (record
+  only, cited for the standard angle dependence of the specularity of a
+  rough surface). The comparison with measured edges rests on two papers
+  found with a few queries, not on a survey; a referee may know more.
+  27 pages plus a 6-page supplement, clean build.
+- Revision of 2026-11-15: Stage B9 (rough edges, Eq. (3) in Sec. II C)
+  is in the manuscript. Sec. V E has two new paragraphs in place of the
+  comparison with two measurements; Fig. 10(g) shows both edge models
+  against the head-on specularity; abstract, introduction, discussion,
+  verdict table, designer's advice, limitations and conclusion now say
+  that the response is half at a head-on specularity of 0.5 and zero at
+  0.2, and that etched edges have been measured from near zero to 0.8.
+  The earlier statement that the shape needs edges more specular than
+  any measured is withdrawn. Three references added (30 entries in
+  `refs_prior.bib`): Berdyugin et al. 2020 and Barnard et al. 2017 (the
+  passages on specularity read in the arXiv versions), Shao et al. 2017
+  (read for the formula; Soffer 1967 is still the record only).
+  Supplement: tests T31a to T31c and the rough-wall controls.
+- Revision of 2026-11-16: Stage B10 is in the manuscript. Part A,
+  contacts that reflect: Eq. (4) and a paragraph in Sec. II C, three
+  paragraphs and Fig. 12 (`fig12_contacts`) in Sec. V E, a fourth
+  condition in the abstract, introduction, discussion and conclusion,
+  the verdict table, the designer's advice and the limitations;
+  supplement tests T32b to T32d and Table S6. Part B, device D with the
+  field computed: Eq. (11), Fig. 3 (`fig13_deviceD`) and two new
+  paragraphs in Sec. III A, a point and the measured value at 0.1 V in
+  Fig. 2(a) in place of the line at 1.66. The earlier text called the
+  first model's 1.62 at 0.1 V close to the measured 1.66; that
+  measurement is at about 1.5 V on a device of 12 to 20 kilohm, and the
+  sentence is withdrawn. Four references added (34 entries in
+  `refs_prior.bib`). 31 pages plus a 7-page supplement, clean build.
+  Figures after Fig. 2 moved up by one.
+- Not computed and worth stating to a referee: device D without
+  scattering and with a computed field (run P7x); which contact model a
+  metal edge resembles; the cause of the 2.5 % difference in the
+  conductance of device D between two particle numbers; the
+  cause of the strip's sign reversal at 3 THz. The rough-edge formula is
+  untested on graphene, and that the twisted-bilayer device of Berdyugin
+  et al. was shaped by etching was taken from a summary of its
+  supplement, not read.
 - Author affiliation and contact in `main.tex`.
 - Unverified details listed at the end of `refs_verification.md` and
   `literature_detectors.md`: the backward-facing-step literature bands,

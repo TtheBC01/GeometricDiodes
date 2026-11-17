@@ -8,8 +8,10 @@ left and the drain on the right. The funnel [Fig.~\ref{fig:devices}(a)] has
 the dimensions of device D of Nguyen \textit{et al.}~\cite{nguyen2021geometric}:
 leads $2\um$ wide, a taper at 30 degrees to the axis down to a neck of
 $175\nm$, and an abrupt shoulder on the drain side, $6\um$ from end to end,
-with the contacts on the two ends; its measured two-terminal asymmetry is
-$1.66$ at $80\ \mu$A. The classical Tesla valve [Fig.~\ref{fig:devices}(b)] is
+with the contacts on the two ends. Its measured two-terminal asymmetry,
+the ratio of the voltages at $\pm80\ \mu$A, is $1.66$; the device has a
+resistance of $12$ to $20$~k$\Omega$ and carries that current at about
+$1.5$~V. The classical Tesla valve [Fig.~\ref{fig:devices}(b)] is
 built from channel centre lines: a zig-zag main channel of width $175\nm$
 inclined at $\pm 25$ degrees, and at every vertex a loop that continues the
 arriving segment straight on, turns through a half circle of radius $175\nm$
@@ -64,8 +66,9 @@ $I=G_{1}V+G_{2}V^{2}$, $A\simeq 1+2(G_{2}/G_{1})V$, and a cosine drive of
 amplitude $V_{a}$ rectifies $\Idc=G_{2}V_{a}^{2}/2$ if the response is
 instantaneous. Carriers are electrons at density $n=1.4\times10^{12}\percm$
 ($\EF=0.138$~eV) and $300$~K, the density we estimate from the gate voltage
-and lever arm reported for that device~\cite{nguyen2021geometric}; holes
-give the inverse asymmetry. The model has no length of its own: with the
+and lever arm reported for that device~\cite{nguyen2021geometric}, an
+upper bound because the gate voltage of its neutrality point is not
+reported; holes give the inverse asymmetry. The model has no length of its own: with the
 bias, $\EF$ and $\kB T$ fixed, the transmission depends only on the shape
 and on $\lambda/L$, and under a drive of frequency $f$ only on those and on
 $fL/\vF$, while currents and conductances scale with the width. This is
@@ -82,8 +85,8 @@ features well above the Fermi wavelength, $30\nm$ here.
 \subsection{Ballistic model with a computed field}
 \label{sec:model-pic}
 
-For the shortest funnel the potential is computed instead of imposed, in
-a particle simulation of the kind applied to geometric diodes in
+For the shortest funnel, and for device D at dc, the potential is
+computed instead of imposed, in a particle simulation of the kind applied to geometric diodes in
 Refs.~\cite{stearns2020high,stearns2021simulation}. The graphene sheet
 lies in a uniform dielectric of permittivity $3.8$ at a distance $d$ above
 a grounded gate plane; $d$ is $30\nm$, the gate of the plasmonic model
@@ -120,13 +123,63 @@ mirror-symmetric device gives no rectified current by symmetry, and the
 drain tied to the gate, $V_{S}=V_{a}\cos\omega t$ and $V_{D}=0$, under
 which a straight channel already rectifies.
 
-Nine tests were passed before use (Supplemental Material), among them the
+The walls reflect either with one specularity $p$ for all angles of
+incidence, as in the model above, or as a rough edge. For the rough edge
+an electron of wave number $k$ that meets the wall at an angle $\theta$
+from its normal is reflected specularly with probability
+\begin{equation}
+p(\theta)=\exp\left[-(2hk\cos\theta)^{2}\right],
+\label{eq:rough}
+\end{equation}
+where $h$ is the rms height of the
+roughness~\cite{soffer1967statistical,shao2017probing}: the more obliquely
+an electron arrives, the more specular the edge. The other electrons
+leave at an angle $\theta'$ drawn from the density
+$[1-p(\theta')]\cos\theta'$. This choice makes the wall reciprocal, so
+that a gas in equilibrium stays uniform and isotropic; re-emission by the
+cosine law alone does not, once $p$ depends on the angle (Supplemental
+Material). We label a rough edge by its specularity for a head-on hit at
+the Fermi wave vector $k_{F}=\sqrt{\pi n}$,
+$p_{0}=\exp[-(2hk_{F})^{2}]$, which is $0.5$ for $h=2.0\nm$ at the
+density used here.
+
+The contacts described so far are ideal: the line on which the sheet
+meets a strip absorbs every electron that reaches it and injects the
+equilibrium flux of the strip. Two contacts that reflect are also used.
+In the first an arriving electron is absorbed with a probability $T$,
+the same for all angles, and reflected as by a mirror otherwise; the
+injected flux is reduced by the factor $T$, which keeps an undriven gas
+in equilibrium. A wide, clean strip between two such contacts has
+$T/(2-T)$ of its ballistic conductance. A transfer-length measurement
+would assign each contact $(2-T)/T$ times the $48\ \Omega\um$ that an
+ideal contact shows at this density, half of the ballistic resistance of
+the sheet: $81$, $145$ and $338\ \Omega\um$ for $T=0.75$, $0.5$ and
+$0.25$. In the second the probability depends on the angle $\theta$
+between the electron and the normal to the contact line as it does for a
+smooth $p$-$n$ junction of half width
+$d_{j}$~\cite{cheianov2006selective},
+\begin{equation}
+T(\theta)=\exp\left(-\pi k d_{j}\sin^{2}\theta\right),
+\label{eq:collimate}
+\end{equation}
+so that electrons near normal incidence pass and the others are
+reflected, and the injected flux is reduced by the same function. Such a
+junction stands in front of a contact whose metal dopes the graphene
+beside it to the polarity opposite to that of the channel. We use
+$d_{j}=7$ and $38\nm$, for which the strip conducts as between contacts
+of $T=0.5$ and $0.25$. For device D the same model is run with ideal
+contacts, the gate at $300\nm$, a grid of $7.5\nm$ and $5\times10^{7}$
+particles for its $1.6\times10^{5}$ electrons.
+
+Thirteen tests were passed before use (Supplemental Material), among them the
 capacitance of the contact strips, the static screening of a weak
 potential, the speed of the gated plasma wave, which is $0.98$ to $0.99$
 of the collisionless value of $3.90\,\vF$ under the $30\nm$ gate, the
 results of the imposed-field model for the same device when the
-interaction is switched off, and a linear conductance that the interaction
-leaves unchanged within $1\%$. The sample particles collide with each
+interaction is switched off, a linear conductance that the interaction
+leaves unchanged within $1\%$, the reflection law and the detailed
+balance of the rough wall, and the absorption law, the strip conductance
+and the equilibrium of the reflecting contacts. The sample particles collide with each
 other through the grid, which relaxes the Fermi distribution towards a
 classical one; in the open device a particle is replaced by a contact
 within about a picosecond, and the rectified current at the operating
@@ -252,7 +305,7 @@ Quantity & Value \\
 \hline
 \multicolumn{2}{l}{\textit{Ballistic}} \\
 $n$, $\EF$, $T$ & $1.4\times10^{12}\percm$, $0.138$ eV, 300 K \\
-specularity $p$ & 1, 0.5, 0 \\
+specularity $p$ & 1, 0.9, 0.8, 0.7, 0.5, 0 \\
 mean free path $\lambda$ & $\infty$, 700, 200, 100 nm \\
 \multicolumn{2}{l}{\textit{Viscous}} \\
 current at $\Rey=1$ & $160\ \mu$A ($\nu=0.1$ m$^2$/s), $32\ \mu$A (0.02) \\

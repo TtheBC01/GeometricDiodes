@@ -204,3 +204,114 @@ revised manuscript uses:
   stand-alone diode (0.0285 A/W for the rectenna diode); 28 THz, zero bias,
   190 pA measured against 270 pA estimated; the only speed limit discussed
   is RC.
+
+## Addendum of 2026-11-13: edge scattering (3 entries in `refs_prior.bib`)
+
+Records fetched from doi.org as BibTeX by DOI. The search behind them was
+two or three queries on the specularity of graphene edges, not a survey.
+
+| Key | Record | What was read, and the statement the manuscript rests on it |
+|---|---|---|
+| `taychatanapat2013electrically` | Nature Physics 9 (4), 225-229 (2013) | **Full text (arXiv:1301.1969v1).** Transverse magnetic focusing in graphene on hBN; "the value of specularity ranges from 0.2 to 0.5", defined as the ratio of the second focusing peak to the first; the devices are etched in an oxygen plasma. The supplementary information, to which the paper refers for these values, was not read. |
+| `masubuchi2012boundary` | Phys. Rev. Lett. 109, 036601 (2012) | **Abstract only.** Magnetoresistance of graphene/hBN wires attributed to diffusive boundary scattering. How the wires were defined was not checked; the manuscript says "narrow wires of the same materials" and does not say etched. |
+| `soffer1967statistical` | J. Appl. Phys. 38 (4), 1710-1715 (1967) | **Record only; not read.** Cited for the textbook result that the specularity of a rough surface rises towards grazing incidence. |
+
+Two statements in the manuscript are ours and not the cited papers': that
+the focusing ratio is measured near normal incidence, and that the walls
+of a 30 degree taper are met obliquely by the electrons that carry the
+current. A report that gate-defined edges in bilayer graphene are
+specular was seen in the search and not read; it is not cited.
+
+## Addendum of 2026-11-15: reading for Stage B9 (no entries added to the bibliography yet)
+
+Done before the runs of `plans/ballistic_edges.md`. The measurement search
+was made by a subagent with about ten queries; "PDF text" means the arXiv
+PDF was converted to text and the passages around the keywords (specular,
+diffuse, etch, rough, slip, peak) were read, "summary" means an HTML page
+read through a summarising fetch, whose quotations are not verified word
+for word. None of these papers is in `refs_prior.bib`; their records have
+not been fetched by DOI, and the citations below are as the search gave
+them.
+
+| Paper | What was read | What it says |
+|---|---|---|
+| Shao, Rong, Hu, Bao, J. Appl. Phys. 122, 155104 (2017), arXiv:1705.02059 | PDF text, the passages on the specularity formula (by us) | p = exp(-4 eta^2 k^2 cos^2(theta)), eta the rms roughness, k the incident wave vector, theta the incident angle; "first derived by Ziman and then extended by Soffer to include angular dependence"; valid only within the Kirchhoff approximation; the correlation length of the surface does not enter. This is the source for the formula of Stage B9. |
+| `soffer1967statistical` | Still the record only | The publisher's page did not open; the abstract was not found elsewhere. |
+| `masubuchi2012boundary`, arXiv:1205.5150 | **Now full text** (PDF text and summary) | Monolayer graphene on hBN, open-faced, wires 1 um wide defined by electron-beam lithography and oxygen plasma etching. The boundary-scattering magnetoresistance peak; "nearly zero specularity" is suggested from the mean free path at which the peak appears. No fitted number. Holes, 4 K, the peak persists to 240 K. |
+| Berdyugin et al., Sci. Adv. 6, eaay7838 (2020), arXiv:1911.02827 | PDF text of the main text; fabrication from a summary | hBN-encapsulated twisted bilayer graphene, reactive-ion etched. Ratio of the areas of the second and first focusing peaks about 0.8 at 1.8e12 per cm^2 ("almost specular") and 0.65 at 6.6e12. 2 K. The highest value found for an etched edge. |
+| Barnard et al., Nat. Commun. 8, 15418 (2017), arXiv:1611.05155 | PDF text | hBN-encapsulated monolayer, reactive-ion etched. Collimated focusing fitted by ray tracing with the diffuse probability free: fully diffuse for electrons (2.7e12 per cm^2), 67 % diffuse for holes. 1.6 K. |
+| Mayorov et al., Nano Lett. 11, 2396 (2011), arXiv:1103.4510 | PDF text | hBN-encapsulated, oxygen plasma etched. The negative bend resistance cannot be reproduced with specular edges; qualitative. 4 to 250 K. |
+| Lee et al., Science 353, 1526 (2016), arXiv:1603.01260 | PDF text with the supplement | Reactive-ion etched (CHF3/O2) encapsulated moire device; focusing peaks up to the sixth are labelled; no specularity is quoted and the simulations assume specular edges. |
+| Bhandari et al., Nano Lett. 16, 1690 (2016), arXiv:1510.05197 | PDF text | Not an independent measurement; quotes the two papers already cited. |
+| Wang et al., PNAS 116, 6575 (2019), arXiv:1809.06757 | PDF text | A fit, not a measurement: reflections spread about the mirror direction with a Gaussian of 15 degrees. |
+| Sulpizio et al., Nature 576, 75 (2019), arXiv:1905.11662 | PDF text | Etched encapsulated channel; in the ballistic regime the wall scattering is called diffuse; no number. |
+| Ingla-Aynes et al., Nano Lett. 23, 5453 (2023), arXiv:2302.00303 | Summary | Gate-defined edge in bilayer graphene; eight focusing peaks of nearly constant area; specular, no number. |
+| Blanda et al., arXiv:2608.18384 (2026) | Summary | Bilayer graphene bounded by gate-defined edges; scattering parameter close to 1 at low density. |
+
+Looked for and not found: any experiment that resolves the angle of
+incidence at an edge; a measured rms roughness of an etched graphene edge.
+The inferences that focusing weights near-normal incidence, and that the
+wire and bend methods average over angles, are ours and the subagent's.
+
+Consequence for the manuscript, not yet applied: the sentence that 0.2 to
+0.5 "has been measured for etched edges" is incomplete. Measured values
+for etched edges run from about zero to about 0.8.
+
+### Entries added on 2026-11-15, with the revision for Stage B9
+
+Three entries were added to `refs_prior.bib` (30 entries now). Records
+from doi.org (Crossref BibTeX); title and DOI of each cross-checked
+against the arXiv API record of the version that was read.
+
+| Key | Record | Read by us | Used for |
+|---|---|---|---|
+| `berdyugin2020minibands` | Sci. Adv. 6, eaay7838 (2020), doi:10.1126/sciadv.aay7838; arXiv:1911.02827v3 | The passage on the focusing-peak ratio, in the arXiv PDF text: "almost specular reflection (A2/A1 about 0.8)" at 1.8e12 per cm^2 and "notably less specular (A2/A1 about 0.65)" at 6.6e12, in twisted bilayer graphene (1.87 degrees) encapsulated in hBN | The upper end of the measured range. **Not read:** how the device edge was made. The main text says only "standard dry-transfer and tear-and-stack techniques"; that the mesa was reactive-ion etched comes from a summary of the supplement. The manuscript counts it among etched edges on that basis. |
+| `barnard2017absorptive` | Nat. Commun. 8, 15418 (2017), doi:10.1038/ncomms15418; arXiv:1611.05155v2 | The passages on edge scattering, in the arXiv PDF text: an "etched graphene heterostructure"; simulation with the probability of diffuse edge scattering 100 % matches the electron-doped data, and 67 % the hole-doped data | "fully diffuse reflection for electrons and two diffuse reflections in three for holes" |
+| `shao2017probing` | J. Appl. Phys. 122, 155104 (2017), doi:10.1063/1.5008367; arXiv:1705.02059v1 | The passages on the specularity formula (its Eq. 4) and on its validity | The formula of Eq. (3) and its Kirchhoff caveat. A paper on phonons; cited beside `soffer1967statistical`, which remains the record only. |
+
+`masubuchi2012boundary` is cited for "a specularity near zero"; the paper
+suggests "nearly zero specularity" and fits no number (read in full, see
+the addendum above).
+
+## Addendum of 2026-11-15: reading for Stage B10 (four entries added to `refs_prior.bib` on 2026-11-16)
+
+Read before any code of Stage B10 (`plans/ballistic_contacts.md`,
+section 3), by a subagent and checked by us where stated. Records from
+doi.org (Crossref). The search was bounded, not a survey.
+
+| Paper | What was read | What it says |
+|---|---|---|
+| Wang et al., Science 342, 614 (2013), doi:10.1126/science.1244358 | Main text in full. **Not read:** the supplement (the publisher refused the request, 403; not worked around) | One-dimensional edge contacts to hBN-encapsulated graphene, Cr/Pd/Au (1/15/60 nm), the contact is to the Cr layer. Contact resistance about 150 ohm um for n-type at high density (the figure shows it at about 2.5e12 per cm^2), which "includes the intrinsic limit set by the quantum resistance of the channel", leaving about 100 ohm um extrinsic; two to three times higher for holes; rises towards neutrality. The temperature of the transfer-length measurement is not stated in the main text. Our conversion (ours, not the paper's): a transparency of about 0.4 in the contact model of Stage B10; about 200 ohm um if scaled to 1.4e12 per cm^2. |
+| Handschin et al., Nano Lett. 17, 328 (2017), doi:10.1021/acs.nanolett.6b04137, arXiv:1701.09141 | arXiv PDF text, in part (the passages on the contacts) | Cr/Au edge contacts, about 50 to 100 ohm um at 1.6 K; "The Cr/Au contacts dope the graphene in its proximity n-type". For an electron channel there is then no p-n junction in front of the contact. |
+| Pandey et al., IEEE Trans. Electron Devices 65, 4129 (2018), doi:10.1109/TED.2018.2865382 | Full text | Scalable Ni edge contacts, about 2 kilohm um. Our conversion: a transparency of 0.05 to 0.1. |
+| Cheianov and Fal'ko, Phys. Rev. B 74, 041403 (2006), doi:10.1103/PhysRevB.74.041403, arXiv:cond-mat/0603624 | arXiv PDF text in full | Transmission of a smooth p-n junction, w(theta) = exp(-pi k_F d sin^2(theta)), with d the half width of the junction and theta the angle from its normal; valid for k_F d > 1. Source of the collimating contact of Stage B10. |
+| `nguyen2021geometric` (npj 2D Mater. Appl. 5, 89 (2021), doi:10.1038/s41699-021-00269-2) | **Now full text with the supplement**, and Fig. 5(c) and 5(d) read by us on the published figure | The asymmetry is defined at fixed current, gamma = \|V(+I) / V(-I)\|. Forward is carriers moving from the taper through the neck, the sense of our A. Device D at a gate voltage of +18 V passes +100 uA at about +2.0 V and -100 uA at about -1.2 V: the 1.66 is reached at about 1.5 V, and the two-terminal resistance is 12 to 20 kilohm (about 15 kilohm at low bias). The curve is called "quite linear" below 20 uA. Fig. 5(d): gamma about 1.05 at 10 uA and 1.17 at 20 uA, which puts it at about 1.03 to 1.04 at 0.1 V (read from the figure, +-0.02). The Dirac point of Device D is not given, so the density 1.4e12 per cm^2 is an upper bound (0.7 to 0.9e12 if like their device B). Cr/Au (5/60 nm) edge contacts; no contact resistance is stated; which contact was grounded is not stated. Room temperature, vacuum. |
+
+Entries added on 2026-11-16 with the revision for Stage B10, records
+fetched from doi.org (Crossref BibTeX): `wang2013one` (cited for about
+150 ohm um at 2.5e12 per cm^2; the conversion to a transparency near 0.4
+is ours), `pandey2018all` (about 2 kilohm um; the conversion to a
+transparency below 0.1 is ours), `handschin2017fabry` (Cr/Au edge
+contacts dope the adjacent graphene n-type; the remark about a junction
+for a hole channel is our inference) and `cheianov2006selective`
+(Eq. (4)). The Crossref record of Cheianov and Fal'ko carries the title
+with MathML; the title was retyped and the article number 041403 added as
+pages. The supplement of Wang et al. is still unread.
+
+Consequences for the manuscript, **applied on 2026-11-16** (Sec. II A now
+gives the voltage and the resistance with the 1.66; Sec. III A compares
+at 0.1 V and states that the agreement is no validation; the dotted line
+at 1.66 in Fig. 2(a) is replaced by the measured value at 0.1 V):
+
+- Sec. III A says the model's 1.62 at 0.1 V is "close to the 1.66
+  measured at 80 uA". The measured 1.66 is at about 1.5 V on a device of
+  about 15 kilohm; the model's device is 0.95 kilohm at 0.1 V. At 0.1 V
+  the measurement shows about 1.03 to 1.04. The sentence compares unlike
+  conditions and has to be rewritten; Sec. II A's "1.66 at 80 uA" should
+  give the voltage.
+- With 15 kilohm measured against 0.95 kilohm for the model's shape,
+  most of the measured resistance is not the ballistic resistance of the
+  shape (contacts, or a density well below the upper bound, or both). A
+  voltage-dependent density along the channel (self-gating through the
+  back gate at volts of bias) is a source of asymmetry that our models
+  at 0.1 V do not contain.

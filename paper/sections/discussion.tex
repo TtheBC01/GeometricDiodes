@@ -59,18 +59,36 @@ present device. A uniform field is a common assumption of simulations of
 geometric diodes; self-consistent electrostatics was already known to
 roughly halve the static asymmetry~\cite{truccolo2024comprehensive}, and
 here it reduces a static asymmetry of $1.56$ to $1.05$ and the terahertz
-response sixfold. Three further conditions follow from
+response sixfold. Four further conditions follow from
 Sec.~\ref{sec:pic}. The mean free path is the least of them: from no
 scattering to $100\nm$ the response per absorbed watt changes from $0.13$
-to $0.10\AW$. The edges are the strictest: with half of the wall
-reflections diffuse the response is lost. And the gate must be far: under
+to $0.10\AW$. The edges are the least known. With one specularity for
+all angles the response would be halved by one diffuse reflection in six;
+with the angle dependence of a rough edge, Eq.~\eqref{eq:rough}, it is
+halved at a head-on specularity of $0.5$ and lost at $0.2$, because the
+walls of the taper are met obliquely. The values measured for etched
+edges, from near zero to
+$0.8$~\cite{taychatanapat2013electrically,masubuchi2012boundary,barnard2017absorptive,berdyugin2020minibands},
+lie on both sides of those marks. The contacts are the third, and
+their resistance is the wrong measure of them. Contacts that reflect
+three quarters of the arriving electrons at every angle, at
+$340\ \Omega\um$ each, leave $0.12\AW$ per absorbed watt under the far
+gate and $0.07\AW$ under the near one, where the same resistance in
+series would leave $0.03\AW$; contacts of the same conductance that pass
+only electrons near normal incidence leave $0.03\AW$ or less, of
+either sign. A
+device shorter than the mean free path and its contacts are one
+scatterer. And the gate
+must be far: under
 a gate at $30\nm$ a straight strip with its drain tied to the gate
 rectifies twice the current of the funnel shape at $1\THz$, so that the
 circuit takes over in the ballistic gas as it did in the fluid.
 Shape-based rectification at terahertz frequencies, then, exists in one
 of the three transport limits, in devices of half a micrometre and below
-with specular edges and a distant gate, and at its best it equals the
-circuit term of the plasmonic element at room temperature.
+with a distant gate, with edges in the upper half of the range
+measured for etched edges and with contacts that absorb electrons
+arriving obliquely, and at its best it
+equals the circuit term of the plasmonic element at room temperature.
 
 \begin{table*}
 \caption{Rectification by geometry and regime. $A$: ballistic asymmetry at
@@ -84,14 +102,14 @@ has the drain tied to the gate.}
 \begin{tabular}{L{0.15\textwidth}L{0.31\textwidth}L{0.24\textwidth}L{0.23\textwidth}}
 Regime & Funnel & Classical Tesla valve & What limits it \\
 \hline
-Ballistic, dc & $A=1.6$ to $1.9$ clean; $1.1$ to $1.6$ at $\lambda=700\nm$, by length and field profile & $A=0.89$ to $1.08$, no systematic sign & reciprocity; needs the bias landscape \\
+Ballistic, dc & $A=1.6$ to $1.9$ clean; $1.1$ to $1.6$ at $\lambda=700\nm$, by length and field profile; device D with the field computed: $1.02$ & $A=0.89$ to $1.08$, no systematic sign & reciprocity; needs the bias landscape \\
 Viscous, dc, no gate & $|D-1|\leq10^{-2}$ within the drift limit & $10^{-3}$ to $3\times10^{-2}$ within the drift limit & drift speed below $0.3\,\vF$ caps $\Rey$ \\
 Viscous, dc, gated & contacts exchanged: $<10^{-3}$; polarity reversed: $0.48\,V/U_{0}$ & the same polarity term; exchange $<10^{-3}$ & the polarity term is the gate, in any channel \\
 Plasmonic, shape only & $10^{-4}$ to $0.13\AW$; $0.22\AW$ at taper resonance & $10^{-5}$ to $10^{-3}\AW$; $0.02\AW$ at resonance & plasmon damping; saturates first \\
 Plasmonic, DS & $0.07$ to $0.34\AW$; $\eta<1\%$ & $0.02$ to $0.1\AW$ at $6$ to $11$~k$\Omega$ & $r^{2}$; gate overdrive; contacts \\
 Ballistic, $1\THz$, $6\um$ & $\RI=0.05\AW$ (uniform field); $0.2$ to $0.45\AW$ (drop at neck) & none ($A=1$ at dc) & length: $fL/\vF=6$ \\
 Ballistic, $1\THz$, $0.55\um$, imposed field & $R_{\mathrm{abs}}=0.7\AW$, either profile; $0.14$ to $0.42\AW$ with rough edges or $\lambda=100\nm$ & none & the field is not computed \\
-Ballistic, $1\THz$, $0.55\um$, computed field & $R_{\mathrm{abs}}=0.12\AW$; $0.10\AW$ at $\lambda=100\nm$; $|R_{\mathrm{abs}}|\leq0.04\AW$ with half-diffuse edges; $\RI=0.012$ to $0.026\AW$ & not computed & contact drops; edges; under a $30\nm$ gate the circuit term is larger; $\eta\sim10^{-4}$ \\
+Ballistic, $1\THz$, $0.55\um$, computed field & $R_{\mathrm{abs}}=0.12\AW$ with specular edges; $0.10\AW$ at $\lambda=100\nm$; rough edges: half at a head-on specularity of $0.5$, zero at $0.2$; contacts of transparency $0.25$: $0.07$ to $0.12\AW$; collimating contacts: none; $\RI=0.012$ to $0.026\AW$ & not computed & contact drops; edges; angular selection at the contacts; under a $30\nm$ gate the circuit term is larger; $\eta\sim10^{-4}$ \\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
@@ -143,7 +161,9 @@ promising an improvement. The matched array of $0.55\um$ ballistic funnels
 is at $130\pWrtHz$ at $1\THz$ and room temperature, twice the figure of
 the plasmonic element at that temperature and again where the best
 measured room-temperature devices are; it assumes nineteen devices matched
-to the antenna, specular edges and no parasitic capacitance, and it is
+to the antenna, specular edges (at a head-on specularity of $0.5$ the
+figure doubles), contacts that absorb at all angles and no parasitic
+capacitance, and it is
 four times the value reported for the encapsulated ballistic
 rectifiers~\cite{auton2017terahertz}. At low temperature, encapsulated devices reach
 $0.2\pWrtHz$ at $10$~K and
@@ -237,8 +257,14 @@ resistive drain contact removes the asymmetry it is supposed to serve. If
 the device is to rectify by its shape, make it short, by
 Eq.~\eqref{eq:criterion}: half a micrometre for $1\THz$, leads included.
 Spend the effort on the edges before the mobility, since a mean free path
-of $100\nm$ costs a fifth of the response and half-diffuse edges cost all
-of it; keep the gate farther away than the device is long, or accept that
+of $100\nm$ costs a fifth of the response while an rms edge roughness
+of $2\nm$ costs half and $3\nm$ all of it, and establish the
+specularity of the edges of the process first, since the values measured
+for etched edges run from those that would leave nothing to those that
+would leave four fifths; ask of the contacts that they absorb
+electrons arriving at wide angles before asking for a low resistance,
+since a transparency of a quarter costs little and a collimating
+junction in front of the metal costs everything; keep the gate farther away than the device is long, or accept that
 the gate connection does the rectifying; and provide for the impedance,
 since one such funnel is a kilohm. Expect no more than the circuit term
 gives. Do not judge a geometric diode for terahertz use by its dc
@@ -247,14 +273,17 @@ loops.
 
 \subsection{Limitations}
 
-There is no experiment here: the solvers are validated against analytic
-limits and one measured number, and the agreement with that number depends
-on the field profile and on the mean free path at the level of a factor of
-several (Sec.~\ref{sec:dc}). Most idealisations favour the device. That is
+There is no experiment here. The solvers are validated against analytic
+limits. The one measured asymmetry that can be set beside them at equal
+bias, $1.03$ to $1.04$ for device D at $0.1$~V, is consistent with the
+computed-field value of $1.02$, but it is too close to one, and the
+measured device too much more resistive than the modelled one, to test
+the model (Sec.~\ref{sec:dc}). Most idealisations favour the device. That is
 the safe direction for the negative results, on the Tesla valve and on the
 conversion efficiency, and the unsafe one for the positive result on the
-short ballistic funnel, which computing the field reduced sixfold and
-which remains an upper estimate.
+short ballistic funnel, which computing the field reduced sixfold, which
+the rougher of the etched edges that have been measured would remove, as
+would contacts that collimate, and which remains an upper estimate.
 
 The ballistic model of the $6\um$ device and of the length scaling
 imposes its potential and has no displacement current. For the $6\um$
@@ -262,16 +291,36 @@ device the terahertz result depends entirely on the length of the drop,
 and the scaling curve of Fig.~\ref{fig:length}(b) was confirmed with a
 computed field for one device only, through its roll-off. For the
 $0.55\um$ funnel the field is computed, in a model with limits of its
-own. The dielectric is uniform. The contacts are ideal equipotential
-strips that absorb and inject without resistance and without doping the
-graphene beneath them; a quarter of the bias drops at the contact planes
-within three grid cells, and since the rectified current goes roughly as
-the square of what remains at the neck, a different contact would change
-the result. The electrons are classical particles in a classical field,
+own. The dielectric is uniform. The contacts are equipotential
+strips that do not dope the graphene beneath or beside them. Between
+ideal ones a quarter of the bias drops at the contact planes within
+three grid cells. The two contacts that reflect are the extremes of
+angular selection, one transparency for all angles and a smooth
+junction, and which of them a metal edge resembles is not known to us.
+The gas loses no energy to the lattice, so that it is $3$ to $7\%$
+warmer in kinetic energy between contacts that reflect at all angles and
+up to $14\%$, and not yet steady, between collimating ones; the points
+at a transparency of $0.75$ and those with collimating contacts are
+single runs. The static pair for device D shares these limits. Its
+asymmetry is the same at two particle numbers and its conductance
+differs by $2.5\%$ between them; the gas was still warming at the end of
+the averaging window, by one per cent of its kinetic energy across it;
+and the bias of the measured $1.66$, about $1.5$~V, is beyond what a
+model without optical phonons, interband processes and heat loss can be
+asked. The electrons are classical particles in a classical field,
 with five to seven modes in the neck, and they interact through the
 common field only; short-range electron-electron scattering enters
-through the $100\nm$ bound. Two wall specularities were computed, and the
-response is lost between them. The antenna is a voltage source, with its
+through the $100\nm$ bound. The rough edge follows
+Eq.~\eqref{eq:rough}, which is the Kirchhoff result: it ignores the
+correlation length of the roughness, is least reliable towards grazing
+incidence, and has not been tested against a measurement on graphene,
+since none resolves the angle of incidence. Reading a focusing ratio as
+the head-on specularity is our interpretation, and we found no measured
+rms roughness of an etched graphene edge. All rough-edge points but one,
+and the points of the single-specularity scan between $p=0.7$ and $0.9$,
+are single runs. The search for measurements of edge specularity was a
+bounded one and not a survey.
+The antenna is a voltage source, with its
 $75\ \Omega$ entering through the computed admittance; the matched array
 is an idealisation, and no array or antenna was modelled. Rectified
 currents below about $0.05\ \mu$A are not resolved. Two results of
