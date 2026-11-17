@@ -176,9 +176,26 @@ Half-diffuse walls, 1 THz, single runs (P6 and the checks P6c; the table above p
 
 Stage B7 at the same amplitudes (I_dc in uA): uniform field: 0.77 at 0.05 V, 3.03 at 0.1 V, 9.83 at 0.2 V, 15.74 at 0.3 V; drop at the neck: 0.86 at 0.05 V, 2.78 at 0.1 V, 3.36 at 0.2 V, 2.01 at 0.3 V.
 
-## 12. Bookkeeping
+## 12. Wall specularity at 1 THz, 700 nm, 0.1 V, shape-only drive (P8, with P6 and the decision point)
 
-66 production runs, 5.64 hours of wall time on 10 cores.
-Particles lost through a wall: at most 2 per run (18 runs lost any), of 4 to 8 million.
+p is the probability that a wall reflection is specular. p = 1 is the pooled decision point, p = 0.5 two pooled seeds, the others single runs over 20 periods.
+
+| gate | p | runs | I_dc | relative to p = 1 | source and drain planes differ by | P_abs | Y_1 | R_abs | R_1 (75 ohm) |
+|---|---|---|---|---|---|---|---|---|---|
+| 300 nm | 0.5 | 2 | -0.073 +- 0.013 | -0.17 +- 0.03 | 0.000 | 3.25 | 0.650 -0.141i | -0.022 +- 0.004 | -0.0040 +- 0.0007 |
+| 300 nm | 0.7 | 1 | +0.102 +- 0.020 | +0.24 +- 0.05 | 0.002 | 3.33 | 0.666 -0.153i | +0.031 +- 0.006 | +0.0056 +- 0.0011 |
+| 300 nm | 0.8 | 1 | +0.156 +- 0.015 | +0.36 +- 0.04 | 0.002 | 3.37 | 0.673 -0.157i | +0.046 +- 0.004 | +0.0085 +- 0.0008 |
+| 300 nm | 0.9 | 1 | +0.291 +- 0.013 | +0.68 +- 0.03 | 0.001 | 3.40 | 0.681 -0.161i | +0.086 +- 0.004 | +0.0158 +- 0.0007 |
+| 300 nm | 1 | 7 | +0.429 +- 0.012 | 1 |  | 3.44 | 0.689 -0.166i | +0.124 +- 0.003 | +0.0232 +- 0.0006 |
+| 30 nm | 0.5 | 2 | -0.134 +- 0.011 | -0.28 +- 0.02 | 0.002 | 3.42 | 0.684 +0.368i | -0.039 +- 0.003 | -0.0072 +- 0.0006 |
+| 30 nm | 0.7 | 1 | +0.079 +- 0.012 | +0.16 +- 0.03 | 0.004 | 3.51 | 0.701 +0.354i | +0.023 +- 0.004 | +0.0043 +- 0.0007 |
+| 30 nm | 0.8 | 1 | +0.169 +- 0.016 | +0.35 +- 0.04 | 0.002 | 3.55 | 0.710 +0.349i | +0.048 +- 0.005 | +0.0092 +- 0.0009 |
+| 30 nm | 0.9 | 1 | +0.349 +- 0.017 | +0.72 +- 0.04 | 0.001 | 3.60 | 0.719 +0.344i | +0.097 +- 0.005 | +0.0189 +- 0.0009 |
+| 30 nm | 1 | 6 | +0.483 +- 0.013 | 1 |  | 3.64 | 0.729 +0.339i | +0.132 +- 0.003 | +0.0260 +- 0.0007 |
+
+## 13. Bookkeeping
+
+72 production runs, 6.39 hours of wall time on 10 cores.
+Particles lost through a wall: at most 2 per run (19 runs lost any), of 4 to 8 million.
 Largest charge-balance error 8.0e-04 electrons (one lost sample particle); 3.0e-12 in runs that lost none.
 Largest difference between the source-plane and drain-plane currents in a driven run: 0.186 uA (strip, 3 THz, gate 30 nm, gated).

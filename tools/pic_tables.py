@@ -151,9 +151,23 @@ if have:
     w("\nStage B7 at the same amplitudes (I_dc in uA): " + "; ".join(
         f"{NAMEF[fm][4:]}: " + ", ".join(f"{I:.2f} at {V:g} V" for V, I, e in pts) for fm, pts in c.b7_amp().items()) + ".\n")
 
+if c.rows("P8.csv"):
+    w("## 12. Wall specularity at 1 THz, 700 nm, 0.1 V, shape-only drive (P8, with P6 and the decision point)\n")
+    w("p is the probability that a wall reflection is specular. p = 1 is the pooled decision point, p = 0.5 two pooled seeds, the others single runs over 20 periods.\n")
+    w("| gate | p | runs | I_dc | relative to p = 1 | source and drain planes differ by | P_abs | Y_1 | R_abs | R_1 (75 ohm) |")
+    w("|---|---|---|---|---|---|---|---|---|---|")
+    for d in c.GATES:
+        sc = c.spec_scan(d); ref = [q for p_, q in sc if p_ == 1.0][0]
+        for p_, q in sc:
+            rel = q["I"] / ref["I"]; erel = abs(rel) * math.hypot(q["e"] / q["I"], ref["e"] / ref["I"]) if p_ != 1.0 else 0
+            sp = "" if q["split"] != q["split"] else f"{q['split']:.3f}"
+            w(f"| {d} nm | {p_:g} | {q['n']} | {q['I']:+.3f} +- {q['e']:.3f} | " + ("1" if p_ == 1.0 else f"{rel:+.2f} +- {erel:.2f}") +
+              f" | {sp} | {q['P']:.2f} | {q['Y'].real * 1e3:.3f} {q['Y'].imag * 1e3:+.3f}i | {q['R']:+.3f} +- {q['eR']:.3f} | {q['R1']:+.4f} +- {q['eR1']:.4f} |")
+    w("")
+
 # ---- bookkeeping -----------------------------------------------------------------
-allp = [r for n in ("P1.csv", "P2.csv", "P3.csv", "P4.csv", "P5.csv", "P6.csv", "P6c.csv") for r in c.rows(n)]
-w("## 12. Bookkeeping\n")
+allp = [r for n in ("P1.csv", "P2.csv", "P3.csv", "P4.csv", "P5.csv", "P6.csv", "P6c.csv", "P8.csv") for r in c.rows(n)]
+w("## 13. Bookkeeping\n")
 w(f"{len(allp)} production runs, {sum(r['seconds'] for r in allp) / 3600:.2f} hours of wall time on 10 cores.")
 w(f"Particles lost through a wall: at most {int(max(r['leaked'] for r in allp))} per run ({int(sum(r['leaked'] > 0 for r in allp))} runs lost any), of 4 to 8 million.")
 w(f"Largest charge-balance error {max(r['charge_err'] for r in allp):.1e} electrons (one lost sample particle); {max(r['charge_err'] for r in allp if r['leaked'] == 0):.1e} in runs that lost none.")

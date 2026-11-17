@@ -82,6 +82,13 @@ struct PicParams {
   double T = 300;                        // K
   double lambda_mfp = std::numeric_limits<double>::infinity();   // nm
   double specularity = 1.0;
+  // Stage B9: rms edge roughness in nm. When > 0 it replaces the constant
+  // specularity: a wall hit with wave-vector component k_n along the normal
+  // is mirror-like with probability exp(-(2 rough k_n)^2), and a scattered
+  // particle leaves with an angle drawn from (1 - p(theta)) cos(theta), which
+  // keeps the wall reciprocal (see Pic::reflect).
+  double rough = 0;
+  bool rough_lambert = false;   // tests only: scattered particles leave with the cosine law (not reciprocal)
   // discretisation
   double h = 5;            // nm, grid spacing
   long N = 1000000;        // sample particles in the equilibrium fill
@@ -94,6 +101,16 @@ struct PicParams {
   int contact_block = 2;   // nodes per block edge
   double filter = 1.5;     // Gaussian low-pass width in cells
   bool contacts = true;    // false: closed box, contact edges reflect
+  // Stage B10: contacts that reflect. An electron reaching a contact plane is
+  // absorbed with probability T and otherwise reflected like a mirror, and the
+  // injected flux is thinned by the same T, so that the gas at rest stays in
+  // equilibrium. contact_T is a constant transparency; contact_junction > 0
+  // (nm) replaces it by T = exp(-pi k d sin^2(theta)), theta from the contact
+  // normal and k the electron's wave number (a smooth p-n junction of width d
+  // in front of the contact).
+  double contact_T = 1.0;
+  double contact_junction = 0;
+  bool contact_unthinned = false;   // tests only: the injected flux is not thinned (breaks equilibrium)
   // drive: electron potential energies of the contacts, with V(t) in volts,
   //   Sym:        U_S = +V/2, U_D = -V/2      (mirror-symmetric circuit)
   //   GateDrain:  U_S = +V,   U_D = 0         (drain tied to the gate)
@@ -181,6 +198,23 @@ class Pic {
   double length() const { return L_; }
   long num_particles() const;
   long leaked() const { return leaked_; }
+  // One reflection from a wall with inward normal n and tangent d, applied to
+  // the wave vector (kx, ky); true if it was mirror-like. This is the rule
+  // used by the mover, exposed for the tests.
+  static bool reflect(double& kx, double& ky, const Vec2& n, const Vec2& d, double specularity, double rough, Rng& rng, bool lambert = false);
+  // Wall hits and mirror-like reflections since the last reset, by wall
+  // class: [2c] hits and [2c + 1] mirror-like, c = 0 walls parallel to the
+  // axis, 1 sloping walls, 2 walls across the axis.
+  void wall_counts(long out[6]) const;
+  // Probability that a contact with inward normal n absorbs an electron of
+  // wave vector (kx, ky): the rule used by the mover and by the injection.
+  static double contact_transmission(double kx, double ky, const Vec2& n, double T, double junction);
+  // Arrivals at the contacts and absorptions since the last reset, counted
+  // only when the contacts reflect: [2c] arrivals, [2c + 1] absorbed.
+  void contact_counts(long out[4]) const;
+  void reset_wall_counts();
+  // x, y, kx, ky of every particle, appended to out
+  void snapshot(std::vector<double>& out) const;
   // wall-clock seconds spent in the particle push and in the field solve
   double seconds_push() const { return tpush_; }
   double seconds_field() const { return tfield_; }
@@ -190,7 +224,7 @@ class Pic {
   struct P { double x, y, kx, ky; };
   struct Worker;
   void fields();
-  int move(P& p, double rem, Rng& rng) const;
+  int move(P& p, double rem, Rng& rng, long* wall) const;
   void deposit(std::vector<double>& a, double x, double y, double w) const;
   Vec2 imposed_force(double x, double t) const;
 
@@ -214,6 +248,7 @@ class Pic {
   std::vector<PicStep> hist_;
   std::vector<double> q_;
   long leaked_ = 0;
+  bool reflecting_ = false;   // the contacts reflect part of the electrons
   double tpush_ = 0, tfield_ = 0;
 };
 

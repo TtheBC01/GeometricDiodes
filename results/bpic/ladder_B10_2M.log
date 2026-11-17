@@ -1,0 +1,26 @@
+Stage B8 ladder: N = 2000000, h = 5 nm, filter = 1.5 cells, FFT backend vDSP
+T32b  PASS  contact law at fixed angles
+      transparency 0.5, k = 0.2097 /nm: absorbed fraction (formula):  0 deg 0.5001 (0.5000) 10 deg 0.4990 (0.5000) 25 deg 0.5005 (0.5000) 50 deg 0.5004 (0.5000) 80 deg 0.5004 (0.5000); largest deviation 1.3 s.e.
+      transparency 0.5, k = 0.1258 /nm: absorbed fraction (formula):  0 deg 0.4994 (0.5000) 10 deg 0.4999 (0.5000) 25 deg 0.5002 (0.5000) 50 deg 0.5016 (0.5000) 80 deg 0.4997 (0.5000); largest deviation 2.0 s.e.
+      junction 38 nm, k = 0.2097 /nm: absorbed fraction (formula):  0 deg 1.0000 (1.0000) 10 deg 0.4679 (0.4700) 25 deg 0.0112 (0.0114) 50 deg 0.0000 (0.0000) 80 deg 0.0000 (0.0000); largest deviation 2.7 s.e.
+      junction 38 nm, k = 0.1258 /nm: absorbed fraction (formula):  0 deg 1.0000 (1.0000) 10 deg 0.6354 (0.6357) 25 deg 0.0683 (0.0684) 50 deg 0.0002 (0.0001) 80 deg 0.0000 (0.0000); largest deviation 0.4 s.e.
+T32c  PASS  strip conductance between reflecting contacts, +-5 mV, no interaction
+      ideal contacts: G = 5.0895 +- 0.0079 mS (Sharvin 5.1769 mS)  [90 s]
+      transparency 0.75: G / G_ideal = 0.6004 +- 0.0024, target 0.6000 (+0.2 s.e.)  [124 s]
+      transparency 0.50: G / G_ideal = 0.3309 +- 0.0022, target 0.3333 (-1.1 s.e.)  [124 s]
+      transparency 0.25: G / G_ideal = 0.1432 +- 0.0012, target 0.1429 (+0.3 s.e.)  [125 s]
+      junction 7 nm: G / G_ideal = 0.3307 +- 0.0015, target 0.3253 (+3.6 s.e.)  [121 s]
+      junction 38 nm: G / G_ideal = 0.1403 +- 0.0017, target 0.1402 (+0.1 s.e.)  [123 s]
+T32d  FAIL  the funnel with reflecting contacts and no drive stays in equilibrium; injection that is not thinned is caught
+      transparency 0.25, 30 nm gate: I_dc +0.077 +- 0.033 uA; particles -0.002 %; kinetic energy +0.022 %; <cos 2 phi> in the source lead +0.6 s.e.;
+          absorbed share 0.2500 source, 0.2501 drain (formula 0.2500; +0.4, +1.5 s.e.)  NOT OK  [110 s]
+      junction 38 nm, 30 nm gate: I_dc +0.051 +- 0.034 uA; particles -0.041 %; kinetic energy +1.622 %; <cos 2 phi> in the source lead +1.0 s.e.;
+          absorbed share 0.2214 source, 0.2215 drain (formula 0.2204; +13.2, +14.0 s.e.)  NOT OK  [110 s]
+      transparency 0.25, no interaction: I_dc -0.015 +- 0.031 uA; particles +0.012 %; kinetic energy -0.035 %; <cos 2 phi> in the source lead +1.2 s.e.;
+          absorbed share 0.2500 source, 0.2501 drain (formula 0.2500; -0.1, +0.9 s.e.)  ok  [63 s]
+      junction 38 nm, no interaction: I_dc +0.010 +- 0.025 uA; particles -0.040 %; kinetic energy -0.044 %; <cos 2 phi> in the source lead -1.2 s.e.;
+          absorbed share 0.2203 source, 0.2205 drain (formula 0.2204; -0.4, +1.4 s.e.)  ok  [65 s]
+      transparency 0.25, injection not thinned (the error the test is for): I_dc +7.965 +- 2.281 uA; particles +267.696 %; kinetic energy -0.006 %; <cos 2 phi> in the source lead +0.4 s.e.;
+          absorbed share 0.2501 source, 0.2500 drain (formula 0.2500; +2.0, -0.1 s.e.)  ok  [96 s]
+
+2 passed, 1 failed

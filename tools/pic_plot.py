@@ -231,3 +231,27 @@ if len(keys) > 1:
                  x=0.06, ha="left", fontsize=11, y=0.985)
     fig.savefig(f"{c.R}/B8_extension.png", dpi=170)
     print("wrote B8_extension.png")
+
+# =============================== figure 4: wall specularity ===============================
+if c.rows("P8.csv"):
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, 4.6))
+    fig.subplots_adjust(left=0.075, right=0.985, top=0.80, bottom=0.14, wspace=0.24)
+    MK = {300: "o", 30: "s"}
+    for ax, key, err, lab in ((axs[0], "I", "e", "rectified current at 0.1 V drive (µA)"), (axs[1], "R", "eR", "rectified current per absorbed watt (A/W)")):
+        ax.axvspan(0.2, 0.5, color="#f1efe8", lw=0); ax.axhline(0, color=INK, lw=0.7)
+        for d in c.GATES:
+            sc = c.spec_scan(d)
+            ax.errorbar([p for p, q in sc], [q[key] for p, q in sc], yerr=[q[err] for p, q in sc], fmt=MK[d] + "-", color=COL[d], ms=6, lw=1.4, capsize=0,
+                        label=f"gate at {d} nm")
+        ax.set_xlim(0.15, 1.04); ax.set_xticks([0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+        ax.set_xlabel("probability that a wall reflection is specular"); ax.set_ylabel(lab)
+    floor = 0.05
+    axs[0].axhspan(-floor, floor, color=PALE, alpha=0.25, lw=0)
+    axs[0].text(1.03, -floor - 0.008, "numerical floor, ±0.05 µA", fontsize=8.3, color=GREY, ha="right", va="top")
+    axs[0].text(0.35, axs[0].get_ylim()[1] * 0.93, "measured for\netched edges\n(magnetic focusing)", fontsize=8.3, color=GREY, ha="center", va="top")
+    axs[0].set_title("(a)  Rectified current at 1 THz", loc="left"); axs[1].set_title("(b)  Per absorbed watt", loc="left")
+    axs[1].legend(loc="upper left", fontsize=9, bbox_to_anchor=(0.42, 0.98))
+    fig.suptitle("Stage B8: the 0.55 µm funnel at 1 THz against the specularity of its walls (computed field, 700 nm, shape-only drive)",
+                 x=0.075, ha="left", fontsize=11, y=0.975)
+    fig.savefig(f"{c.R}/B8_specularity.png", dpi=170)
+    print("wrote B8_specularity.png")

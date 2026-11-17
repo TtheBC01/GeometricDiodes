@@ -173,3 +173,15 @@ def b7_amp():
         pts = [(r["V_V"], r["Idc_A"] * 1e6, r["Idc_err_A"] * 1e6) for r in s5 if r["field"] == fm] + [(0.1, a["Idc_A"] * 1e6, a["Idc_err_A"] * 1e6)]
         out[fm] = sorted(pts)
     return out
+
+
+def spec_scan(d):
+    """Wall specularity scan at 1 THz, 700 nm, 0.1 V, shape-only drive, gate d: [(p, dict)] sorted by p.
+    p = 1 is the pooled decision point, p = 0.5 the two pooled seeds of P6 and P6c, the others single runs (P8)."""
+    out = [(1.0, ext_ac("700", d)), (0.5, ext_ac("p05", d))]
+    for r in rows("P8.csv"):
+        if r["d"] == d and abs(r["f"] - 1) < 1e-6:
+            Pav = (VA * abs(1 + RANT * r["Y"])) ** 2 / (8 * RANT) * 1e6
+            out.append((r["p"], dict(I=r["I"], e=r["e"], P=r["P"], Y=r["Y"], n=1, split=r["split"], R=r["I"] / r["P"], eR=r["e"] / r["P"],
+                                     R1=r["I"] / Pav, eR1=r["e"] / Pav, V=VA)))
+    return sorted(out, key=lambda t: t[0])

@@ -3,7 +3,7 @@
 //
 //   gd_bpic --geo funnel|symmetric|strip [shape flags] [--label s]
 //           [--d nm] [--eps e] [--mode sym|gated|gates] [--V volts] [--f Hz]
-//           [--lambda nm|inf] [--p specularity]
+//           [--lambda nm|inf] [--p specularity | --rough h_nm] [--ct T | --cjunction d_nm]
 //           [--h nm] [--N particles] [--dt fs] [--filter cells] [--clen nm] [--cblock n]
 //           [--settle fs] [--period fs] [--nper n] [--ramp fs]
 //           [--noint] [--imposed 0|1|2] [--ellF nm]
@@ -14,6 +14,10 @@
 // --mode: sym    U_S = +V/2, U_D = -V/2 (shape-only drive)
 //         gated  U_S = +V,   U_D = 0    (drain tied to the gate)
 //         gates  U_S = 0,    U_D = -V   (source tied to the gate)
+// --rough (Stage B9): rms edge roughness; the specularity of a wall hit is
+//         then exp(-(2 h k_n)^2) with k_n the wave vector along the normal.
+// --ct, --cjunction (Stage B10): contacts that absorb an arriving electron
+//         with probability T, or exp(-pi k d sin^2(theta)), and mirror the rest.
 // With --f > 0 the drive is V cos(2 pi f t) and --period defaults to 1/f;
 // otherwise the drive is static and the averaging window is cut into
 // "periods" of --period fs (default 1000) for the batch error.
@@ -34,6 +38,7 @@ int main(int argc, char** argv) {
   PicParams p;
   double V = 0, f = 0, settle = -1, period = -1, ramp = -1;
   int nper = 10;
+  bool have_p = false;
   for (int i = 1; i < argc; ++i) {
     std::string a = argv[i];
     auto next = [&]() -> std::string { if (i + 1 >= argc) { std::fprintf(stderr, "missing value for %s\n", a.c_str()); std::exit(2); } return argv[++i]; };
@@ -53,7 +58,10 @@ int main(int argc, char** argv) {
     else if (a == "--V") V = std::stod(next());
     else if (a == "--f") f = std::stod(next());
     else if (a == "--lambda") { std::string v = next(); p.lambda_mfp = v == "inf" ? std::numeric_limits<double>::infinity() : std::stod(v); }
-    else if (a == "--p") p.specularity = std::stod(next());
+    else if (a == "--p") { p.specularity = std::stod(next()); have_p = true; }
+    else if (a == "--rough") p.rough = std::stod(next());
+    else if (a == "--ct") p.contact_T = std::stod(next());
+    else if (a == "--cjunction") p.contact_junction = std::stod(next());
     else if (a == "--h") p.h = std::stod(next());
     else if (a == "--N") p.N = std::stol(next());
     else if (a == "--dt") p.dt = std::stod(next());
@@ -73,6 +81,9 @@ int main(int argc, char** argv) {
     else if (a == "--map") map = next();
     else { std::fprintf(stderr, "unknown argument %s\n", a.c_str()); return 2; }
   }
+  if (have_p && p.rough > 0) { std::fprintf(stderr, "--p and --rough exclude each other\n"); return 2; }
+  if (p.contact_T < 1.0 && p.contact_junction > 0) { std::fprintf(stderr, "--ct and --cjunction exclude each other\n"); return 2; }
+  if (p.contact_T <= 0 || p.contact_T > 1.0 || p.contact_junction < 0) { std::fprintf(stderr, "--ct must be in (0, 1] and --cjunction >= 0\n"); return 2; }
   Boundary b;
   double Lt = 0.5 * (fq.Wc - fq.Wn) / std::tan(deg2rad(fq.alpha_deg));
   if (geo == "funnel") { b = make_funnel(fq); p.x_F = fq.Lc + Lt; }
@@ -99,10 +110,14 @@ int main(int argc, char** argv) {
   while (pic.time() < settle - 1e-9) pic.step();
   double t0 = pic.time();
   if (!map.empty()) pic.start_average();
+  pic.reset_wall_counts();
   while (pic.time() < t0 + nper * period - 1e-9) pic.step();
   PicResult r = pic.analyse(t0, period, nper);
   double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - c0).count();
 
+  long wc[6]; pic.wall_counts(wc);
+  long cc[4]; pic.contact_counts(cc);
+  auto frac = [&](int c) { return wc[2 * c] ? (double)wc[2 * c + 1] / (double)wc[2 * c] : 1.0; };
   const double Rant = 75.0;
   double Rabs = r.Pabs != 0 ? r.Idc / r.Pabs : 0;
   double Pav = f > 0 ? std::norm(V * (1.0 + Rant * r.Y1)) / (8 * Rant) : 0;
@@ -117,6 +132,11 @@ int main(int argc, char** argv) {
               r.Y1.real() * 1e3, r.Y1.imag() * 1e3, r.Pabs * 1e6, Rabs, R1, Ek0, r.Ek_last, r.np_mean, pic.weight(), pic.leaked());
   std::printf("  grid %d x %d at %g nm, dt %g fs, %zu steps, %.1f s (push %.1f, field %.1f)\n", pic.nx(), pic.ny(), p.h, pic.dt(), pic.history().size() - 1, secs,
               pic.seconds_push(), pic.seconds_field());
+  std::printf("  walls: roughness %g nm; mirror-like fraction %.4f along the axis (%ld hits), %.4f sloping (%ld), %.4f across (%ld)\n", p.rough, frac(0), wc[0], frac(1), wc[2],
+              frac(2), wc[4]);
+  if (p.contact_T < 1.0 || p.contact_junction > 0)
+    std::printf("  contacts: transparency %g, junction %g nm; absorbed fraction of arrivals %.4f at the source (%ld), %.4f at the drain (%ld)\n", p.contact_T, p.contact_junction,
+                cc[0] ? (double)cc[1] / (double)cc[0] : 1.0, cc[0], cc[2] ? (double)cc[3] / (double)cc[2] : 1.0, cc[2]);
 
   if (!out.empty()) {
     bool fresh = !std::ifstream(out).good();
@@ -125,12 +145,12 @@ int main(int argc, char** argv) {
     if (fresh)
       std::fprintf(fp, "label,geo,mode,interaction,imposed,d_nm,eps,lambda_nm,p,f_Hz,V_V,h_nm,N,dt_fs,filter,clen_nm,cblock,settle_fs,period_fs,nper,"
                        "Idc_A,Idc_err_A,IdcS_A,IdcD_A,Idcvol_A,ReY1_S,ImY1_S,Pabs_W,Rabs_A_per_W,R1_A_per_W,Ek0_eV,Ek_first_eV,Ek_last_eV,"
-                       "np_mean,weight,qS,qD,Qg,charge_err,leaked,L_nm,area_nm2,neq_nm2,seed,seconds\n");
-    std::fprintf(fp, "%s,%s,%s,%d,%d,%g,%g,%g,%g,%.6g,%g,%g,%ld,%g,%g,%g,%d,%g,%g,%d,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.3g,%ld,%.8g,%.8g,%.8g,%llu,%.1f\n",
+                       "np_mean,weight,qS,qD,Qg,charge_err,leaked,L_nm,area_nm2,neq_nm2,seed,seconds,rough_nm,hits_axis,mirror_axis,hits_slope,mirror_slope,hits_across,mirror_across,contact_T,junction_nm,arrive_S,absorb_S,arrive_D,absorb_D\n");
+    std::fprintf(fp, "%s,%s,%s,%d,%d,%g,%g,%g,%g,%.6g,%g,%g,%ld,%g,%g,%g,%d,%g,%g,%d,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.8g,%.3g,%ld,%.8g,%.8g,%.8g,%llu,%.1f,%g,%ld,%ld,%ld,%ld,%ld,%ld,%g,%g,%ld,%ld,%ld,%ld\n",
                  label.c_str(), geo.c_str(), mode.c_str(), (int)p.interaction, p.imposed, p.d_gate, p.eps_r, p.lambda_mfp, p.specularity, f, V, p.h, p.N, pic.dt(), p.filter,
                  p.contact_len, p.contact_block, settle, period, nper, r.Idc, r.Idc_err, r.IdcS, r.IdcD, r.Idc_vol, r.Y1.real(), r.Y1.imag(), r.Pabs, Rabs, R1, Ek0,
                  r.Ek_first, r.Ek_last, r.np_mean, pic.weight(), qS, qD, r.Qg_mean, r.charge_error, pic.leaked(), pic.length(), pic.area(), pic.n_eq(),
-                 (unsigned long long)p.seed, secs);
+                 (unsigned long long)p.seed, secs, p.rough, wc[0], wc[1], wc[2], wc[3], wc[4], wc[5], p.contact_T, p.contact_junction, cc[0], cc[1], cc[2], cc[3]);
     std::fclose(fp);
   }
   if (!map.empty() && pic.averaged_steps() > 0) {

@@ -10,9 +10,11 @@ results in `results/bpic/` (`P1.csv` to `P6.csv`, `P6c.csv`,
 `checks.csv`, `runs.log`, `ext.log`, potential maps `P1_d*_V*.txt`,
 `map_d*.txt`), tables `results/bpic/tables_B8.md`
 (`tools/pic_tables.py`), figures `B8_potential.png`,
-`B8_responsivity.png` and `B8_extension.png` (`tools/pic_plot.py`).
-The extension (points 10 to 12 of the verdict and the section
-"Extension") was run after the core set, on the same day.
+`B8_responsivity.png`, `B8_extension.png` and `B8_specularity.png`
+(`tools/pic_plot.py`). The extension (points 10 to 12 of the verdict and
+the section "Extension") was run after the core set, on the same day; the
+wall-specularity scan (point 13, `P8.csv`) on 2026-11-13, after the third
+draft of the paper.
 
 The question: Stage B7 found that the 0.55 um funnel G3 rectifies at 1 THz
 at the room-temperature mean free path, 0.70 A/W per absorbed watt, with
@@ -119,13 +121,26 @@ metal contacts?
    mirror-symmetric control with the same walls is zero within the
    floor. So |R_abs| is at most 0.04 A/W, and the positive result of
    this stage is a result for specular edges. B7 gave 0.42 and
-   0.14 A/W for this case. No specularity between 0.5 and 1 was run.
+   0.14 A/W for this case. Point 13 fills in the specularities between.
 12. **Extension: amplitude.** At 0.05 V the current is 0.099 uA under
    both gates, 0.92 +- 0.17 and 0.82 +- 0.13 of the square law through
    the 0.1 V point (a weak test: the floor is half the signal). At
    0.2 V it is 1.50 +- 0.04 and 1.38 +- 0.04 times the square law
    (2.56 and 2.66 uA; R_abs 0.20 A/W). Both imposed fields of B7 fell
    below the square law at 0.2 V; the computed field rises above it.
+13. **Scan of the wall specularity (2026-11-13): the response falls
+   almost linearly with the diffuse fraction and is gone near p = 0.6.**
+   With a probability p that a wall reflection is specular, the 1 THz
+   current under the 300 nm gate is 0.429, 0.291, 0.156, 0.102 and
+   -0.073 uA at p = 1, 0.9, 0.8, 0.7 and 0.5 (0.483, 0.349, 0.169, 0.079
+   and -0.134 uA under the 30 nm gate). One reflection in ten diffuse
+   costs 30 % of the response; half is left at p = 0.84; the current
+   crosses zero near p = 0.6. Per absorbed watt: 0.124, 0.086, 0.046,
+   0.031 A/W (300 nm gate). Magnetic-focusing experiments on etched
+   graphene edges report specularities of 0.2 to 0.5, and a study of
+   graphene/hBN wires found diffusive boundary scattering. If those
+   numbers carry over, an etched funnel has no shape rectification at
+   1 THz in this model.
 
 **For the paper** (done in the third draft of 2026-11-12, `paper/outline.md`).
 The short-funnel headline of 0.70 A/W has to become 0.12 A/W, and R_1 of
@@ -141,8 +156,11 @@ becomes: 0.10 to 0.13 A/W per absorbed watt for specular edges at any
 mean free path from 100 nm up (0.012 to 0.023 A/W for one device on
 75 ohm), and nothing usable, at most 0.04 A/W with the sign reversed,
 for half-diffuse edges. The paper has to say that the short-funnel
-result depends on the edges being close to specular, and that how close
-has not been computed.
+result depends on the edges being close to specular. After the scan of
+point 13 (in the paper since 2026-11-13, Sec. V E and Fig. 10(g)): half
+of the response needs p above about
+0.85, and the measured specularity of etched edges, 0.2 to 0.5, is below
+the value at which the response vanishes.
 
 ## Acceptance ladder (`bpic/ladder_B8.txt`; 11 passed, 0 failed)
 
@@ -404,8 +422,50 @@ the static asymmetry (1.005, 1.004). The single runs at 1 THz:
 The negative sign is reproduced under both gates. Under the 30 nm gate
 it is 2.7 times the floor; under the 300 nm gate 1.5 times, so there I
 would call it zero or negative. The dc limit is positive (+0.1 uA), so
-the sign changes between dc and 1 THz. Only a specularity of 0.5 was
-run: where between 0.5 and 1 the response is lost is not known.
+the sign changes between dc and 1 THz.
+
+Scan of the specularity p (figure `bpic/B8_specularity.png`; table 12 of
+`bpic/tables_B8.md`; single runs of 20 periods at p = 0.7, 0.8 and 0.9,
+seed 5):
+
+| p | I_dc, 300 nm gate (uA) | R_abs (A/W) | relative to p = 1 | I_dc, 30 nm gate (uA) | R_abs (A/W) | relative to p = 1 |
+|---|---|---|---|---|---|---|
+| 1 | 0.429 +- 0.012 | 0.124 +- 0.003 | 1 | 0.483 +- 0.013 | 0.132 +- 0.003 | 1 |
+| 0.9 | 0.291 +- 0.013 | 0.086 +- 0.004 | 0.68 +- 0.03 | 0.349 +- 0.017 | 0.097 +- 0.005 | 0.72 +- 0.04 |
+| 0.8 | 0.156 +- 0.015 | 0.046 +- 0.004 | 0.36 +- 0.04 | 0.169 +- 0.016 | 0.048 +- 0.005 | 0.35 +- 0.04 |
+| 0.7 | 0.102 +- 0.020 | 0.031 +- 0.006 | 0.24 +- 0.05 | 0.079 +- 0.012 | 0.023 +- 0.004 | 0.16 +- 0.03 |
+| 0.5 | -0.073 +- 0.013 | -0.022 +- 0.004 | -0.17 +- 0.03 | -0.134 +- 0.011 | -0.039 +- 0.003 | -0.28 +- 0.02 |
+
+The current falls almost linearly from p = 1 to p = 0.5, by 0.10 to
+0.12 uA for each tenth of diffuse reflection, and the two gates agree.
+Interpolated linearly it is half its specular value at p = 0.84 under
+both gates and crosses zero at p = 0.58 (300 nm gate) and 0.63 (30 nm).
+At p = 0.7 it is 2.0 and 1.6 times the numerical floor. The absorbed
+power changes by 6 % over the scan, so R_abs follows the current.
+
+For comparison with real edges, two measurements (records checked
+against Crossref; the first read in full as arXiv:1301.1969v1, the second
+as its abstract only):
+
+- Taychatanapat, Watanabe, Taniguchi and Jarillo-Herrero, Nature Physics
+  9, 225 (2013), doi:10.1038/nphys2549: transverse magnetic focusing in
+  graphene on hBN with oxygen-plasma-etched edges; "the value of
+  specularity ranges from 0.2 to 0.5", defined as the ratio of the
+  second focusing peak to the first.
+- Masubuchi et al., Phys. Rev. Lett. 109, 036601 (2012),
+  doi:10.1103/PhysRevLett.109.036601: magnetoresistance of
+  graphene/hBN wires, attributed to diffusive boundary scattering.
+
+Two cautions on the comparison, the first my own reading and not a
+statement of those papers. The focusing ratio is measured for
+electrons that meet the edge near normal incidence, and a rough edge
+reflects grazing electrons more specularly; the walls of a 30 degree
+taper are met at shallower angles, so the model's p for a real funnel
+may be higher than the focusing number. And the search was two queries,
+not a survey: I found a report that gate-defined edges in bilayer
+graphene are specular but did not read it. With those cautions, the
+measured range lies below the specularity at which the model's response
+vanishes.
 
 **Amplitude** (700 nm, specular walls):
 
@@ -441,9 +501,11 @@ this stage:
   at the checkpoint, but a contact model with doping under the metal
   could change that fraction, and the rectified current goes roughly as
   the square of what is left at the neck.
-- Two wall specularities only, 1 and 0.5, and the response is lost
-  between them. The other mean free paths and the walls were run at
-  1 THz and dc only, with the shape-only drive.
+- One model of the walls: each reflection is specular with probability
+  p whatever the angle of incidence. The scan in p and the other mean
+  free paths were run at 1 THz only (the walls at p = 0.5 also at dc),
+  with the shape-only drive, and the points at p = 0.7 to 0.9 are single
+  runs.
 - The mean kinetic energy rises from 0.1112 to 0.1137 eV at the decision
   point (steady, consistent with the absorbed power times the residence
   time), and to 0.122 eV in the resonant run at 3 THz and at 0.2 V,
@@ -458,4 +520,5 @@ minutes each; two repeats in a quarter of an hour. At most two sample
 particles in 8 million were lost through a wall in any run. The
 extension: 26 runs (P5, P6 and the four checks) in 2.0 hours, 2 to
 7 minutes each; the two current estimators agree within 0.005 uA in the
-driven runs and 0.011 uA in the static ones. P7 (the 6 um Device D) has not been run.
+driven runs and 0.011 uA in the static ones. The specularity scan: 6 runs
+in 45 minutes. P7 (the 6 um Device D) has not been run.

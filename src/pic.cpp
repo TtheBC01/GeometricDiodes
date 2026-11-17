@@ -168,6 +168,7 @@ struct Pic::Worker {
   // per-step tallies
   double absorbed[2] = {0, 0}, injected[2] = {0, 0}, sumvx = 0, sumE = 0;
   long leaked = 0;
+  long wall[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};   // cumulative: [0..5] see Pic::wall_counts, [6..9] see Pic::contact_counts
 };
 
 Pic::~Pic() = default;
@@ -212,6 +213,7 @@ Pic::Pic(const Boundary& b, PicParams p) : b_(b), p_(p) {
   double xF = std::isnan(p_.x_F) ? 0.5 * (xmin_ + xmax_) : p_.x_F;
   x_lo_ = xF - 0.5 * p_.ell_F; x_hi_ = xF + 0.5 * p_.ell_F;
   const bool metal = p_.interaction && p_.contacts;
+  reflecting_ = p_.contacts && (p_.contact_T < 1.0 || p_.contact_junction > 0);
 
   int mpad = metal ? (int)std::ceil(p_.contact_len / h) + 2 : 3;
   gx0_ = xmin_ - mpad * h;
@@ -349,6 +351,71 @@ long Pic::num_particles() const {
   return n;
 }
 
+void Pic::wall_counts(long out[6]) const {
+  for (int i = 0; i < 6; ++i) { out[i] = 0; for (const auto& w : workers_) out[i] += w->wall[i]; }
+}
+void Pic::reset_wall_counts() {
+  for (auto& w : workers_) for (int i = 0; i < 10; ++i) w->wall[i] = 0;
+}
+void Pic::contact_counts(long out[4]) const {
+  for (int i = 0; i < 4; ++i) { out[i] = 0; for (const auto& w : workers_) out[i] += w->wall[6 + i]; }
+}
+
+// Probability that a contact absorbs an electron. With junction > 0 it is the
+// transmission of a smooth p-n junction of that width, exp(-pi k d sin^2(theta)),
+// which depends on the angle from the contact normal and on the wave number;
+// otherwise the constant T. Mirror reflection keeps both, so thinning the
+// injected flux by the same function keeps the gas at rest in equilibrium:
+// at every angle and wave number the reflected and the injected flux add up
+// to the flux that arrived.
+double Pic::contact_transmission(double kx, double ky, const Vec2& n, double T, double junction) {
+  if (junction <= 0) return T;
+  const double k2 = kx * kx + ky * ky;
+  if (k2 <= 0) return 1.0;
+  const double kn = kx * n.x + ky * n.y;
+  return std::exp(-kPi * junction * (k2 - kn * kn) / std::sqrt(k2));
+}
+void Pic::snapshot(std::vector<double>& out) const {
+  for (const auto& w : workers_) for (const P& q : w->parts) { out.push_back(q.x); out.push_back(q.y); out.push_back(q.kx); out.push_back(q.ky); }
+}
+
+// Reflection from a wall. With rough == 0 a hit is mirror-like with the
+// constant probability `specularity` and otherwise re-emitted with the cosine
+// law. With rough > 0 the probability of a mirror-like reflection is
+//   p(theta) = exp(-(2 rough k cos(theta))^2),
+// theta from the normal, and a scattered particle leaves at an angle drawn
+// from (1 - p(theta')) cos(theta'). The flux leaving at theta' is then
+// p(theta') cos(theta') + (1 - p(theta')) cos(theta') = cos(theta') for a gas
+// that arrives isotropic, so the wall leaves an isotropic gas isotropic; with
+// the cosine law for the scattered part it would not. |k| is conserved.
+bool Pic::reflect(double& kx, double& ky, const Vec2& n, const Vec2& d, double specularity, double rough, Rng& rng, bool lambert) {
+  const double kn = std::sqrt(kx * kx + ky * ky);
+  double pm = specularity, q0 = 0;
+  if (rough > 0) {
+    double q = 2.0 * rough * (kx * n.x + ky * n.y);
+    pm = std::exp(-q * q);
+    q0 = 2.0 * rough * kn;
+  }
+  if (rng.uniform() < pm) {
+    double kd = 2.0 * (kx * n.x + ky * n.y);
+    kx -= kd * n.x; ky -= kd * n.y;
+    return true;
+  }
+  double a = rng.cosine_angle();
+  if (rough > 0 && !lambert) {
+    // rejection from the cosine law; the acceptance is at least 2/3 on average
+    const double norm = -std::expm1(-q0 * q0);   // 1 - p(0)
+    for (;;) {
+      double qa = q0 * std::cos(a);
+      if (rng.uniform() * norm < -std::expm1(-qa * qa)) break;
+      a = rng.cosine_angle();
+    }
+  }
+  Vec2 nd = n * std::cos(a) + d * std::sin(a);
+  kx = nd.x * kn; ky = nd.y * kn;
+  return false;
+}
+
 // Sum the workers' charge, subtract the background, and compute the potential
 // and the force at the current time.
 void Pic::fields() {
@@ -371,7 +438,7 @@ void Pic::fields() {
 
 // Free flight over the path length rem with wall reflections. Returns the
 // contact that absorbed the particle, -1 if it is still inside.
-int Pic::move(P& p, double rem, Rng& rng) const {
+int Pic::move(P& p, double rem, Rng& rng, long* wall) const {
   int last = -1;
   for (int guard = 0; guard < 200 && rem > 0; ++guard) {
     double kn = std::sqrt(p.kx * p.kx + p.ky * p.ky);
@@ -384,14 +451,18 @@ int Pic::move(P& p, double rem, Rng& rng) const {
     if (!b_.nearest_hit({p.x, p.y}, d, rem, last, hit)) { p.x += d.x * rem; p.y += d.y * rem; return -1; }
     rem -= hit.t;
     const Segment& s = b_.segments()[hit.seg];
-    if (s.kind == SegKind::Contact && p_.contacts) return s.contact;
-    if (s.kind == SegKind::Contact || rng.uniform() < p_.specularity) {
+    if (s.kind == SegKind::Contact && p_.contacts) {
+      if (!reflecting_) return s.contact;
+      ++wall[6 + 2 * s.contact];
+      if (rng.uniform() < contact_transmission(p.kx, p.ky, s.n, p_.contact_T, p_.contact_junction)) { ++wall[7 + 2 * s.contact]; return s.contact; }
+    }
+    if (s.kind == SegKind::Contact) {   // closed box, or a contact that reflected this electron: a mirror
       double kd = 2.0 * (p.kx * s.n.x + p.ky * s.n.y);
       p.kx -= kd * s.n.x; p.ky -= kd * s.n.y;
     } else {
-      double a = rng.cosine_angle();
-      Vec2 nd = s.n * std::cos(a) + s.d * std::sin(a);
-      p.kx = nd.x * kn; p.ky = nd.y * kn;
+      bool mirror = reflect(p.kx, p.ky, s.n, s.d, p_.specularity, p_.rough, rng, p_.rough_lambert);
+      int c = std::fabs(s.n.x) < 1e-9 ? 0 : std::fabs(s.n.y) < 1e-9 ? 4 : 2;
+      ++wall[c]; if (mirror) ++wall[c + 1];
     }
     p.x = hit.p.x + s.n.x * 1e-7; p.y = hit.p.y + s.n.y * 1e-7;
     last = hit.seg;
@@ -437,7 +508,7 @@ void Pic::step() {
         double kn = std::sqrt(q.kx * q.kx + q.ky * q.ky), a = wk.rng.uniform(0, 2 * kPi);
         q.kx = kn * std::cos(a); q.ky = kn * std::sin(a);
       }
-      int c = move(q, kVF * dt, wk.rng);
+      int c = move(q, kVF * dt, wk.rng, wk.wall);
       if (c >= 0) { wk.absorbed[c] += 1; ps[n] = ps.back(); ps.pop_back(); continue; }
       deposit(wk.rho, q.x, q.y, w_);
       double kn = std::sqrt(q.kx * q.kx + q.ky * q.ky);
@@ -459,9 +530,11 @@ void Pic::step() {
           double th = wk.rng.cosine_angle();
           Vec2 dir = cs.n * std::cos(th) + cs.d * std::sin(th);
           double k = table_[c].sample(wk.rng) / kHbarVF;
+          // a reflecting contact lets in what it would let out
+          if (reflecting_ && !p_.contact_unthinned && wk.rng.uniform() >= contact_transmission(dir.x * k, dir.y * k, cs.n, p_.contact_T, p_.contact_junction)) continue;
           P q{pos.x, pos.y, dir.x * k, dir.y * k};
           wk.injected[c] += 1;
-          int cc = move(q, wk.rng.uniform() * kVF * dt, wk.rng);
+          int cc = move(q, wk.rng.uniform() * kVF * dt, wk.rng, wk.wall);
           if (cc >= 0) { wk.absorbed[cc] += 1; continue; }
           deposit(wk.rho, q.x, q.y, w_);
           wk.sumvx += dir.x; wk.sumE += kHbarVF * k;

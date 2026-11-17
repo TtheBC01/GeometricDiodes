@@ -1,0 +1,242 @@
+"""Stage B9 (plans/ballistic_edges.md): tables and figure for the runs with
+rough walls, whose specularity depends on the angle of the hit.
+Reads results/bpic/P9.csv, P9s.csv (second seed) and P9c.csv (tools/pic_ext.sh P9c P9 P9s); writes
+results/bpic/tables_B9.md and results/bpic/B9_edges.png.
+usage: .venv/bin/python tools/edges_results.py"""
+import math, os, sys
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+sys.path.insert(0, os.path.dirname(__file__))
+import pic_common as c
+
+KF = math.sqrt(math.pi * 1.4e12 * 1e-14)      # per nm
+FLOOR = 0.05                                    # uA, numerical floor of Stage B8
+MEAS = (0.0, 0.8)                               # head-on specularity measured for etched edges (plan, section 10)
+
+
+HV = 0.6582119569                               # hbar v_F in eV nm
+EF, KT = HV * KF, 8.617333e-5 * 300.0
+
+
+def head_on(h): return math.exp(-(2 * h * KF) ** 2)
+def at_60(h): return head_on(h) ** 0.25
+def gas_average(h):
+    """Specularity at the Fermi wave vector averaged over the cosine-law spread of hits (the plan's guess A)."""
+    u = np.linspace(0, 1, 20001)
+    return float(np.trapezoid(head_on(h) ** (1 - u ** 2), u))
+
+
+def thermal(h, which):
+    """The formula averaged over the energies of the model's gas at 300 K. which: 'level0', 'level60', 'level' are a
+    head-on hit, a hit at 60 degrees and the cosine-law average for the electrons within kT of the Fermi level
+    (weight E (-df/dE)), which carry the response; 'sea' is the cosine-law average over every electron (weight E f),
+    which is what a count of wall hits in the run measures."""
+    E = np.linspace(1e-4, EF + 30 * KT, 4001); f = 1 / (1 + np.exp((E - EF) / KT))
+    wgt = E * f if which == "sea" else E * f * (1 - f)
+    a = (2 * h * E / HV) ** 2
+    if which == "level0": p = np.exp(-a)
+    elif which == "level60": p = np.exp(-a * 0.25)
+    else:
+        u = np.linspace(0, 1, 801)
+        p = np.trapezoid(np.exp(-a[:, None] * (1 - u[None, :] ** 2)), u, axis=1)
+    return float(np.trapezoid(wgt * p, E) / np.trapezoid(wgt, E))
+
+
+def met(r):
+    """Mirror-like fraction of the wall hits of a run: sloping walls, walls along the axis, walls across it, all."""
+    f = lambda a, b: r[a] / r[b] if r[b] else float("nan")
+    hits = r["hits_axis"] + r["hits_slope"] + r["hits_across"]
+    return dict(slope=f("mirror_slope", "hits_slope"), axis=f("mirror_axis", "hits_axis"), across=f("mirror_across", "hits_across"),
+                all=(r["mirror_axis"] + r["mirror_slope"] + r["mirror_across"]) / hits, share_slope=r["hits_slope"] / hits)
+
+
+def prod():
+    """The production runs: P9 and, where present, the second seed P9s."""
+    return c.rows("P9.csv") + (c.rows("P9s.csv") if os.path.exists(f"{c.R}/P9s.csv") else [])
+
+
+def rough_scan(d):
+    """[(roughness nm, dict)] for the gate d, sorted by roughness; runs of one roughness are pooled."""
+    out = {}
+    for r in prod():
+        if r["d"] == d and r["geo"] == "funnel": out.setdefault(r["rough_nm"], []).append(r)
+    res = []
+    for h, rs in sorted(out.items()):
+        I, e = c.pool(rs) if len(rs) > 1 else (rs[0]["I"], rs[0]["e"])
+        P = float(np.mean([r["P"] for r in rs])); m = {k: float(np.mean([met(r)[k] for r in rs])) for k in met(rs[0])}
+        res.append((h, dict(I=I, e=e, P=P, R=I / P, eR=e / P, n=len(rs), met=m, split=max(r["split"] for r in rs))))
+    return res
+
+
+def scan_curve(d):
+    sc = c.spec_scan(d)
+    return np.array([p for p, q in sc]), np.array([q["I"] for p, q in sc]), np.array([q["e"] for p, q in sc])
+
+
+def scan_at(d, p):
+    """The one-specularity scan read at specularity p (linear between its points; None outside 0.5 to 1)."""
+    ps, I, _ = scan_curve(d)
+    return float(np.interp(p, ps, I)) if ps[0] <= p <= ps[-1] else None
+
+
+def equivalent(d, I, e):
+    """The one specularity for all angles that gives the current I at gate d (the scan inverted, linear between its
+    points), with the error from e; None if I is outside the scanned currents."""
+    ps, Is, _ = scan_curve(d)
+    if not (Is[0] <= I <= Is[-1]): return None
+    f = lambda v: float(np.interp(v, Is, ps))
+    return f(I), 0.5 * (f(min(I + e, Is[-1])) - f(max(I - e, Is[0])))
+
+
+def crossing(d, level):
+    """Head-on specularity at k_F at which the rough-edge current of gate d falls to level times the mirror-wall
+    current (linear between the points), and the roughness there."""
+    ref = c.spec_scan(d)[-1][1]["I"]
+    pts = sorted([(head_on(h), q["I"] / ref) for h, q in rough_scan(d)] + [(1.0, 1.0)])
+    x = np.array([a for a, b in pts]); y = np.array([b for a, b in pts])
+    p0 = float(np.interp(level, y, x))
+    return p0, math.sqrt(-math.log(p0)) / (2 * KF)
+
+
+def main():
+    if not c.rows("P9.csv"): sys.exit("no results/bpic/P9.csv")
+    dec = {d: c.spec_scan(d)[-1][1] for d in c.GATES}        # the mirror-wall point
+    out = []; w = out.append
+    w("# Stage B9: the short funnel with rough edges (tables)\n")
+    w("Generated by `tools/edges_results.py` from `results/bpic/P9.csv`, `P9s.csv` and `P9c.csv`. 1 THz, 0.1 V, shape-only drive, 700 nm, 8 million particles, 20 periods.")
+    w("A wall hit is mirror-like with probability exp(-(2 h k cos(theta))^2), h the rms roughness and theta the angle from the wall normal.\n")
+    w("## 1. Controls\n")
+    w("| run | device | gate | drive | I_dc (uA) | in standard errors | mirror-like share of wall hits |")
+    w("|---|---|---|---|---|---|---|")
+    names = {"control": "mirror-symmetric funnel, 2.4 nm", "nodrive": "funnel, 2.4 nm, no drive", "repeat": "funnel, one specularity 0.9 (repeat of P8)"}
+    for r in c.rows("P9c.csv"):
+        w(f"| {r['label']} | {names.get(r['label'], r['geo'])} | {r['d']} nm | {r['V_V']:g} V | {r['I']:+.3f} +- {r['e']:.3f} | {r['I'] / r['e']:+.1f} | {met(r)['all']:.3f} |")
+    rp = [r for r in c.rows("P8.csv") if abs(r["p"] - 0.9) < 1e-9 and r["d"] == 300]
+    if rp: w(f"\nThe P8 run that `repeat` repeats gave {rp[0]['I']:+.3f} +- {rp[0]['e']:.3f} uA.")
+    w("\n## 2. Rectified current against roughness\n")
+    w("| gate | roughness | head-on specularity at k_F | runs | I_dc (uA) | relative to mirror walls | source and drain planes differ by | P_abs (uW) | R_abs (A/W) |")
+    w("|---|---|---|---|---|---|---|---|---|")
+    for d in c.GATES:
+        ref = dec[d]
+        w(f"| {d} nm | 0 | 1 | {ref.get('n', '')} | {ref['I']:+.3f} +- {ref['e']:.3f} | 1 | | {ref['P']:.2f} | {ref['R']:+.3f} +- {ref['eR']:.3f} |")
+        for h, q in rough_scan(d):
+            rel = q["I"] / ref["I"]; erel = math.hypot(q["e"] / ref["I"], rel * ref["e"] / ref["I"])
+            w(f"| {d} nm | {h:g} nm | {head_on(h):.2f} | {q['n']} | {q['I']:+.3f} +- {q['e']:.3f} | {rel:+.2f} +- {erel:.2f} | {q['split']:.3f} | {q['P']:.2f} | {q['R']:+.3f} +- {q['eR']:.3f} |")
+    w("\n## 3. The specularity of each roughness, and what the runs counted\n")
+    w("The first three columns are the formula at the Fermi wave vector: head-on, at 60 degrees (where an electron moving along the axis meets the taper), and averaged "
+      "over the cosine-law spread of hits of a gas at rest. The next three are the same for the electrons within kT of the Fermi level at 300 K, which carry the response. "
+      "The last four compare the share of mirror-like wall hits counted in the runs (mean of the two gates) with the formula averaged over every electron of the model's gas: "
+      "the count is over all sample particles, most of which lie below the Fermi level and see a smoother edge, so it checks the wall rule and the spread of angles on each "
+      "kind of wall, not the specularity that matters for the current.\n")
+    w("| roughness | k_F: head-on | k_F: 60 deg | k_F: average | Fermi level: head-on | Fermi level: 60 deg | Fermi level: average | all electrons, formula | counted: sloping walls | counted: along the axis | counted: across |")
+    w("|---|---|---|---|---|---|---|---|---|---|---|")
+    byh = {}
+    for d in c.GATES:
+        for h, q in rough_scan(d): byh.setdefault(h, []).append(q["met"])
+    for h, ms in sorted(byh.items()):
+        mm = {k: float(np.mean([m[k] for m in ms])) for k in ms[0]}
+        w(f"| {h:g} nm | {head_on(h):.3f} | {at_60(h):.3f} | {gas_average(h):.3f} | {thermal(h, 'level0'):.3f} | {thermal(h, 'level60'):.3f} | {thermal(h, 'level'):.3f} | "
+          f"{thermal(h, 'sea'):.3f} | {mm['slope']:.4f} | {mm['axis']:.4f} | {mm['across']:.4f} |")
+    w("\n## 4. Against the two guesses recorded in the plan\n")
+    w("Guess A reads the one-specularity scan of the same gate at the specularity averaged over all hits, guess B at the 60 degree specularity, both at the Fermi wave vector "
+      "as in the plan; the last two columns do the same with the averages over the electrons within kT of the Fermi level. Currents in uA; a dash is outside the scanned "
+      "range (specularity below 0.5).\n")
+    w("| gate | roughness | I_dc | guess A | guess B | A, Fermi level at 300 K | B, Fermi level at 300 K |")
+    w("|---|---|---|---|---|---|---|")
+    f = lambda v: "-" if v is None else f"{v:+.3f}"
+    for d in c.GATES:
+        for h, q in rough_scan(d):
+            w(f"| {d} nm | {h:g} nm | {q['I']:+.3f} +- {q['e']:.3f} | {f(scan_at(d, gas_average(h)))} | {f(scan_at(d, at_60(h)))} | {f(scan_at(d, thermal(h, 'level')))} | {f(scan_at(d, thermal(h, 'level60')))} |")
+    w("\n## 5. The one specularity that gives the same current\n")
+    w("Each rough-edge current is placed on the one-specularity scan of the same gate (linear between the scan's points), which gives the single specularity, the same "
+      "for every angle, that would rectify as much. The equivalent angle is the angle from the wall normal at which the roughness formula at the Fermi wave vector has "
+      "that specularity. A dash: the current is below the lowest point of the scan (specularity 0.5). The error is from the rough-edge run only.\n")
+    w("| gate | roughness | head-on at k_F | equivalent specularity | equivalent angle | formula at 60 deg, k_F | formula at 60 deg, Fermi level at 300 K | average over all hits, k_F |")
+    w("|---|---|---|---|---|---|---|---|")
+    for d in c.GATES:
+        for h, q in rough_scan(d):
+            eq = equivalent(d, q["I"], q["e"])
+            if eq is None: s1, s2 = "-", "-"
+            else:
+                ang = lambda pe: math.degrees(math.acos(math.sqrt(min(1.0, math.log(pe) / math.log(head_on(h))))))
+                s1 = f"{eq[0]:.3f} +- {eq[1]:.3f}"; s2 = f"{ang(eq[0]):.0f} deg ({ang(min(eq[0] + eq[1], 0.9999)):.0f} to {ang(eq[0] - eq[1]):.0f})"
+            w(f"| {d} nm | {h:g} nm | {head_on(h):.3f} | {s1} | {s2} | {at_60(h):.3f} | {thermal(h, 'level60'):.3f} | {gas_average(h):.3f} |")
+    w("\n## 6. Where the current is halved and where it vanishes\n")
+    w("Linear interpolation between the rough-edge points of section 2, in the head-on specularity at the Fermi wave vector.\n")
+    w("| gate | half of the mirror-wall current at head-on specularity | rms roughness there | zero at head-on specularity | rms roughness there | a third (the plan's 0.15 uA line) at |")
+    w("|---|---|---|---|---|---|")
+    for d in c.GATES:
+        a, b, t = crossing(d, 0.5), crossing(d, 0.0), crossing(d, 1 / 3)
+        w(f"| {d} nm | {a[0]:.2f} | {a[1]:.1f} nm | {b[0]:.2f} | {b[1]:.1f} nm | {t[0]:.2f} ({t[1]:.1f} nm) |")
+    multi = {}
+    for r in prod(): multi.setdefault((r["d"], r["rough_nm"]), []).append(r)
+    multi = {k: v for k, v in multi.items() if len(v) > 1}
+    if multi:
+        w("\n## 7. Second seed\n")
+        w("The roughness that fell on the plan's 0.15 uA line was run again with another seed; section 2 uses the pooled value.\n")
+        w("| gate | roughness | seed | I_dc (uA) | pooled |")
+        w("|---|---|---|---|---|")
+        for (d, h), rs in sorted(multi.items(), key=lambda kv: (-kv[0][0], kv[0][1])):
+            I, e = c.pool(rs)
+            for k, r in enumerate(rs):
+                w(f"| {d} nm | {h:g} nm | {int(r['seed'])} | {r['I']:+.3f} +- {r['e']:.3f} | {f'{I:+.3f} +- {e:.3f}' if k == 0 else ''} |")
+    allr = prod() + c.rows("P9c.csv")
+    w("\n## 8. Bookkeeping\n")
+    w(f"{len(allr)} runs, {sum(r['seconds'] for r in allr) / 3600:.2f} hours of wall time on 10 cores. Particles lost through a wall: at most {int(max(r['leaked'] for r in allr))} per run. "
+      f"Largest difference between the source-plane and drain-plane currents: {max(r['split'] for r in allr):.3f} uA. "
+      f"Sloping walls take {100 * np.mean([met(r)['share_slope'] for r in prod()]):.0f} % of the wall hits.")
+    open(f"{c.R}/tables_B9.md", "w").write("\n".join(out) + "\n")
+    print("wrote tables_B9.md")
+
+    # ---------------------------------------------------------------- figure
+    BLUE, VERM, GREY, INK, PALE = "#0072B2", "#D55E00", "#6e6e6e", "#222222", "#a8a8a8"
+    COL = {300: BLUE, 30: VERM}; MK = {300: "o", 30: "s"}
+    plt.rcParams.update({"font.size": 9.5, "axes.titlesize": 10.5, "axes.spines.top": False, "axes.spines.right": False,
+                         "axes.grid": True, "grid.color": "#e6e6e6", "grid.linewidth": 0.6, "legend.frameon": False})
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, 4.7))
+    fig.subplots_adjust(left=0.075, right=0.985, top=0.775, bottom=0.135, wspace=0.22)
+    # (a) against the head-on specularity
+    ax = axs[0]
+    ax.axvspan(MEAS[0], MEAS[1], color="#f1efe8", lw=0); ax.axhspan(-FLOOR, FLOOR, color=PALE, alpha=0.25, lw=0); ax.axhline(0, color=INK, lw=0.7)
+    for d in c.GATES:
+        rs = rough_scan(d)
+        x = [head_on(h) for h, q in rs] + [1.0]; y = [q["I"] for h, q in rs] + [dec[d]["I"]]; e = [q["e"] for h, q in rs] + [dec[d]["e"]]
+        o = np.argsort(x)
+        ax.errorbar(np.array(x)[o], np.array(y)[o], yerr=np.array(e)[o], fmt=MK[d] + "-", color=COL[d], ms=6, lw=1.4, capsize=0, label=f"rough edges, gate at {d} nm")
+        ps, I, _ = scan_curve(d)
+        ax.plot(ps, I, MK[d] + "--", color=COL[d], ms=4, lw=0.9, mfc="white", alpha=0.75, label=f"one specularity for all angles, {d} nm")
+    ax.set_xlim(-0.03, 1.04); ax.set_xticks(np.arange(0, 1.01, 0.2))
+    ax.set_xlabel("specularity of a head-on hit at the Fermi wave vector"); ax.set_ylabel("rectified current at 0.1 V drive (µA)")
+    ax.set_title("(a)  Against the head-on specularity", loc="left", pad=40)
+    ylo, yhi = ax.get_ylim()
+    ax.text(0.40, yhi - 0.02 * (yhi - ylo), "measured for etched edges: 0 to 0.8", fontsize=8.3, color=GREY, ha="center", va="top")
+    ax.text(1.03, -FLOOR - 0.008, "numerical floor", fontsize=8.3, color=GREY, ha="right", va="top")
+    ax.legend(loc="upper left", fontsize=8.3, bbox_to_anchor=(0.0, 0.90))
+    top = ax.secondary_xaxis("top"); hs = [h for h, q in rough_scan(300)]
+    top.set_xticks([head_on(h) for h in hs] + [1.0]); top.set_xticklabels([f"{h:g}" for h in hs] + ["0"], fontsize=8.3)
+    top.set_xlabel("rms edge roughness (nm)", fontsize=8.8); top.spines["top"].set_visible(True)
+    # (b) the one specularity that gives the same current, against the head-on specularity
+    ax = axs[1]
+    x = np.linspace(0.02, 1, 300); hx = np.sqrt(-np.log(x)) / (2 * KF)
+    ax.plot(x, x ** 0.25, color=INK, lw=1.1, label="formula at 60° from the wall normal")
+    ax.plot(x, [gas_average(h) for h in hx], color=GREY, lw=1.0, ls=(0, (5, 2)), label="formula averaged over all hits")
+    ax.plot(x, x, color=GREY, lw=1.0, ls=":", label="formula for a head-on hit")
+    for d in c.GATES:
+        pts = [(head_on(h), equivalent(d, q["I"], q["e"])) for h, q in rough_scan(d)]
+        pts = [(a, b) for a, b in pts if b is not None]
+        ax.errorbar([a for a, b in pts], [b[0] for a, b in pts], yerr=[b[1] for a, b in pts], fmt=MK[d], color=COL[d], ms=6, capsize=0, mec="white", mew=0.6,
+                    label=f"rough edges, gate at {d} nm")
+    ax.set_xlim(-0.03, 1.04); ax.set_xticks(np.arange(0, 1.01, 0.2)); ax.set_ylim(0.45, 1.09); ax.set_yticks(np.arange(0.5, 1.01, 0.1))
+    ax.set_xlabel("specularity of a head-on hit at the Fermi wave vector"); ax.set_ylabel("one specularity that gives the same current")
+    ax.set_title("(b)  Which hits decide", loc="left", pad=40)
+    ax.legend(loc="upper left", fontsize=8.3, borderaxespad=0.2)
+    fig.suptitle("Stage B9: the 0.55 µm funnel at 1 THz with rough edges  (computed field, 700 nm mean free path, shape-only drive of 0.1 V)",
+                 x=0.075, ha="left", fontsize=10.5, y=0.985)
+    fig.savefig(f"{c.R}/B9_edges.png", dpi=170)
+    print("wrote B9_edges.png")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,14 @@
+Stage B8 ladder: N = 8000000, h = 5 nm, filter = 1.5 cells, FFT backend vDSP
+T32d  PASS  the funnel with reflecting contacts and no drive stays in equilibrium; injection that is not thinned is caught
+      transparency 0.25, 30 nm gate: I_dc +0.022 +- 0.016 uA; particles -0.001 %; kinetic energy +0.032 %; <cos 2 phi> in the source lead -1.1 s.e.;
+          absorbed share 0.2500 source, 0.2500 drain (formula 0.2500; +0.6, +1.1 s.e.)  ok  [324 s]
+      junction 38 nm, 30 nm gate: I_dc -0.011 +- 0.015 uA; particles -0.013 %; kinetic energy +0.502 %; <cos 2 phi> in the source lead -0.1 s.e.;
+          absorbed share 0.2208 source, 0.2207 drain (formula 0.2204; +10.3, +8.0 s.e.)  ok  [332 s]
+      transparency 0.25, no interaction: I_dc +0.017 +- 0.023 uA; particles -0.016 %; kinetic energy +0.002 %; <cos 2 phi> in the source lead +1.2 s.e.;
+          absorbed share 0.2500 source, 0.2501 drain (formula 0.2500; +0.1, +1.2 s.e.)  ok  [224 s]
+      junction 38 nm, no interaction: I_dc +0.022 +- 0.017 uA; particles +0.010 %; kinetic energy +0.006 %; <cos 2 phi> in the source lead +0.2 s.e.;
+          absorbed share 0.2204 source, 0.2204 drain (formula 0.2204; -0.4, +0.1 s.e.)  ok  [234 s]
+      transparency 0.25, injection not thinned (the error the test is for): I_dc +8.002 +- 2.280 uA; particles +267.690 %; kinetic energy +0.022 %; <cos 2 phi> in the source lead +4.3 s.e.;
+          absorbed share 0.2501 source, 0.2501 drain (formula 0.2500; +1.7, +1.7 s.e.)  ok  [369 s]
+
+1 passed, 0 failed

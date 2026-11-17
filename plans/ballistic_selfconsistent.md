@@ -346,3 +346,13 @@ changes to the paper have not been started.
 
 The third draft of the paper and `OVERVIEW.md` carry the Stage B8 numbers
 (`paper/outline.md`, entry "Third draft"). P7 has not been run.
+
+## 14. Wall specularity, 2026-11-13
+
+Not in the plan: 1 THz runs at p = 0.9, 0.8 and 0.7 under both gates
+(`tools/pic_ext.sh P8`). The response falls almost linearly with the
+diffuse fraction, is half at p = 0.84 and crosses zero near p = 0.6.
+Record: section "Extension" of `results/BALLISTIC_SELFCONSISTENT.md`,
+with two measurements of the specularity of etched graphene edges
+(0.2 to 0.5). The paper carries the scan since the revision of
+2026-11-13 (Sec. V E, Fig. 10(g)).

@@ -340,11 +340,76 @@ the rest is centred on the neck. Under a 30 nm gate at 1 THz a straight
 strip with its drain tied to the gate rectifies more than the funnel
 shape. Extension: 0.10 A/W at a 100 nm mean free path, and no usable
 rectification with half-diffuse walls (at most 0.04 A/W, sign reversed),
-so the result is one for near-specular edges. The paper (third draft)
-and `OVERVIEW.md` carry these numbers.
+and with one specularity for all angles the response falls almost
+linearly with the diffuse fraction, is half at a specularity of 0.84 and
+vanishes near 0.6. Stage B9 below replaces that edge model by a rough
+edge, which changes the conclusion about etched edges.
 
     make build/gd_bpic build/gd_pic_tests && ./build/gd_pic_tests        # T22 to T30
     tools/pic_convergence.sh && tools/pic_nseries.sh                     # decision point, numerical settings
     tools/pic_runs.sh P1 P2 P3 P4 && tools/pic_checks.sh                 # core set, about 4 hours on 10 cores
-    tools/pic_ext.sh P5 P6 P6c                                           # extension, about 2 hours
+    tools/pic_ext.sh P5 P6 P6c P8                                        # extension and specularity scan, about 3 hours
     .venv/bin/python tools/pic_tables.py && .venv/bin/python tools/pic_plot.py
+
+## Stage B9: the short funnel with rough edges
+
+Plan `plans/ballistic_edges.md`, results `results/BALLISTIC_EDGES.md`.
+The specularity scan of Stage B8 gave every wall hit the same chance of a
+mirror reflection. Here a wall of rms roughness h reflects an electron of
+wave number k arriving at angle theta from the wall normal like a mirror
+with probability exp[-(2 h k cos(theta))^2], so that oblique hits are more
+mirror-like (`Pic::reflect`, flag `--rough`). The funnel then tolerates
+rougher edges than the scan said: the 1 THz current is half its
+mirror-wall value at a head-on specularity of 0.5 (roughness 2 nm) and
+gone at 0.2 (3 nm), against 0.84 and 0.6 with one specularity for all
+angles, because the edge acts like one whose specularity is that of a hit
+at about 60 degrees. Etched graphene edges have been measured from about
+0 to about 0.8, so the upper half of that range keeps half to four fifths
+of the response (0.06 to 0.10 A/W per absorbed watt) and the lower end
+keeps nothing. The paper (revised 2026-11-15) and `OVERVIEW.md` carry
+these numbers.
+
+    make build/gd_bpic build/gd_pic_tests && ./build/gd_pic_tests T31    # wall rule, about 3 min
+    tools/pic_ext.sh P9c P9 P9s                                          # controls first; about 2 hours
+    .venv/bin/python tools/edges_results.py
+
+## Stage B10: the short funnel between contacts that reflect
+
+Plan `plans/ballistic_contacts.md`, results `results/BALLISTIC_CONTACTS.md`.
+Every earlier run ended the device at ideal contacts, which absorb each
+arriving electron. Here a contact absorbs an electron with probability T
+and mirrors it otherwise (flag `--ct`), or passes only electrons near its
+normal, as a p-n junction in front of the metal would (flag
+`--cjunction`, the junction half width in nm); the injected gas is thinned
+by the same law (`Pic::contact_transmission`). A contact is not a series
+resistor to this device. With one transparency for all angles the
+response per absorbed watt at 1 THz stays at 0.12 A/W down to T = 0.25
+(338 ohm um per contact) under the 300 nm gate, and at 0.12, 0.12 and
+0.07 A/W for T = 0.75, 0.5 and 0.25 under the 30 nm gate, where a series
+resistor would leave 0.03. The best measured edge contacts (about
+150 ohm um) are at T of about 0.4. Collimating contacts that conduct
+equally well leave no current above the numerical floor. The condition
+on the positive result is therefore what the contact does with electrons
+arriving at wide angles, not its resistance. The gas heats behind
+reflecting contacts (the model has no loss to the lattice), and behind
+the collimating ones it was still heating at the end of the run.
+
+Part B of the plan is the 6 um Device D with a computed field. The
+reading found that its measured asymmetry of 1.66 is reached at about
+1.5 V on a device of about 15 kilohm, against 0.1 V and 0.95 kilohm in
+the model, so the comparison in Sec. III of the paper needs rewriting.
+Run at +-0.1 V, the model gives an asymmetry of 1.0174 +- 0.0008 (the
+same at 25 and at 50 million particles), with 55 % of the bias on the
+500 nm around the neck; the first model, with a uniform field and no
+scattering, gave 1.62. The measurement at 0.1 V reads 1.03 to 1.04
+(+-0.02). The two do not conflict, and with the measured device fifteen
+times more resistive than the model the agreement confirms nothing.
+Figure `results/bpic/B10_deviceD.png`. The paper carries both parts
+since the revision of 2026-11-16 (Secs. II C, III A and V E, Figs. 3
+and 12, Table S6 of the supplement).
+
+    make build/gd_bpic build/gd_pic_tests && ./build/gd_pic_tests T32 --N 8000000   # contact rule; T32d fails at 2 million particles
+    tools/pic_ext.sh P10c P10t P10k P10s P10l P10n P10r                  # controls first; about 3 hours
+    .venv/bin/python tools/contacts_results.py
+    tools/pic_ext.sh P7 P7n                                              # Device D, 50 and 25 million particles; about 2.5 hours, 2 GB
+    .venv/bin/python tools/deviced_results.py

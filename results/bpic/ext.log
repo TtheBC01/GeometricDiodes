@@ -78,3 +78,244 @@ G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.1426 +- 0.016
   Y1 0.68453 +0.36770i mS, P_abs 3.42256 uW, R_abs -0.0417 A/W, R_1 -0.0077 A/W; E_kin 0.11113 -> 0.11399 eV; particles 7996655 (weight 0.00040 e), leaked 0
   grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 442.2 s (push 410.7, field 30.6)
 done P6c
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2912 +- 0.0126 uA (S 0.2908, D 0.2916, vol 0.3044)
+  Y1 0.68085 -0.16113i mS, P_abs 3.40412 uW, R_abs 0.0855 A/W, R_1 0.0158 A/W; E_kin 0.11113 -> 0.11375 eV; particles 7997120 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 467.9 s (push 435.1, field 31.9)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3494 +- 0.0171 uA (S 0.3488, D 0.3500, vol 0.3643)
+  Y1 0.71905 +0.34407i mS, P_abs 3.59512 uW, R_abs 0.0972 A/W, R_1 0.0189 A/W; E_kin 0.11113 -> 0.11396 eV; particles 7995518 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 435.3 s (push 403.3, field 31.0)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1563 +- 0.0149 uA (S 0.1553, D 0.1573, vol 0.1679)
+  Y1 0.67309 -0.15722i mS, P_abs 3.36536 uW, R_abs 0.0464 A/W, R_1 0.0085 A/W; E_kin 0.11113 -> 0.11371 eV; particles 7997289 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 439.3 s (push 406.9, field 31.4)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1693 +- 0.0165 uA (S 0.1705, D 0.1681, vol 0.1810)
+  Y1 0.71007 +0.34919i mS, P_abs 3.55024 uW, R_abs 0.0477 A/W, R_1 0.0092 A/W; E_kin 0.11113 -> 0.11396 eV; particles 7995833 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 458.8 s (push 426.2, field 31.7)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1023 +- 0.0200 uA (S 0.1035, D 0.1011, vol 0.1103)
+  Y1 0.66554 -0.15268i mS, P_abs 3.32758 uW, R_abs 0.0307 A/W, R_1 0.0056 A/W; E_kin 0.11113 -> 0.11374 eV; particles 7997478 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 444.6 s (push 411.9, field 31.7)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0790 +- 0.0123 uA (S 0.0810, D 0.0770, vol 0.0910)
+  Y1 0.70139 +0.35423i mS, P_abs 3.50684 uW, R_abs 0.0225 A/W, R_1 0.0043 A/W; E_kin 0.11113 -> 0.11393 eV; particles 7996150 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 447.4 s (push 414.9, field 31.5)
+done P8
+control symmetric mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0203 +- 0.0203 uA (S 0.0204, D 0.0202, vol 0.0198)
+  Y1 0.46226 -0.19808i mS, P_abs 2.31123 uW, R_abs 0.0088 A/W, R_1 0.0011 A/W; E_kin 0.11112 -> 0.11324 eV; particles 7998975 (weight 0.00060 e), leaked 1
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 409.1 s (push 354.1, field 53.8)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6541 along the axis (66173447 hits), 0.6525 sloping (263609603), 1.0000 across (0)
+control symmetric mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0345 +- 0.0231 uA (S -0.0341, D -0.0348, vol -0.0338)
+  Y1 0.50219 +0.41948i mS, P_abs 2.51085 uW, R_abs -0.0137 A/W, R_1 -0.0019 A/W; E_kin 0.11112 -> 0.11356 eV; particles 7998587 (weight 0.00060 e), leaked 0
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 422.1 s (push 367.2, field 53.8)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6531 along the axis (66240099 hits), 0.6512 sloping (263491781), 1.0000 across (0)
+nodrive funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0: I_dc 0.0067 +- 0.0175 uA (S 0.0075, D 0.0059, vol -0.0018)
+  Y1 0.00000 +0.00000i mS, P_abs 0.00000 uW, R_abs 0.0000 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11113 eV; particles 8000042 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 400.0 s (push 368.7, field 30.4)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6585 along the axis (100088176 hits), 0.6588 sloping (199784423), 0.6599 across (99295082)
+repeat funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2905 +- 0.0178 uA (S 0.2891, D 0.2918, vol 0.3047)
+  Y1 0.68121 -0.16139i mS, P_abs 3.40596 uW, R_abs 0.0853 A/W, R_1 0.0158 A/W; E_kin 0.11113 -> 0.11373 eV; particles 7997090 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 378.0 s (push 346.8, field 30.3)
+  walls: roughness 0 nm; mirror-like fraction 0.9000 along the axis (99580072 hits), 0.9000 sloping (198560777), 0.9000 across (100048106)
+done P9c
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3089 +- 0.0195 uA (S 0.3087, D 0.3090, vol 0.3221)
+  Y1 0.67735 -0.16265i mS, P_abs 3.38663 uW, R_abs 0.0912 A/W, R_1 0.0168 A/W; E_kin 0.11113 -> 0.11376 eV; particles 7997142 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 376.5 s (push 345.1, field 30.4)
+  walls: roughness 1.3 nm; mirror-like fraction 0.8634 along the axis (99568790 hits), 0.8611 sloping (198620470), 0.8627 across (100170572)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3784 +- 0.0143 uA (S 0.3771, D 0.3796, vol 0.3949)
+  Y1 0.71351 +0.34217i mS, P_abs 3.56746 uW, R_abs 0.1061 A/W, R_1 0.0204 A/W; E_kin 0.11113 -> 0.11399 eV; particles 7995615 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 400.1 s (push 368.8, field 30.4)
+  walls: roughness 1.3 nm; mirror-like fraction 0.8630 along the axis (99542636 hits), 0.8602 sloping (198387130), 0.8620 across (100129894)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2115 +- 0.0184 uA (S 0.2119, D 0.2112, vol 0.2241)
+  Y1 0.66583 -0.15854i mS, P_abs 3.32904 uW, R_abs 0.0635 A/W, R_1 0.0115 A/W; E_kin 0.11113 -> 0.11379 eV; particles 7997422 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 375.8 s (push 344.6, field 30.2)
+  walls: roughness 2 nm; mirror-like fraction 0.7297 along the axis (99621667 hits), 0.7259 sloping (198635875), 0.7284 across (100081521)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2026 +- 0.0157 uA (S 0.2040, D 0.2011, vol 0.2166)
+  Y1 0.69961 +0.34750i mS, P_abs 3.49796 uW, R_abs 0.0579 A/W, R_1 0.0110 A/W; E_kin 0.11113 -> 0.11398 eV; particles 7996034 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 379.3 s (push 348.0, field 30.4)
+  walls: roughness 2 nm; mirror-like fraction 0.7293 along the axis (99605524 hits), 0.7246 sloping (198423859), 0.7274 across (100074554)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1522 +- 0.0162 uA (S 0.1530, D 0.1513, vol 0.1643)
+  Y1 0.65944 -0.15499i mS, P_abs 3.29709 uW, R_abs 0.0461 A/W, R_1 0.0083 A/W; E_kin 0.11113 -> 0.11377 eV; particles 7997563 (weight 0.00040 e), leaked 2
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 382.4 s (push 351.2, field 30.2)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6539 along the axis (99647576 hits), 0.6496 sloping (198617199), 0.6523 across (100038439)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1400 +- 0.0189 uA (S 0.1401, D 0.1398, vol 0.1543)
+  Y1 0.69188 +0.35170i mS, P_abs 3.45930 uW, R_abs 0.0405 A/W, R_1 0.0076 A/W; E_kin 0.11113 -> 0.11399 eV; particles 7996266 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 382.3 s (push 350.4, field 31.0)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6533 along the axis (99650958 hits), 0.6482 sloping (198438091), 0.6510 across (100018040)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0406 +- 0.0149 uA (S 0.0407, D 0.0406, vol 0.0519)
+  Y1 0.65120 -0.14920i mS, P_abs 3.25590 uW, R_abs 0.0125 A/W, R_1 0.0022 A/W; E_kin 0.11113 -> 0.11378 eV; particles 7997767 (weight 0.00040 e), leaked 2
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 399.4 s (push 367.2, field 31.3)
+  walls: roughness 3 nm; mirror-like fraction 0.5503 along the axis (99709198 hits), 0.5459 sloping (198604193), 0.5485 across (99970465)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0239 +- 0.0129 uA (S -0.0224, D -0.0253, vol -0.0100)
+  Y1 0.68208 +0.35843i mS, P_abs 3.41028 uW, R_abs -0.0070 A/W, R_1 -0.0013 A/W; E_kin 0.11113 -> 0.11397 eV; particles 7996571 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 393.7 s (push 361.4, field 31.3)
+  walls: roughness 3 nm; mirror-like fraction 0.5496 along the axis (99719829 hits), 0.5445 sloping (198435812), 0.5471 across (99954864)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3437 +- 0.0147 uA (S 0.3426, D 0.3448, vol 0.3583)
+  Y1 0.68003 -0.16380i mS, P_abs 3.40006 uW, R_abs 0.1011 A/W, R_1 0.0187 A/W; E_kin 0.11113 -> 0.11374 eV; particles 7997081 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 400.3 s (push 368.1, field 31.3)
+  walls: roughness 1.1 nm; mirror-like fraction 0.8980 along the axis (99552471 hits), 0.8962 sloping (198626984), 0.8974 across (100179735)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3720 +- 0.0181 uA (S 0.3710, D 0.3729, vol 0.3885)
+  Y1 0.71728 +0.34152i mS, P_abs 3.58627 uW, R_abs 0.1037 A/W, R_1 0.0201 A/W; E_kin 0.11113 -> 0.11396 eV; particles 7995484 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 377.4 s (push 345.9, field 30.6)
+  walls: roughness 1.1 nm; mirror-like fraction 0.8977 along the axis (99519903 hits), 0.8955 sloping (198405421), 0.8969 across (100167782)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.1015 +- 0.0146 uA (S -0.1023, D -0.1007, vol -0.0933)
+  Y1 0.63965 -0.13929i mS, P_abs 3.19817 uW, R_abs -0.0317 A/W, R_1 -0.0055 A/W; E_kin 0.11113 -> 0.11381 eV; particles 7998001 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 409.7 s (push 378.6, field 30.2)
+  walls: roughness 4.1 nm; mirror-like fraction 0.4020 along the axis (99775041 hits), 0.3984 sloping (198568605), 0.4001 across (99868190)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.1811 +- 0.0179 uA (S -0.1822, D -0.1799, vol -0.1713)
+  Y1 0.66887 +0.36996i mS, P_abs 3.34427 uW, R_abs -0.0541 A/W, R_1 -0.0098 A/W; E_kin 0.11113 -> 0.11404 eV; particles 7996939 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 378.6 s (push 347.2, field 30.4)
+  walls: roughness 4.1 nm; mirror-like fraction 0.4014 along the axis (99795238 hits), 0.3975 sloping (198405933), 0.3989 across (99857258)
+done P9
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1250 +- 0.0178 uA (S 0.1263, D 0.1237, vol 0.1381)
+  Y1 0.65931 -0.15557i mS, P_abs 3.29643 uW, R_abs 0.0379 A/W, R_1 0.0068 A/W; E_kin 0.11113 -> 0.11379 eV; particles 7997565 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 395.6 s (push 363.8, field 30.8)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6538 along the axis (99655435 hits), 0.6496 sloping (198629683), 0.6524 across (100027119)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1455 +- 0.0200 uA (S 0.1463, D 0.1446, vol 0.1605)
+  Y1 0.69200 +0.35181i mS, P_abs 3.45988 uW, R_abs 0.0420 A/W, R_1 0.0079 A/W; E_kin 0.11113 -> 0.11398 eV; particles 7996278 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 410.3 s (push 378.9, field 30.4)
+  walls: roughness 2.4 nm; mirror-like fraction 0.6533 along the axis (99659580 hits), 0.6483 sloping (198420356), 0.6511 across (100016325)
+done P9s
+D funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 110.8029 +- 0.0000 uA (S 108.7744, D 112.8313, vol 108.2879)
+  Y1 0.00000 +0.00000i mS, P_abs 11.08295 uW, R_abs 9.9976 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11163 eV; particles 50007299 (weight 0.00330 e), leaked 0
+  grid 859 x 274 at 7.5 nm, dt 3.75031 fs, 534 steps, 201.0 s (push 153.6, field 42.2)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (13216099 hits), 1.0000 sloping (5813340), 1.0000 across (2563797)
+done P7p
+control symmetric mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0101 +- 0.0137 uA (S 0.0097, D 0.0104, vol 0.0111)
+  Y1 0.42835 +0.08777i mS, P_abs 2.14169 uW, R_abs 0.0047 A/W, R_1 0.0006 A/W; E_kin 0.11112 -> 0.11917 eV; particles 7993817 (weight 0.00060 e), leaked 0
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 549.9 s (push 478.5, field 70.3)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (65629727 hits), 1.0000 sloping (263530972), 1.0000 across (0)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (82716541), 0.2500 at the drain (82737916)
+control symmetric mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0317 +- 0.0183 uA (S -0.0292, D -0.0341, vol -0.0322)
+  Y1 0.35896 +0.54859i mS, P_abs 1.79474 uW, R_abs -0.0177 A/W, R_1 -0.0018 A/W; E_kin 0.11112 -> 0.11822 eV; particles 7992976 (weight 0.00060 e), leaked 0
+  grid 266 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 500.8 s (push 430.6, field 69.0)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (65733576 hits), 1.0000 sloping (263539901), 1.0000 across (0)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2501 at the source (82691726), 0.2499 at the drain (82724548)
+nodrive funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0: I_dc 0.0142 +- 0.0098 uA (S 0.0160, D 0.0124, vol 0.0091)
+  Y1 0.00000 +0.00000i mS, P_abs 0.00000 uW, R_abs 0.0000 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11162 eV; particles 7999385 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 484.0 s (push 442.4, field 40.6)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (100038872 hits), 1.0000 sloping (199719150), 1.0000 across (99298209)
+  contacts: transparency 1, junction 38 nm; absorbed fraction of arrivals 0.2206 at the source (124728633), 0.2206 at the drain (124771829)
+nodrive funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0: I_dc 0.0217 +- 0.0096 uA (S 0.0233, D 0.0201, vol 0.0156)
+  Y1 0.00000 +0.00000i mS, P_abs 0.00000 uW, R_abs 0.0000 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11114 eV; particles 7999921 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 471.9 s (push 430.9, field 40.0)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (100088509 hits), 1.0000 sloping (199777147), 1.0000 across (99286247)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (124872746), 0.2500 at the drain (124838179)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3451 +- 0.0172 uA (S 0.3441, D 0.3462, vol 0.3616)
+  Y1 0.64441 -0.08933i mS, P_abs 3.22196 uW, R_abs 0.1071 A/W, R_1 0.0188 A/W; E_kin 0.11113 -> 0.11468 eV; particles 7995587 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 380.2 s (push 348.4, field 30.9)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99312032 hits), 1.0000 sloping (198699857), 1.0000 across (100315983)
+  contacts: transparency 0.75, junction 0 nm; absorbed fraction of arrivals 0.7500 at the source (124727952), 0.7500 at the drain (125027768)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.4112 +- 0.0141 uA (S 0.4111, D 0.4113, vol 0.4286)
+  Y1 0.66683 +0.39423i mS, P_abs 3.33405 uW, R_abs 0.1233 A/W, R_1 0.0224 A/W; E_kin 0.11113 -> 0.11486 eV; particles 7993650 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 381.0 s (push 349.3, field 30.7)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99279931 hits), 1.0000 sloping (198466558), 1.0000 across (100252757)
+  contacts: transparency 0.75, junction 0 nm; absorbed fraction of arrivals 0.7501 at the source (124691978), 0.7500 at the drain (125046847)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3540 +- 0.0180 uA (S 0.3529, D 0.3551, vol 0.3695)
+  Y1 0.57219 +0.01630i mS, P_abs 2.86088 uW, R_abs 0.1237 A/W, R_1 0.0195 A/W; E_kin 0.11113 -> 0.11614 eV; particles 7993601 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 381.0 s (push 348.5, field 31.6)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99088219 hits), 1.0000 sloping (198770681), 1.0000 across (100422134)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.5000 at the source (124641423), 0.5000 at the drain (125081937)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3256 +- 0.0195 uA (S 0.3241, D 0.3271, vol 0.3446)
+  Y1 0.57081 +0.46853i mS, P_abs 2.85396 uW, R_abs 0.1141 A/W, R_1 0.0179 A/W; E_kin 0.11113 -> 0.11627 eV; particles 7991364 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 381.1 s (push 348.9, field 31.2)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99068656 hits), 1.0000 sloping (198541458), 1.0000 across (100261831)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.5000 at the source (124665098), 0.5001 at the drain (125062624)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2698 +- 0.0144 uA (S 0.2723, D 0.2673, vol 0.2792)
+  Y1 0.44382 +0.18178i mS, P_abs 2.21902 uW, R_abs 0.1216 A/W, R_1 0.0152 A/W; E_kin 0.11113 -> 0.11934 eV; particles 7990229 (weight 0.00040 e), leaked 2
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 493.4 s (push 452.6, field 39.8)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (98841552 hits), 1.0000 sloping (198785083), 1.0000 across (100334207)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (124553901), 0.2500 at the drain (125208641)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1412 +- 0.0157 uA (S 0.1431, D 0.1393, vol 0.1586)
+  Y1 0.41332 +0.58483i mS, P_abs 2.06654 uW, R_abs 0.0683 A/W, R_1 0.0080 A/W; E_kin 0.11113 -> 0.11890 eV; particles 7987170 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 495.3 s (push 454.7, field 39.7)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (98816091 hits), 1.0000 sloping (198500375), 1.0000 across (100136654)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (124706430), 0.2500 at the drain (125056116)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0749 +- 0.0155 uA (S 0.0792, D 0.0706, vol 0.0853)
+  Y1 0.55163 +0.02435i mS, P_abs 2.75804 uW, R_abs 0.0272 A/W, R_1 0.0041 A/W; E_kin 0.11113 -> 0.11839 eV; particles 8002379 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 382.4 s (push 350.6, field 30.8)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99961147 hits), 1.0000 sloping (198817722), 1.0000 across (100239713)
+  contacts: transparency 1, junction 7 nm; absorbed fraction of arrivals 0.4802 at the source (127054654), 0.4782 at the drain (127706127)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0494 +- 0.0189 uA (S -0.0419, D -0.0570, vol -0.0381)
+  Y1 0.52597 +0.46455i mS, P_abs 2.62975 uW, R_abs -0.0188 A/W, R_1 -0.0027 A/W; E_kin 0.11113 -> 0.11825 eV; particles 8005055 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 383.2 s (push 351.4, field 30.8)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (100175882 hits), 1.0000 sloping (199102426), 1.0000 across (100333387)
+  contacts: transparency 1, junction 7 nm; absorbed fraction of arrivals 0.4801 at the source (127172880), 0.4783 at the drain (127583559)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.0361 +- 0.0116 uA (S 0.0412, D 0.0310, vol 0.0517)
+  Y1 0.42259 +0.23520i mS, P_abs 2.11286 uW, R_abs 0.0171 A/W, R_1 0.0020 A/W; E_kin 0.11113 -> 0.12687 eV; particles 8007481 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 500.1 s (push 458.6, field 40.4)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (100274292 hits), 1.0000 sloping (199215061), 1.0000 across (100212692)
+  contacts: transparency 1, junction 38 nm; absorbed fraction of arrivals 0.2117 at the source (129937519), 0.2121 at the drain (129836498)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc -0.0607 +- 0.0165 uA (S -0.0497, D -0.0718, vol -0.0431)
+  Y1 0.36863 +0.62158i mS, P_abs 1.84311 uW, R_abs -0.0330 A/W, R_1 -0.0034 A/W; E_kin 0.11113 -> 0.12516 eV; particles 8012578 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 501.5 s (push 460.3, field 40.2)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (100524391 hits), 1.0000 sloping (199853263), 1.0000 across (100396912)
+  contacts: transparency 1, junction 38 nm; absorbed fraction of arrivals 0.2123 at the source (129737600), 0.2129 at the drain (129157351)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 60.5397 +- 0.0291 uA (S 60.5411, D 60.5383, vol 59.6116)
+  Y1 0.00000 +0.00000i mS, P_abs 6.05370 uW, R_abs 10.0004 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.12222 eV; particles 4004094 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 7182 steps, 173.3 s (push 148.6, field 24.1)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (24931753 hits), 1.0000 sloping (54729348), 1.0000 across (22509845)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.4999 at the source (21728344), 0.5001 at the drain (40716016)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V -0.1: I_dc -56.8483 +- 0.0290 uA (S -56.8490, D -56.8477, vol -55.8822)
+  Y1 0.00000 +0.00000i mS, P_abs 5.68452 uW, R_abs -10.0006 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.12299 eV; particles 3983043 (weight 0.00080 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 7182 steps, 174.6 s (push 147.9, field 26.1)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (24047943 hits), 1.0000 sloping (44443416), 1.0000 across (28206781)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.4999 at the source (40140100), 0.4998 at the drain (22309527)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 38.5584 +- 0.0296 uA (S 38.5566, D 38.5601, vol 37.3896)
+  Y1 0.00000 +0.00000i mS, P_abs 3.85562 uW, R_abs 10.0006 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.12622 eV; particles 3997476 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 7182 steps, 174.1 s (push 149.3, field 24.0)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (24908762 hits), 1.0000 sloping (53081291), 1.0000 across (23317246)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (19110208), 0.2500 at the drain (43332222)
+G3 funnel mode sym d 300 nm lambda 700 nm f 0 Hz V -0.1: I_dc -36.4820 +- 0.0257 uA (S -36.4825, D -36.4814, vol -35.3236)
+  Y1 0.00000 +0.00000i mS, P_abs 3.64805 uW, R_abs -10.0004 A/W, R_1 0.0000 A/W; E_kin 0.11115 -> 0.12635 eV; particles 3982424 (weight 0.00080 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.50647 fs, 7182 steps, 173.3 s (push 148.7, field 23.9)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (23958561 hits), 1.0000 sloping (46163838), 1.0000 across (26952257)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (42660885), 0.2500 at the drain (19773916)
+G3L funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2314 +- 0.0142 uA (S 0.2316, D 0.2313, vol 0.2517)
+  Y1 0.52394 -0.15253i mS, P_abs 2.61961 uW, R_abs 0.0883 A/W, R_1 0.0129 A/W; E_kin 0.11114 -> 0.11328 eV; particles 15997822 (weight 0.00039 e), leaked 1
+  grid 274 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 687.1 s (push 632.8, field 52.7)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (304160487 hits), 1.0000 sloping (201040804), 1.0000 across (103202122)
+G3L funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3230 +- 0.0146 uA (S 0.3229, D 0.3231, vol 0.3431)
+  Y1 0.62570 +0.50881i mS, P_abs 3.12840 uW, R_abs 0.1033 A/W, R_1 0.0177 A/W; E_kin 0.11114 -> 0.11378 eV; particles 15995225 (weight 0.00039 e), leaked 0
+  grid 274 x 107 at 5 nm, dt 2.5 fs, 9200 steps, 688.5 s (push 634.3, field 52.6)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (304107386 hits), 1.0000 sloping (200729486), 1.0000 across (103052878)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2656 +- 0.0091 uA (S 0.2657, D 0.2656, vol 0.2763)
+  Y1 0.44295 +0.18196i mS, P_abs 2.21467 uW, R_abs 0.1199 A/W, R_1 0.0149 A/W; E_kin 0.11114 -> 0.11935 eV; particles 15980747 (weight 0.00020 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 877.5 s (push 836.3, field 39.7)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (197680888 hits), 1.0000 sloping (397641986), 1.0000 across (200715264)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (249174906), 0.2500 at the drain (250464295)
+done P10c P10t P10k P10s P10l P10n
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3618 +- 0.0194 uA (S 0.3617, D 0.3620, vol 0.3787)
+  Y1 0.57211 +0.01595i mS, P_abs 2.86044 uW, R_abs 0.1265 A/W, R_1 0.0200 A/W; E_kin 0.11113 -> 0.11614 eV; particles 7993671 (weight 0.00040 e), leaked 1
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 495.0 s (push 454.4, field 39.6)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99082685 hits), 1.0000 sloping (198789548), 1.0000 across (100428026)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.5001 at the source (124650109), 0.5000 at the drain (125118016)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.3290 +- 0.0154 uA (S 0.3302, D 0.3277, vol 0.3478)
+  Y1 0.57162 +0.46875i mS, P_abs 2.85799 uW, R_abs 0.1151 A/W, R_1 0.0181 A/W; E_kin 0.11113 -> 0.11626 eV; particles 7991439 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 493.4 s (push 452.8, field 39.6)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99086230 hits), 1.0000 sloping (198531420), 1.0000 across (100255419)
+  contacts: transparency 0.5, junction 0 nm; absorbed fraction of arrivals 0.5000 at the source (124679995), 0.5000 at the drain (125094317)
+G3 funnel mode sym d 300 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.2650 +- 0.0142 uA (S 0.2644, D 0.2656, vol 0.2737)
+  Y1 0.44322 +0.18225i mS, P_abs 2.21603 uW, R_abs 0.1196 A/W, R_1 0.0149 A/W; E_kin 0.11113 -> 0.11934 eV; particles 7990163 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 493.7 s (push 452.8, field 39.8)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (98823443 hits), 1.0000 sloping (198798707), 1.0000 across (100364815)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (124541917), 0.2501 at the drain (125174628)
+G3 funnel mode sym d 30 nm lambda 700 nm f 1e+12 Hz V 0.1: I_dc 0.1506 +- 0.0138 uA (S 0.1493, D 0.1519, vol 0.1664)
+  Y1 0.41337 +0.58448i mS, P_abs 2.06677 uW, R_abs 0.0729 A/W, R_1 0.0085 A/W; E_kin 0.11113 -> 0.11889 eV; particles 7987258 (weight 0.00040 e), leaked 0
+  grid 194 x 107 at 5 nm, dt 2.5 fs, 12000 steps, 495.4 s (push 454.6, field 39.9)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (98832414 hits), 1.0000 sloping (198504750), 1.0000 across (100137330)
+  contacts: transparency 0.25, junction 0 nm; absorbed fraction of arrivals 0.2500 at the source (124721507), 0.2500 at the drain (125076211)
+done P10r
+D funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 108.6926 +- 0.0629 uA (S 108.6630, D 108.7223, vol 108.5273)
+  Y1 0.00000 +0.00000i mS, P_abs 10.86868 uW, R_abs 10.0005 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11596 eV; particles 50008117 (weight 0.00330 e), leaked 0
+  grid 859 x 274 at 7.5 nm, dt 3.75031 fs, 8000 steps, 2772.4 s (push 2136.6, field 627.8)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (198021092 hits), 1.0000 sloping (87253812), 1.0000 across (38352832)
+D funnel mode sym d 300 nm lambda 700 nm f 0 Hz V -0.1: I_dc -106.8329 +- 0.0587 uA (S -106.8417, D -106.8242, vol -106.6917)
+  Y1 0.00000 +0.00000i mS, P_abs 10.68371 uW, R_abs -9.9996 A/W, R_1 0.0000 A/W; E_kin 0.11113 -> 0.11613 eV; particles 49992009 (weight 0.00330 e), leaked 0
+  grid 859 x 274 at 7.5 nm, dt 3.75031 fs, 8000 steps, 2779.4 s (push 2145.5, field 626.1)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (198828444 hits), 1.0000 sloping (77464777), 1.0000 across (43827493)
+D funnel mode sym d 300 nm lambda 700 nm f 0 Hz V 0.1: I_dc 111.4107 +- 0.1147 uA (S 111.4027, D 111.4187, vol 111.2511)
+  Y1 0.00000 +0.00000i mS, P_abs 11.14012 uW, R_abs 10.0008 A/W, R_1 0.0000 A/W; E_kin 0.11114 -> 0.11598 eV; particles 25004265 (weight 0.00659 e), leaked 0
+  grid 859 x 274 at 7.5 nm, dt 3.75031 fs, 8000 steps, 1709.1 s (push 1084.4, field 619.7)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (98994952 hits), 1.0000 sloping (43651135), 1.0000 across (19150227)
+D funnel mode sym d 300 nm lambda 700 nm f 0 Hz V -0.1: I_dc -109.5300 +- 0.0942 uA (S -109.5180, D -109.5419, vol -109.3828)
+  Y1 0.00000 +0.00000i mS, P_abs 10.95358 uW, R_abs -9.9995 A/W, R_1 0.0000 A/W; E_kin 0.11114 -> 0.11616 eV; particles 24996242 (weight 0.00659 e), leaked 0
+  grid 859 x 274 at 7.5 nm, dt 3.75031 fs, 8000 steps, 1884.9 s (push 1241.8, field 638.0)
+  walls: roughness 0 nm; mirror-like fraction 1.0000 along the axis (99413837 hits), 1.0000 sloping (38680315), 1.0000 across (21925261)
+done P7 P7n

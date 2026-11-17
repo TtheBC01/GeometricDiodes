@@ -1,6 +1,10 @@
 // Acceptance ladder of Stage B8 (plans/ballistic_selfconsistent.md, section 4):
 // the self-consistent particle solver of src/pic.*.
 //   usage: gd_pic_tests [T22,T23,...] [--N n] [--h nm] [--filter cells]
+// T31 (Stage B9, plans/ballistic_edges.md section 4) tests the rough-wall
+// rule; it is not in the default list.
+// T32 (Stage B10, plans/ballistic_contacts.md section 5) tests contacts that
+// reflect; it is not in the default list either.
 // T30 (convergence of the decision number) is run with gd_bpic and
 // tools/pic_convergence.sh, not here.
 #include "generators.hpp"
@@ -424,6 +428,243 @@ int main(int argc, char** argv) {
       det += fmt("\n      mirror-symmetric device, 1 THz, shape-only drive: I_dc = %+.3f +- %.3f uA  [%.0f s]", res.Idc * 1e6, res.Idc_err * 1e6, now() - t0);
     }
     verdict("T29", ok, "null tests" + det);
+  }
+
+  // -------------------------------------------------------------------------
+  // Stage B9: walls of rms roughness h_r, specularity exp(-(2 h_r k cos(theta))^2)
+  if (want("T31")) {
+    const double kF = EF / kHbarVF, hr = 2.4;
+    const Vec2 wn{0, 1}, wd{1, 0};
+    const int NB = 18;
+    auto chi2 = [&](const std::vector<double>& cnt, const std::vector<double>& ex) {
+      double tot = 0, s = 0;
+      for (double c : cnt) tot += c;
+      for (int i = 0; i < NB; ++i) { double e = ex[i] * tot; s += (cnt[i] - e) * (cnt[i] - e) / e; }
+      return s;
+    };
+    auto bin = [&](double kx, double ky) { double a = std::atan2(kx, ky); int i = (int)std::floor((a + 0.5 * kPi) / kPi * NB); return std::min(std::max(i, 0), NB - 1); };
+    const double chi_max = (NB - 1) + 3 * std::sqrt(2.0 * (NB - 1));
+    // (b) the reflection law at fixed angles of incidence
+    {
+      bool ok = true; std::string det;
+      Rng rng(3101);
+      const long M = 400000;
+      for (double kk : {kF, 0.6 * kF}) {
+        const double q0 = 2 * hr * kk;
+        std::vector<double> cnt(NB, 0.0), ex(NB, 0.0);
+        double zmax = 0, dev = 0;
+        std::string row;
+        for (double deg : {0.0, 30.0, 60.0, 80.0}) {
+          const double th = deg2rad(deg), pex = std::exp(-q0 * q0 * std::cos(th) * std::cos(th));
+          long m = 0;
+          for (long i = 0; i < M; ++i) {
+            double kx = kk * std::sin(th), ky = -kk * std::cos(th);
+            const double kx0 = kx, ky0 = ky;
+            if (Pic::reflect(kx, ky, wn, wd, 1.0, hr, rng)) { ++m; dev = std::max(dev, std::fabs(kx - kx0) + std::fabs(ky + ky0)); }
+            else { cnt[bin(kx, ky)] += 1; dev = std::max(dev, std::fabs(std::sqrt(kx * kx + ky * ky) - kk)); }
+          }
+          double z = ((double)m / M - pex) / std::sqrt(pex * (1 - pex) / M);
+          zmax = std::max(zmax, std::fabs(z));
+          row += fmt(" %2.0f deg %.4f (%.4f, %+.1f)", deg, (double)m / M, pex, z);
+        }
+        // expected distribution of the scattered angle, (1 - p(a)) cos(a), by bin
+        double tot = 0;
+        for (int i = 0; i < NB; ++i) {
+          const int ns = 200;
+          for (int j = 0; j < ns; ++j) { double a = -0.5 * kPi + kPi * (i + (j + 0.5) / ns) / NB, c = std::cos(a); ex[i] += -std::expm1(-q0 * q0 * c * c) * c; }
+          tot += ex[i];
+        }
+        for (double& e : ex) e /= tot;
+        double c2 = chi2(cnt, ex);
+        ok = ok && zmax < 3 && c2 < chi_max && dev < 1e-12;
+        det += fmt("\n      k = %.4f /nm: mirror-like fraction, (formula, deviation in standard errors):", kk) + row +
+               fmt("\n        scattered angles against (1 - p) cos: chi2 = %.1f on %.0f bins (limit %.1f); |k| and the mirror direction kept to %.0e", c2, NB, chi_max, dev);
+      }
+      verdict("T31b", ok, fmt("reflection law of a wall of roughness %.1f nm", hr) + det);
+    }
+    // (b2) a gas arriving isotropic (cosine-law flux) leaves isotropic; with the
+    // cosine law for the scattered part it does not
+    {
+      Rng rng(3102);
+      const long M = 4000000;
+      std::vector<double> ex(NB);
+      for (int i = 0; i < NB; ++i) ex[i] = 0.5 * (std::sin(-0.5 * kPi + kPi * (i + 1) / NB) - std::sin(-0.5 * kPi + kPi * i / NB));
+      double c2[2];
+      for (int w = 0; w < 2; ++w) {
+        std::vector<double> cnt(NB, 0.0);
+        for (long i = 0; i < M; ++i) {
+          double a = rng.cosine_angle(), kx = kF * std::sin(a), ky = -kF * std::cos(a);
+          Pic::reflect(kx, ky, wn, wd, 1.0, hr, rng, w == 1);
+          cnt[bin(kx, ky)] += 1;
+        }
+        c2[w] = chi2(cnt, ex);
+      }
+      verdict("T31b2", c2[0] < chi_max && c2[1] > 10 * chi_max,
+              fmt("cosine-law flux in, flux out against the cosine law: chi2 = %.1f (limit %.1f); with cosine-law re-emission of the scattered part chi2 = %.0f", c2[0], chi_max, c2[1]));
+    }
+    // (c) the funnel as a closed box with rough walls, no field, no scattering
+    // in the bulk: the gas stays uniform and isotropic
+    {
+      Boundary b = g3();
+      const double xF = kG3xF, t30 = std::tan(deg2rad(30.0));
+      std::string det; bool ok = true;
+      for (int w = 0; w < 2; ++w) {
+        PicParams p; p.EF = EF; p.h = h; p.N = N; p.filter = filter; p.contacts = false; p.interaction = false; p.rough = hr; p.rough_lambert = w == 1; p.seed = 3103;
+        Pic pic(b, p);
+        double t0 = now();
+        while (pic.time() < 20000 - 1e-9) pic.step();
+        std::vector<double> s; pic.snapshot(s);
+        const long n = (long)s.size() / 4;
+        // regions: wide lead, taper, far lead, and the last 100 nm of the taper
+        const double A = pic.area(), ar[4] = {100.0 * 500, 0.5 * (500 + 100) * (xF - 100), 100.0 * 500, 100 * (100 + 100 * t30)};
+        double cn[4] = {0, 0, 0, 0}, c2s[4] = {0, 0, 0, 0};
+        for (long i = 0; i < n; ++i) {
+          double x = s[4 * i], kx = s[4 * i + 2], ky = s[4 * i + 3], k2 = kx * kx + ky * ky, c2 = k2 > 0 ? (kx * kx - ky * ky) / k2 : 0;
+          int r = x < 100 ? 0 : x < xF ? 1 : 2;
+          cn[r] += 1; c2s[r] += c2;
+          if (x >= xF - 100 && x < xF) { cn[3] += 1; c2s[3] += c2; }
+        }
+        double zmax = 0; std::string row;
+        const char* nm[4] = {"wide lead", "taper", "far lead", "narrow end of taper"};
+        for (int r = 0; r < 4; ++r) {
+          double f = ar[r] / A, zf = (cn[r] / n - f) / std::sqrt(f * (1 - f) / n), za = (c2s[r] / cn[r]) / std::sqrt(0.5 / cn[r]);
+          zmax = std::max(zmax, std::max(std::fabs(zf), std::fabs(za)));
+          char buf[320];
+          std::snprintf(buf, sizeof buf, "\n          %-20s share of particles %.5f (area share %.5f, %+.1f s.e.); <cos 2 phi> = %+.5f (%+.1f s.e.)", nm[r], cn[r] / n, f, zf, c2s[r] / cn[r], za);
+          row += buf;
+        }
+        long wc[6]; pic.wall_counts(wc);
+        det += fmt(w == 0 ? "\n      reciprocal rule, 20 ps, %.0f particles, %.0f wall hits (%.3f mirror-like): largest deviation %.1f s.e.  [%.0f s]"
+                          : "\n      cosine-law re-emission (the error the test is for), %.0f particles, %.0f wall hits (%.3f mirror-like): largest deviation %.1f s.e.  [%.0f s]",
+                   (double)n, (double)(wc[0] + wc[2] + wc[4]), (double)(wc[1] + wc[3] + wc[5]) / (double)(wc[0] + wc[2] + wc[4]), zmax, now() - t0) + row;
+        ok = ok && (w == 0 ? zmax < 3.5 : zmax > 10);
+      }
+      verdict("T31c", ok, "closed funnel with rough walls stays uniform and isotropic (8 numbers, limit 3.5 s.e.); the wrong rule is caught" + det);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Stage B10 (plans/ballistic_contacts.md section 5): contacts that reflect.
+  if (want("T32") || want("T32b") || want("T32c") || want("T32d")) {
+    const bool all32 = want("T32");
+    const double kF = EF / kHbarVF, kT = kBoltzmann * 300;
+    const double TC[3] = {0.75, 0.5, 0.25}, DJ[2] = {7.0, 38.0};
+    // averages of a function g(T) of the junction transmission over the sine s
+    // of the angle (cosine-law flux) and over the wave number, with weight
+    // k f(E) (arrivals of the gas at rest) or k (-df/dE) (linear conductance)
+    auto javg = [&](double d, bool conductance, bool series) {
+      double num = 0, den = 0;
+      const int nk = 4000, ns = 4000;
+      for (int i = 0; i < nk; ++i) {
+        double k = (i + 0.5) / nk * 3 * kF, x = (kHbarVF * k - EF) / kT;
+        double f = 1 / (std::exp(x) + 1), w = k * (conductance ? f * (1 - f) : f), in = 0;
+        for (int j = 0; j < ns; ++j) { double sn = (j + 0.5) / ns, T = std::exp(-kPi * k * d * sn * sn); in += series ? T / (2 - T) : T; }
+        num += w * in / ns; den += w;
+      }
+      return num / den;
+    };
+    // (b) the contact law at fixed angles
+    if (all32 || want("T32b")) {
+      bool ok = true; std::string det;
+      Rng rng(3201);
+      const long M = 400000;
+      const Vec2 n{1, 0};
+      for (int v = 0; v < 2; ++v)
+        for (double kk : {kF, 0.6 * kF}) {
+          std::string row; double zmax = 0;
+          for (double deg : {0.0, 10.0, 25.0, 50.0, 80.0}) {
+            const double th = deg2rad(deg), kx = -kk * std::cos(th), ky = kk * std::sin(th);
+            const double pex = v == 0 ? 0.5 : std::exp(-kPi * kk * DJ[1] * std::sin(th) * std::sin(th));
+            long m = 0;
+            for (long i = 0; i < M; ++i) if (rng.uniform() < Pic::contact_transmission(kx, ky, n, v == 0 ? 0.5 : 1.0, v == 0 ? 0.0 : DJ[1])) ++m;
+            double se = std::sqrt(std::max(pex * (1 - pex), 1e-12) / M), z = ((double)m / M - pex) / se;
+            if (pex > 1e-9 && pex < 1 - 1e-9) zmax = std::max(zmax, std::fabs(z)); else ok = ok && (double)m / M == (pex > 0.5 ? 1.0 : 0.0);
+            row += fmt(" %2.0f deg %.4f (%.4f)", deg, (double)m / M, pex);
+          }
+          ok = ok && zmax < 3;
+          det += fmt(v == 0 ? "\n      transparency 0.5, k = %.4f /nm: absorbed fraction (formula):" : "\n      junction 38 nm, k = %.4f /nm: absorbed fraction (formula):", kk) + row + fmt("; largest deviation %.1f s.e.", zmax);
+        }
+      verdict("T32b", ok, "contact law at fixed angles" + det);
+    }
+    // (c) the contact resistance: a clean strip with mirror walls between two
+    // such contacts conducts T / (2 - T) of the ideal value (an electron let in
+    // with probability T ends in the far contact with probability 1 / (2 - T))
+    if (all32 || want("T32c")) {
+      bool ok = true; std::string det;
+      Boundary bs = make_straight_channel(546.41, 500);
+      const double V = 0.005;
+      double Gid = 0, eGid = 0;
+      for (int c = 0; c < 6; ++c) {
+        double I[2], e[2], t0 = now(); int m = 0;
+        for (double sgn : {1.0, -1.0}) {
+          PicParams p; p.EF = EF; p.h = h; p.N = N; p.filter = filter; p.interaction = false; p.imposed = 1; p.V = sgn * V; p.ramp_fs = 300; p.seed = 3202;
+          if (c >= 1 && c <= 3) p.contact_T = TC[c - 1];
+          if (c >= 4) p.contact_junction = DJ[c - 4];
+          Pic pic(bs, p);
+          PicResult res = run_window(pic, c == 0 ? 3000 : 8000, 1000, 10);
+          I[m] = res.Idc; e[m] = res.Idc_err; ++m;
+        }
+        double G = (I[0] - I[1]) / (2 * V), eG = std::hypot(e[0], e[1]) / (2 * V);
+        if (c == 0) {
+          Gid = G; eGid = eG;
+          double Gsh = kValleySpin * kE2OverH * 500 / (kPi * kHbarVF) * kT * std::log(1 + std::exp(EF / kT));
+          det += fmt("\n      ideal contacts: G = %.4f +- %.4f mS (Sharvin %.4f mS)  [%.0f s]", G * 1e3, eG * 1e3, Gsh * 1e3, now() - t0);
+          continue;
+        }
+        double target = c <= 3 ? TC[c - 1] / (2 - TC[c - 1]) : javg(DJ[c - 4], true, true);
+        double r = G / Gid, er = r * std::hypot(eG / G, eGid / Gid);
+        bool good = std::fabs(r - target) < std::max(0.02 * target, 3 * er);
+        ok = ok && good;
+        det += fmt(c <= 3 ? "\n      transparency %.2f: G / G_ideal = %.4f +- %.4f, target %.4f (%+.1f s.e.)  [%.0f s]" : "\n      junction %.0f nm: G / G_ideal = %.4f +- %.4f, target %.4f (%+.1f s.e.)  [%.0f s]",
+                   c <= 3 ? TC[c - 1] : DJ[c - 4], r, er, target, (r - target) / er, now() - t0);
+      }
+      verdict("T32c", ok, "strip conductance between reflecting contacts, +-5 mV, no interaction" + det);
+    }
+    // (d) equilibrium: with no drive the funnel carries no current, keeps its
+    // particles and its kinetic energy, the gas in front of the source stays
+    // isotropic, and the contacts absorb the share the formula gives for a gas
+    // at rest. Injection that is not thinned is caught.
+    if (all32 || want("T32d")) {
+      bool ok = true; std::string det;
+      Boundary b = g3();
+      struct Case { const char* name; double T, dj; bool inter, wrong; };
+      const Case cs[5] = {{"transparency 0.25, 30 nm gate", 0.25, 0, true, false}, {"junction 38 nm, 30 nm gate", 1, 38, true, false},
+                          {"transparency 0.25, no interaction", 0.25, 0, false, false}, {"junction 38 nm, no interaction", 1, 38, false, false},
+                          {"transparency 0.25, injection not thinned (the error the test is for)", 0.25, 0, false, true}};
+      for (const Case& c : cs) {
+        PicParams p; p.EF = EF; p.h = h; p.N = N; p.filter = filter; p.lambda_mfp = 700; p.contact_T = c.T; p.contact_junction = c.dj; p.contact_unthinned = c.wrong; p.seed = 3203;
+        if (c.inter) p.d_gate = 30; else p.interaction = false;
+        Pic pic(b, p);
+        double t0 = now();
+        const double tend = c.wrong ? 10000 : 20000;
+        pic.step(); double Ek0 = pic.history().back().Ek;
+        while (pic.time() < 3000 - 1e-9) pic.step();
+        double ts = pic.time();
+        pic.reset_wall_counts();
+        while (pic.time() < tend - 1e-9) pic.step();
+        PicResult res = pic.analyse(ts, 1000, (int)std::lround((tend - 3000) / 1000));
+        long cc[4]; pic.contact_counts(cc);
+        std::vector<double> s; pic.snapshot(s);
+        double c2 = 0; long nl = 0;
+        for (size_t i = 0; i + 3 < s.size(); i += 4) if (s[i] < 100) { double kx = s[i + 2], ky = s[i + 3], k2 = kx * kx + ky * ky; if (k2 > 0) { c2 += (kx * kx - ky * ky) / k2; ++nl; } }
+        double za = (c2 / nl) / std::sqrt(0.5 / nl);
+        double fex = c.dj > 0 ? javg(c.dj, false, false) : c.T;
+        double fS = (double)cc[1] / cc[0], fD = (double)cc[3] / cc[2];
+        double zS = (fS - fex) / std::sqrt(fex * (1 - fex) / cc[0]), zD = (fD - fex) / std::sqrt(fex * (1 - fex) / cc[2]);
+        double dn = res.np_mean / (double)N - 1, dE = res.Ek_last / Ek0 - 1;
+        bool good;
+        if (c.wrong) good = dn > 0.10;
+        else good = std::fabs(res.Idc) < 2 * res.Idc_err + 1e-12 && std::fabs(dn) < 0.003 && std::fabs(dE) < 0.01 && std::fabs(za) < 3.5 &&
+                    (c.inter ? std::fabs(fS - fex) < 0.01 && std::fabs(fD - fex) < 0.01 : std::fabs(zS) < 3.5 && std::fabs(zD) < 3.5);
+        ok = ok && good;
+        char buf[640];
+        std::snprintf(buf, sizeof buf, "\n      %s: I_dc %+.3f +- %.3f uA; particles %+.3f %%; kinetic energy %+.3f %%; <cos 2 phi> in the source lead %+.1f s.e.;"
+                                       "\n          absorbed share %.4f source, %.4f drain (formula %.4f; %+.1f, %+.1f s.e.)  %s  [%.0f s]",
+                      c.name, res.Idc * 1e6, res.Idc_err * 1e6, 100 * dn, 100 * dE, za, fS, fD, fex, zS, zD, good ? "ok" : "NOT OK", now() - t0);
+        det += buf;
+      }
+      verdict("T32d", ok, "the funnel with reflecting contacts and no drive stays in equilibrium; injection that is not thinned is caught" + det);
+    }
   }
 
   std::printf("\n%d passed, %d failed\n", g_pass, g_fail);
