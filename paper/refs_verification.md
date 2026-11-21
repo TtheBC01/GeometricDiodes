@@ -315,3 +315,11 @@ at 1.66 in Fig. 2(a) is replaced by the measured value at 0.1 V):
   voltage-dependent density along the channel (self-gating through the
   back gate at volts of bias) is a source of asymmetry that our models
   at 0.1 V do not contain.
+
+## Added with the seventh draft (2026-11-19)
+
+| key | status | source | use |
+|---|---|---|---|
+| `landau1987fluid` | not fetched; standard textbook, cited from memory (2nd English edition, Pergamon 1987, Chapter XV, relativistic fluid dynamics) | | the Euler equation of an ideal relativistic fluid. The same equation is quoted, with a citation to this book, as Eq. (3) of `tomadin2013theory`, which was read in full |
+| `svintsov2013hydrodynamic` | re-read in full on 2026-11-17 (ar5iv) | Phys. Rev. B 88, 245444 (2013), journal reference confirmed on the arXiv abstract page | the convective term vanishes for degenerate carriers in one dimension (Eq. (19)); wave speeds u0/2 +- s0 on a drift (Eq. (39)). Not used: their transverse stress, Eq. (13), and the velocity-dependent part of Eq. (16), which do not agree with a direct evaluation (`tools/momentum_step0.py`) |
+| `tomadin2013theory` | re-read in full on 2026-11-17 (ar5iv) | | Eq. (13) is introduced there as "a crude approximation"; Eq. (43) equals our channel closed form with alpha = 1/2 |

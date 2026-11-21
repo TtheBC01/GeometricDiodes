@@ -63,7 +63,7 @@ nonlinearity is at the power an antenna delivers, and how fast it is. A
 geometric diode in the ballistic regime feeds the bias-induced landscape; a
 Tesla valve in the viscous regime feeds the convective term of the
 Navier-Stokes equation; and at terahertz frequencies a gated graphene
-channel is a plasmonic cavity whose convective and density nonlinearities
+channel is a plasmonic cavity whose hydrodynamic nonlinearities
 rectify by the mechanism of Dyakonov and
 Shur~\cite{dyakonov1993shallow,dyakonov1996detection}, which is the basis of
 most graphene terahertz detectors to
@@ -89,53 +89,70 @@ ballistic model of the kind used in the geometric-diode
 literature~\cite{zhu2013graphene,stearns2021simulation,truccolo2024comprehensive}, (ii) in
 steady viscous electron hydrodynamics, without and with the gate, (iii) in
 the gated compressible (plasmonic) electron fluid from $10\GHz$ to $3\THz$,
-at small signal and at finite amplitude up to the gate overdrive, (iv)
+at small signal and at finite amplitude up to the drift speed at which
+the fluid model ends, (iv)
 in the ballistic model driven from $0.3\GHz$ to $30\THz$, and (v), for
-the shortest funnel, in a particle simulation that computes the field
-from the charge of the electrons, a gate and the contacts. Each solver is
+a $0.55\um$ funnel and, at dc, for the $6\um$ one, in a particle
+simulation that computes the field from the charge of the electrons, a
+gate and the contacts. Each solver is
 validated against analytic limits and benchmarks before it is used; the
 acceptance tests are listed in the Supplemental Material.
 
-The answer separates cleanly into shape and circuit, and it differs
-between the two devices. The Tesla valve does not rectify ballistically,
-rectifies viscously only at Reynolds numbers the graphene Fermi liquid
-cannot sustain, and contributes $10^{-5}$ to $10^{-3}\AW$ at terahertz
-frequencies. In the electron fluid the funnel does no better as a shape:
-with the gate included, a steady current sees a percent-level asymmetry
-that is the same for every channel and belongs to the gate connection, and
-the terahertz response of $0.1$ to $0.3\AW$ is the Dyakonov-Shur asymmetry
-of the terminations, with a conversion efficiency below one per cent at
-every operating point for which the fluid description holds. The ballistic
-funnel is different. Its shape does rectify at terahertz frequencies, on
-conditions. The first is its length: the response is a function of the
-reduced frequency $fL/\vF$ and is gone when the flight through the device
-takes longer than about two periods. The $6\um$ device of the dc
-experiments fails that condition at $1\THz$; a $0.55\um$ funnel meets it.
-The second is the field. With an imposed potential, the simplest
-assumption of simulations of geometric diodes, the short funnel appears to give several
-times the current per absorbed watt of the plasmonic element; with the
-potential computed it gives a sixth of that, about what the plasmonic
-element gives at room temperature. The third is the edges. A rough edge
-reflects oblique electrons more specularly than head-on ones, and the
-walls of the taper are met obliquely; with such edges the response is
-halved at a head-on specularity of $0.5$ and gone at $0.2$, and etched
-edges have been measured from near zero to
+The answer differs between the two devices and between the regimes. The
+Tesla valve shows a ballistic asymmetry only in the clean specular limit,
+with the blocking direction the easier one; in the viscous liquid its
+diodicity is $10^{-3}$ to $3\times10^{-2}$ at the Reynolds numbers the
+graphene Fermi liquid can sustain; and its shape contributes less than
+$10^{-3}\AW$ below $0.3\THz$ and $0.02\AW$ at most above. In the electron
+fluid the funnel does little better as a shape. With the gate included, a
+steady current sees a percent-level asymmetry that is the same for every
+channel and belongs to the gate connection. The terahertz response of
+$0.05$ to $0.26\AW$ is carried mainly by the Dyakonov-Shur asymmetry of the
+terminations: in the $1\um$ funnel between $0.3$ and $1\THz$ the shape
+alone gives a third of it at $100$~K and a few per cent of it at $300$~K.
+These numbers are
+obtained with the momentum equation of the degenerate Dirac gas, which
+has no convective term in one dimension; with the convective term of an
+ordinary fluid the responses with the Dyakonov-Shur termination would be
+up to $1.7$ times larger. The response follows a square law up to a drift
+speed of $0.3\,\vF$, which we take as the limit of the model and which is
+reached at tens of microwatts; the conversion efficiency there is
+$10^{-5}$ to $5\times10^{-4}$ over the operating points examined. The ballistic funnel is different. Its shape does rectify at
+terahertz frequencies, on conditions. The first is its length: in a
+uniform field the response is a function of the reduced frequency
+$fL/\vF$ and is gone when the flight through the device takes longer than
+about two periods. In such a field the $6\um$ device of the dc
+experiments fails that condition at $1\THz$ and a $0.55\um$ funnel meets
+it. The static field that we compute for the long device is concentrated
+at its neck, however, and what that device does at $1\THz$ with a
+computed field is left open. The second is the field. With an imposed
+potential, the simplest assumption of simulations of geometric diodes, the
+short funnel appears to give several times the current per absorbed watt
+of the plasmonic element; with the potential computed it gives five to
+seven times less, about twice what the plasmonic element gives at room
+temperature. The third is the edges. A rough edge reflects oblique
+electrons more specularly than head-on ones, and the walls of the taper
+are met obliquely; with such edges the response is halved at a head-on
+specularity of $0.5$, passes through zero near $0.2$ and returns with the
+opposite sign, at $0.2$ to $0.4$ of its specular magnitude, at $0.05$.
+Etched edges have been measured from near zero to
 $0.8$~\cite{taychatanapat2013electrically,masubuchi2012boundary,barnard2017absorptive,berdyugin2020minibands}.
 The fourth is the contacts, and their resistance is a poor guide to it.
 A contact that reflects three quarters of the electrons, whatever their
 angle, costs the short funnel far less than the same resistance in
 series, while a contact of equal resistance that admits only electrons
-near normal incidence removes the rectification. And when the gate is closer than
-the device is long, the gate connection again rectifies more than the
-shape. As a detector the short funnel with specular edges and contacts
-that absorb at all angles is where the
-plasmonic element and the best measured graphene detectors are. As a harvester
-neither element exists: no mechanism studied here converts as much as one
-per cent of the incident power.
+near normal incidence leaves a current at or near the resolution of the
+method. And when the gate is closer than the device is long, the gate
+connection again rectifies more than the shape at $1\THz$. As a detector,
+a matched array of short funnels with specular edges and contacts that
+absorb at all angles would be where the plasmonic element and the best
+measured graphene detectors are. As a harvester neither element exists:
+within the range in which the models are trusted the conversion
+efficiencies computed are $10^{-5}$ to $5\times10^{-4}$.
 
 Section~\ref{sec:models} describes the devices and the models,
 Sec.~\ref{sec:dc} the dc results, Sec.~\ref{sec:plasmonic} the plasmonic
-element from small signal to saturation, Sec.~\ref{sec:ballistic} the
+element from small signal to its drift limit, Sec.~\ref{sec:ballistic} the
 ballistic element at terahertz frequencies, its scaling with length and
 the short funnel with a computed field, and
 Sec.~\ref{sec:discussion} compares the regimes, places the numbers against

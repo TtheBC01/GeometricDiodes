@@ -5,7 +5,7 @@ In units of the contact width $W$, the plasma speed $s_{0}$ and the gated
 density $n_{0}$, Eqs.~\eqref{eq:cont} and \eqref{eq:mom} contain the
 friction $\Gamma=W/s_{0}\taumr$, the plasma Reynolds number
 $\Rey_{s}=s_{0}W/\nu$, the collision time $s_{0}\tauee/W$ and the
-quantum-capacitance fraction $q$, with the closure
+quantum-capacitance fraction $q$, with
 $h(n)=2(1-q)(\sqrt{n}-1)+q\ln n$ and $h''(1)=-(1+q)/2\equiv\kappa$. Writing
 $n=1+\mathrm{Re}(n_{1}e^{i\Omega t})+n_{20}$ and
 $\bm{u}=\mathrm{Re}(\bm{u}_{1}e^{i\Omega t})+\bm{u}_{20}$, the first order is
@@ -13,16 +13,22 @@ $\bm{u}=\mathrm{Re}(\bm{u}_{1}e^{i\Omega t})+\bm{u}_{20}$, the first order is
 i\Omega n_{1}+\nabla\cdot\bm{u}_{1}&=0,\\
 (i\Omega+\Gamma)\bm{u}_{1}+\nabla n_{1}-\nu(\Omega)\nabla^{2}\bm{u}_{1}&=0,
 \end{align}
-with $\nu(\Omega)=\Rey_{s}^{-1}/(1+i\Omega s_{0}\tauee/W)$, and the time
+with the dimensionless viscosity
+$\nu(\Omega)=\Rey_{s}^{-1}/(1+i\Omega s_{0}\tauee/W)$, and the time
 average of the second order is
-\begin{align}
-\nabla\cdot\bm{u}_{20}&=-\tfrac12\mathrm{Re}\,\nabla\cdot(n_{1}\bm{u}_{1}^{*}),\\
-\Gamma\bm{u}_{20}+\nabla P-\Rey_{s}^{-1}\nabla^{2}\bm{u}_{20}
-&=-\tfrac12\mathrm{Re}\,(\bm{u}_{1}^{*}\cdot\nabla)\bm{u}_{1},
-\end{align}
-where $P=n_{20}+(\kappa/4)|n_{1}|^{2}$. The dc contact voltage is
-$P+c_{V}|n_{1}|^{2}$ with $c_{V}=1/8$ for the Dirac closure and zero for
-shallow water, and the dc particle current through a contact is the flux of
+\begin{equation}
+\nabla\cdot\bm{u}_{20}=-\tfrac12\mathrm{Re}\,\nabla\cdot(n_{1}\bm{u}_{1}^{*}),
+\end{equation}
+\begin{multline}
+\Gamma\bm{u}_{20}+\nabla P-\Rey_{s}^{-1}\nabla^{2}\bm{u}_{20}\\
+=-\tfrac12\mathrm{Re}\,(\bm{u}_{1}^{*}\cdot\nabla)\bm{u}_{1}
++\tfrac14\mathrm{Re}\,\bm{u}_{1}^{*}(\nabla\cdot\bm{u}_{1})
++\tfrac18\nabla|\bm{u}_{1}|^{2},
+\end{multline}
+where $P=n_{20}+(\kappa/4)|n_{1}|^{2}$; the last two terms on the right
+are absent for the classical gas. The dc contact voltage is
+$P+c_{V}|n_{1}|^{2}$ with $c_{V}=1/8$ for the Dirac gas and zero for
+the classical gas, and the dc particle current through a contact is the flux of
 $\bm{u}_{20}+\mathrm{Re}(n_{1}\bm{u}_{1}^{*})/2$. Each contact is an
 equipotential with one unknown voltage per order, closed by Kirchhoff's law
 for its termination: $R I_{c}+V_{c}=V_{a,c}$ for a source of resistance $R$,
@@ -31,6 +37,74 @@ gives the rectified power. Voltages are in units of
 $V_{u}=m^{*}s_{0}^{2}/e$, resistances in units of
 $m^{*}s_{0}/e^{2}n_{0}W$ ($65\ \Omega$ for $W=4\um$), and frequency in units
 of $s_{0}/2\pi W$ ($0.142\THz$).
+
+For a uniform channel of length $L$ with an ideal source of amplitude
+$U_{a}$ and an open drain these equations integrate to
+\begin{multline}
+\frac{\Delta U}{U_{a}^{2}}=\frac{\Phi''-\kappa}{4}\left(|n_{1}(L)|^{2}-1\right)
++\frac{\alpha}{4}|u_{1}(0)|^{2}\\
++\frac{\Gamma}{2}\int_{0}^{L}\mathrm{Re}\,(n_{1}u_{1}^{*})\,dx ,
+\label{eq:channel}
+\end{multline}
+with the first-order fields per unit source amplitude,
+$n_{1}=\cos k(L-x)/\cos kL$ and $u_{1}=-n_{1}'/(i\Omega+\Gamma)$,
+$k^{2}=\Omega^{2}-i\Omega\Gamma$, $\Phi''(1)=-q/2$, and $\alpha$ the
+coefficient of $u\,\partial_{x}u$ in one dimension: $\alpha=0$ for
+Eq.~\eqref{eq:mom} and $\alpha=1$ for the ordinary convective term. For
+the classical gas, $\alpha=1$ and
+$\kappa=\Phi''=0$, this is the result of Dyakonov and
+Shur~\cite{dyakonov1996detection}. With $\alpha=1/2$ and the density fixed
+at the source, Eq.~\eqref{eq:channel} is Eq.~(43) of
+Ref.~\cite{tomadin2013theory}, which we reproduce to $3\times10^{-10}$.
+The lines of Fig.~\ref{fig:small}(a) are Eq.~\eqref{eq:channel} for the
+classical gas and for the Dirac gas, $\alpha=0$.
+
+The integral can be removed. The first-order equations give
+$\partial_{x}(|n_{1}|^{2}+|u_{1}|^{2})=-2\Gamma\,\mathrm{Re}\,(n_{1}u_{1}^{*})$,
+and with $n_{1}(0)=1$ and $u_{1}(L)=0$
+\begin{equation}
+\frac{\Delta U}{U_{a}^{2}}=\frac{1+\alpha}{4}|u_{1}(0)|^{2}
+-\frac{1-\Phi''+\kappa}{4}\left(|n_{1}(L)|^{2}-1\right).
+\label{eq:half}
+\end{equation}
+For the classical gas the two coefficients are $\tfrac12$ and $\tfrac14$;
+for the Dirac gas $1-\Phi''+\kappa=\tfrac12$ for any $q$, and they are
+$\tfrac14$ and $\tfrac18$. In units of its own $V_{u}$ the Dirac gas
+therefore gives exactly half the response of the classical gas, at every
+frequency, friction and length. The statement extends to two dimensions
+when there is no viscosity: the first-order velocity is then a gradient,
+and the time-averaged equations of the Dirac gas are those of the
+classical gas with the dc current and the dc voltage halved, for any
+shape and any linear terminations. With viscosity it does not hold, and
+the funnels of Sec.~\ref{sec:small} are not at half the classical
+response.
+
+Beyond second order the momentum per particle of the drifting gas is
+$m^{*}(n)\gamma^{1/2}\bm{u}$ and its pressure is
+$P_{0}(n)\gamma^{-3/2}$, with $\gamma=(1-u^{2}/\vF^{2})^{-1/2}$ and $n$ the
+density in the frame of the lattice, and the momentum balance becomes
+\begin{multline}
+\Bigl(1+\frac{\gamma^{2}}{2\vF^{2}}\bm{u}\bm{u}^{T}\Bigr)
+\bigl[\partial_{t}\bm{u}+(\bm{u}\cdot\nabla)\bm{u}\bigr]
+-\tfrac12\bm{u}\,(\nabla\cdot\bm{u})-\tfrac14\nabla u^{2}
++\frac{\bm{u}}{\taumr}\\
+=-\frac{1}{m^{*}}\Bigl[\gamma^{-1/2}\,\nabla\frac{e^{2}n}{C_{g}}
++\gamma^{-2}\,\nabla\bigl(\hbar\vF\sqrt{\pi n}\bigr)\Bigr]
++\nu\nabla^{2}\bm{u}.
+\label{eq:exact}
+\end{multline}
+This is the Euler equation of an ideal relativistic fluid with $\vF$ for
+the speed of light~\cite{landau1987fluid}, multiplied by the matrix
+$1+\gamma^{2}\bm{u}\bm{u}^{T}/\vF^{2}$, with the gate force and the
+friction added; in the units used here $u^{2}/\vF^{2}=u^{2}/2q$, so no new
+parameter enters. It reduces to Eq.~\eqref{eq:mom} at small $u$. On an
+ungated fluid that drifts at $0.05$ to $0.8\,\vF$ its wave speeds obey
+the relativistic addition of velocities to six digits, and a steady
+radial flow computed with it agrees with the radial momentum balance
+written directly from the stress tensor to $3\times10^{-4}$ of the
+inertial part of the voltage. The friction and the viscous term are kept
+in the form of Eq.~\eqref{eq:mom}; the contact condition is the potential
+$\Phi(n)$ at the density $n$.
 
 A contact resistance $R_{c}$ enters as a change of the ports only: the
 source becomes a Thevenin source of resistance $\Rant+R_{c}$ and the drain
@@ -41,20 +115,27 @@ one of the ladder tests. At the signal frequency the antenna does not see
 the device impedance plus $2R_{c}$, because the source and drain currents
 differ by the gate displacement current.
 
-\section{Saturation estimate on the density and gate grid}
+\section{The drift limit on the density and gate grid}
 \label{app:knee}
 
-The peak efficiencies of Fig.~\ref{fig:operating}(b) are
-$\eta_{\mathrm{peak}}=2r^{2}(\Rant/\Rdc)\,(0.7)^{2}\,\mathcal{S}$, with $r$
-and $\Rdc$ from the small-signal solver at each grid point and
-$\mathcal{S}$ the ratio of the time-domain efficiency to the square law at
-$V_{a}=0.7\,V_{u}$ for the reference device ($0.86$, $0.89$, $0.60$ at
-$100$~K and $1.14$, $1.10$, $0.81$ at $300$~K for $0.1$, $0.3$, $1\THz$).
-The assumption that saturation occurs at a fixed $V_{a}/V_{u}$ was tested
-by a time-domain ladder at $(5\times10^{11}\percm,10\nm)$: $\mathcal{S}$
-agrees to $0.2\%$ at $300$~K and is $0.76$ instead of $0.89$ at $100$~K, so
-the $100$~K peak values at low density and thin gates are upper estimates
-by $10$ to $20\%$.
+The powers and efficiencies of Figs.~\ref{fig:operating}(a) and (b) come
+from the small-signal solver alone. At each grid point the largest
+first-order drift speed in the device, $\max|\bm{u}_{1}|$ per unit antenna
+amplitude, gives the amplitude $V_{\mathrm{lim}}$ at which the drift
+reaches $0.3\,\vF$, the available power
+$P_{\mathrm{lim}}=V_{\mathrm{lim}}^{2}/8\Rant$, and the efficiency
+$(\eta/\Pav)\,P_{\mathrm{lim}}$ of the square law there. The time-domain
+runs support the two extrapolations in amplitude: for the reference
+device the largest drift speed
+is linear in the amplitude to $9\%$ up to $0.3\,\vF$ and the efficiency
+follows the square law of the same solver to $7\%$, and a second ladder
+at $(5\times10^{11}\percm,10\nm)$ gives $12\%$ and $9\%$. They do not
+confirm the level at $100$~K. There the time-domain solver, which has no
+viscoelastic term, finds a drift per unit amplitude smaller by factors of
+$1.1$, $1.5$ and $2.5$ at $0.1$, $0.3$ and $1\THz$ and a different square
+law (Sec.~\ref{sec:large}); the grid values are those of the small-signal
+solver. At $300$~K the two agree on the drift to $3\%$ and on the law to
+$1\%$ at $0.1$ and $0.3\THz$.
 
 \section{Steady gated flow in one dimension}
 \label{app:gated}
@@ -66,8 +147,8 @@ the units of Appendix~\ref{app:perturbation}, so that
 \begin{equation}
 n\,h'(n)\,\frac{dn}{dx}=-\frac{\Gamma I}{W(x)} .
 \end{equation}
-With $G'(n)=n h'(n)$, i.e. $G=n^{2}/2$ for shallow water and
-$G=\tfrac23(1-q)n^{3/2}+qn$ for the Dirac closure, integration from the
+With $G'(n)=n h'(n)$, i.e. $G=n^{2}/2$ for the classical gas and
+$G=\tfrac23(1-q)n^{3/2}+qn$ for the Dirac gas, integration from the
 driven contact, where $n=n_{s}$, to the contact tied to the gate, where
 $n=1$, gives Eq.~\eqref{eq:1d}. The voltage of the driven contact is
 $\Phi(n_{s})$ with $\Phi=(1-q)(n-1)+2q(\sqrt{n}-1)$ in units of $V_{u}$.
@@ -81,12 +162,15 @@ V=\rho I-\tfrac14(\rho I)^{2},\qquad \rho=\Gamma\int_{0}^{L}\frac{dx}{W},
 \end{equation}
 and the ratio of the two voltage magnitudes is $1+\rho|I|/2=1+V/2V_{u}$,
 which is Eq.~\eqref{eq:dpol} with $U_{0}=(1-q)V_{u}$ and $q=0.039$; for
-shallow water the coefficient of $(\rho I)^{2}$ is $\tfrac12$ and the ratio
-is $1+V/U_{0}$. In a uniform channel the convective term can be kept: the
-equation becomes $(nh'-j^{2}/n^{2})\,dn/dx=-\Gamma j$ with $j=I/W$, with the
-integral $G(n)+j^{2}/n$, and the two-dimensional solver reproduces this
-closed form to $1.1\times10^{-4}$ for both closures and both signs up to
-$V=0.3\,U_{0}$. In a channel of varying width the convective term brings in
-$dW/dx$, and with it the inertial shape term of Sec.~\ref{sec:dc}, which is
-second order in the current.
+the classical gas the coefficient of $(\rho I)^{2}$ is $\tfrac12$ and the ratio
+is $1+V/U_{0}$. In a uniform channel the inertia can be kept. For the
+classical gas the equation becomes $(nh'-j^{2}/n^{2})\,dn/dx=-\Gamma j$
+with $j=I/W$, with the integral $G(n)+j^{2}/n$. For the Dirac gas the
+three inertial terms of Eq.~\eqref{eq:mom} cancel in one dimension and
+what remains of Eq.~\eqref{eq:exact} is of relative order $u^{2}/\vF^{2}$;
+it is integrated numerically. The two-dimensional solver reproduces both
+to $1.1\times10^{-4}$ for both signs up to $V=0.3\,U_{0}$, and the Dirac
+gas to $7\times10^{-5}$ up to a drift of $0.8\,\vF$. In a channel of
+varying width the inertia brings in $dW/dx$, and with it the inertial
+shape term of Sec.~\ref{sec:dc}, which is second order in the current.
 

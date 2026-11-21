@@ -1,6 +1,7 @@
 % Supplemental Material for "Shape versus circuit: graphene geometric
 % diodes and Tesla valves as terahertz rectifiers".
-% Draft 2026-11-12. Numbers from results/*.md and results/checks/.
+% Draft 2026-11-19 (seventh draft: tests of the momentum equation of the Dirac gas, Stage H6).
+% Numbers from results/*.md and results/checks/.
 \documentclass[aps,prapplied,onecolumn,superscriptaddress,floatfix]{revtex4-2}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
@@ -13,6 +14,7 @@
 \newcommand{\nm}{\,\mathrm{nm}}
 \newcommand{\THz}{\,\mathrm{THz}}
 \newcommand{\GHz}{\,\mathrm{GHz}}
+\newcommand{\AW}{\,\mathrm{A/W}}
 
 \begin{document}
 \title{Supplemental Material: Shape versus circuit: graphene geometric diodes and Tesla valves as terahertz rectifiers}
@@ -130,6 +132,7 @@ T30 & convergence of the rectified current of G3 at $1\THz$ & converged from $4\
 T31a & the rewritten wall routine with $h=0$ and $p=1$ against the earlier code, same seed & identical in every output column \\
 T31b & rough wall, $h=2.4\nm$: fraction of specular reflections at $0$, $30$, $60$ and $80^{\circ}$ for $k_{F}$ and $0.6\,k_{F}$; angles of the other electrons against $(1-p)\cos\theta'$; a cosine-law flux in gives a cosine-law flux out & all eight fractions within $2.7$ standard errors of Eq.~(3) of the main text; $\chi^{2}=16.8$ and $17.4$ on 18 bins; $\chi^{2}=20.9$, against $1.2\times10^{5}$ with cosine-law re-emission \\
 T31c & closed funnel with rough walls, no field, no scattering, $20$~ps, $10^{8}$ wall hits: particle share of four regions against their area, and $\langle\cos2\varphi\rangle$ in each & largest deviation $1.7$ standard errors; with cosine-law re-emission $179$ \\
+T32a & the program with the contact options, ideal contacts, against the earlier one on four short runs & identical in every output column \\
 T32b & contacts that reflect: absorbed fraction at $0$, $10$, $25$, $50$ and $80^{\circ}$ for $k_{F}$ and $0.6\,k_{F}$, for a transparency of $0.5$ and for a junction of $38\nm$ & all twenty fractions within $2.7$ standard errors of $T$ and of Eq.~(4) of the main text \\
 T32c & conductance of a clean strip between two such contacts over its value between ideal ones, interaction off, $\pm5$~mV & $0.600\pm0.002$, $0.331\pm0.002$ and $0.143\pm0.001$ against $T/(2-T)=0.600$, $0.333$ and $0.143$; junctions of $7$ and $38\nm$: $0.331\pm0.002$ and $0.140\pm0.002$ against $0.325$ and $0.140$ \\
 T32d & the funnel between contacts of transparency $0.25$ and behind junctions of $38\nm$ with no drive, with the interaction (gate at $30\nm$) and without & currents $+0.02\pm0.02$, $-0.01\pm0.02$, $+0.02\pm0.02$ and $+0.02\pm0.02$; particle number constant to $0.02\%$; injection that is not reduced by $T$, the error the test is for, raises the particle number by $268\%$ \\
@@ -195,7 +198,9 @@ under the shape-only drive, which must give no rectified current, gives
 $-0.003\pm0.017$, $+0.056\pm0.028$ and $+0.025\pm0.028\ \mu$A at $0.3$,
 $1$ and $3\THz$ under the $300\nm$ gate and $-0.051\pm0.028$,
 $+0.038\pm0.022$ and $-0.093\pm0.052\ \mu$A under the $30\nm$ gate; the
-weighted mean is $+0.008\pm0.023\ \mu$A, and $\chi^{2}$ against zero is
+weighted mean is $+0.008\ \mu$A, with an error of $0.010\ \mu$A from the
+batch errors and $0.023\ \mu$A from the scatter of the six values, and
+$\chi^{2}$ against zero is
 $14.4$ for the six runs, so the batch errors are too small by about
 $1.5$ or there is a floor of about $0.05\ \mu$A, which is what the main
 text assumes. With half-diffuse walls the same control gives
@@ -229,7 +234,7 @@ the shape-only drive, with specular walls. $R_{c}$ is the contact
 resistance that a transfer-length measurement would report. ``Series'' is
 the current of the funnel between ideal contacts behind a series
 resistance of $(1-T)/T$ times the Sharvin resistance of the lead at each
-contact, $s^{3}$ of the ideal value with $s$ the share of the voltage
+contact, $\beta^{3}$ of the ideal value with $\beta$ the share of the voltage
 left on the device. The junctions of $7$ and $38\nm$ are set against the
 transparencies $0.5$ and $0.25$, which give a clean strip the same
 conductance. The last column is the rise of the mean kinetic energy per
@@ -324,9 +329,13 @@ U1 & units & Poiseuille and Brinkman resistances equal the Gurzhi and Drude form
 \end{table}
 
 Below $\mathrm{Re}\approx1$ the diodicity is under the discretisation floor of
-about $3\times10^{-5}$ and is reported as a bound. For the classical valve
-with no-slip walls the steady branch continued from Stokes flow ends at a
-fold near $\mathrm{Re}=85$; this is outside the range relevant to graphene.
+about $3\times10^{-5}$ and is reported as a bound. For the side-loop valve
+of test H6, treated as a classical device with no-slip walls, the steady
+branch continued from Stokes flow ends at a
+fold near $\mathrm{Re}=85$, and the value at $\mathrm{Re}=100$ in the
+table is a sample of another branch; this is outside the range relevant
+to graphene. The four-loop valve of the main text converged at
+$\mathrm{Re}=25$, $50$ and $100$ in a continuation through those values.
 
 \begin{table}[ht]
 \caption{Mesh convergence of the classical Tesla valve ($175\nm$ channel, no
@@ -358,8 +367,11 @@ about $10\%$.
 
 \begin{table}[ht]
 \caption{Acceptance tests of the perturbation solver (P1 to P9, P15 to P17)
-and of the time-domain solver (P10 to P14). All pass. In the code the steady
-gated tests P18 to P20 below are numbered T18 to T20.}
+and of the time-domain solver (P10 to P14), with the momentum equation of
+the degenerate Dirac gas, Eq.~(8) of the main text; P1 to P6 are run with
+the classical gas, which has the ordinary convective term. All
+pass. In the code the steady gated tests P18 to P20 below are numbered T18
+to T20 and the tests P21 to P27 of the momentum equation T33 to T39.}
 \begin{ruledtabular}
 \begin{tabular}{lp{0.42\textwidth}p{0.46\textwidth}}
 Test & What is checked & Result \\
@@ -370,17 +382,17 @@ P3 & position and width of the first plasmon resonance, with friction, viscosity
 P4 & photoresponse against the Dyakonov-Shur closed form~\cite{dyakonov1996detection} and an independent quadrature & errors $2\times10^{-7}$ to $2\times10^{-4}$ \\
 P5 & funnel, quasi-static rectified current: curvature of the steady solution against perturbation & $2.206\times10^{-2}$ against $2.210\times10^{-2}$ \\
 P6 & time domain against perturbation at small amplitude & ratios 0.9997 and 0.9994 \\
-P7 & symmetric termination: dc current of a symmetric constriction and of a channel relative to the funnel & $6\times10^{-7}$ and $10^{-8}$ against $1.6\times10^{-3}$ \\
-P8 & mesh convergence of the funnel response on three meshes & last change 2.0 \% and 1.1 \% at reduced frequency 1 and 3 \\
+P7 & symmetric termination: dc current of a symmetric constriction and of a channel relative to the funnel & $6\times10^{-7}$ and $10^{-8}$ against $8\times10^{-4}$ \\
+P8 & mesh convergence of the response of the $175\nm$ funnel on wall meshes of 28, 20 and 14 nm & last change 1.8 \% and 1.1 \% at reduced frequency 1 and 3 \\
 P9 & units & plasma speed, gate overdrive, resistance and frequency units against hand values \\
-P10 & time-domain efficiency against the time-discrete perturbation law & ratios 1.0033 and 1.0038 \\
-P11 & dc load correction from a deliberately wrong bias seed & 1.0016 (short circuit), 1.0017 (open circuit) \\
-P12 & time step: 60 against 120 steps per period at $100$~K & efficiency ratio 0.991 \\
+P10 & time-domain efficiency against the time-discrete perturbation law & ratios 1.0048 and 1.0063 \\
+P11 & dc load correction from a deliberately wrong bias seed & 1.0023 (short circuit), 1.0024 (open circuit) \\
+P12 & time step: 60 against 120 steps per period at $100$~K, amplitude $0.3$ of the voltage unit (drift $0.8\,v_{F}$) & efficiency ratio 0.979 \\
 P13 & power bookkeeping & absorbed power within 0.2 \% of the linear value \\
-P14 & P10 for the symmetric termination & ratio 0.998 \\
-P15 & contact resistance: $I_{\mathrm{sc}}(R_{\mathrm{dc}}+2R_{c})=V_{\mathrm{oc}}$; port relations; passivity & $7\times10^{-15}$; $4\times10^{-16}$; absorbed fraction 0.39 \\
+P14 & P10 for the symmetric termination & ratio 0.996 \\
+P15 & contact resistance: $I_{\mathrm{sc}}(R_{\mathrm{dc}}+2R_{c})=V_{\mathrm{oc}}$; port relations; passivity & $3.5\times10^{-15}$; $4\times10^{-16}$; absorbed fraction 0.39 \\
 P16 & invariance under co-scaling of density, gate distance, width and scattering times at fixed nondimensional groups & nondimensional response identical to round-off \\
-P17 & units and closure at a second operating point & closed forms to $2\times10^{-16}$; Dirac against shallow-water response ratio 0.970 \\
+P17 & units and equation of state at a second operating point & closed forms to $2\times10^{-16}$; response of the Dirac gas against its closed form, Eq.~(A5), to $9\times10^{-4}$ (0.50 of the classical response with each gas in its own voltage unit; 0.43 at equal amplitude in volts) \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
@@ -390,14 +402,134 @@ time-discretised operator, which removes a start-up transient that would
 otherwise exceed the rectified signal at small amplitude; the dc load
 current is held at the small-signal prediction and corrected with the dc
 Thevenin relation. The level of the square law carries the 60-step
-time-discretisation bias ($+0.6\%$, $+4.5\%$ and $-0.5\%$ at 0.1, 0.3 and
-1 THz) and the $2\%$ mesh uncertainty of P8; the ratios to the square law
-quoted in the main text are taken against the time-discrete law, so the
-bias cancels. The shape of the response is converged in the time step: at
-$100$~K the efficiency ratio between 60 and 120 steps per period is 0.991
-(P12), and at $300$~K the ratio of the efficiency to the square law changes
-from 0.992, 1.054, 1.101 to 1.004, 1.058, 1.109 at amplitudes 0.1, 0.5, 0.7
-of the voltage unit at 0.3 THz, and from 1.144 to 1.145 at 0.7 at 0.1 THz.
+time-discretisation bias ($+0.4\%$, $+0.8\%$ and $-4.4\%$ at 0.1, 0.3 and
+1 THz at $100$~K, $1\%$ or less at $300$~K) and the error of the $80\nm$
+mesh on which these runs were made (Table~\ref{tab:thzmesh}); the ratios to the square law
+quoted in the main text are taken against the time-discrete law on the
+same mesh, so
+both cancel. At $1\THz$ the time-domain efficiency at the smallest
+amplitude differs from that law by $10\%$ at $100$~K and $3\%$ at
+$300$~K; the curves of Fig.~7(b) of the main text are
+normalised at the smallest amplitude. In the time step the
+efficiency ratio between 60 and 120 steps per period is 0.979 at an
+amplitude of $0.3$ of the voltage unit, where the drift is $0.8\,v_{F}$
+(P12); it is 0.991 at the same amplitude with the ordinary convective
+term, which has no limit at $v_{F}$.
+
+\begin{table}[ht]
+\caption{Mesh convergence of the small-signal response of the $1\um$
+funnel: current responsivity in A/W on meshes with $80$, $40$ and $20\nm$
+at the walls ($18\,601$, $41\,509$ and $98\,963$ nodes; largest interior
+element six times the wall spacing), the limit of a Richardson
+extrapolation with the observed rate, and the part of the limit that the
+$20\nm$ mesh misses.}
+\label{tab:thzmesh}
+\begin{ruledtabular}
+\begin{tabular}{llccccc}
+Set, termination & $f$ (THz) & 80 nm & 40 nm & 20 nm & limit & missing \\
+\hline
+$100$~K, DS & 0.108 & 0.165 & 0.168 & 0.169 & 0.171 & 0.9 \% \\
+ & 0.279 & 0.223 & 0.236 & 0.243 & 0.256 & 4.8 \% \\
+ & 0.568 & 0.194 & 0.212 & 0.223 & 0.238 & 6.3 \% \\
+ & 0.914 & 0.238 & 0.256 & 0.259 & 0.260 & 0.4 \% \\
+$100$~K, shape only & 0.108 & 0.0249 & 0.0307 & 0.0337 & 0.0371 & 9.2 \% \\
+ & 0.279 & 0.0678 & 0.0790 & 0.0858 & 0.0963 & 10.9 \% \\
+ & 0.568 & 0.0627 & 0.0671 & 0.0696 & 0.0727 & 4.3 \% \\
+ & 0.914 & 0.0705 & 0.0770 & 0.0780 & 0.0782 & 0.2 \% \\
+$300$~K, DS & 0.108 & 0.0558 & 0.0557 & 0.0556 & 0.0554 & $-0.3$ \% \\
+ & 0.279 & 0.0553 & 0.0552 & 0.0551 & 0.0550 & $-0.3$ \% \\
+ & 0.914 & 0.0518 & 0.0524 & 0.0525 & 0.0525 & 0.1 \% \\
+$300$~K, shape only & 0.108 & $2.9\times10^{-4}$ & $3.8\times10^{-4}$ & $4.1\times10^{-4}$ & $4.3\times10^{-4}$ & 4.6 \% \\
+ & 0.279 & 0.00131 & 0.00139 & 0.00143 & 0.00146 & 2.4 \% \\
+ & 0.568 & 0.00166 & 0.00168 & 0.00169 & 0.00169 & 0.2 \% \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The small-signal results of the $1\um$ funnel, of the plain-channel
+control and of the density and gate grid in the main text are from the
+$20\nm$ mesh of Table~\ref{tab:thzmesh}. Over the $25$ frequencies up to
+$1\THz$ that mesh misses at most $6\%$ of the extrapolated DS response at
+$100$~K and $11\%$ of the shape-only response, and $0.3\%$ and $5\%$ at
+$300$~K. Two errors are distinct. The first is at the walls and at the
+re-entrant corners of the taper, converges slowly, and matters at $100$~K,
+where the viscous boundary layer is thin. The $80\nm$ mesh, on which the
+large-signal runs were made and cannot be repeated on a finer one with the
+memory available, is low by up to $21\%$ in the DS response at $100$~K
+between $0.3$ and $1\THz$ and by a quarter in the shape-only response; at
+$300$~K it is within $2\%$ and $7\%$ above $0.2\THz$. The second is in the interior. The $80\nm$ mesh
+has elements of up to $480\nm$ in the leads, the plasma wavelength at the
+reference point is $3.6\um$ at $1\THz$ and $1.2\um$ at $3\THz$, and with
+fewer than about eight elements per wavelength the response is wrong: at
+$3\THz$ and $300$~K the $80\nm$ mesh gives $0.025\AW$ and the $20\nm$ mesh,
+with $120\nm$ inside, $0.044\AW$, which a mesh with $60\nm$ inside
+reproduces to $1.5\%$. The $20\nm$ mesh is therefore good to about $3\%$
+up to $3\THz$ at $300$~K. At $100$~K it is not converged above $1.2\THz$
+($0.115$ against $0.157\AW$ at $3\THz$ for wall meshes of $20$ and $80\nm$
+with the same interior), nor is the shape-only response above $1\THz$, where it changes sign, and no
+$100$~K result is given there. On the density and gate grid the
+plasma speed falls to $0.98\times10^{6}$~m/s, and the $80\nm$ mesh would
+have two elements per wavelength at $1\THz$; the $20\nm$ mesh has eight.
+The same interior error produced an apparent shape-only response of the
+plain channel, whose exact value is zero, of $8\times10^{-3}\AW$ at
+$0.9\THz$ on the $80\nm$ mesh; on the $20\nm$ mesh it is below
+$3\times10^{-6}\AW$ up to $1\THz$.
+
+For the $175\nm$ funnel and the Tesla valve the production mesh has
+$14\nm$ at the walls and $84\nm$ inside. Against a mesh of $20\nm$ the DS
+responses differ by $1$ to $3.5\%$ of their largest value and the
+shape-only responses by $2.5$ to $4\%$ for the funnel and $8$ to $11\%$
+for the Tesla valve; at the taper resonance the two meshes agree to
+$0.2\%$. Where the shape-only response is small the difference is as
+large as the value, so that shape-only responses of these two devices
+below about $5\times10^{-4}\AW$, and of the $1\um$ funnel below about
+$10^{-4}\AW$, are not established in magnitude or sign.
+
+Without viscosity the solver is used for the uniform channel only. There
+the response of the Dirac gas is half that of the classical gas, as
+Eq.~(A6) of the main text requires, to $10^{-4}$ for the ideal source
+and to $1.5\%$ for a plain channel on the antenna. In the $1\um$ funnel
+without viscosity the ratio is $0.16$, $0.25$ and $0.31$ at $0.1\THz$ on
+the three meshes of Table~\ref{tab:thzmesh} and $0.43$, $0.45$ and $0.46$
+at $1\THz$: the corners spoil the inviscid solution and it converges
+towards the identity only slowly. Every result for a channel with corners
+is computed with the viscosity of Table~I of the main text or, in the
+sensitivity run of Sec.~IV~A, a fifth of it; at those viscosities the
+choice between pinning the corner nodes and letting them slide changes
+the DS response by $3\%$ or less on the $20\nm$ mesh.
+
+\begin{table}[ht]
+\caption{Tests of the momentum equation of the Dirac gas. ``Legacy'' is
+the ordinary convective term with the density-dependent mass, which the
+code keeps as an option and with which the comparisons of Sec.~IV~A of
+the main text are made. All pass.}
+\begin{ruledtabular}
+\begin{tabular}{lp{0.46\textwidth}p{0.42\textwidth}}
+Test & What is checked & Result \\
+\hline
+P21 & legacy option against results stored before Eq.~(8) was implemented: channel (25 frequencies), $1\um$ funnel with both terminations, time domain at two amplitudes, steady gated flow & 123 numbers identical to the last digit \\
+P22 & uniform channel against the closed form, Eq.~(A5): $\alpha=0$, $1/2$ and $1$, quantum-capacitance share $0.04$ and $0.3$, friction $1$ and $0.1$, five frequencies & 60 points, worst error $1.3\times10^{-3}$ \\
+P23 & a small pulse on a fluid drifting at $u_{0}$: sum of the two wave speeds over $u_{0}$ & Dirac gas $0.997$ at $0.07\,v_{F}$ and $1.012$ at $0.18\,v_{F}$ (linearised equation $1.002$ and $1.016$); legacy $1.999$ ($2.000$) \\
+P24 & steady gated channel against a quadrature of the one-dimensional equation: exact, second order, legacy & worst error $1.3\times10^{-5}$ below $0.3\,v_{F}$, $7\times10^{-5}$ up to $0.8\,v_{F}$; legacy quadrature against its closed form to $8\times10^{-13}$ \\
+P25 & steady radial flow in a $60^{\circ}$ sector of a ring, outward and inward at $0.3\,v_{F}$, against the radial momentum balance written from the stress tensor & exact equation: $2$ and $3\times10^{-4}$ of the inertial part of the voltage; second order: $2$ and $4\times10^{-3}$ \\
+P26 & the $1\um$ funnel mesh rotated by $30^{\circ}$ & small-signal current and steady voltage equal to $4\times10^{-15}$ \\
+P27 & time domain with the exact equation against perturbation with the second-order one, graphene channel & ratios $0.9997$ and $1.0016$ at amplitudes $0.01$ and $0.03$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+The exact form of the momentum equation, Eq.~(A7) of the main text, was
+checked before use in three ways that do not involve the solver: the
+angular integrals of the drifting distribution give the momentum density
+and the stress on which it rests; its wave speeds on an ungated fluid
+drifting at $0.05$ to $0.8\,v_{F}$ equal the relativistic addition of
+velocities to six digits; and it equals the Euler equation of an ideal
+relativistic fluid multiplied by an invertible matrix. In P25 the steady
+solver needs a small viscosity to converge; the only contribution of the
+viscous term to a radial flow at this order is its natural boundary
+condition at the two contacts, a potential
+$\nu J(r_{1}^{-2}-r_{2}^{-2})$ for a flux $J$ per radian, which is added
+to the reference.
 
 \begin{table}[ht]
 \caption{Acceptance tests of the steady gated solver, with the gate
@@ -406,8 +538,8 @@ overdrive $U_{0}$ as the unit of bias. All pass.}
 \begin{tabular}{lp{0.47\textwidth}p{0.41\textwidth}}
 Test & What is checked & Result \\
 \hline
-P18 & uniform gated channel, steady voltage against the one-dimensional closed form with inertia, both closures, both signs, up to $0.3\,U_{0}$ & worst relative error $1.1\times10^{-4}$ \\
-P19 & mirror-symmetric constriction at $0.1\,U_{0}$: asymmetry under exchange of the contacts against asymmetry under reversal of polarity & $3.8\times10^{-6}$ against $4.96\times10^{-2}$ \\
+P18 & uniform gated channel, steady voltage against the one-dimensional equation with inertia (closed form for the classical gas, quadrature for the Dirac gas), both signs, up to $0.3\,U_{0}$ & worst relative error $1.1\times10^{-4}$ \\
+P19 & mirror-symmetric constriction at $0.1\,U_{0}$: asymmetry under exchange of the contacts against asymmetry under reversal of polarity & $3.7\times10^{-6}$ against $5.18\times10^{-2}$ \\
 P20 & incompressible limit: funnel, slip walls, $\mathrm{Re}=10$, Mach number $10^{-3}$, against the viscous solver on the same mesh & $D=0.83845$ against $0.83843$ \\
 \end{tabular}
 \end{ruledtabular}
@@ -418,32 +550,37 @@ P20 & incompressible limit: funnel, slip walls, $\mathrm{Re}=10$, Mach number $1
 ($300$~K parameters, slip walls): asymmetry under exchange of the contacts
 at two biases, its linear coefficient $a$ and quadratic coefficient $b$ in
 $D-1=a\,(V/U_{0})+b\,(V/U_{0})^{2}$ from those two points, and the asymmetry
-under reversal of polarity at $V/U_{0}=0.03$, for which the closed form is
-$1.4521\times10^{-2}$.}
+under reversal of polarity at $V/U_{0}=0.03$, for which the closed form
+without inertia is $1.4521\times10^{-2}$; the terms of order
+$u^{2}/v_{F}^{2}$ of the exact equation add about $1\%$ to it at this
+bias.}
 \label{tab:gatedmesh}
 \begin{ruledtabular}
 \begin{tabular}{lccccc}
 Wall spacing & exchange, $0.01$ & exchange, $0.03$ & $a$ & $b$ & polarity, $0.03$ \\
 \hline
-28 nm & $-1.0\times10^{-4}$ & $-3.3\times10^{-4}$ & $-9.7\times10^{-3}$ & $-0.044$ & $1.4246\times10^{-2}$ \\
-20 nm & $-4.0\times10^{-5}$ & $-1.5\times10^{-4}$ & $-3.5\times10^{-3}$ & $-0.049$ & $1.4434\times10^{-2}$ \\
-14 nm & $-1.9\times10^{-5}$ & $-8.9\times10^{-5}$ & $-1.4\times10^{-3}$ & $-0.051$ & $1.4498\times10^{-2}$ \\
-10 nm & $-7.4\times10^{-6}$ & $-5.4\times10^{-5}$ & $-2.1\times10^{-4}$ & $-0.053$ & $1.4535\times10^{-2}$ \\
+28 nm & $-1.5\times10^{-4}$ & $-4.8\times10^{-4}$ & $-1.5\times10^{-2}$ & $-0.037$ & $1.420\times10^{-2}$ \\
+20 nm & $-6.5\times10^{-5}$ & $-2.2\times10^{-4}$ & $-6.1\times10^{-3}$ & $-0.040$ & $1.447\times10^{-2}$ \\
+14 nm & $-3.2\times10^{-5}$ & $-1.2\times10^{-4}$ & $-2.8\times10^{-3}$ & $-0.042$ & $1.458\times10^{-2}$ \\
+10 nm & $-1.4\times10^{-5}$ & $-6.7\times10^{-5}$ & $-9.4\times10^{-4}$ & $-0.043$ & $1.463\times10^{-2}$ \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
 
 The linear coefficient $a$ of Table~\ref{tab:gatedmesh} is forbidden by
 the one-dimensional argument of the main text and falls with the mesh size,
-while the quadratic, inertial coefficient $b$ is stable; the low-bias
+while the quadratic, inertial coefficient $b$ changes by a sixth; with the
+gate tied to the other contact $a$ falls in the same way and $b$ moves
+from $-0.065$ to $-0.050$. The low-bias
 exchange asymmetry is therefore reported as a bound. For the Tesla valve
-the exchange asymmetry at $V/U_{0}=0.01$ falls from $2\times10^{-6}$ to
-$1.5\times10^{-7}$ between wall spacings of 20 and 10 nm. The
+the exchange asymmetry at $V/U_{0}=0.01$ falls from $3\times10^{-6}$ to
+$4\times10^{-7}$ between wall spacings of 20 and 10 nm. The
 mirror-symmetric constriction of P19 has an unstructured mesh that is not
 itself mirror symmetric, so its exchange asymmetry measures the
-discretisation floor. One production point did not converge, the straight
-channel at $100$~K and $0.3\,U_{0}$, where the drift speed would exceed the
-Fermi velocity several times over; it is not used.
+discretisation floor. Twelve of the 112 production points have no steady
+state, because the bias would require a drift speed above the Fermi
+velocity somewhere in the device; all of them are at $0.2$ or $0.3\,U_{0}$,
+and they are not used.
 
 \section{Production parameters}
 
@@ -454,7 +591,11 @@ $\vF/40f$ and to one twentieth of the field region. Length scaling: static
 curves at $\pm0.05$ and $\pm0.1$~V with $2\times10^{6}$ trajectories per
 side ($4\times10^{6}$ with scattering), frequency sweeps from $10\GHz$ to
 $30\THz$ with $10^{6}$ ($4\times10^{6}$) per side, stopped where $fL/\vF$
-exceeds about 20; 174 sweep points, 22 controls. Computed field: grid
+exceeds about 20; 174 sweep points, 22 controls. The contacts of all
+ballistic runs are at a chemical potential of $0.138$~eV and $300$~K,
+which gives the gas an electron density of $1.56\times10^{12}$~cm$^{-2}$
+($0.0156$ per nm$^{2}$; $3180$ electrons in the $0.55\um$ funnel).
+Computed field: grid
 spacing $5.013\nm$, chosen so that both contact planes lie on node
 columns, time step $2.5$~fs, $8\times10^{6}$ particles for the driven
 runs and $4\times10^{6}$ for the static runs and at $0.1\THz$; averages
@@ -469,16 +610,30 @@ pooled from seven or six and from two runs. The rough-wall points are
 single runs except that at $h=2.4\nm$, which pools two seeds
 ($0.152\pm0.016$ and $0.125\pm0.018\ \mu$A under the $300\nm$ gate,
 $0.140\pm0.019$ and $0.145\pm0.020\ \mu$A under the $30\nm$ gate). Steady gated flow: wall
-spacing $20\nm$ for the $175\nm$ devices and $80\nm$ for the $1\um$
-devices, seven biases from $10^{-3}$ to $0.3$ of the gate overdrive, four
+spacing $20\nm$ for the $175\nm$ devices and the symmetric constriction, $80\nm$ for the $1\um$
+funnel, $114\nm$ for the $1\um$ Tesla valve and $50\nm$ for the straight channel, seven biases from $10^{-3}$ to $0.3$ of the gate overdrive, four
 steady solutions per point (two polarities for each of the two gate
 connections), 112 points. Viscous: Taylor-Hood
 meshes with $20\nm$ wall spacing ($23\,000$ to $55\,000$ triangles),
 Newton residual below $10^{-10}$. Plasmonic small signal: wall spacing
-$14\nm$ for the $175\nm$ devices and $80\nm$ ($18\,601$ nodes) for the
-$1\um$ funnel, 25 frequencies from 10 GHz to 3 THz. Plasmonic large signal:
-the same $1\um$ mesh, 60 steps per period, eight amplitudes from $0.01$ to
-$0.7$ of the voltage unit.
+$14\nm$ for the $175\nm$ funnel and the Tesla valve ($65\,927$ and
+$97\,491$ nodes) and $20\nm$ ($98\,963$ nodes) for the
+$1\um$ funnel, 25 frequencies from 10 GHz to 3 THz; the density and gate
+grid and the contact resistances at $0.1$, $0.3$ and $1\THz$ on the same
+$20\nm$ mesh. Plasmonic large signal:
+the $1\um$ funnel on a mesh of $80\nm$ at the walls ($18\,601$ nodes), 60 steps per period, eleven amplitudes from $0.01$ to
+$0.7$ of the voltage unit, each ladder ending at the last amplitude at
+which the drift speed stays below the Fermi velocity, except two that
+were stopped earlier: six amplitudes up to $0.3$ at $100$~K and
+$1\THz$ (drift $0.56\,v_{F}$) and five up to $0.2$ for the symmetric
+drive at $1\THz$ ($0.26\,v_{F}$). The
+variants of Sec.~IV~A of the main text (contact condition, coefficients of
+the gas at finite temperature, plain channel) use the meshes of the
+devices they vary. The runs with a fifth of the viscosity are on a mesh
+of $40\nm$. The comparison of the $1\um$ funnel with the ordinary
+convective term is made on the $20\nm$ mesh for both equations; on the
+$80\nm$ mesh the ratio of the two responses differs by $9\%$ or less
+between $10\GHz$ and $1\THz$.
 
 \bibliography{refs,refs_detectors,refs_prior}
 
