@@ -25,6 +25,76 @@ inline double gated_channel_n0(const ClosureFn& c, double GammaL, double j) {
   return n;
 }
 
+// The same channel for any convective closure, exact Dirac gas included: the steady
+// one-dimensional momentum balance
+//   (A + c_div + 2 c_grad) u u' + Gamma u = -(h'(n) - E) n',   u = j / n,
+//   A = 1 + gamma^2 b2 / 2,  b2 = u^2 / (2 q),  E = (1 - gamma^(-1/2)) (1 - q) / sqrt n + b2 q / n
+// (A = 1, E = 0 unless the closure is exact) integrated from the grounded contact (n = 1 at
+// x = L) to the driven one with RK4. Returns the density at the driven contact, or -1 if
+// the drift reaches v_F or the flow chokes on the way.
+inline double gated_channel_ode(const ClosureFn& c, double Gamma, double L, double j, int nstep = 20000) {
+  const double cc = c.cdiv() + 2 * c.cgrad();
+  const bool ex = c.exact();
+  bool bad = false;
+  auto rhs = [&](double n) {
+    double u = j / n, A = 1, E = 0;
+    if (ex) {
+      double b2 = u * u / (2 * c.q);
+      if (b2 >= 1) { bad = true; return 0.0; }
+      A = 1 + 0.5 * b2 / (1 - b2);
+      E = (1 - std::pow(1 - b2, 0.25)) * (1 - c.q) / std::sqrt(n) + b2 * c.q / n;
+    }
+    double den = c.hp(n) - E - (A + cc) * u * u / n;
+    if (den <= 0) { bad = true; return 0.0; }
+    return -Gamma * u / den;
+  };
+  double n = 1.0, h = -L / nstep;   // from x = L down to x = 0
+  for (int i = 0; i < nstep && !bad; ++i) {
+    double k1 = rhs(n), k2 = rhs(n + 0.5 * h * k1), k3 = rhs(n + 0.5 * h * k2), k4 = rhs(n + h * k3);
+    n += h * (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+    if (n <= 0) bad = true;
+  }
+  return bad ? -1.0 : n;
+}
+
+// Steady radial flow in a sector of a ring, r1 < r < r2, flux J per radian outward from the
+// inner contact (negative: inward), outer contact grounded (n = 1). Written in the conservative
+// form, from the momentum per particle M u and the pressure P of the gas, not from the velocity
+// form the solvers use:
+//   u d(M u)/dr + (1/n) dP/dr + (1 - q) dn/dr + Gamma M u = 0,   n u r = J.
+// model 0: no inertia (friction and the static force only);
+// model 1: M = sqrt n, P = P0(n) = (2 q / 3) n^(3/2): the Tomadin-Polini form (c_div -1/2, c_grad 0);
+// model 2: M = sqrt n, P = P0 - n^(3/2) u^2 / 4: the degenerate Dirac gas to second order;
+// model 3: M = sqrt(n) gamma^(1/2), P = P0 gamma^(-3/2): the same gas exactly.
+// Returns the density at the inner contact (-1 if u reaches v_F).
+inline double radial_reference(int model, double q, double Gamma, double r1, double r2, double J, int nstep = 20000) {
+  bool bad = false;
+  auto gam = [&](double u) { double b2 = u * u / (2 * q); if (b2 >= 1) { bad = true; return 1.0; } return 1 / std::sqrt(1 - b2); };
+  auto Mu = [&](double n, double u) { return model == 3 ? std::sqrt(n) * std::sqrt(gam(u)) * u : std::sqrt(n) * u; };
+  auto P = [&](double n, double u) {
+    double P0 = (2 * q / 3) * std::pow(n, 1.5);
+    if (model == 2) return P0 - 0.25 * std::pow(n, 1.5) * u * u;
+    if (model == 3) return P0 * std::pow(gam(u), -1.5);
+    return P0;
+  };
+  auto rhs = [&](double r, double n) {
+    double u = J / (n * r);
+    if (model == 0) return -Gamma * std::sqrt(n) * u / (q / std::sqrt(n) + (1 - q));
+    const double dn = 1e-6 * n, du = 1e-6 * std::max(std::fabs(u), 1e-6);
+    double Mn = (Mu(n + dn, u) - Mu(n - dn, u)) / (2 * dn), Mv = (Mu(n, u + du) - Mu(n, u - du)) / (2 * du);
+    double Pn = (P(n + dn, u) - P(n - dn, u)) / (2 * dn), Pv = (P(n, u + du) - P(n, u - du)) / (2 * du);
+    double den = u * Mn - Mv * u * u / n + Pn / n - Pv * u / (n * n) + (1 - q);
+    return (Mv * u * u / r + Pv * u / (n * r) - Gamma * Mu(n, u)) / den;
+  };
+  double n = 1.0, r = r2, h = (r1 - r2) / nstep;
+  for (int i = 0; i < nstep && !bad; ++i) {
+    double k1 = rhs(r, n), k2 = rhs(r + 0.5 * h, n + 0.5 * h * k1), k3 = rhs(r + 0.5 * h, n + 0.5 * h * k2), k4 = rhs(r + h, n + h * k3);
+    n += h * (k1 + 2 * k2 + 2 * k3 + k4) / 6; r += h;
+    if (n <= 0) bad = true;
+  }
+  return bad ? -1.0 : n;
+}
+
 struct SteadyPoint { double V = 0, umax = 0, nmin = 1, nmax = 1; bool ok = false; };
 
 // Steady state with a dc current I injected at contact `driven` (0 or 1) and the

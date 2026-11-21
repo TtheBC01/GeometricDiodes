@@ -1,7 +1,12 @@
 % Shape versus circuit: graphene geometric diodes and Tesla valves as
 % terahertz rectifiers.
-% Draft 2026-11-16 (fifth draft: reflecting contacts and device D with the
-% field computed, Stage B10; fourth draft 2026-11-15, rough edges, Stage B9;
+% Draft 2026-11-20 (eighth draft: text and figures corrected after the review in
+% paper/review_seventh_draft.md; small-signal results of the 1 um funnel from the 20 nm mesh,
+% results/thz2/fine, numbers as band ranges from tools/paper_numbers.py; seventh draft 2026-11-19:
+% the fluid model with the momentum equation of the degenerate
+% Dirac gas, Stage H6, results/HYDRO_MOMENTUM.md; sixth draft 2026-11-17, text corrections after
+% the review in paper/review_fifth_draft.md; fifth draft 2026-11-16,
+% reflecting contacts and device D with the field computed, Stage B10; fourth draft 2026-11-15, rough edges, Stage B9;
 % third draft 2026-11-12, the short ballistic funnel with the field
 % computed, Stage B8; second draft 2026-11-11 after the prior-work search and
 % Stages B7 and H5). Every number is taken from results/*.md of the repository (commit
@@ -49,52 +54,42 @@
 \date{\today}
 
 \begin{abstract}
-Geometric diodes, in which an asymmetric channel is meant to rectify by its
-shape, and electronic Tesla valves have both been proposed as junction-free
-rectifiers for terahertz rectennas in graphene. We compute the rectification
-of one set of funnel and Tesla-valve geometries in the ballistic, viscous
-and plasmonic transport limits with validated solvers, and separate in each
-what the shape contributes from what the circuit contributes. The Tesla
-valve does not rectify ballistically, rectifies a steady viscous flow only
-at Reynolds numbers above the drift-velocity limit of the graphene Fermi
-liquid, and adds $10^{-5}$ to $10^{-3}\AW$ at terahertz frequencies. With
-the gate included, a steady current in any channel, straight ones included,
-shows an asymmetry of $0.48$ times the bias over the gate overdrive when the
-polarity is reversed, and less than $10^{-3}$ when the contacts are
-exchanged. At terahertz frequencies the gated fluid is plasmonic: a funnel
-matched to a $75\ \Omega$ antenna responds at $0.07$ to $0.34\AW$, nearly
-all of it the Dyakonov-Shur asymmetry of its terminations, and its
-conversion efficiency follows the square law known for field-effect
-detectors up to the gate overdrive and peaks below one per cent for every
-carrier density and gate distance. The ballistic funnel is the one case in
-which the shape itself rectifies at terahertz frequencies, and its length
-decides whether it does: with a uniform imposed field the response
-depends on $fL/\vF$ alone, falls to half near $0.4$ and vanishes above
-$1.7$, which limits the $6\um$ funnel with the best documented dc
-asymmetry to tens of gigahertz. For a $0.55\um$ funnel we also compute the
-field, in a particle simulation with a gate, metal contacts and
-displacement current. At the room-temperature mean free path it rectifies
-$0.12\AW$ per absorbed watt at $1\THz$, a sixth of what the imposed
-fields give, because a quarter of the bias drops at the contacts. The
-figure is $0.10\AW$ at a mean free path of $100\nm$. It depends on the
-edges. For a rough edge, which reflects oblique electrons more
-specularly than head-on ones, the response is half its specular value at
-a head-on specularity of $0.5$ and vanishes at $0.2$; values from zero
-to $0.8$ have been measured for etched edges. Contacts act by what they
-do with oblique electrons, not by their resistance: contacts that
-reflect three quarters of the arriving electrons at every angle leave
-$0.07$ to $0.12\AW$, where the same resistance in series would leave
-$0.03\AW$, and contacts of equal resistance that pass only electrons
-near normal incidence leave $0.03\AW$ or less, of either sign. Under a
-gate at $30\nm$ a straight
-channel with its drain tied to the gate rectifies more than the funnel
-shape. In no regime does the conversion efficiency reach one per cent. A
-short graphene funnel is a square-law detector at the level of the
-plasmonic element, with a noise-equivalent power of the order of
-$100$~pW/Hz$^{1/2}$ at room temperature, only if its edges are among the
-more specular of the etched edges that have been measured and its
-contacts absorb at wide angles; it is not an
-energy harvester, and the Tesla valve is neither.
+Geometric diodes, asymmetric channels meant to rectify by their shape, and
+electronic Tesla valves have both been proposed as junction-free rectifiers
+for terahertz rectennas in graphene. We compute the rectification of one
+set of funnel and Tesla-valve geometries in the ballistic, viscous and
+plasmonic transport limits and separate what the shape contributes from
+what the circuit contributes. The Tesla valve is not a useful rectifier in
+any limit: its ballistic asymmetry appears only in the clean specular
+limit and has the wrong sign, its viscous diodicity is at most three per
+cent at the drift velocities the graphene Fermi liquid allows, and at
+terahertz frequencies its shape contributes at most $0.02\AW$. In the
+gated electron fluid, for which we use the momentum equation of the
+degenerate Dirac gas, the funnel rectifies mainly through its
+terminations: between $10\GHz$ and $1\THz$ a $1\um$ funnel on a
+$75\ \Omega$ antenna responds at $0.05$ to $0.26\AW$ with the
+Dyakonov-Shur termination and at $0.10\AW$ or less by its shape alone.
+Its response follows a square law up to a drift speed of three tenths of
+the Fermi velocity, the limit to which we trust the model, and that speed
+is reached at tens of microwatts. The ballistic funnel does rectify by its shape. In a uniform
+imposed field its response depends on $fL/\vF$ alone and is halved near
+$0.4$, which would limit the $6\um$ funnel with the best documented dc
+asymmetry to tens of gigahertz; the static field that we compute for that
+device is concentrated at its neck, however, and its terahertz response
+with a computed field remains open. For a $0.55\um$ funnel we compute the
+field in a particle simulation with a gate, metal contacts and
+displacement current. At $1\THz$ it rectifies $0.12\AW$ per absorbed watt,
+five to seven times less than imposed fields give, and only if its edges
+reflect head-on electrons specularly about half the time or more and its
+contacts absorb electrons arriving obliquely; under a gate closer than
+the device is long the gate connection rectifies more than the shape.
+Within the range in which the models are trusted the conversion
+efficiency is $10^{-5}$ to $5\times10^{-4}$ for the fluid element and
+$10^{-4}$ for the ballistic funnel. A matched
+array of short funnels that meets those conditions would be a square-law
+detector with a Johnson-limited noise-equivalent power of the order of
+$100$~pW/Hz$^{1/2}$ at room temperature; it is not an energy harvester,
+and the Tesla valve is neither.
 \end{abstract}
 
 \maketitle

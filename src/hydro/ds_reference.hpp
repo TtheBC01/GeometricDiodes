@@ -43,4 +43,21 @@ inline double quadrature(double Omega, double Gamma, double L, int nseg = 20000)
   return s * h / 3;
 }
 
+// General second-order closure (plans/hydro_momentum.md), one dimension:
+//   d_t u + alpha u d_x u + Gamma u = -d_x h(n),  h'(1) = 1, h''(1) = kappa,
+// source potential Phi(n) with Phi'(1) = 1, Phi''(1) = phi2, open drain. dc drain voltage per Va^2:
+//   (phi2 - kappa)/4 (|n1(L)|^2 - 1) + alpha/4 |u1(0)|^2 + Gamma/2 int_0^L Re(n1 u1*) dx.
+// alpha = 1, kappa = phi2 = 0 is the Dyakonov-Shur result; alpha = 1/2, phi2 = 0 is Eq. (43) of
+// Tomadin and Polini (checked in tools/momentum_step0.py).
+inline double general(double Omega, double Gamma, double L, double alpha, double kappa, double phi2, int nseg = 20000) {
+  cd k = std::sqrt(cd(Omega * Omega, -Omega * Gamma));
+  cd a(Gamma, Omega);
+  auto n1 = [&](double x) { return std::cos(k * (L - x)) / std::cos(k * L); };
+  auto u1 = [&](double x) { return -(k * std::sin(k * (L - x)) / std::cos(k * L)) / a; };
+  auto f = [&](double x) { return std::real(n1(x) * std::conj(u1(x))); };
+  double h = L / nseg, s = f(0) + f(L);
+  for (int i = 1; i < nseg; ++i) s += (i % 2 ? 4 : 2) * f(i * h);
+  return (phi2 - kappa) / 4 * (std::norm(n1(L)) - 1) + alpha / 4 * std::norm(u1(0)) + Gamma / 2 * s * h / 3;
+}
+
 }  // namespace gd::hydro::ds

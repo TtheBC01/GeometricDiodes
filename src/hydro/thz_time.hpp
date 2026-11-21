@@ -8,6 +8,7 @@
 #include "hydro/thz_solver.hpp"
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+#include <functional>
 #include <memory>
 
 namespace gd::hydro {
@@ -26,6 +27,9 @@ struct TimeTrace {
   std::vector<double> V_dc, I_dc;
   double P_in = 0;                 // <sum_c V_c I_c> over the last period (power into the graphene)
   double n_min = 1, n_max = 1;     // density extrema over the last period
+  double u_max = 0;                // largest nodal drift speed over the last period (units of s_0)
+  double u_max_run = 0;            // the same over the whole run
+  bool limit_hit = false;          // exact Dirac closure: Newton stopped because u reached v_F
   double dc_drift = 0;             // max relative change of I_dc, V_dc between the last two periods
   double bias_change = 0;          // bias tee: relative change of the dc bias current at the last update
   std::vector<double> I_bias;      // bias tee: dc load current per port used in the last period
@@ -71,6 +75,14 @@ class ThzTimeSolver {
   void init_from_perturbation(const FirstOrder& f, const SecondOrder& s, double Va, double Omega, int steps);
   ThzState state() const;
   const ThzGrid& grid() const { return g_; }
+  // Largest nodal drift speed of the current state, in units of s_0.
+  double max_speed() const;
+  bool limit_hit() const { return limit_hit_; }
+  // n(x) += f(x) at the density nodes (used to launch a small pulse on a steady state).
+  void add_density(const std::function<double(Vec2)>& f);
+  // nsteps BDF2 steps of size dt (the first one BDF1) from the current state with the dc
+  // port settings held: the free evolution of a perturbed steady state.
+  bool advance_dc(double dt, int nsteps, double tol = 1e-10);
 
  private:
   // Residual and Jacobian of the semi-discrete system at the current state with
@@ -90,6 +102,7 @@ class ThzTimeSolver {
   bool analyzed_ = false;
   bool bias_tee_ = false;
   bool have_prev_ = false;
+  bool limit_hit_ = false;
   Eigen::VectorXd xprev_;
   Eigen::VectorXd perturbative_state(const FirstOrder& f, const SecondOrder& s, double Va, double t) const;
   std::vector<double> ibias_, ibias_prev_, imean_prev_;

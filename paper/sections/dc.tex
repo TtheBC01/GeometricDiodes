@@ -1,7 +1,7 @@
 \section{Rectification at dc}
 \label{sec:dc}
 
-\subsection{Ballistic: the funnel rectifies, the Tesla valve does not}
+\subsection{Ballistic: the funnel rectifies, the Tesla valve does not act as a valve}
 
 Figure~\ref{fig:ballistic-dc} shows the asymmetry at $0.1$~V and the
 resistance of all six devices for three edge specularities and three mean
@@ -61,16 +61,21 @@ the neck by the bias arrive with more kinetic energy and more transverse
 modes than those decelerated toward it, and how much that rectifies
 depends on where the bias drops.
 
-No Tesla geometry rectifies in this model. All 54 points of the three
+No Tesla geometry acts as a valve in this model. All 54 points of the three
 side-loop variants lie between $0.93$ and $1.08$ with standard errors of
 $0.01$ to $0.05$, and sixteen of the eighteen points of the classical valve
 are within two standard errors of one. The two exceptions are in the clean
 specular limit, where the classical valve gives $A=0.93\pm0.02$ at $0.05$~V
-and $0.89\pm0.01$ at $0.1$~V: the wrong sign, the blocking direction being
-the easier one, and gone as soon as edges are partly diffuse or bulk
-scattering is present. The straight control gives $0.99\pm0.01$. Meanwhile
-the loops cost resistance in both directions, $1.4$ to $22$~k$\Omega$ against
-$0.5$ to $2$~k$\Omega$ for the funnel [Fig.~\ref{fig:ballistic-dc}(b)]. The
+and $0.89\pm0.01$ at $0.1$~V. That is as far from one as the funnel at
+$\lambda=700\nm$, but of the wrong sign, the blocking direction being
+the easier one, and it is gone as soon as edges are partly diffuse or bulk
+scattering is present. The straight control gives $0.99\pm0.01$. These
+errors are ten or more times those of the computed-field result of
+Eq.~\eqref{eq:deviceD}, so an asymmetry of a per cent or two in a Tesla
+valve is not excluded by them, and no Tesla valve was run with a computed
+field or under an ac drive. Meanwhile
+the loops cost resistance in both directions, $1.0$ to $22$~k$\Omega$ against
+$0.5$ to $2.2$~k$\Omega$ for the funnel [Fig.~\ref{fig:ballistic-dc}(b)]. The
 result follows from the structure of the problem rather than from the
 parameters: at fixed potential landscape the transmission is reciprocal for
 any shape, and the Tesla loops do nothing to the way the bias landscape acts
@@ -138,16 +143,17 @@ Ref.~\cite{geurs2020rectification} used currents of at most a few
 microamperes ($6.3\ \mu$A for the device that showed the effect), for
 which we estimate $\Rey\approx0.04$ to $0.2$ at $10^{12}\percm$ and
 $\nu=0.1$ to $0.02$~m$^{2}$/s; the authors quote no Reynolds number. For
-$\Rey$ up to $0.3$ every geometry, wall condition and damping gives
-$|D-1|<3\times10^{-5}$, three orders of magnitude below the reported five
-per cent, which was observed for holes in a single-loop valve as a ratio of
+$\Rey$ up to $0.3$ every Tesla geometry, wall condition and damping gives
+$|D-1|<3\times10^{-5}$ (the funnel, $1.5\times10^{-4}$), three orders of
+magnitude below the reported five per cent, which was observed for holes in a single-loop valve as a ratio of
 four-terminal resistances. Steady incompressible
 electron hydrodynamics does not reproduce that observation; whatever
 produces it is not the inertial Tesla mechanism, and we do not explain it.
 The candidates that Eq.~\eqref{eq:ns} excludes are the compressibility of the
 gated fluid, taken up in Sec.~\ref{sec:gated}, and electron heating. Second, the Reynolds number is bounded.
 The drift speed in a channel of width $w$ is $u=\Rey\,\nu/w$, and keeping it
-below $0.3\,\vF$, where a Fermi-liquid description is still tenable, caps
+below $0.3\,\vF$, the drift limit that we assume for all the fluid models
+(Sec.~\ref{sec:model-plasmonic}), caps
 $\Rey$ at $0.5$ to $2.6$ in a $175\nm$ channel and at $3$ to $15$ in a
 $1\um$ channel for $\nu=0.1$ to $0.02$~m$^{2}$/s [shaded in
 Fig.~\ref{fig:viscous}]. The bound is not new: the Reynolds number of the
@@ -160,7 +166,8 @@ Reynolds number comes with weak slip relative to the width and strong
 relative damping. Figure~\ref{fig:viscous}(b) shows the valve scaled to
 $1\um$: each factor of four in $\Da$ costs a factor two to three, and a
 slip length of $0.4\um$ instead of perfect slip a factor twenty. Inside the
-admissible window the diodicity is $10^{-3}$ to $3\times10^{-2}$, at a
+admissible window the diodicity of the $1\um$ valve is $10^{-3}$ to
+$3\times10^{-2}$ over these dampings and slip lengths, at a
 resistance of $0.3$ to $1.6$~k$\Omega$; the $175\nm$ valve costs $10$ to
 $86$~k$\Omega$ for less.
 
@@ -202,7 +209,7 @@ perfect slip for forward and reverse flow.}
 Equation~\eqref{eq:ns} has no gate. In a gated device the density follows
 the local potential, so a bias opens the channel at one end and closes it at
 the other, and a second nonlinearity appears that owes nothing to inertia.
-We computed the steady states of Eqs.~\eqref{eq:cont} and \eqref{eq:mom} for
+We computed the steady states of Eqs.~\eqref{eq:cont} and \eqref{eq:exact} for
 both funnels, both Tesla valves, a straight channel and a mirror-symmetric
 constriction, with a current source at one contact and the other contact
 tied to the gate, for the two parameter sets of Table~\ref{tab:params} and
@@ -232,30 +239,41 @@ polarity gives the same asymmetry for every shape,
 D_{\mathrm{pol}}-1=\frac{V}{2V_{u}}=0.48\,\frac{V}{U_{0}}
 \label{eq:dpol}
 \end{equation}
-to first order in the bias $V$ for the Dirac closure ($V/U_{0}$ for shallow
-water), the harder polarity being the one that depletes the channel.
+to first order in the bias $V$ for the Dirac gas ($V/U_{0}$ for the
+classical gas), the harder polarity being the one that depletes the channel. Here
+$V_{u}=m^{*}s_{0}^{2}/e$ is the voltage unit of the gated fluid, $1.49$~V
+at the reference point.
 
 The two-dimensional solutions bear this out
 [Fig.~\ref{fig:gated}(a)]. Under reversal of the polarity all six devices
-lie on one curve, $1.45\%$ at $43$~mV, within $2\%$ of the closed form
-wherever the drift speed is below $0.3\,\vF$ ($4\%$ for the $1\um$ Tesla
-valve at its largest bias, where inertia enters). Under exchange of the
-contacts the asymmetry is at most $4\times10^{-4}$ at any computed point
-inside the drift limit and, growing there as the square of the current,
-stays below $10^{-3}$ up to the limit; where it is above the discretisation
+lie on one curve, $1.45$ to $1.53\%$ at $43$~mV, within $5\%$ of the closed form
+wherever the drift speed is below $0.3\,\vF$ ($8\%$ for the $1\um$ Tesla
+valve at its largest bias inside the limit); the terms of relative order
+$u^{2}/\vF^{2}$ in Eq.~\eqref{eq:exact}, which Eq.~\eqref{eq:1d} omits, and
+the mesh contribute to the difference in comparable amounts (Supplemental
+Material). Under exchange of the
+contacts the asymmetry is at most $3\times10^{-4}$ at any production point
+inside the drift limit. Where it is above the discretisation
 floor it is the
-inertial term of the previous subsection, unchanged by the gate
-[Fig.~\ref{fig:gated}(b)]: at $21$ of the $23$ points at which the
-incompressible diodicity exceeds $10^{-4}$ the gated solution agrees with
-it within a factor two at the same Reynolds number, damping, wall condition
-and mesh, and the two exceptions are one point outside the drift limit and
-one at the floor of its mesh. At low bias the exchange asymmetry on the production meshes is
+inertial term of the previous subsection, little changed by the gate
+[Fig.~\ref{fig:gated}(b)]: inside the drift limit, at nine of the ten
+points at which the
+incompressible diodicity exceeds $3\times10^{-5}$ the gated solution agrees with
+it in magnitude within a factor two at the same Reynolds number, damping, wall condition
+and mesh, seven of the nine in sign as well, and the exception is the $1\um$ Tesla valve at the edge of the
+limit, where the gated value is ten times smaller. With the gate tied to
+the other contact seven of the ten agree within a factor two and the
+largest departure is a factor three. Beyond the limit the
+comparison loses its meaning: the terms of Eq.~\eqref{eq:exact} beyond
+second order grow, and a bias that would require a drift above $\vF$ has no
+steady state at all ($12$ of the $112$ points computed). At low bias the exchange asymmetry on the production meshes is
 linear in the bias, which Eq.~\eqref{eq:1d} forbids. It is numerical: for
-the funnel its coefficient falls by a factor of forty-five as the wall mesh
+the funnel its coefficient falls by a factor of sixteen as the wall mesh
 is refined from $28$ to $10\nm$, while the quadratic, inertial coefficient
-does not move [Fig.~\ref{fig:gated}(c)]. We therefore report the low-bias
-shape term of a gated channel as a bound, $7\times10^{-6}$ at $14$~mV for
-the funnel and $1.5\times10^{-7}$ for the Tesla valve.
+changes by a sixth to a quarter, depending on the contact to which the
+gate is tied [Fig.~\ref{fig:gated}(c)]. We therefore report the low-bias
+shape term of a gated channel as a bound, $1.4\times10^{-5}$ at $14$~mV for
+the funnel and $5\times10^{-7}$ for the Tesla valve.
 
 Three things follow. A gated channel of any shape, a straight strip
 included, shows an asymmetry of a per cent at some tens of millivolts when
@@ -264,9 +282,10 @@ the polarity will find it in a Tesla valve without the valve having
 anything to do with it. The compressible simulation of
 Ref.~\cite{gungor2022modeling}, which gives a diodicity of $1.07$ for a
 graphene Tesla valve with a $10\nm$ channel at $50$~mV, is not reproduced
-here as an effect of the shape: at $50$~mV the exchange asymmetry of our
-valve is below $10^{-5}$, and the polarity term of Eq.~\eqref{eq:dpol} is
-$1.7\%$ for any channel under our gate. Second, the circuit term is not
+here as an effect of the shape: at $43$~mV the exchange asymmetry of our
+valve is $10^{-5}$ on the production mesh and $10^{-6}$ on the finest
+one, and the polarity term of Eq.~\eqref{eq:dpol} is
+$1.7\%$ at $50$~mV for any channel under our gate. Second, the circuit term is not
 offered as an explanation of the measurement of
 Ref.~\cite{geurs2020rectification}, which is a ratio of four-terminal
 resistances and is reported to vanish outside the viscous regime; that
@@ -295,7 +314,8 @@ Exchange asymmetry with the gate against the diodicity of the
 incompressible model of Eq.~\eqref{eq:ns} at the same Reynolds number,
 damping, wall condition and mesh, for both parameter sets; filled: slip
 walls, open: no slip; the band is a factor two. (c) Refinement of the wall
-mesh for the $175\nm$ funnel and Tesla valve at $300$~K. Faint symbols in
+mesh for the $175\nm$ funnel and Tesla valve at $300$~K, at biases of
+$0.01\,U_{0}$ (filled symbols) and $0.03\,U_{0}$ (open symbols). Faint symbols in
 (a) and (b): drift speed above $0.3\,\vF$.}
 \label{fig:gated}
 \end{figure*}

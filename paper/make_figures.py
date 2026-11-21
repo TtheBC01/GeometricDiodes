@@ -16,6 +16,17 @@ import matplotlib.tri as mtri
 from matplotlib.lines import Line2D
 from matplotlib.ticker import NullFormatter, LogLocator
 
+# The fluid figures read the runs made with the momentum equation of the degenerate Dirac gas
+# (Stage H6, results/HYDRO_MOMENTUM.md). The runs with the earlier, Galilean equation are in
+# results/thz and results/dcgate.
+THZ_DIR, DCGATE_DIR = "thz2", "dcgate2"
+# Small-signal runs of the 1 um funnel (sweeps, density and gate grid, contact resistance) on the 20 nm wall mesh
+# (results/thz2/fine, paper/review_seventh_draft.md sections 3.4 and 3.5). The 80 nm production mesh of that device, on
+# which the large-signal runs remain, is too coarse at 100 K and above 1.2 THz. At 100 K the 20 nm sweeps are not
+# converged above 1.2 THz either (the shape-only response not above 1 THz) and are drawn up to 1 THz.
+FINE_DIR = os.path.join("thz2", "fine")
+F_CONVERGED = {"100K": 1.05e12, "300K": 4e12}
+
 
 # =============================================================================
 # Figure 1: devices and characteristic frequencies
@@ -258,43 +269,60 @@ def signed_loglog(ax, x, y, color, ls, marker="o", label=None, ms=3.2, lw=1.2, z
     ax.plot(x[~pos], np.abs(y[~pos]), color=color, marker=marker, ls="none", ms=ms, mfc="white", mew=0.7, zorder=zorder)
 
 
+def ds_general(Om, Gam, L, alpha, kappa, phi2, N=4001):
+    """dc drain voltage per squared amplitude of a uniform channel with an ideal source and an open drain
+    for d_t u + alpha u d_x u + Gamma u = -d_x h(n), h''(1) = kappa, contact potential with Phi''(1) = phi2
+    (alpha = 0 for the degenerate Dirac gas; Appendix A)."""
+    k = np.sqrt(Om * (Om - 1j * Gam) + 0j); x = np.linspace(0, L, N)
+    n1 = np.cos(k * (L - x)) / np.cos(k * L); u1 = -(k * np.sin(k * (L - x)) / np.cos(k * L)) / (1j * Om + Gam)
+    return (phi2 - kappa) / 4 * (abs(n1[-1]) ** 2 - 1) + alpha / 4 * abs(u1[0]) ** 2 + Gam / 2 * np.trapezoid((n1 * np.conj(u1)).real, x)
+
+
 def fig4():
-    T = os.path.join(RES, "thz")
+    T = os.path.join(RES, THZ_DIR)
     fig, axes = plt.subplots(2, 2, figsize=(COL2, 4.9), gridspec_kw=dict(hspace=0.30, wspace=0.26))
     # (a) validation on the uniform channel
     ax = axes[0, 0]
     sw = load_csv(f"{T}/S1_chan_100K_sw_ds.csv"); g1 = load_csv(f"{T}/S1_chan_100K_ds.csv"); g3 = load_csv(f"{T}/S1_chan_300K_ds.csv")
     f = np.array([r["f_Hz"] for r in sw]); Om = np.array([r["Omega"] for r in sw])
     ff = np.logspace(10, math.log10(1.3e12), 900); OO = ff * Om[0] / f[0]
-    ax.plot(ff, ds_closed_form(OO, 0.056, 10.0), color=BLACK, lw=0.9, label="Dyakonov-Shur closed form")
+    ax.plot(ff, ds_closed_form(OO, 0.056, 10.0), color=BLACK, lw=0.9, label="classical gas, closed form (Dyakonov-Shur)")
+    q = 0.5 / 3.57 ** 2                                   # quantum-capacitance share at the reference point
+    gi = load_csv(f"{T}/S1_chan_100K_inviscid_ds.csv")
+    ax.plot(ff, [ds_general(o, 0.056, 10.0, 0.0, -(1 + q) / 2, -q / 2) for o in OO], color=BLUE, lw=0.9, label="Dirac gas, closed form")
     m = f <= 1.3e12
-    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in sw])[m], color=GREY, marker="s", ms=3.2, ls="none", mec="white", mew=0.3, label="solver, shallow-water closure")
-    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in g1])[m], color=BLUE, marker="o", ms=3.2, lw=1.0, mec="white", mew=0.3, label="solver, Dirac closure, 100 K")
-    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in g3])[m], color=BLUE, marker="o", ms=3.2, lw=1.0, ls="--", mec="white", mew=0.3, label="solver, Dirac closure, 300 K")
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(8e9, 1.3e12); ax.set_ylim(5e-3, 300)
-    ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"dc drain voltage $\Delta U\,U_0/U_a^{2}$")
+    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in sw])[m], color=GREY, marker="s", ms=3.2, ls="none", mec="white", mew=0.3, label="solver, classical gas")
+    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in gi])[m], color=BLUE, marker="o", ms=3.2, ls="none", mec="white", mew=0.3, label="solver, Dirac gas, 100 K")
+    ax.plot(f[m], np.array([abs(r["Voc_per_Va2"]) for r in g3])[m], color=BLUE, marker="o", ms=3.2, lw=1.0, ls="--", mfc="white", mew=0.7, label="solver, Dirac gas, 300 K")
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(8e9, 1.3e12); ax.set_ylim(5e-3, 6000)
+    ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"dc drain voltage $\Delta U\,V_u/U_a^{2}$")
     ax.legend(loc="upper left", fontsize=6.3, borderaxespad=0.6)
     panel(ax, "a")
 
-    def ri_panel(ax, stem, sets, entries, title, ylim=(3e-6, 4)):
+    def ri_panel(ax, stem, sets, entries, title, ylim=(3e-6, 4), src=T, fmax=None, floor=None):
         for term, color, lab in entries:
             for st, ls in sets:
-                rows = load_csv(f"{T}/{stem}_{st}_{term}.csv")
+                rows = load_csv(f"{src}/{stem}_{st}_{term}.csv")
+                if fmax: rows = [r for r in rows if r["f_Hz"] <= fmax[st]]
                 if not rows: continue
                 signed_loglog(ax, [r["f_Hz"] for r in rows], [r["RI_A_per_W"] for r in rows], color, ls)
         ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(8e9, 3.6e12); ax.set_ylim(*ylim)
         ax.set_xlabel("frequency (Hz)"); ax.set_ylabel(r"responsivity $|R_I|$ (A/W)")
         ax.axvspan(3e11, 1e12, color="#e3f4ee", zorder=0)
+        if floor:      # below this level the shape-only response changes with the mesh by as much as its value
+            ax.axhspan(ylim[0], floor, color="#ececec", zorder=0.5, lw=0)
+            ax.text(0.97, 0.035, "not resolved by the mesh", transform=ax.transAxes, fontsize=5.8, color="#666666", ha="right", va="bottom")
         ax.text(0.03, 0.95, title, transform=ax.transAxes, fontsize=6.5, va="top")
 
     sets = [("100K", "-"), ("300K", "--")]
-    ri_panel(axes[0, 1], "S2_funnel_w1000", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"1 $\mu$m funnel, $R_{\rm dc}=168\ \Omega$ (100 K)")
+    ri_panel(axes[0, 1], "S2_funnel_w1000", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"1 $\mu$m funnel, $R_{\rm dc}=172\ \Omega$ (100 K)",
+             src=os.path.join(RES, FINE_DIR), fmax=F_CONVERGED, floor=1e-4)
     panel(axes[0, 1], "b")
-    ri_panel(axes[1, 0], "S2_funnel", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"175 nm funnel, $R_{\rm dc}=1.9$ k$\Omega$ (100 K)")
-    axes[1, 0].annotate("taper\nresonance", xy=(1.87e12, 0.3), xytext=(6e11, 2.2e-4), fontsize=6.3, ha="center",
-                        arrowprops=dict(arrowstyle="->", lw=0.5, color=GREY), color=GREY)
+    ri_panel(axes[1, 0], "S2_funnel", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"175 nm funnel, $R_{\rm dc}=1.9$ k$\Omega$ (100 K)", floor=5e-4)
+    axes[1, 0].annotate("taper\nresonance", xy=(1.87e12, 0.17), xytext=(1.95e12, 8.5e-4), fontsize=6.3, ha="center", va="bottom", linespacing=0.95,
+                        arrowprops=dict(arrowstyle="->", lw=0.5, color=GREY, shrinkA=1, shrinkB=1), color=GREY)
     panel(axes[1, 0], "c")
-    ri_panel(axes[1, 1], "S3_tesla_classic", sets, [("dss", ORANGE, ""), ("sym", VERM, "")], r"classical Tesla valve, $R_{\rm dc}=10.9$ k$\Omega$ (100 K)")
+    ri_panel(axes[1, 1], "S3_tesla_classic", sets, [("dss", ORANGE, ""), ("sym", VERM, "")], r"classical Tesla valve, $R_{\rm dc}=10.9$ k$\Omega$ (100 K)", floor=5e-4)
     panel(axes[1, 1], "d")
     h = [Line2D([], [], color=BLUE, marker="o", ms=3.2, label="funnel, source through antenna, drain to gate (circuit asymmetry)"),
          Line2D([], [], color=GREEN, marker="o", ms=3.2, label="funnel, symmetric drive (shape only)"),
@@ -311,48 +339,70 @@ def fig4():
 # Figure 5: large signal
 # =============================================================================
 def fig5():
-    T = os.path.join(RES, "thz"); VU = 1.487
+    """Large signal with the exact Dirac gas: the runs end where the drift speed reaches v_F."""
+    T = os.path.join(RES, THZ_DIR); VU = 1.487
     fig, axes = plt.subplots(1, 3, figsize=(COL2, 2.75), gridspec_kw=dict(wspace=0.46))
     fs = [("1e11", BLUES[0], "0.1 THz"), ("3e11", BLUES[1], "0.3 THz"), ("1e12", BLUES[2], "1 THz")]
+
+    def run(name):
+        rows = sorted(load_csv(f"{T}/{name}.csv"), key=lambda r: r["Va"])
+        return [r for r in rows if r["ok"] > 0.5]
+
+    def marks(ax, x, y, u, c, ls):
+        x, y, u = np.asarray(x), np.asarray(y), np.asarray(u)
+        ax.plot(x, y, color=c, ls=ls, lw=1.0)
+        ins = u <= 0.3
+        ax.plot(x[ins], y[ins], color=c, marker="o", ms=3, ls="none", mec="white", mew=0.3)
+        ax.plot(x[~ins], y[~ins], color=c, marker="o", ms=3, ls="none", mfc="white", mew=0.7)
+
     ax = axes[0]
-    for st, run, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
+    for st, runn, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
         for f, c, lab in fs:
-            rows = sorted(load_csv(f"{T}/{run}_funnel_w1000_{st}_dss_f{f}.csv"), key=lambda r: r["Va"])
+            rows = run(f"{runn}_funnel_w1000_{st}_dss_f{f}")
             if not rows: continue
-            P = np.array([r["Pav_W"] for r in rows]); eta = np.array([r["eta_av"] for r in rows])
-            ax.plot(P, eta, color=c, ls=ls, marker="o", ms=3, mec="white", mew=0.3)
+            marks(ax, [r["Pav_W"] for r in rows], [r["eta_av"] for r in rows], [r["umax_over_vF"] for r in rows], c, ls)
     P = np.logspace(-7.5, -2.3, 10)
-    for k in (1.0, 2.4): ax.plot(P, k * P, color=GREY, lw=0.6, ls=":")
-    ax.text(0.96, 0.05, "dotted: square laws\n" r"$\eta=1$ and $2.4\ {\rm W^{-1}}\times P_{\rm av}$", transform=ax.transAxes, fontsize=6.3, color=GREY, ha="right", va="bottom")
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(2e-7, 4e-3); ax.set_ylim(2e-7, 1e-2)
+    for k in (0.45, 1.1): ax.plot(P, k * P, color=GREY, lw=0.6, ls=":")
+    ax.text(0.04, 0.96, "dotted: square laws\n" r"$\eta=0.45$ and $1.1\ {\rm W^{-1}}\times P_{\rm av}$", transform=ax.transAxes, fontsize=6.3, color=GREY, ha="left", va="top")
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(2e-7, 4e-3); ax.set_ylim(3e-8, 1e-2)
     ax.set_xlabel(r"available power $P_{\rm av}$ (W)"); ax.set_ylabel(r"conversion efficiency $\eta=P_{\rm dc}/P_{\rm av}$")
     panel(ax, "a", x=-0.22)
+
     ax = axes[1]
-    for st, run, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
+    for st, runn, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
         for f, c, lab in fs:
-            rows = sorted(load_csv(f"{T}/{run}_funnel_w1000_{st}_dss_f{f}.csv"), key=lambda r: r["Va"])
+            rows = run(f"{runn}_funnel_w1000_{st}_dss_f{f}")
             if not rows: continue
-            ax.plot([r["Va"] * VU for r in rows], [r["eta_av"] / r["eta_small_bdf"] for r in rows], color=c, ls=ls, marker="o", ms=3, mec="white", mew=0.3)
-    rows = sorted(load_csv(f"{T}/P4_funnel_w1000_100K_sym_f3e11.csv"), key=lambda r: r["Va"])
-    ax.plot([r["Va"] * VU for r in rows], [r["eta_av"] / r["eta_small_bdf"] for r in rows], color=GREEN, ls="-", marker="o", ms=3, mec="white", mew=0.3)
-    ax.axhline(1, color=GREY, lw=0.6, ls=":")
-    ax.text(0.2, 0.52, "shape only,\n0.3 THz", fontsize=6.3, color=GREEN, ha="right", va="center")
-    ax.set_xscale("log"); ax.set_xlim(0.012, 1.3); ax.set_ylim(0.35, 1.2)
-    ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"$\eta$ / square law")
+            ratio = np.array([r["eta_av"] / r["eta_small_bdf"] for r in rows])
+            marks(ax, [r["umax_over_vF"] for r in rows], ratio / ratio[0], [r["umax_over_vF"] for r in rows], c, ls)
+    rows = run("P4_funnel_w1000_100K_sym_f3e11")
+    ratio = np.array([r["eta_av"] / r["eta_small_bdf"] for r in rows])
+    marks(ax, [r["umax_over_vF"] for r in rows], ratio / ratio[0], [r["umax_over_vF"] for r in rows], GREEN, "-")
+    ax.axhline(1, color=GREY, lw=0.6, ls=":"); ax.axvline(0.3, color=GREY, lw=0.6, ls="--"); ax.axvline(1.0, color=BLACK, lw=0.7)
+    ax.text(0.27, 0.36, r"$0.3\,v_F$", fontsize=6.3, color=GREY, rotation=90, ha="right", va="bottom")
+    ax.text(0.2, 0.62, "shape only,\n0.3 THz", fontsize=6.3, color=GREEN, ha="right", va="center")
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(0.012, 1.25); ax.set_ylim(0.33, 3.3)
+    ax.set_yticks([0.5, 1, 2, 3]); ax.set_yticklabels(["0.5", "1", "2", "3"]); ax.yaxis.set_minor_formatter(NullFormatter())
+    ax.set_xticks([0.03, 0.1, 0.3, 1]); ax.set_xticklabels(["0.03", "0.1", "0.3", "1"])
+    ax.set_xlabel(r"largest drift speed $u_{\max}/v_F$"); ax.set_ylabel(r"$\eta$ / square law")
     panel(ax, "b", x=-0.22)
+
     ax = axes[2]
-    for f, c, lab in fs:
-        rows = sorted(load_csv(f"{T}/P1_funnel_w1000_100K_dss_f{f}.csv"), key=lambda r: r["Va"])
-        V = [r["Va"] * VU for r in rows]
-        ax.plot(V, [r["n_max"] for r in rows], color=c, marker="o", ms=3, mec="white", mew=0.3)
-        ax.plot(V, [r["n_min"] for r in rows], color=c, marker="o", ms=3, mec="white", mew=0.3)
-    ax.axhline(1, color=GREY, lw=0.6, ls=":"); ax.axvline(1.43, color=GREY, lw=0.6, ls="--")
-    ax.text(1.55, 0.06, "gate overdrive", fontsize=6.3, color=GREY, rotation=90, ha="left", va="bottom")
-    ax.set_xscale("log"); ax.set_xlim(0.012, 2.4); ax.set_ylim(0, 1.8)
-    ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"$n_{\min}/n_0$ and $n_{\max}/n_0$ (100 K)")
+    for st, runn, ls in (("100K", "P1", "-"), ("300K", "P2", "--")):
+        for f, c, lab in fs:
+            rows = run(f"{runn}_funnel_w1000_{st}_dss_f{f}")
+            if not rows: continue
+            marks(ax, [r["Va"] * VU for r in rows], [r["umax_over_vF"] for r in rows], [r["umax_over_vF"] for r in rows], c, ls)
+    ax.axhline(0.3, color=GREY, lw=0.6, ls="--"); ax.axhline(1.0, color=BLACK, lw=0.7); ax.axvline(1.43, color=GREY, lw=0.6, ls=":")
+    ax.text(1.55, 0.012, "gate overdrive", fontsize=6.3, color=GREY, rotation=90, ha="left", va="bottom")
+    ax.text(0.0135, 1.08, r"$v_F$: no state beyond", fontsize=6.3, color=BLACK, ha="left", va="bottom")
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(0.012, 2.4); ax.set_ylim(0.01, 2.2)
+    ax.set_yticks([0.01, 0.1, 0.3, 1]); ax.set_yticklabels(["0.01", "0.1", "0.3", "1"])
+    ax.set_xlabel(r"drive amplitude $V_a$ (V)"); ax.set_ylabel(r"largest drift speed $u_{\max}/v_F$")
     panel(ax, "c", x=-0.22)
-    h = [Line2D([], [], color=c, marker="o", ms=3, label=lab) for f, c, lab in fs] + [Line2D([], [], color=GREY, ls="-", label="100 K"), Line2D([], [], color=GREY, ls="--", label="300 K")]
-    fig.legend(handles=h, loc="upper center", ncol=5, fontsize=6.6, bbox_to_anchor=(0.5, 1.04), columnspacing=1.6)
+    h = [Line2D([], [], color=c, marker="o", ms=3, label=lab) for f, c, lab in fs] + [Line2D([], [], color=GREY, ls="-", label="100 K"), Line2D([], [], color=GREY, ls="--", label="300 K"),
+         Line2D([], [], color=GREY, marker="o", mfc="white", ls="none", ms=3, mew=0.7, label=r"open: drift above $0.3\,v_F$")]
+    fig.legend(handles=h, loc="upper center", ncol=6, fontsize=6.6, bbox_to_anchor=(0.5, 1.04), columnspacing=1.4)
     save(fig, "fig5_large_signal")
 
 
@@ -364,7 +414,7 @@ NS = [1e12, 5e11, 2e11, 1e11, 5e10]; DNM = [30, 10, 5]
 
 def d1_row(prefix, st, n, d, f):
     tag = f"{n:.0e}".replace("e+", "e")
-    rows = load_csv(os.path.join(RES, "thz", f"{prefix}_{st}_n{tag}_d{d}.csv"))
+    rows = load_csv(os.path.join(RES, FINE_DIR, f"{prefix}_{st}_n{tag}_d{d}.csv"))
     rows = [r for r in rows if abs(math.log(r["f_Hz"] / f)) < 0.05]
     return rows[0] if rows else None
 
@@ -373,38 +423,36 @@ def fig6():
     fig, axes = plt.subplots(2, 2, figsize=(COL2, 4.9), gridspec_kw=dict(hspace=0.32, wspace=0.28))
     mk = {30: "o", 10: "s", 5: "^"}; col = dict(zip(DNM, BLUES[::-1]))
     valid = lambda r: r["valid_FL"] > 0.5 and r["valid_gate"] > 0.5
-    # (a) saturation power against n d
+    # power at which the largest first-order drift speed reaches 0.3 v_F, and the square-law efficiency there
+    def p_limit(r):
+        return (r["Va_at_0p3vF"] * r["Vunit_V"]) ** 2 / (8 * r["Rant_ohm"])
+
+    def against_density(ax, value):
+        for st, ls in (("100K", "-"), ("300K", "--")):
+            for d in DNM:
+                xs, ys, oks = [], [], []
+                for n in NS:
+                    r = d1_row("D1", st, n, d, 3e11)
+                    if r is None: continue
+                    xs.append(n); ys.append(value(r)); oks.append(valid(r))
+                xs, ys, oks = np.array(xs), np.array(ys), np.array(oks)
+                ax.plot(xs, ys, color=col[d], ls=ls, lw=1.0)
+                ax.plot(xs[oks], ys[oks], color=col[d], marker=mk[d], ms=4.5, ls="none", mec="white", mew=0.3)
+                ax.plot(xs[~oks], ys[~oks], color=col[d], marker=mk[d], ms=4.5, ls="none", mfc="white", mew=0.8)
+        ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(3.5e10, 1.5e12)
+        ax.set_xlabel(r"carrier density $n$ (cm$^{-2}$)")
+
+    # (a) the power at the drift limit
     ax = axes[0, 0]
-    for d in DNM:
-        for n in NS:
-            r = d1_row("D1", "100K", n, d, 3e11)
-            if r is None: continue
-            ok = valid(r)
-            ax.plot(n * d * 1e-7, r["Pknee_W"], marker=mk[d], color=col[d], ms=4.5, ls="none", mfc=col[d] if ok else "white", mew=0.8)
-    xnd = np.logspace(4.25, 6.6, 10)
-    r0 = d1_row("D1", "100K", 1e12, 30, 3e11)
-    ax.plot(xnd, r0["Pknee_W"] * (xnd / 3e6) ** 2, color=GREY, lw=0.6, ls=":", zorder=1)
-    ax.set_xlim(1.5e4, 5e6); ax.set_ylim(5e-8, 3e-3)
-    ax.set_xscale("log"); ax.set_yscale("log")
-    ax.set_xlabel(r"$n\,d$ (cm$^{-1}$)"); ax.set_ylabel(r"saturation power $P_{\rm knee}$ (W)")
-    ax.text(0.05, 0.92, r"$P_{\rm knee}\propto V_{\rm unit}^2\sim(nd)^2$", transform=ax.transAxes, fontsize=6.8, va="top")
+    against_density(ax, p_limit)
+    ax.set_ylabel(r"$P_{\rm av}$ at a drift of $0.3\,v_F$ (W), 0.3 THz")
     panel(ax, "a")
-    # (b) peak efficiency against density
+    # (b) the efficiency there
     ax = axes[0, 1]
-    for st, ls in (("100K", "-"), ("300K", "--")):
-        for d in DNM:
-            xs, ys, oks = [], [], []
-            for n in NS:
-                r = d1_row("D1", st, n, d, 3e11)
-                if r is None: continue
-                xs.append(n); ys.append(r["eta_peak"]); oks.append(valid(r))
-            xs, ys, oks = np.array(xs), np.array(ys), np.array(oks)
-            ax.plot(xs, ys, color=col[d], ls=ls, lw=1.0)
-            ax.plot(xs[oks], ys[oks], color=col[d], marker=mk[d], ms=4.5, ls="none", mec="white", mew=0.3)
-            ax.plot(xs[~oks], ys[~oks], color=col[d], marker=mk[d], ms=4.5, ls="none", mfc="white", mew=0.8)
-    ax.axhline(0.01, color=GREY, lw=0.6, ls=":"); ax.text(1.05e12, 0.0108, "1 %", fontsize=6.3, color=GREY, ha="right", va="bottom")
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(1e-4, 3e-2); ax.set_xlim(3.5e10, 1.5e12)
-    ax.set_xlabel(r"carrier density $n$ (cm$^{-2}$)"); ax.set_ylabel(r"peak efficiency $\eta_{\rm peak}$, 0.3 THz")
+    against_density(ax, lambda r: r["eta_per_W"] * p_limit(r))
+    ax.axhline(1e-3, color=GREY, lw=0.6, ls=":"); ax.text(1.4e12, 1.08e-3, "0.1 %", fontsize=6.3, color=GREY, ha="right", va="bottom")
+    ax.set_ylim(1e-6, 3e-3)
+    ax.set_ylabel(r"efficiency at that power")
     panel(ax, "b")
     # (c) contact resistance at the reference point
     ax = axes[1, 0]
@@ -413,7 +461,7 @@ def fig6():
             base = d1_row("D1", st, 1e12, 30, float(f))
             xs, ys = [0], [1.0]
             for Rc in (100, 300, 1000):
-                rows = [r for r in load_csv(os.path.join(RES, "thz", f"D2_{st}_n1e12_d30_Rc{Rc}.csv")) if abs(math.log(r["f_Hz"] / float(f))) < 0.05]
+                rows = [r for r in load_csv(os.path.join(RES, FINE_DIR, f"D2_{st}_n1e12_d30_Rc{Rc}.csv")) if abs(math.log(r["f_Hz"] / float(f))) < 0.05]
                 if rows: xs.append(Rc); ys.append(rows[0]["eta_per_W"] / base["eta_per_W"])
             ax.plot(xs, ys, color=c, ls=ls, marker="o", ms=3.5, mec="white", mew=0.3)
     xx = np.linspace(0, 1000, 100)
@@ -546,13 +594,13 @@ def pic_g3(d, mode="sym"):
 # =============================================================================
 def fig8():
     import ballistic_thz_common as bc
-    T = os.path.join(RES, "thz"); B = os.path.join(RES, "bthz")
+    T = os.path.join(RES, THZ_DIR); TF = os.path.join(RES, FINE_DIR); B = os.path.join(RES, "bthz")
     fig, axes = plt.subplots(1, 2, figsize=(COL2, 4.25), gridspec_kw=dict(wspace=0.27))
     fig.subplots_adjust(bottom=0.36)
     ax = axes[0]
     for st, ls in (("100K", "-"), ("300K", "--")):
         for term, c in (("dss", BLUE), ("sym", GREEN)):
-            rows = load_csv(f"{T}/S2_funnel_w1000_{st}_{term}.csv")
+            rows = [r for r in load_csv(f"{TF}/S2_funnel_w1000_{st}_{term}.csv") if r["f_Hz"] <= F_CONVERGED[st]]
             signed_loglog(ax, [r["f_Hz"] for r in rows], [r["RI_A_per_W"] for r in rows], c, ls, ms=2.4, lw=1.1)
         rows = load_csv(f"{T}/S3_tesla_classic_{st}_sym.csv")
         signed_loglog(ax, [r["f_Hz"] for r in rows], [r["RI_A_per_W"] for r in rows], VERM, ls, ms=2.4, lw=1.1)
@@ -584,9 +632,9 @@ def fig8():
     # (b) NEP: simulated (Johnson limited, ideal coupling) against measured detectors
     ax = axes[1]
     for st, Tk, ls in (("100K", 100.0, "-"), ("300K", 300.0, "--")):
-        rows = load_csv(f"{T}/S2_funnel_w1000_{st}_dss.csv")
+        rows = load_csv(f"{TF}/S2_funnel_w1000_{st}_dss.csv")
         f = np.array([r["f_Hz"] for r in rows]); nep = np.array([math.sqrt(4 * kB * Tk / r["Rdc_ohm"]) / abs(r["RI_A_per_W"]) for r in rows])
-        m = (f >= 5e10) & (f <= 2.4e12)
+        m = (f >= 5e10) & (f <= min(2.4e12, F_CONVERGED[st]))
         ax.plot(f[m], nep[m], color=BLUE, ls=ls, lw=1.2)
     xs, ys, ys2 = [], [], []
     for f0 in (1e11, 3e11, 1e12):
@@ -595,7 +643,7 @@ def fig8():
     ax.plot(xs, ys, color=BLUE, ls=":", lw=1.2, marker="o", ms=3, mec="white", mew=0.3)
     xs, ys = [], []
     for st, ls2 in (("300K", "--"),):
-        rows = load_csv(os.path.join(T, f"D2_{st}_n1e12_d30_Rc300.csv"))
+        rows = load_csv(os.path.join(TF, f"D2_{st}_n1e12_d30_Rc300.csv"))
         ax.plot([r["f_Hz"] for r in rows], [r["NEP_W_per_rtHz"] for r in rows], color=SKY, ls=ls2, lw=1.2, marker="o", ms=3, mec="white", mew=0.3)
     o = [q for q in g3 if q["I"] > 3 * q["e"]]
     ax.plot([q["f"] * 1e12 for q in o], [q["NEP"] for q in o], color=BLACK, ls="--", lw=1.2, marker="D", ms=3, mec="white", mew=0.3)
@@ -626,7 +674,7 @@ def fig8():
 # Figure 9 (Fig. 4 of the paper): steady flow with the gate
 # =============================================================================
 def fig9():
-    D = os.path.join(RES, "dcgate")
+    D = os.path.join(RES, DCGATE_DIR)
     def rows(fn):
         out = []
         for r in csv.DictReader(open(os.path.join(D, fn + ".csv"))):
@@ -691,10 +739,8 @@ def fig9():
             if not sub: continue
             ax.plot([r["hw"] for r in sub], [abs(r["D_swap_dn"] - 1) for r in sub], color=c, ls=ls, lw=1.0, marker=MK[geo], ms=3.8,
                     mfc=c if fill else "white", mew=0.8)
-    sub = sorted([r for r in d4 if r["geo"] == "funnel" and abs(r["v_target"] - 0.03) < 1e-9], key=lambda r: r["hw"])
-    ax.plot([r["hw"] for r in sub], [abs(r["D_flip0"] - r["D_1d_flip"]) for r in sub], color=BLUE, ls="--", lw=1.0, marker="o", ms=3.8, mfc="white", mew=0.8)
     h = np.array([9.0, 30.0]); ax.plot(h, 1.2e-7 * h ** 2, color=GREY, lw=0.7, ls=":")
-    ax.axhline(0.0528 * 0.03 ** 2, color=GREEN, lw=0.6, ls=(0, (1, 2)))
+    ax.axhline(0.043 * 0.03 ** 2, color=GREEN, lw=0.6, ls=(0, (1, 2)))   # quadratic coefficient on the 10 nm mesh
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(8.5, 33); ax.set_ylim(5e-8, 6e-4)
     ax.set_xticks([10, 14, 20, 28]); ax.set_xticklabels(["10", "14", "20", "28"]); ax.xaxis.set_minor_formatter(NullFormatter())
     ax.tick_params(axis="x", which="minor", bottom=False, top=False)
@@ -707,7 +753,6 @@ def fig9():
           Line2D([], [], color=GREEN, marker="o", ls="none", ms=3.8, mfc="white", mew=0.8, label="contacts exchanged (shape): funnel"),
           Line2D([], [], color=VERM, marker="^", ls="none", ms=3.8, label="Tesla valve: filled, polarity; open, contacts"),
           Line2D([], [], color=GREY, lw=1.0, ls="-", label=r"(c) $V/U_{0}=0.01$"), Line2D([], [], color=GREY, lw=1.0, ls="--", label=r"(c) $V/U_{0}=0.03$"),
-          Line2D([], [], color=BLUE, lw=1.0, ls="--", marker="o", ms=3.8, mfc="white", mew=0.8, label="(c) funnel: polarity term minus closed form"),
           Line2D([], [], color=GREY, lw=0.7, ls=":", label=r"(c) slope $h^{2}$"),
           Line2D([], [], color=GREEN, lw=0.6, ls=(0, (1, 2)), label="(c) inertial term of the funnel at 0.03")]
     fig.legend(handles=h, loc="lower center", ncol=3, fontsize=6.2, bbox_to_anchor=(0.5, -0.02), columnspacing=1.4, handlelength=2.2, labelspacing=0.35)
@@ -768,7 +813,7 @@ def fig10():
     panel(ax, "b", x=-0.15)
 
     ax = fig.add_subplot(gs[1, 0])
-    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0); ax.text(0.0092, 0.205, "plasmonic funnel", fontsize=6.0, color=BLUE, va="bottom")
+    ax.axhspan(0.05, 0.26, color="#dcecf7", zorder=0); ax.text(0.0092, 0.135, "plasmonic funnel", fontsize=6.0, color=BLUE, va="bottom")
     ax.axvspan(0.3, 1.0, color="#e3f4ee", zorder=0, alpha=0.6)
     for fm, c, m in (("uniform", PURPLE, "o"), ("local", DPURPLE, "s")):
         rows = ac[("G3", fm, "700")]; fit = sf.static_fit(static[("G3", fm, "700")])
@@ -785,7 +830,7 @@ def fig10():
     panel(ax, "c", x=-0.15)
 
     ax = fig.add_subplot(gs[1, 1])
-    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0)
+    ax.axhspan(0.05, 0.26, color="#dcecf7", zorder=0)
     for fm, c, m in (("uniform", PURPLE, "o"), ("local", DPURPLE, "s")):
         for lam, ls in (("inf", "-"), ("700", "--")):
             P = []
@@ -895,7 +940,7 @@ def fig11():
     # (f) mean free path and walls at 1 THz
     ax = fig.add_subplot(gfg[0, 0])
     keys = [k for k, *_ in c.CASES]; xs = np.arange(len(keys))
-    ax.axhspan(0.07, 0.34, color="#dcecf7", zorder=0); ax.axhline(0, color=GREY, lw=0.5)
+    ax.axhspan(0.05, 0.26, color="#dcecf7", zorder=0); ax.axhline(0, color=GREY, lw=0.5)
     for fm, col, mk, off in (("uniform", PURPLE, "o", -0.24), ("local", DPURPLE, "s", 0.24)):
         ax.plot(xs + off, [c.b7_case(k)[fm]["Rs"] for k in keys], mk, color=col, ms=3.6, mec="white", mew=0.3, ls="none")
     for d, mfc, off in ((300, BLACK, -0.08), (30, "white", 0.08)):

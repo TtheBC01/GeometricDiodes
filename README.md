@@ -327,6 +327,41 @@ the drift limit.
     tools/dc_gate_runs.sh D1        # then D2 to D4
     .venv/bin/python tools/dc_gate_ref.py && .venv/bin/python tools/dc_gate_tables.py && .venv/bin/python tools/dc_gate_plot.py
 
+## Stage H6: the momentum equation of the Dirac fluid, corrected
+
+Plan `plans/hydro_momentum.md`, results `results/HYDRO_MOMENTUM.md`. The
+gated-fluid solvers of Stages H2 to H5 used the convective term of an
+ordinary fluid. A degenerate Dirac gas has two more terms,
+`- u (div u) / 2 - grad(u^2) / 4`, and an exact form at any drift below
+v_F; both are now in `src/hydro` (`ClosureFn` in `thz_common.hpp`), with
+the old form kept as `--closure legacy`. Every fluid run was repeated into
+`results/thz2` and `results/dcgate2`, which the paper uses from its
+seventh draft on; `results/thz` and `results/dcgate` hold the earlier
+numbers. The 1 um funnel with
+the Dyakonov-Shur termination gives 0.14 to 0.26 A/W at 100 K and 0.05 to
+0.07 A/W at 300 K (0.15 to 0.34 and 0.07 to 0.09 before), and the
+large-signal runs now stop where the drift reaches v_F.
+
+After the review of the seventh draft (`paper/review_seventh_draft.md`)
+the small-signal runs of the 1 um funnel, of the plain-channel control and
+of the density and gate grid were repeated on a mesh of 20 nm at the walls
+(`results/thz2/fine`, `tools/momentum_runs.sh fine` and `fine2`), because
+the 80 nm mesh is 3 to 21 % low at 100 K and wrong above 1.2 THz. The
+paper reads those files from its eighth draft on. The 175 nm funnel and
+the Tesla valve are on their 14 nm mesh (`tools/momentum_runs.sh mesh14`);
+the large-signal runs remain on the 80 nm mesh. The 1 um funnel with the
+ordinary convective term is on the 20 nm mesh too
+(`tools/momentum_runs.sh legacy20`, files `fine/L_funnel_w1000_*`), for
+the comparison of the two equations in Sec. IV A. Every fluid number of the
+paper, as a range over a stated band:
+
+    .venv/bin/python tools/paper_numbers.py > results/thz2/paper_numbers.md
+
+    make && ./build/gd_thz_tests T34,T35,T36,T37,T38,T39 && tools/momentum_regress.sh
+    tools/momentum_runs.sh small    # then density, contact, steady, large (at most eight jobs at a time on 16 GB)
+    .venv/bin/python tools/momentum_report.py > results/thz2/tables_H6.md
+    .venv/bin/python tools/momentum_results_fig.py results/thz2/H6_before_after.png
+
 ## Stage B8: the short funnel with the field computed
 
 Plan `plans/ballistic_selfconsistent.md`, results

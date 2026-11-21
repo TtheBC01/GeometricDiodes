@@ -1,0 +1,8 @@
+funnel_w1000 set 100K term sym closure legacy: 18601 nodes, W_ref 4000 nm, n 1e+12 cm^-2, d 30 nm, s0 3.570e+06 m/s, q 0.039, U0 1.4286 V, Gamma 0.2241, 1/Re_s 7.003e-03, Omega tau_ee per THz 6.28, R_unit 65.0 ohm (R_ant 75 -> 1.154), R_c 0.0 ohm (0.000), f_unit 0.142 THz, I_unit 2.288e-02 A, V_unit 1.4869 V, tau 5 ps (scale 1.000)
+convective closure: c_div +0.0000, c_grad +0.0000 (alpha in one dimension 1.0000); s0 / v_F 3.5700
+T 100 K: E_F 116.7 meV = 13.5 kT (Fermi liquid ok), U0 = 165.8 kT (gating ok), q 0.04
+dc resistance 2.5831 R_unit = 167.9 ohm (+ 2 R_c = 167.9 ohm)
+    f (Hz)    Omega   R_ant | Re Z (ohm) Im Z (ohm)  Re Z_ant |   I_sc/Va^2   V_oc/Va^2 |  R_I (A/W)  R_V (V/W) | P_in/P_av | NEP W/rtHz eta/P (1/W)  P_knee W
+ 1.732e+11   1.2194    75.0 |     203.26      28.99    221.77 |  1.7964e-02 -4.6403e-02 |  1.115e-01 -1.872e+01 |    0.7284 |  5.142e-11  5.221e-01 9.212e-04
+ 2.786e+11   1.9614    75.0 |     117.02      65.64     94.94 |  1.2822e-02 -3.3121e-02 |  7.961e-02 -1.337e+01 |    0.8222 |  7.204e-11  2.660e-01 9.212e-04
+ 9.142e+11   6.4361    75.0 |      91.14     -53.35    105.78 |  2.1351e-02 -5.5151e-02 |  1.326e-01 -2.225e+01 |    0.7875 |  4.326e-11  7.376e-01 9.212e-04

@@ -43,6 +43,13 @@ inline LsPoint run_ls_point(const Mesh& m, const ThzParams& p, const FirstOrder&
   bt.seed.assign(sc.I20.size(), 0.0);
   for (size_t c = 0; c < sc.I20.size(); ++c) bt.seed[c] = o.seed_scale * sc.I20[c] * Va * Va;
   auto t0 = std::chrono::steady_clock::now();
+  // Exact Dirac closure: if the small-signal state already asks for a drift at or above v_F
+  // there is no state to start from; report the limit without time stepping.
+  if (p.closure.exact() && ts.max_speed() >= 0.98 * std::sqrt(2 * p.closure.q)) {
+    r.tr.ok = false; r.tr.limit_hit = true; r.tr.u_max = r.tr.u_max_run = ts.max_speed();
+    r.tr.V_dc.assign(sc.V20.size(), 0.0); r.tr.I_dc.assign(sc.I20.size(), 0.0);
+    return r;
+  }
   r.tr = ts.run(Omega, o.periods, o.steps, o.tol, bt);
   r.wall = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
   r.ok = r.tr.ok && r.tr.n_min > 0;

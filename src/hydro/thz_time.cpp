@@ -39,6 +39,10 @@ void ThzTimeSolver::assemble(double c0, const Eigen::VectorXd& hist, double t, d
   const ClosureFn& cl = p_.closure;
   const int ndl = g.density_order == 2 ? 6 : 3;
   const double Gamma = p_.Gamma, nu = p_.nu;
+  // Convective closure (plans/hydro_momentum.md): c_div u (div u) + c_grad grad(u^2), and for the
+  // exact Dirac gas the acceleration matrix 1 + cA u u^T and the force correction E (see below).
+  const double cdv = cl.cdiv(), cgr = cl.cgrad(), qq = cl.q;
+  const bool exact = cl.exact();
   F.setZero(g.ndof);
   trip.clear();
   trip.reserve(m_.tri.size() * 500 + m_.bedges.size() * 80 + g.ndof);
@@ -94,30 +98,58 @@ void ThzTimeSolver::assemble(double c0, const Eigen::VectorXd& hist, double t, d
         n += ne[v] * Nd[v]; gn += dNd[v] * ne[v];
         if (c0 != 0) ndot += (c0 * ne[v] - hist[g.ndof_n(T[v])]) * Nd[v];
       }
-      double hp = cl.hp(n), hpp = cl.hpp(n), hval = cl.h(n);
+      double hp = cl.hp(n), hval = cl.h(n);
       double divu = gu[0][0] + gu[1][1];
       double conv[2] = {u.x * gu[0][0] + u.y * gu[0][1], u.x * gu[1][0] + u.y * gu[1][1]};
       double uk[2] = {u.x, u.y}, udk[2] = {udot.x, udot.y};
+      double acc[2] = {udk[0] + conv[0], udk[1] + conv[1]};          // d_t u + (u.grad) u
+      double gnk[2] = {gn.x, gn.y};
+      double gu2[2] = {2 * (u.x * gu[0][0] + u.y * gu[1][0]), 2 * (u.x * gu[0][1] + u.y * gu[1][1])};   // grad(u^2)
+      // Exact Dirac gas: b2 = u^2 / v_F^2 = u^2 / (2 q), gamma^2 = 1 / (1 - b2);
+      //   acceleration  acc + cA u (u.acc),  cA = gamma^2 / (2 v_F^2) = gamma^2 / (4 q);
+      //   force  -grad h + E,  E = [(1 - gamma^(-1/2)) (1 - q) / sqrt n + (1 - gamma^(-2)) q / n] grad n.
+      double cA = 0, dcA = 0, Ec = 0, dEc_du = 0, dEc_dn = 0;
+      if (exact) {
+        double b2 = std::min((u.x * u.x + u.y * u.y) / (2 * qq), 0.995), g2 = 1 / (1 - b2);
+        cA = g2 / (4 * qq); dcA = g2 * g2 / (4 * qq * qq);              // d cA / d u_m = dcA u_m
+        double e1 = 1 - std::pow(1 - b2, 0.25), de1 = std::pow(1 - b2, -0.75) / (4 * qq);   // d e1 / d u_m = de1 u_m
+        double g1n = (1 - qq) / std::sqrt(n), g2n = qq / n;
+        Ec = e1 * g1n + b2 * g2n; dEc_du = de1 * g1n + g2n / qq;
+        dEc_dn = e1 * (-0.5 * (1 - qq) * std::pow(n, -1.5)) + b2 * (-qq / (n * n));
+      }
+      double ua = uk[0] * acc[0] + uk[1] * acc[1];
+      double mom[2];
+      for (int k = 0; k < 2; ++k)
+        mom[k] = acc[k] + cA * uk[k] * ua + cdv * uk[k] * divu + cgr * gu2[k] + Gamma * uk[k] - Ec * gnk[k];
       for (int a = 0; a < 6; ++a) {
         double dNa[2] = {dN[a].x, dN[a].y};
         for (int k = 0; k < 2; ++k) {
-          ru[a][k] += w * (N[a] * (udk[k] + conv[k] + Gamma * uk[k]) - hval * dNa[k] +
-                           nu * (gu[k][0] * dNa[0] + gu[k][1] * dNa[1]));
-          for (int v = 0; v < ndl; ++v) Kun[a][k][v] += -w * hp * Nd[v] * dNa[k];
+          ru[a][k] += w * (N[a] * mom[k] - hval * dNa[k] + nu * (gu[k][0] * dNa[0] + gu[k][1] * dNa[1]));
+          for (int v = 0; v < ndl; ++v) {
+            double dNdv[2] = {dNd[v].x, dNd[v].y};
+            Kun[a][k][v] += -w * hp * Nd[v] * dNa[k] - w * N[a] * (dEc_dn * Nd[v] * gnk[k] + Ec * dNdv[k]);
+          }
         }
         for (int b = 0; b < 6; ++b) {
           double dNb[2] = {dN[b].x, dN[b].y};
           double ugradNb = u.x * dNb[0] + u.y * dNb[1];
           double lap = dNa[0] * dNb[0] + dNa[1] * dNb[1];
-          for (int k = 0; k < 2; ++k)
-            for (int l = 0; l < 2; ++l) {
-              double val = N[b] * gu[k][l] * N[a];
-              if (k == l) val += (c0 + Gamma) * N[a] * N[b] + ugradNb * N[a] + nu * lap;
+          for (int l = 0; l < 2; ++l) {
+            // d acc_j / d u_{b,l} = delta_jl (c0 N_b + u.grad N_b) + N_b d_l u_j
+            double dacc[2] = {N[b] * gu[0][l], N[b] * gu[1][l]};
+            dacc[l] += c0 * N[b] + ugradNb;
+            double udacc = uk[0] * dacc[0] + uk[1] * dacc[1];
+            for (int k = 0; k < 2; ++k) {
+              double val = dacc[k] + cA * (uk[k] * N[b] * acc[l] + uk[k] * udacc) + dcA * uk[l] * N[b] * uk[k] * ua
+                           + cdv * uk[k] * dNb[l] + 2 * cgr * (N[b] * gu[l][k] + uk[l] * dNb[k]) - dEc_du * uk[l] * N[b] * gnk[k];
+              if (k == l) val += cA * N[b] * ua + cdv * N[b] * divu + Gamma * N[b];
+              val *= N[a];
+              if (k == l) val += nu * lap;
               Kuu[a][k][b][l] += w * val;
             }
+          }
         }
       }
-      (void)hpp;
       for (int v = 0; v < ndl; ++v) {
         rn[v] += w * Nd[v] * (ndot + dot(gn, u) + n * divu);
         for (int b = 0; b < 6; ++b) {
@@ -268,7 +300,22 @@ bool ThzTimeSolver::newton(double c0, const Eigen::VectorXd& hist, double t, dou
     lu_->factorize(J);
     if (lu_->info() != Eigen::Success) return false;
     d = lu_->solve(F);
-    x_ -= d;
+    double step = 1.0;
+    if (p_.closure.exact()) {
+      // the exact Dirac closure exists only for u < v_F: shorten a step that would leave that range
+      const double u2max = 0.98 * 2 * p_.closure.q;
+      for (int h = 0; h < 12; ++h) {
+        double worst = 0;
+        for (int a = 0; a < g_.nn; ++a) {
+          double u0 = x_[2 * a] - step * d[2 * a], u1 = x_[2 * a + 1] - step * d[2 * a + 1];
+          worst = std::max(worst, u0 * u0 + u1 * u1);
+        }
+        if (worst < u2max) break;
+        step *= 0.5;
+      }
+      if (step < 1e-3) { limit_hit_ = true; return false; }
+    }
+    x_ -= step * d;
   }
   assemble(c0, hist, t, Omega, steady, F, trip);
   return F.norm() < tol;
@@ -302,18 +349,52 @@ ThzState ThzTimeSolver::state() const {
   return s;
 }
 
+double ThzTimeSolver::max_speed() const {
+  double m2 = 0;
+  for (int a = 0; a < g_.nn; ++a) m2 = std::max(m2, x_[2 * a] * x_[2 * a] + x_[2 * a + 1] * x_[2 * a + 1]);
+  return std::sqrt(m2);
+}
+
+void ThzTimeSolver::add_density(const std::function<double(Vec2)>& f) {
+  for (int a = 0; a < g_.nd; ++a) x_[g_.ndof_n(a)] += f(m_.X[a]);
+}
+
+bool ThzTimeSolver::advance_dc(double dt, int nsteps, double tol) {
+  Eigen::VectorXd xm1 = x_, xm2 = x_, hist(g_.ndof);
+  for (int k = 1; k <= nsteps; ++k) {
+    const bool first = k == 1;
+    double c0 = first ? 1.0 / dt : 1.5 / dt;
+    hist = first ? Eigen::VectorXd(xm1 / dt) : Eigen::VectorXd((2.0 * xm1 - 0.5 * xm2) / dt);
+    for (int a = 0; a < g_.nn; ++a) if (g_.type[a] == ThzNode::Wall) {
+      auto cart = [&](const Eigen::VectorXd& v) { return g_.t[a] * v[2 * a] + g_.n[a] * v[2 * a + 1]; };
+      Vec2 h = first ? cart(xm1) * (1.0 / dt) : (cart(xm1) * 2.0 - cart(xm2) * 0.5) * (1.0 / dt);
+      hist[2 * a] = h.x; hist[2 * a + 1] = h.y;
+    }
+    if (!newton(c0, hist, k * dt, 0.0, true, tol, 25)) return false;
+    xm2 = xm1; xm1 = x_;
+  }
+  return true;
+}
+
 ThzState ThzTimeSolver::solve_steady(double tol, int max_newton) {
   Eigen::VectorXd hist = Eigen::VectorXd::Zero(g_.ndof);
   // continuation in the drive amplitude: scale all dc sources by lambda
   ThzParams full = p_;
   double lambda = 1.0, done = 0.0;
   Eigen::VectorXd saved = x_;
-  int tries = 0;
+  int tries = 0, limit_fails = 0;
   while (done < 1.0 - 1e-12 && tries < 40) {
     double target = std::min(1.0, done + lambda);
     for (size_t c = 0; c < p_.ports.size(); ++c) { p_.ports[c].Idc = full.ports[c].Idc * target; }
+    limit_hit_ = false;
     if (newton(0.0, hist, 0.0, 0.0, true, tol, max_newton)) { done = target; saved = x_; lambda *= 1.5; }
-    else { x_ = saved; lambda *= 0.5; ++tries; if (lambda < 1e-4) break; }
+    else {
+      x_ = saved; lambda *= 0.5; ++tries;
+      // exact Dirac closure: a drive whose steady state needs u >= v_F has no solution; stop after a
+      // few shortened attempts instead of creeping up to the limit
+      if (limit_hit_ && ++limit_fails >= 3) { limit_hit_ = true; break; }
+      if (lambda < 1e-4) break;
+    }
   }
   p_ = full;
   ThzState s = state();
@@ -349,6 +430,7 @@ void ThzTimeSolver::init_from_perturbation(const FirstOrder& f, const SecondOrde
 
 TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol, const BiasTee& bt) {
   TimeTrace tr;
+  limit_hit_ = false;
   tr.V.assign(g_.np, {}); tr.I.assign(g_.np, {});
   double Tp = 2 * M_PI / Omega, dt = Tp / steps;
   Eigen::VectorXd xm1 = x_, xm2 = have_prev_ ? xprev_ : x_, hist(g_.ndof);
@@ -362,7 +444,7 @@ TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol, c
   bias_updates_ = 0;
   const double Rdc_dev = bt.Rdc_dev;
   std::vector<double> Vm_prev(g_.np, 0.0), Im_prev(g_.np, 0.0);
-  double nmin = 1e300, nmax = -1e300, Pin = 0;
+  double nmin = 1e300, nmax = -1e300, Pin = 0, umax = 0;
   for (int k = 1; k <= ntot; ++k) {
     double t = k * dt, c0;
     if (k == 1 && !bdf2_start) { c0 = 1.0 / dt; hist = xm1 / dt; }       // BDF1 start from rest
@@ -373,13 +455,15 @@ TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol, c
       Vec2 h = (k == 1 && !bdf2_start) ? cart(xm1) * (1.0 / dt) : (cart(xm1) * 2.0 - cart(xm2) * 0.5) * (1.0 / dt);
       hist[2 * a] = h.x; hist[2 * a + 1] = h.y;
     }
-    if (!newton(c0, hist, t, Omega, false, tol, 25)) { tr.ok = false; break; }
+    if (!newton(c0, hist, t, Omega, false, tol, 25)) { tr.ok = false; tr.limit_hit = limit_hit_; break; }
     xm2 = xm1; xm1 = x_;
     ThzState s = state();
     tr.t.push_back(t);
     for (int c = 0; c < g_.np; ++c) { tr.V[c].push_back(s.V[c]); tr.I[c].push_back(s.I[c]); }
     bool last_period = k > ntot - steps;
+    tr.u_max_run = std::max(tr.u_max_run, max_speed());
     if (last_period) {
+      umax = std::max(umax, max_speed());
       for (double n : s.n) { nmin = std::min(nmin, n); nmax = std::max(nmax, n); }
       for (int c = 0; c < g_.np; ++c) Pin += s.V[c] * s.I[c] / steps;
     }
@@ -438,7 +522,7 @@ TimeTrace ThzTimeSolver::run(double Omega, int periods, int steps, double tol, c
       for (int k = n0; k < (int)tr.t.size(); ++k) { tr.V_dc[c] += tr.V[c][k]; tr.I_dc[c] += tr.I[c][k]; }
       tr.V_dc[c] /= steps; tr.I_dc[c] /= steps;
     }
-    tr.P_in = Pin; tr.n_min = nmin; tr.n_max = nmax;
+    tr.P_in = Pin; tr.n_min = nmin; tr.n_max = nmax; tr.u_max = umax;
     // Aitken: with a single slow exponential the period means are geometric
     tr.V_dc_ext = tr.V_dc; tr.I_dc_ext = tr.I_dc;
     int np_ = (int)Imeans[0].size();

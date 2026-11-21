@@ -1,0 +1,18 @@
+convective closure: c_div -0.5000, c_grad -0.2500, exact in u / v_F; s0 / v_F 3.5700
+dc resistance 2.5831 R_unit = 167.9 ohm; dc load R_L 2.5831 R_unit = 167.9 ohm (bias tee); device length 6.65 W_ref, settle 26.8, relax 8.5
+f 3.000e+11 Hz, Omega 2.1120, period 2.975: small-signal I_dc/Va^2 5.3733e-03, eta/Va^2 6.8856e-04 (BDF2-discrete 7.0403e-04), P_in/P_av 0.728; 12 periods x 60 steps (0 bias updates from period 9 every 3)
+     Va   P_av (W)   P_in (W)    I_dc raw      I* (A)    P_dc (W)     eta_av    eta_abs  eta_small   n_min   n_max     tail     corr    drift   wall
+  0.020  1.474e-06  1.070e-06  4.9593e-08  4.9629e-08  4.1348e-13  2.805e-07  3.863e-07  2.754e-07  0.9912  1.0088  0.0e+00  7.3e-04  8.6e-03   1611
+        largest drift speed 0.054 v_F in the last period, 0.054 v_F in the run
+  0.050  9.212e-06  6.689e-06  3.0746e-07  3.0838e-07  1.5964e-11  1.733e-06  2.387e-06  1.721e-06  0.9780  1.0221  0.0e+00  3.0e-03  2.7e-03    632
+        largest drift speed 0.135 v_F in the last period, 0.135 v_F in the run
+  0.100  3.685e-05  2.675e-05  1.1932e-06  1.2070e-06  2.4458e-10  6.638e-06  9.143e-06  6.886e-06  0.9563  1.0442  0.0e+00  1.1e-02  9.5e-04    928
+        largest drift speed 0.272 v_F in the last period, 0.272 v_F in the run
+  0.150  8.291e-05  6.018e-05  2.5397e-06  2.6109e-06  1.1443e-09  1.380e-05  1.901e-05  1.549e-05  0.9349  1.0662  0.0e+00  2.7e-02  4.6e-04    718
+        largest drift speed 0.409 v_F in the last period, 0.409 v_F in the run
+  0.200  1.474e-04  1.070e-04  4.1210e-06  4.3571e-06  3.1869e-09  2.162e-05  2.978e-05  2.754e-05  0.9106  1.0880  4.9e-05  5.4e-02  2.3e-04    849
+        largest drift speed 0.543 v_F in the last period, 0.543 v_F in the run
+  0.300  3.316e-04  2.413e-04  6.0875e-06  7.4983e-06  9.4386e-09  2.846e-05  3.911e-05  6.197e-05  0.8564  1.1306  4.3e-05  1.9e-01  7.1e-05    895
+        largest drift speed 0.790 v_F in the last period, 0.792 v_F in the run
+  0.500  9.212e-04  0.000e+00  0.0000e+00  0.0000e+00  0.0000e+00  0.000e+00  0.000e+00  1.721e-04  1.0000  1.0000  0.0e+00  0.0e+00  0.0e+00     22  (drift reached v_F)
+        largest drift speed 0.000 v_F in the last period, 0.985 v_F in the run

@@ -18,9 +18,10 @@ The answer this project arrives at has two parts.
   short (about half a micrometre for a frequency of one terahertz) and its
   edges are reasonably smooth. Edges of graphene cut in the usual way have
   been measured to be anywhere from smooth enough to far too rough. Even
-  at its best the shape does no better than a simpler effect that comes
-  from how the device is wired.
-- **As a power source, no.** Neither shape converts as much as 1 % of the
+  at its best the shape does about twice as well as a simpler effect that
+  comes from how the device is wired, which is within the uncertainty of
+  our model of that effect.
+- **As a power source, no.** Neither shape converts as much as 0.1 % of the
   incoming power, in any of the cases we studied. The Tesla valve does
   nothing useful in graphene.
 
@@ -138,7 +139,7 @@ a straight strip wired the same way would do it too. When we wire the
 funnel symmetrically, so that only its shape can matter, the response
 nearly vanishes. The one exception is a narrow range of frequencies where
 the taper acts like the horn of a trumpet and helps the wave in. The Tesla
-valve contributes ten to twenty times less than the funnel at every
+valve contributes ten or more times less than the funnel at every
 frequency.
 
 **6. A very short funnel does rectify terahertz radiation by its shape,
@@ -152,11 +153,11 @@ working at 1 terahertz, at room temperature.
 
 How well it works depends on something our first simulations did not
 calculate: how the applied voltage spreads inside the device. They assumed
-it, in two different ways, and both gave a strong response, two to eight
-times the wiring effect in point 5. We then wrote a simulation that
+it, in two different ways, and both gave a strong response, three to
+thirteen times the wiring effect in point 5. We then wrote a simulation that
 calculates the voltage from the electrons' own charge, with a gate and
-metal contacts included. The response dropped to a sixth: about the same
-as the wiring effect at room temperature, and not more. The reason is that
+metal contacts included. The response dropped to a sixth: about twice
+the wiring effect at room temperature. The reason is that
 a quarter of the voltage is used up at the two contacts, and the rest
 falls evenly on both sides of the narrowest point, which helps the one-way
 effect much less than either assumption did.
@@ -193,12 +194,16 @@ not reproduced by our model at all. That frequency is beyond what the model
 can describe.
 
 **7. As a power source, every version is very inefficient.** At best, less
-than 1 % of the incoming terahertz power comes out as DC power. For the
-long, wired device we tried changing the two main design choices (how many
+than 0.1 % of the incoming terahertz power comes out as DC power. For the
+long, wired device the figure is 0.001 % to 0.05 % at the strongest signal
+for which we trust our model of it, a limit that we assumed and did not
+derive. We tried changing the two main design choices (how many
 electrons are in the graphene, and how close the gate sits). Neither raised
-that ceiling. They only changed the power level at which the device stops
-improving. Realistic electrical contacts make it several times worse. The
-short funnel is far below even that: about one part in ten thousand. That a
+the figure to 0.1 %. They mainly changed the power level at which that
+limit is reached. Realistic electrical contacts make it several times
+worse. The
+short funnel converts about one part in ten thousand at the strongest
+signal we calculated. That a
 ceiling of this kind exists for transistor-like detectors was already known
 from earlier work by others. Our contribution is the numbers for graphene.
 
@@ -274,6 +279,7 @@ can overstate the effect several times over.
 | The short funnel with an assumed voltage profile | [results/BALLISTIC_SHORT.md](results/BALLISTIC_SHORT.md) |
 | The short funnel with the voltage calculated | [results/BALLISTIC_SELFCONSISTENT.md](results/BALLISTIC_SELFCONSISTENT.md) |
 | The effect of the gate on steady currents | [results/HYDRO_GATE.md](results/HYDRO_GATE.md) |
+| The fluid results with the corrected momentum equation | [results/HYDRO_MOMENTUM.md](results/HYDRO_MOMENTUM.md) |
 | What earlier work by others already showed | [paper/prior_work.md](paper/prior_work.md) |
 | How to build and run the code | [README.md](README.md) |
 

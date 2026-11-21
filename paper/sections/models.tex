@@ -23,7 +23,8 @@ depend on the details of the valve, and a straight $175\nm$ channel between
 the same leads as a control. For the terahertz calculations each shape is
 also scaled so that its narrowest width is $1\um$, with $4\um$ contacts,
 which brings the device resistance from kilohms to the hundred-ohm range of
-an antenna [Fig.~\ref{fig:devices}(c)]. Four further funnels, from a
+an antenna [Fig.~\ref{fig:devices}(c)]; the scaled funnel has straight
+leads of $12\um$ on each side of its taper and is $27\um$ long. Four further funnels, from a
 half-scale copy of device D down to a $0.5\um$ device with the proportions
 of the diode measured at $28\THz$~\cite{zhu2013graphene}, are used for the
 length scaling of Sec.~\ref{sec:length} and listed in
@@ -64,11 +65,14 @@ reverse it for shallow tapers~\cite{truccolo2024comprehensive}; we return
 to the field distribution in Sec.~\ref{sec:ballistic}. The figure of merit is the asymmetry $A=I(+V)/|I(-V)|$; writing
 $I=G_{1}V+G_{2}V^{2}$, $A\simeq 1+2(G_{2}/G_{1})V$, and a cosine drive of
 amplitude $V_{a}$ rectifies $\Idc=G_{2}V_{a}^{2}/2$ if the response is
-instantaneous. Carriers are electrons at density $n=1.4\times10^{12}\percm$
-($\EF=0.138$~eV) and $300$~K, the density we estimate from the gate voltage
-and lever arm reported for that device~\cite{nguyen2021geometric}, an
-upper bound because the gate voltage of its neutrality point is not
-reported; holes give the inverse asymmetry. The model has no length of its own: with the
+instantaneous. Carriers are electrons at a chemical potential
+$\EF=0.138$~eV and $300$~K. This is the Fermi energy of a density of
+$1.4\times10^{12}\percm$, which we estimate from the gate voltage and
+lever arm reported for that device~\cite{nguyen2021geometric}, an upper
+bound because the gate voltage of its neutrality point is not reported;
+at $300$~K the electron density at this chemical potential, which is the
+density of the simulated gas, is $1.56\times10^{12}\percm$. Holes give
+the inverse asymmetry. The model has no length of its own: with the
 bias, $\EF$ and $\kB T$ fixed, the transmission depends only on the shape
 and on $\lambda/L$, and under a drive of frequency $f$ only on those and on
 $fL/\vF$, while currents and conductances scale with the width. This is
@@ -80,20 +84,24 @@ channel~\cite{richley1964numerical}, the Sharvin
 conductance~\cite{sharvin1965possible}, the ballistic-to-diffusive crossover, reciprocity with and
 without the field, unit asymmetry of a mirror-symmetric constriction, and
 convergence of the chord integration. Classical trajectories require
-features well above the Fermi wavelength, $30\nm$ here.
+features well above the Fermi wavelength, $30\nm$ here. Collisions
+between electrons are not in this model; their mean free path at $300$~K
+is of the order of $100\nm$ (Table~\ref{tab:params}), shorter than
+every device studied, and we return to them in Secs.~\ref{sec:short} and
+\ref{sec:discussion}.
 
 \subsection{Ballistic model with a computed field}
 \label{sec:model-pic}
 
-For the shortest funnel, and for device D at dc, the potential is
-computed instead of imposed, in a particle simulation of the kind applied to geometric diodes in
+For the $0.55\um$ funnel G3 of Table~\ref{tab:short}, and for device D
+at dc, the potential is computed instead of imposed, in a particle simulation of the kind applied to geometric diodes in
 Refs.~\cite{stearns2020high,stearns2021simulation}. The graphene sheet
 lies in a uniform dielectric of permittivity $3.8$ at a distance $d$ above
 a grounded gate plane; $d$ is $30\nm$, the gate of the plasmonic model
 below, or $300\nm$, an oxide back gate that leaves a device of this size
 nearly ungated. The contacts are metal strips in the plane of the sheet,
 $200\nm$ long and as wide as the leads, held at potentials $V_{S}(t)$ and
-$V_{D}(t)$. All electrons of the device, about $2900$, are represented by
+$V_{D}(t)$. All electrons of the device, about $3200$, are represented by
 $4$ to $8\times10^{6}$ sample particles that move together, with the
 trajectories, wall reflection, scattering and equilibrium injection at the
 contacts of the model above. At every time step of $2.5$~fs their charge
@@ -139,9 +147,8 @@ $[1-p(\theta')]\cos\theta'$. This choice makes the wall reciprocal, so
 that a gas in equilibrium stays uniform and isotropic; re-emission by the
 cosine law alone does not, once $p$ depends on the angle (Supplemental
 Material). We label a rough edge by its specularity for a head-on hit at
-the Fermi wave vector $k_{F}=\sqrt{\pi n}$,
-$p_{0}=\exp[-(2hk_{F})^{2}]$, which is $0.5$ for $h=2.0\nm$ at the
-density used here.
+the Fermi wave vector $k_{F}=\EF/\hbar\vF=0.21\nm^{-1}$,
+$p_{0}=\exp[-(2hk_{F})^{2}]$, which is $0.5$ for $h=2.0\nm$.
 
 The contacts described so far are ideal: the line on which the sheet
 meets a strip absorbs every electron that reaches it and injects the
@@ -171,7 +178,9 @@ of $T=0.5$ and $0.25$. For device D the same model is run with ideal
 contacts, the gate at $300\nm$, a grid of $7.5\nm$ and $5\times10^{7}$
 particles for its $1.6\times10^{5}$ electrons.
 
-Thirteen tests were passed before use (Supplemental Material), among them the
+Tests T22 to T32 of the Supplemental Material were passed before use,
+two of them in a form that had to be relaxed and is described there.
+They include the
 capacitance of the contact strips, the static screening of a weak
 potential, the speed of the gated plasma wave, which is $0.98$ to $0.99$
 of the collisionless value of $3.90\,\vF$ under the $30\nm$ gate, the
@@ -235,11 +244,15 @@ $\Phi(n)=e^{2}n/C_{g}+\hbar\vF\sqrt{\pi n}$, the hydrodynamic mass is
 $m^{*}(n)=\hbar\sqrt{\pi n}/\vF$~\cite{tomadin2013theory,svintsov2012hydrodynamic}, and because both
 depend on the density only the force per unit mass is the gradient of a
 single function $h(n)$ with $h'=\Phi'/m^{*}$. The model is
-\begin{align}
-\partial_{t}n+\nabla\cdot(n\bm{u})&=0,\label{eq:cont}\\
-\partial_{t}\bm{u}+(\bm{u}\cdot\nabla)\bm{u}+\frac{\bm{u}}{\taumr}
-&=-\nabla h(n)+\nu\nabla^{2}\bm{u},\label{eq:mom}
-\end{align}
+\begin{equation}
+\partial_{t}n+\nabla\cdot(n\bm{u})=0,\label{eq:cont}
+\end{equation}
+\begin{multline}
+\partial_{t}\bm{u}+(\bm{u}\cdot\nabla)\bm{u}
+-\tfrac12\bm{u}\,(\nabla\cdot\bm{u})-\tfrac14\nabla u^{2}
++\frac{\bm{u}}{\taumr}\\
+=-\nabla h(n)+\nu\nabla^{2}\bm{u},\label{eq:mom}
+\end{multline}
 with the plasma speed $s(n)$ given by
 \begin{equation}
 s^{2}(n)=n\,h'(n)=\frac{e^{2}n}{C_{g}m^{*}(n)}+\frac{\vF^{2}}{2}.
@@ -248,10 +261,60 @@ s^{2}(n)=n\,h'(n)=\frac{e^{2}n}{C_{g}m^{*}(n)}+\frac{\vF^{2}}{2}.
 The second term is the quantum capacitance~\cite{fang2007carrier}; its share $q=\vF^{2}/2s_{0}^{2}$
 of $s_{0}^{2}=s^{2}(n_{0})$ is $0.04$ at $n_{0}=10^{12}\percm$ under $30\nm$ of
 hBN and grows to $0.5$ at the thin-gate, low-density corner of
-Sec.~\ref{sec:operating}. Replacing $h$ by $s_{0}^{2}n/n_{0}$ gives the
-shallow-water model of Dyakonov and Shur~\cite{dyakonov1993shallow}. At
-frequencies above $1/\tauee$ the viscosity is taken in the viscoelastic form
-$\nu/(1+i\omega\tauee)$.
+Sec.~\ref{sec:operating}. Replacing $h$ by $s_{0}^{2}n/n_{0}$ and dropping
+the third and fourth terms on the left of Eq.~\eqref{eq:mom} gives the
+shallow-water model of Dyakonov and Shur~\cite{dyakonov1993shallow},
+which we call the classical gas; Eqs.~\eqref{eq:cont} and \eqref{eq:mom}
+as written are the Dirac gas. In the small-signal solver the viscosity
+has the viscoelastic form $\nu/(1+i\omega\tauee)$, which matters above
+$1/\tauee$; the time-domain solver has the constant $\nu$.
+
+The third and fourth terms on the left of Eq.~\eqref{eq:mom} are what
+distinguishes the Dirac gas from an ordinary fluid in the inertia, and
+they are of the same order as the convective term. For carriers of energy
+$\hbar\vF|\bm{k}|$ that drift at a velocity $\bm{u}$, the momentum density
+at fixed density is $n m^{*}\bm{u}$ and the momentum flux is
+$P_{0}(n)+\tfrac34 n m^{*}u^{2}$ along the drift and
+$P_{0}(n)-\tfrac14 n m^{*}u^{2}$ across it, where
+$P_{0}=\hbar\vF\sqrt{\pi}\,n^{3/2}/3$ is the pressure of the gas at rest
+and an ordinary fluid has
+the factors $1$ and $0$; with Eq.~\eqref{eq:cont} this gives
+Eq.~\eqref{eq:mom} to second order in the amplitude about a state of
+uniform density at rest, which is the order to which the small-signal
+response is computed. In one dimension the three
+inertial terms cancel, so that the degenerate Dirac gas has no convective
+term at
+this order~\cite{svintsov2013hydrodynamic}. Two other forms are in the
+literature. The form with
+$(\bm{u}\cdot\nabla)\bm{u}$ alone, which is that of a classical electron
+gas with the mass $m^{*}(n)$ and which Ref.~\cite{tomadin2013theory}
+introduces as a crude approximation, gives a uniform channel between
+$1.6$ and $3$ times the rectified voltage of Eq.~\eqref{eq:mom}
+(Sec.~\ref{sec:small}); we refer to it as the ordinary convective term.
+The photoresponse derived in Ref.~\cite{tomadin2013theory} rests on an
+equation that keeps the third term of Eq.~\eqref{eq:mom} and not the
+fourth, which leaves half a convective term in one dimension and gives
+the uniform channel $1.3$ to $1.9$ times the voltage of
+Eq.~\eqref{eq:mom} between $0.1$ and $1\THz$
+(Appendix~\ref{app:perturbation}). We do not follow it: the general
+equations of that reference reduce to Eq.~\eqref{eq:mom} once the pressure
+is evaluated at fixed density in the frame of the lattice, and the speeds
+$u_{0}/2\pm s_{0}$ of waves on a drifting
+gas~\cite{svintsov2013hydrodynamic} require the cancellation. For an
+incompressible flow the third term vanishes and the fourth is a gradient
+that is absorbed in the pressure, so the viscous model of
+Eq.~\eqref{eq:ns} holds for the Dirac liquid as it stands.
+Equation~\eqref{eq:mom} is the expansion of the Euler equation of an
+ideal relativistic fluid with $\vF$ in place of the speed of
+light~\cite{landau1987fluid,tomadin2013theory}. For steady states and for
+finite amplitudes we use that equation in full
+[Eq.~\eqref{eq:exact} of Appendix~\ref{app:perturbation}], which holds for
+any drift speed below $\vF$ and has no solution beyond it. Two choices
+enter at the same order as these terms and are varied in
+Sec.~\ref{sec:small}: a contact fixes the density of the fluid next to
+it, as in
+Refs.~\cite{dyakonov1993shallow,tomadin2013theory,svintsov2013hydrodynamic},
+and the gas is taken at zero temperature.
 
 The antenna is a Thevenin source of amplitude $V_{a}$ and resistance $\Rant$
 connected to lumped ports: each contact is an equipotential whose voltage and
@@ -276,18 +339,32 @@ order about rest: the first order is a complex time-harmonic plasmon problem,
 and the time average of the second order is a Stokes-Brinkman problem for the
 dc flow, forced by products of first-order fields, whose port current or
 voltage is the rectified signal (Appendix~\ref{app:perturbation}). For finite amplitudes
-Eqs.~\eqref{eq:cont} and \eqref{eq:mom} are integrated in time with the
+Eqs.~\eqref{eq:cont} and \eqref{eq:exact} are integrated in time with the
 second-order backward difference formula and Newton iteration, with a bias
 tee that separates the dc load from the antenna. Both use Taylor-Hood
 elements on the meshes of the viscous model. The steady states of
-Eqs.~\eqref{eq:cont} and \eqref{eq:mom} under a dc current, used in
+Eqs.~\eqref{eq:cont} and \eqref{eq:exact} under a dc current, used in
 Sec.~\ref{sec:gated}, are obtained with the same discretisation by Newton
-iteration. The validation ladder has twenty tests: the static limit against the viscous solver, the plasmon
-dispersion, the Dyakonov-Shur closed form [Fig.~\ref{fig:small}(a)],
+iteration. Every finite-amplitude and steady solution carries its largest
+drift speed, and results above $0.3\,\vF$ are marked: there the ideal gas
+is still defined, but heating and the scattering by optical phonons,
+which the model does not contain, are not negligible in a real sample.
+We call $0.3\,\vF$ the drift limit. It is an assumption and not a derived
+bound: we have no estimate that places the limit of the model at this
+speed rather than at $0.2$ or $0.5\,\vF$, and every power quoted at the
+limit, and every square-law efficiency quoted there, scales as its
+square.
+The validation ladder has twenty-seven tests: the static limit against the viscous solver, the plasmon
+dispersion, the Dyakonov-Shur closed form and its counterpart for the
+Dirac gas [Fig.~\ref{fig:small}(a)],
 reciprocity of the symmetric termination, mesh and time-step convergence,
 agreement of the two solvers at small amplitude, invariance under
-co-scaling of the physical parameters at fixed nondimensional groups, and,
-for the steady states, a closed form for the gated channel and the
+co-scaling of the physical parameters at fixed nondimensional groups,
+the speeds of waves on a drifting fluid, which are $u_{0}/2\pm s_{0}$ for
+the Dirac gas~\cite{svintsov2013hydrodynamic} against $u_{0}\pm s_{0}$ for
+an ordinary one, a radial flow that separates the two new terms of
+Eq.~\eqref{eq:mom}, and,
+for the steady states, a quadrature for the gated channel and the
 incompressible limit against the viscous solver.
 
 \begin{table}
@@ -296,15 +373,18 @@ Ref.~\cite{nguyen2021geometric}; the two plasmonic sets are representative of
 hBN-encapsulated graphene at the two temperatures and are labelled by them;
 they are assumptions, not fits. The $100$~K viscosity is of the order
 measured~\cite{bandurin2016negative,krishnakumar2017superballistic}; the
-$300$~K value is the kinetic estimate $\vF^{2}\tauee/4$. $W$ is the contact
-width.}
+$300$~K value is the kinetic estimate $\vF^{2}\tauee/4=0.025$~m$^{2}$/s,
+rounded. The steady viscous results are given for the range $0.02$ to
+$0.1$~m$^{2}$/s. The electron-electron mean free path $\vF\tauee$ is
+$1\um$ at $100$~K and $0.1\um$ at $300$~K. $W$ is the contact width.}
 \label{tab:params}
 \begin{ruledtabular}
 \begin{tabular}{ll}
 Quantity & Value \\
 \hline
 \multicolumn{2}{l}{\textit{Ballistic}} \\
-$n$, $\EF$, $T$ & $1.4\times10^{12}\percm$, $0.138$ eV, 300 K \\
+$\EF$, $T$ & $0.138$ eV, 300 K \\
+$n$ at 300 K; at $T=0$ & $1.56$; $1.4\times10^{12}\percm$ \\
 specularity $p$ & 1, 0.9, 0.8, 0.7, 0.5, 0 \\
 mean free path $\lambda$ & $\infty$, 700, 200, 100 nm \\
 \multicolumn{2}{l}{\textit{Viscous}} \\
