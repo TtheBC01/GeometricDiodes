@@ -1,6 +1,6 @@
 """Loaders for Stage H5 (results/dcgate)."""
 import csv, os, math
-R = "results/dcgate"
+R = os.environ.get("DCGATE_DIR", "results/dcgate")   # Stage H6 reads results/dcgate2 through this
 NAME = {"chan": "straight channel", "symcon": "symmetric constriction", "funnel": "funnel, 175 nm neck", "funnel_w1000": "funnel, 1 um neck",
         "tesla_classic": "Tesla valve, 175 nm", "tesla_classic_w1000": "Tesla valve, 1 um"}
 

@@ -65,6 +65,9 @@ int main(int argc, char** argv) {
   int nf = 25; double fmin = 1e10, fmax = 3e12, Rant = 75, slip = INFINITY, hw = 20, hm = 120;
   double n_cm2 = 1e12, d = 30e-9, eps = 3.8, nu = -1, tau = -1, tauee = -1, Rc_ohm_um = 0, T = -1;
   std::string closure = "graphene", tauscale = "1";
+  double cdiv_opt = NAN, cgrad_opt = NAN;   // --cdiv, --cgrad: custom convective coefficients (plans/hydro_momentum.md)
+  double contact_drift = 0;                 // --contact_drift 1: variant C2 of the contact condition
+  double corner_deg = 25;                   // --corner_deg 181: wall corners are not pinned (they slide along the mean tangent)
   bool match = false;
   for (int i = 1; i + 1 < argc; i += 2) {
     std::string k = argv[i], v = argv[i + 1];
@@ -77,6 +80,9 @@ int main(int argc, char** argv) {
     else if (k == "--closure") closure = v; else if (k == "--nu") nu = std::stod(v); else if (k == "--tau") tau = std::stod(v); else if (k == "--tauee") tauee = std::stod(v);
     else if (k == "--Rc") Rc_ohm_um = std::stod(v); else if (k == "--match") match = std::stoi(v) != 0;
     else if (k == "--tauscale") tauscale = v; else if (k == "--T") T = std::stod(v);
+    else if (k == "--cdiv") cdiv_opt = std::stod(v); else if (k == "--cgrad") cgrad_opt = std::stod(v);
+    else if (k == "--contact_drift") contact_drift = std::stod(v);
+    else if (k == "--corner_deg") corner_deg = std::stod(v);
     else { std::fprintf(stderr, "unknown option %s\n", k.c_str()); return 1; }
   }
   // parameter sets (plan, sec. 4): 300 K: tau_mr 1 ps, tau_ee 0.1 ps, nu 0.03; 100 K: 5 ps, 1 ps, 0.1
@@ -93,8 +99,10 @@ int main(int argc, char** argv) {
   ThzUnits u = ThzUnits::make(n_cm2, d, eps, G.W_ref * 1e-9, nu, tau, tauee);
   ThzParams p;
   p.Gamma = u.Gamma; p.nu = u.inv_Res; p.tau_ee = u.t_ee; p.closure.q = u.q;
-  p.closure.kind = closure == "sw" ? Closure::ShallowWater : Closure::Graphene;   // sw: the classical DS model
-  p.slip = slip;
+  // sw: the classical DS model; legacy: graphene with the Galilean convective term of the runs before Stage H6
+  if (!p.closure.set_by_name(closure)) { std::fprintf(stderr, "unknown closure %s (sw | graphene | legacy | tp | dirac2)\n", closure.c_str()); return 1; }
+  if (std::isfinite(cdiv_opt) || std::isfinite(cgrad_opt)) p.closure.set_custom(std::isfinite(cdiv_opt) ? cdiv_opt : p.closure.cdiv(), std::isfinite(cgrad_opt) ? cgrad_opt : p.closure.cgrad());
+  p.slip = slip; p.contact_drift = contact_drift; p.corner_deg = corner_deg;
   const double Rc_ohm = Rc_ohm_um / (G.W_ref * 1e-3);   // ohm um over the contact width in um
   const double Rc = u.R_nd(Rc_ohm);
   // first-order (ac) ports for the terminations with R_c in series at every contact;
@@ -121,6 +129,8 @@ int main(int argc, char** argv) {
               geo.c_str(), set.c_str(), term.c_str(), closure.c_str(), m.nn(), G.W_ref, n_cm2, d * 1e9, u.s0, u.q, u.U0, u.Gamma,
               u.inv_Res, u.Omega(1e12) * u.t_ee, u.R_unit, Rant, u.R_nd(Rant), Rc_ohm, Rc, u.f_unit / 1e12, u.I_unit, u.V_unit,
               tau * 1e12, tscale);
+  std::printf("convective closure: c_div %+.4f, c_grad %+.4f (alpha in one dimension %.4f); s0 / v_F %.4f\n", p.closure.cdiv(), p.closure.cgrad(),
+              p.closure.alpha1d(), u.s0 / units::vF);
   std::printf("T %g K: E_F %.1f meV = %.1f kT (Fermi liquid %s), U0 = %.1f kT (gating %s), q %.2f%s\n", T, EF_eV * 1e3, EF_kT,
               valid_FL ? "ok" : "VIOLATED", U0_kT, valid_gate ? "ok" : "VIOLATED", u.q, flag_q ? " (quantum capacitance dominant)" : "");
   ThzSolver s(m, p);
@@ -136,9 +146,10 @@ int main(int argc, char** argv) {
     csv.open(out); csv.precision(10);
     csv << "geo,set,term,f_Hz,Omega,ReZ_ohm,ImZ_ohm,Isc_per_Va2,Voc_per_Va2,RI_A_per_W,RV_V_per_W,Pin_over_Pav,Rdc_ohm,"
            "ReZant_ohm,ImZant_ohm,Rant_ohm,Rc_ohm,n_cm2,d_m,T_K,tau_s,tauee_s,nu,EF_over_kT,U0_over_kT,q,valid_FL,valid_gate,flag_q,"
-           "Vunit_V,Runit_ohm,NEP_W_per_rtHz,eta_per_W,Pknee_W,S_sat,eta_peak,eta_1uW,eta_10uW,eta_100uW\n";
+           "Vunit_V,Runit_ohm,NEP_W_per_rtHz,eta_per_W,Pknee_W,S_sat,eta_peak,eta_1uW,eta_10uW,eta_100uW,"
+           "cdiv,cgrad,u1max_over_vF_per_Va,Va_at_0p3vF\n";
   }
-  struct Row { cd Z, Zant; double Pin_Pav, Isc, Voc, Rant; };
+  struct Row { cd Z, Zant; double Pin_Pav, Isc, Voc, Rant, u1max; };
   // one evaluation at a given antenna resistance: linear solve, short-circuit and open-circuit dc solves
   auto evaluate = [&](double R_ohm, double f) {
     double R = u.R_nd(R_ohm), Om = u.Omega(f);
@@ -146,6 +157,8 @@ int main(int argc, char** argv) {
     ThzSolver ss(m, pp);
     FirstOrder fo = ss.solve_linear(Om);
     Row r; r.Rant = R_ohm;
+    r.u1max = 0;   // largest first-order drift amplitude per unit antenna amplitude, in units of s_0
+    for (size_t a = 0; a < fo.u1x.size(); ++a) r.u1max = std::max(r.u1max, std::sqrt(std::norm(fo.u1x[a]) + std::norm(fo.u1y[a])));
     r.Z = (fo.V1[0] - fo.V1[1]) / fo.I1[0];                   // device impedance (V_s - V_d) / I_s, as in S2
     if (term == "sym") { cd Id = 0.5 * (fo.I1[0] - fo.I1[1]); r.Zant = (1.0 - R * Id) / Id; }
     else { int c = term == "dsd" ? 1 : 0; r.Zant = (1.0 - R * fo.I1[c]) / fo.I1[c]; }
@@ -183,7 +196,8 @@ int main(int argc, char** argv) {
                  << Rdc * u.R_unit << "," << std::real(r.Zant) * u.R_unit << "," << std::imag(r.Zant) * u.R_unit << "," << r.Rant << "," << Rc_ohm << "," << n_cm2 << "," << d << "," << T << "," << tau << ","
                  << tauee << "," << nu << "," << EF_kT << "," << U0_kT << "," << u.q << "," << valid_FL << "," << valid_gate << ","
                  << flag_q << "," << u.V_unit << "," << u.R_unit << "," << NEP << "," << eta_per_W << "," << Pknee << "," << S << ","
-                 << eta_peak << "," << eta_at(1e-6) << "," << eta_at(1e-5) << "," << eta_at(1e-4) << "\n";
+                 << eta_peak << "," << eta_at(1e-6) << "," << eta_at(1e-5) << "," << eta_at(1e-4) << ","
+                 << p.closure.cdiv() << "," << p.closure.cgrad() << "," << r.u1max * u.s0 / units::vF << "," << 0.3 / (r.u1max * u.s0 / units::vF) << "\n";
   }
   return 0;
 }

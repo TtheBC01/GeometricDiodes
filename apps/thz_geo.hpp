@@ -1,6 +1,7 @@
 // Device catalogue shared by the Stage H2/H3 drivers (gd_thz_sweep, gd_thz_power).
 #pragma once
 #include "generators.hpp"
+#include <cmath>
 #include <stdexcept>
 #include <string>
 
@@ -19,6 +20,8 @@ inline ThzGeo make_thz_geo(const std::string& name) {
     FunnelParams f; f.Wc = f.Wd = 4000; f.Wn = 1000; f.Lc = f.Ld = 12000;
     return {make_funnel(f), 4000, "h_funnel_w1000"};
   }
+  // Stage H6 control C1: a plain channel with the lead width and the full length of funnel_w1000
+  if (name == "chan_w4000") return {make_straight_channel(24000 + 1500 / std::tan(deg2rad(30)), 4000), 4000, "h_chan_w4000"};
   if (name == "tesla_classic") return {load_boundary("meshes/tesla_classic_h.poly"), 2000, "h_tesla_classic"};
   if (name == "tesla_classic_w1000") return {load_boundary("meshes/tesla_classic_w1000_h.poly"), 4000, "h_tesla_classic_w1000"};
   throw std::runtime_error("unknown geometry " + name);

@@ -395,10 +395,14 @@ int main(int argc, char** argv) {
     double dU_sw = ssw.solve_dc(fsw).V20[1], dU_gr = sgr.solve_dc(fgr).V20[1];
     // in volts: graphene dU_gr V_unit vs classical dU_sw U0 (shallow water V_unit = U0)
     double ratio = dU_gr * u.V_unit / (dU_sw * u.U0);
-    bool ok = cf < 1e-9 && hv < 1e-3 && std::fabs(ratio - 1) < 0.1;
+    // Stage H6: the graphene response is no longer close to the classical one (the convective term of the
+    // degenerate Dirac gas vanishes in one dimension); the reference is the closed form with the closure's coefficients
+    double dU_ref = ds::general(3.0, 1.0, L, pgr.closure.alpha1d(), pgr.closure.kappa(), -u.q / 2);
+    bool ok = cf < 1e-9 && hv < 1e-3 && std::fabs(dU_gr / dU_ref - 1) < 0.01;
     report("T17", ok, fmt("units at (5e11, 10 nm): E_F %.1f meV, s0 %.4e m/s, q %.4f, U0 %.4f V, V_unit %.4f V, R_unit %.2f ohm, f_unit %.2f GHz; "
                           "closed forms to %.1e, hand values to %.1e; channel DS dU at Gamma 1 Omega 3: graphene %.5f V_unit vs shallow water %.5f U0, "
-                          "ratio in volts %.4f", EF_meV, u.s0, u.q, u.U0, u.V_unit, u.R_unit, u.f_unit / 1e9, cf, hv, dU_gr, dU_sw, ratio));
+                          "ratio in volts %.4f; graphene closed form %.5f (rel %.1e)", EF_meV, u.s0, u.q, u.U0, u.V_unit, u.R_unit, u.f_unit / 1e9, cf, hv, dU_gr, dU_sw, ratio,
+                          dU_ref, dU_gr / dU_ref - 1));
   }
 
   // Stage H3 ladder (plans/hydro_largesignal.md, sec. 4): 1 um funnel, 100 K,
@@ -510,7 +514,8 @@ int main(int argc, char** argv) {
         double I = v * U0 / (p.Gamma * L);
         for (int sgn : {+1, -1}) {
           SteadyPoint a = steady_point(m, p, 0, sgn * I);
-          double ref = p.closure.Phi(gated_channel_n0(p.closure, p.Gamma * L, sgn * I));
+          // Stage H6: the quadrature for the closure in use (it equals the old closed form for the classical gas)
+          double ref = p.closure.Phi(gated_channel_ode(p.closure, p.Gamma, L, sgn * I));
           double err = std::fabs(a.V / ref - 1); worst = std::max(worst, a.ok ? err : 1.0);
           det += fmt("\n         %s v %+.2f: V %.6f closed form %.6f (err %.1e)", kind == 0 ? "shallow water" : "graphene     ", sgn * v, a.V, ref, err);
         }
@@ -548,6 +553,193 @@ int main(int argc, char** argv) {
     double D = dp.back().D;
     report("T20", a.ok && c.ok && dp.back().ok && std::fabs(D2 / D - 1) < 0.02,
            fmt("funnel, slip, Re 10: gated solver D %.5f (density drop %.1e) vs Stage H D %.5f (rel diff %.1e)", D2, a.nmax - a.nmin, D, D2 / D - 1));
+  }
+
+
+  // ===================== Stage H6: the momentum equation of the Dirac gas ========================
+  // (plans/hydro_momentum.md, section 4). T33, the legacy switch against the stored result
+  // files, is tools/momentum_regress.sh.
+  // T34: uniform channel, new convective terms, against the closed form with alpha = 0
+  //      (degenerate Dirac gas) and alpha = 1/2 (Tomadin and Polini), friction only.
+  if (want("T34")) {
+    Mesh m = channel_mesh(L, g_hw);
+    double worst = 0; std::string det;
+    for (double q : {0.04, 0.3}) {
+      for (int form = 0; form < 3; ++form) {
+        for (double Gamma : {1.0, 0.1}) {
+          ThzParams p = ds_params(Gamma, 0.0);
+          p.closure.kind = Closure::Graphene; p.closure.q = q;
+          p.closure.conv = form == 0 ? Convection::Dirac : (form == 1 ? Convection::TomadinPolini : Convection::Galilean);
+          ThzSolver s(m, p);
+          for (double Om : {0.1, 0.3, 0.6, 1.0, 3.0}) {
+            FirstOrder f = s.solve_linear(Om);
+            double fem = s.solve_dc(f).V20[1];
+            double ref = ds::general(Om, Gamma, L, p.closure.alpha1d(), p.closure.kappa(), -q / 2);
+            double err = std::fabs(fem / ref - 1); worst = std::max(worst, err);
+            if (q == 0.04 && (Om == 0.3 || Om == 3.0))
+              det += fmt("\n         q %.2f alpha %.1f Gamma %.1f Om %.1f: FEM %.6f closed form %.6f (err %.1e)", q, p.closure.alpha1d(), Gamma, Om, fem, ref, err);
+          }
+        }
+      }
+    }
+    report("T34", worst < 1e-2, fmt("channel photoresponse with the Dirac-gas, Tomadin-Polini and Galilean terms, 60 points, worst error %.1e:", worst) + det);
+  }
+
+  // T35: a small density pulse on a channel carrying a steady drift u0. The two halves travel at
+  //      s+ and s-; their sum is u0 (1 + alpha) to first order (u0 for the Dirac gas, as Svintsov's
+  //      Eq. (39) says; 2 u0 for a Galilean fluid). Compared with the roots of the linearised
+  //      equation (s - u0)(A s - B) = C.
+  if (!quick && want("T35")) {
+    const double Lp = 24.0;
+    Boundary b = make_straight_channel(Lp * 1000, 1000);
+    Mesh m = Mesh::load(ensure_mesh(b, "t_chan24", 100, 100), 1000);
+    bool ok = true; std::string det;
+    struct Case { Convection cv; double u_vF; const char* name; };
+    for (const Case& cs : {Case{Convection::DiracExact, 0.07, "Dirac gas"}, Case{Convection::DiracExact, 0.18, "Dirac gas"}, Case{Convection::Galilean, 0.18, "Galilean "}}) {
+      ThzParams p; p.Gamma = 0; p.nu = 1e-4; p.closure.q = 0.04; p.closure.conv = cs.cv;
+      const double q = p.closure.q, u0 = cs.u_vF * std::sqrt(2 * q);
+      Port src; src.tag = 0; src.dc = Port::Kind::Current; src.Idc = u0;
+      p.ports = {src, Port::ground(1)};
+      ThzTimeSolver ts(m, p, 1);
+      ThzState st0 = ts.solve_steady(1e-11);
+      const double eps = 2e-3, sig = 1.0, x0 = 0.5 * Lp, tend = 5.0; const int nst = 250;
+      ts.add_density([&](Vec2 X) { return eps * std::exp(-(X.x - x0) * (X.x - x0) / (2 * sig * sig)); });
+      bool adv = ts.advance_dc(tend / nst, nst, 1e-10);
+      ThzState st = ts.state();
+      double sl = 0, sxl = 0, sr = 0, sxr = 0;
+      for (int a = 0; a < m.nv; ++a) {
+        double dn = st.n[a] - st0.n[a], x = m.X[a].x;
+        if (x < 2 || x > Lp - 2) continue;              // away from the contacts
+        if (x < x0) { sl += dn; sxl += dn * x; } else { sr += dn; sxr += dn * x; }
+      }
+      double sp = (sxr / sr - x0) / tend, sm = (sxl / sl - x0) / tend;
+      // linearised: (s - u0)(A s - B) = C about (n = 1, u0)
+      double A = 1, E = 0;
+      if (p.closure.exact()) { double b2 = u0 * u0 / (2 * q); A = 1 + 0.5 * b2 / (1 - b2); E = (1 - std::pow(1 - b2, 0.25)) * (1 - q) + b2 * q; }
+      double B = u0 * (A + p.closure.cdiv() + 2 * p.closure.cgrad()), C = 1 - E;
+      double disc = std::sqrt((A * u0 + B) * (A * u0 + B) - 4 * A * (B * u0 - C));
+      double rp = ((A * u0 + B) + disc) / (2 * A), rm = ((A * u0 + B) - disc) / (2 * A);
+      double err = std::fabs((sp + sm) - (rp + rm)) / u0;
+      ok = ok && st0.t >= 0 && adv && err < 0.05 && std::fabs(sp - rp) < 0.01 && std::fabs(sm - rm) < 0.01;
+      det += fmt("\n         %s, u0 = %.2f v_F = %.4f s0: s+ %.4f (%.4f) s- %.4f (%.4f); (s+ + s-) / u0 = %.3f, linearised %.3f (difference %.3f)",
+                 cs.name, cs.u_vF, u0, sp, rp, sm, rm, (sp + sm) / u0, (rp + rm) / u0, err);
+    }
+    report("T35", ok, "pulse on a drifting fluid, measured wave speeds (linearised equation in brackets):" + det);
+  }
+
+  // T36: steady gated channel against the quadrature of the one-dimensional equation, for the
+  //      exact Dirac gas up to 0.8 v_F, its second-order form, and the legacy form (which must
+  //      also agree with the old closed form).
+  if (want("T36")) {
+    Mesh m = channel_mesh(L, g_hw);
+    double worst_lo = 0, worst_hi = 0, worst_cf = 0; std::string det;
+    for (int form = 0; form < 3; ++form) {
+      ThzParams p; p.Gamma = 0.28; p.nu = 0.0084; p.closure.q = 0.04;
+      p.closure.conv = form == 0 ? Convection::DiracExact : (form == 1 ? Convection::Dirac : Convection::Galilean);
+      const char* name = form == 0 ? "exact     " : (form == 1 ? "2nd order " : "legacy    ");
+      for (double j : {0.01, 0.03, 0.06, 0.10, 0.14, 0.18}) {
+        for (int sgn : {+1, -1}) {
+          SteadyPoint a = steady_point(m, p, 0, sgn * j);
+          double n0 = gated_channel_ode(p.closure, p.Gamma, L, sgn * j);
+          if (n0 < 0 || !a.ok) { det += fmt("\n         %s j %+.2f: %s", name, sgn * j, n0 < 0 ? "outside the range of the closure (reference)" : "solver did not converge"); if (n0 >= 0 && j <= 0.10) worst_lo = 1; continue; }
+          double ref = p.closure.Phi(n0), err = std::fabs(a.V / ref - 1), uv = a.umax / std::sqrt(2 * p.closure.q);
+          if (uv <= 0.3) worst_lo = std::max(worst_lo, err); else if (uv <= 0.8) worst_hi = std::max(worst_hi, err);
+          if (form == 2) worst_cf = std::max(worst_cf, std::fabs(ref / p.closure.Phi(gated_channel_n0(p.closure, p.Gamma * L, sgn * j)) - 1));
+          if (j == 0.03 || j == 0.10 || j == 0.18) det += fmt("\n         %s j %+.2f: V %.6f quadrature %.6f (err %.1e), u_max %.2f v_F", name, sgn * j, a.V, ref, err, uv);
+        }
+      }
+    }
+    report("T36", worst_lo < 1e-3 && worst_hi < 1e-2 && worst_cf < 1e-6,
+           fmt("steady gated channel against the one-dimensional quadrature: worst error %.1e below 0.3 v_F, %.1e up to 0.8 v_F; "
+               "legacy quadrature against the old closed form %.1e:", worst_lo, worst_hi, worst_cf) + det);
+  }
+
+  // T37: steady radial flow in a 60 degree sector of a ring (1 to 3 um), slip side walls, weak
+  //      friction. One dimension only tests c_div + 2 c_grad; here div u = u' + u / r and
+  //      grad u^2 = 2 u u' enter separately. Reference: the radial quadrature in conservative form.
+  //      The steady solver does not converge at zero viscosity, so nu = 0.002; the bulk viscous force
+  //      of a radial flow vanishes to this order, and what remains is the do-nothing condition of the
+  //      viscous term at the two contacts, a potential nu J (1 / r1^2 - 1 / r2^2), added to the reference.
+  if (want("T37")) {
+    const double r1 = 1000, r2 = 3000, half = M_PI / 6;
+    Polygon poly;
+    const int na = 60;
+    for (int i = 0; i <= na; ++i) { double th = -half + 2 * half * i / na; poly.pts.push_back({r2 * std::cos(th), r2 * std::sin(th)}); }
+    for (int i = na; i >= 0; --i) { double th = -half + 2 * half * i / na; poly.pts.push_back({r1 * std::cos(th), r1 * std::sin(th)}); }
+    Boundary b({poly}, [&](Vec2 a, Vec2 c) {
+      if (std::fabs(a.norm() - r1) < 1e-6 && std::fabs(c.norm() - r1) < 1e-6) return 0;
+      if (std::fabs(a.norm() - r2) < 1e-6 && std::fabs(c.norm() - r2) < 1e-6) return 1;
+      return -1;
+    });
+    bool ok = true; std::string det;
+    for (double hw : {50.0, 25.0}) {
+      Mesh m = Mesh::load(ensure_mesh(b, "t_sector", hw, hw), 1000);
+      for (int form = 0; form < 3; ++form) {
+        ThzParams p; p.Gamma = 0.05; p.nu = 0.002; p.closure.q = 0.04;
+        p.closure.conv = form == 0 ? Convection::DiracExact : (form == 1 ? Convection::Dirac : Convection::TomadinPolini);
+        const int model = form == 0 ? 3 : (form == 1 ? 2 : 1);
+        const char* name = form == 0 ? "exact          " : (form == 1 ? "2nd order      " : "Tomadin-Polini ");
+        const double q = p.closure.q, J = 0.3 * std::sqrt(2 * q);   // 0.3 v_F at the inner contact (r = 1, n = 1)
+        for (int sgn : {+1, -1}) {
+          SteadyPoint a = steady_point(m, p, 0, sgn * J * 2 * half);
+          const double visc = p.nu * sgn * J * (1.0 - 1.0 / 9.0);
+          double ref = p.closure.Phi(radial_reference(model, q, p.Gamma, 1.0, 3.0, sgn * J)) + visc;
+          double ref0 = p.closure.Phi(radial_reference(0, q, p.Gamma, 1.0, 3.0, sgn * J)) + visc;
+          double err = std::fabs(a.V - ref) / std::fabs(ref - ref0);
+          if (hw == 25.0) ok = ok && a.ok && err < 0.03;
+          det += fmt("\n         hw %2.0f nm %s J %+.4f: V %.6f, radial quadrature %.6f, without inertia %.6f; error %.4f of the inertial part; u_max %.2f v_F",
+                     hw, name, sgn * J, a.V, ref, ref0, err, a.umax / std::sqrt(2 * q));
+        }
+      }
+    }
+    report("T37", ok, "radial flow in a ring sector against the conservative radial quadrature (criterion on the 25 nm mesh):" + det);
+  }
+
+  // T38: the 1 um funnel mesh rotated by 30 degrees: the same small-signal current and the same
+  //      steady point (tests the tensor form of the new terms through the wall frames).
+  if (want("T38")) {
+    ThzGeo G = make_thz_geo("funnel_w1000");
+    Mesh m = Mesh::load(ensure_mesh(G.b, G.mesh_name, 160, 960), G.W_ref);
+    Mesh mr = m;
+    const double c = std::cos(M_PI / 6), s = std::sin(M_PI / 6);
+    auto rot = [&](Vec2 v) { return Vec2{c * v.x - s * v.y, s * v.x + c * v.y}; };
+    for (auto& X : mr.X) X = rot(X);
+    for (auto& e : mr.bedges) { e.n = rot(e.n); e.t = rot(e.t); }
+    ThzUnits u = ThzUnits::make(1e12, 30e-9, 3.8, 4e-6, 0.1, 5e-12, 1e-12);
+    ThzParams p; p.Gamma = u.Gamma; p.nu = u.inv_Res; p.tau_ee = u.t_ee; p.closure.q = u.q;
+    p.ports = {Port::thevenin(0, 1.0, u.R_nd(75), 0.0), Port::ground(1)};
+    double I[2], V[2]; int i = 0;
+    for (const Mesh* mm : {&m, &mr}) {
+      ThzSolver sv(*mm, p); FirstOrder f = sv.solve_linear(u.Omega(3e11)); I[i] = sv.solve_dc(f).I20[0];
+      V[i] = steady_point(*mm, p, 0, 0.05).V; ++i;
+    }
+    double eI = std::fabs(I[1] / I[0] - 1), eV = std::fabs(V[1] / V[0] - 1);
+    report("T38", eI < 1e-6 && eV < 1e-6, fmt("1 um funnel rotated by 30 degrees: I_sc/Va^2 %.8e vs %.8e (rel %.1e); steady V at I = 0.05: %.8f vs %.8f (rel %.1e)",
+                                             I[0], I[1], eI, V[0], V[1], eV));
+  }
+
+  // T39: time domain (exact Dirac gas) against the second-order perturbation solver with the new
+  //      terms, graphene channel, as T6. T10 and T14 are the same comparison for the 1 um funnel.
+  if (!quick && want("T39")) {
+    Mesh m = channel_mesh(L, 100);
+    std::string det; bool ok = true;
+    for (int form = 0; form < 2; ++form) {
+      ThzParams p = ds_params(1.0, 0.02);
+      p.closure.kind = Closure::Graphene; p.closure.q = 0.04; p.closure.conv = form == 0 ? Convection::DiracExact : Convection::Galilean;
+      ThzSolver s(m, p);
+      FirstOrder f = s.solve_linear(1.0);
+      double pert = s.solve_dc(f).V20[1];
+      for (double Va : {0.01, 0.03}) {
+        ThzParams pt = p; pt.ports = ds_params(1.0, 0.02, Va).ports;
+        ThzTimeSolver ts(m, pt, 1);
+        TimeTrace tr = ts.run(1.0, 48, 60, 1e-11);
+        double ratio = tr.V_dc[1] / (Va * Va * pert);
+        ok = ok && tr.ok && std::fabs(ratio - 1) < 0.02 + 2 * Va;
+        det += fmt("\n         %s Va %.2f: time-domain V_dc %.4e, perturbation %.4e, ratio %.4f, u_max %.3f v_F%s", form == 0 ? "Dirac gas" : "legacy   ", Va,
+                   tr.V_dc[1], Va * Va * pert, ratio, tr.u_max / std::sqrt(2 * p.closure.q), tr.ok ? "" : " (nc)");
+      }
+    }
+    report("T39", ok, "BDF2 time domain vs second-order perturbation, graphene channel, Om 1, Gamma 1, nu 0.02:" + det);
   }
 
   double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();

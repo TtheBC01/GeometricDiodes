@@ -1,0 +1,6 @@
+PASS  uniform channel, 100 K, ideal source (S1): 25 rows, 75 numbers, largest relative difference 0.0e+00
+PASS  1 um funnel, 100 K, DS termination (S2): 3 rows, 12 numbers, largest relative difference 0.0e+00
+PASS  1 um funnel, 100 K, symmetric termination (S2): 3 rows, 12 numbers, largest relative difference 0.0e+00
+PASS  1 um funnel, time domain, 0.3 THz, Va 0.01 and 0.3 (P1): 2 rows, 12 numbers, largest relative difference 0.0e+00
+PASS  175 nm funnel, steady gated flow, 300 K, slip (D2): 2 rows, 12 numbers, largest relative difference 0.0e+00
+T33 PASS: largest relative difference 0.0e+00 (criterion 1e-8)

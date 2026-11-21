@@ -19,6 +19,7 @@
 #include "hydro/thz_solver.hpp"
 #include "hydro/thz_time.hpp"
 #include "hydro/thz_units.hpp"
+#include "hydro/units.hpp"
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -42,6 +43,7 @@ int main(int argc, char** argv) {
   int steps = 60, bias_updates = 0, min_periods = 6, verbose = 0;
   double settle = -1, relax = -1, Rant = 75, hw = 80, hm = 480, tol = 1e-10;
   double n_cm2 = 1e12, d = 30e-9, eps = 3.8, nu = -1, tau = -1, tauee = -1;
+  double cdiv_opt = NAN, cgrad_opt = NAN;
   for (int i = 1; i + 1 < argc; i += 2) {
     std::string k = argv[i], v = argv[i + 1];
     if (k == "--geo") geo = v; else if (k == "--set") set = v; else if (k == "--term") term = v;
@@ -52,6 +54,7 @@ int main(int argc, char** argv) {
     else if (k == "--Rant") Rant = std::stod(v); else if (k == "--hw") hw = std::stod(v); else if (k == "--hm") hm = std::stod(v);
     else if (k == "--out") out = v; else if (k == "--verbose") verbose = std::stoi(v); else if (k == "--tol") tol = std::stod(v);
     else if (k == "--n") n_cm2 = std::stod(v); else if (k == "--d") d = std::stod(v); else if (k == "--eps") eps = std::stod(v);
+    else if (k == "--cdiv") cdiv_opt = std::stod(v); else if (k == "--cgrad") cgrad_opt = std::stod(v);
     else if (k == "--closure") closure = v; else if (k == "--nu") nu = std::stod(v); else if (k == "--tau") tau = std::stod(v); else if (k == "--tauee") tauee = std::stod(v);
     else { std::fprintf(stderr, "unknown option %s\n", k.c_str()); return 1; }
   }
@@ -67,7 +70,8 @@ int main(int argc, char** argv) {
   ThzUnits u = ThzUnits::make(n_cm2, d, eps, G.W_ref * 1e-9, nu, tau, tauee);
   ThzParams p;
   p.Gamma = u.Gamma; p.nu = u.inv_Res; p.tau_ee = u.t_ee; p.closure.q = u.q;
-  p.closure.kind = closure == "sw" ? Closure::ShallowWater : Closure::Graphene;
+  if (!p.closure.set_by_name(closure)) { std::fprintf(stderr, "unknown closure %s (sw | graphene | legacy | tp | dirac2)\n", closure.c_str()); return 1; }
+  if (std::isfinite(cdiv_opt) || std::isfinite(cgrad_opt)) p.closure.set_custom(std::isfinite(cdiv_opt) ? cdiv_opt : p.closure.cdiv(), std::isfinite(cgrad_opt) ? cgrad_opt : p.closure.cgrad());
   p.tau_ee = 0;   // the nonlinear time-domain solver is Newtonian; keep the small-signal reference consistent
   p.verbose = verbose > 1;
   double R = u.R_nd(Rant);
@@ -92,13 +96,17 @@ int main(int argc, char** argv) {
   double Ldev = xmax - xmin;
   if (relax < 0) relax = 1.0 / u.Gamma + u.Gamma * std::pow(2 * Ldev / M_PI, 2);
   if (settle < 0) settle = std::max(3 * 2 / u.Gamma, 10.0);
+  const double s0_vF = u.s0 / units::vF;
+  std::printf("convective closure: c_div %+.4f, c_grad %+.4f, %s; s0 / v_F %.4f\n", p.closure.cdiv(), p.closure.cgrad(),
+              p.closure.exact() ? "exact in u / v_F" : "second order in u", s0_vF);
   std::printf("dc resistance %.4f R_unit = %.1f ohm; dc load R_L %.4f R_unit = %.1f ohm (%s); device length %.2f W_ref, settle %.1f, relax %.1f\n",
               Rdc, Rdc * u.R_unit, RL, RL * u.R_unit, bias ? "bias tee" : "no bias tee: dc through R_ant", Ldev, settle, relax);
   std::ofstream csv;
   if (!out.empty()) {
     csv.open(out); csv.precision(10);
     csv << "geo,set,term,f_Hz,Omega,Va,Pav_W,Pin_W,Idc_raw_A,Idc_ext_A,Istar_A,Vdc_V,Vrect_V,Pdc_W,eta_av,eta_abs,eta_small,Pin_over_Pav_lin,"
-           "eta_small_bdf,n_min,n_max,tail,tau_periods,corr,dc_drift,periods,steps,ok,wall_s,Rdc_ohm,RL_ohm\n";
+           "eta_small_bdf,n_min,n_max,tail,tau_periods,corr,dc_drift,periods,steps,ok,wall_s,Rdc_ohm,RL_ohm,"
+           "umax_over_vF,umax_run_over_vF,limit_hit,cdiv,cgrad,exact\n";
   }
   for (double f : freqs) {
     double Om = u.Omega(f), Tp = 2 * M_PI / Om;
@@ -131,14 +139,16 @@ int main(int argc, char** argv) {
       double eta_av = r.Pdc / Pav, eta_abs = r.Pin > 0 ? r.Pdc / r.Pin : 0.0, es = eta_small * Va * Va;
       std::printf("%7.3f %10.3e %10.3e %11.4e %11.4e %11.4e %10.3e %10.3e %10.3e %7.4f %7.4f %8.1e %8.1e %8.1e %6.0f%s\n", Va, Pav * u.P_unit,
                   r.Pin * u.P_unit, r.I_raw * u.I_unit, r.Istar * u.I_unit, r.Pdc * u.P_unit, eta_av, eta_abs, es, r.tr.n_min, r.tr.n_max,
-                  r.tail, r.corr, r.tr.dc_drift, r.wall, r.ok ? "" : (r.tr.ok ? "  (n <= 0: breakdown)" : "  (Newton failed: breakdown)"));
+                  r.tail, r.corr, r.tr.dc_drift, r.wall, r.ok ? "" : (r.tr.ok ? "  (n <= 0: breakdown)" : (r.tr.limit_hit ? "  (drift reached v_F)" : "  (Newton failed: breakdown)")));
+      std::printf("        largest drift speed %.3f v_F in the last period, %.3f v_F in the run\n", r.tr.u_max * s0_vF, r.tr.u_max_run * s0_vF);
       std::fflush(stdout);
       if (csv) csv << geo << "," << set << "," << term << "," << f << "," << Om << "," << Va << "," << Pav * u.P_unit << ","
                    << r.Pin * u.P_unit << "," << r.I_raw * u.I_unit << "," << r.I_ext * u.I_unit << "," << r.Istar * u.I_unit << ","
                    << r.V_raw * u.V_unit << "," << r.Vrect * u.V_unit << "," << r.Pdc * u.P_unit << "," << eta_av << "," << eta_abs << ","
                    << es << "," << Pin_lin << "," << eta_small_bdf * Va * Va << "," << r.tr.n_min << "," << r.tr.n_max << "," << r.tail << "," << r.tau_periods << ","
                    << r.corr << "," << r.tr.dc_drift << "," << r.tr.periods_run << "," << steps << "," << (r.ok ? 1 : 0) << "," << r.wall
-                   << "," << Rdc * u.R_unit << "," << RL * u.R_unit << "\n";
+                   << "," << Rdc * u.R_unit << "," << RL * u.R_unit << "," << r.tr.u_max * s0_vF << "," << r.tr.u_max_run * s0_vF << ","
+                   << (r.tr.limit_hit ? 1 : 0) << "," << p.closure.cdiv() << "," << p.closure.cgrad() << "," << (p.closure.exact() ? 1 : 0) << "\n";
       if (csv) csv.flush();
       if (!r.ok) break;
     }

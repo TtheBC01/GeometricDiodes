@@ -1,0 +1,2 @@
+sh: line 1: 89190 Terminated: 15          ./build/gd_thz_power --geo funnel_w1000 --set 100K --term dss --f 1e12 --Va 0.01,0.02,0.05,0.1,0.15,0.2,0.25,0.3,0.4,0.5,0.7 --out results/thz2/P1_funnel_w1000_100K_dss_f1e12.csv > results/thz2/P1_funnel_w1000_100K_dss_f1e12.txt 2>&1
+sh: line 1: 89213 Terminated: 15          ./build/gd_thz_power --geo funnel_w1000 --set 100K --term sym --f 1e12 --Va 0.02,0.05,0.1,0.15,0.2,0.3,0.5 --out results/thz2/P4_funnel_w1000_100K_sym_f1e12.csv > results/thz2/P4_funnel_w1000_100K_sym_f1e12.txt 2>&1

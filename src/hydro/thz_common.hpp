@@ -17,6 +17,7 @@
 #include <complex>
 #include <limits>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 namespace gd::hydro {
@@ -24,6 +25,17 @@ namespace gd::hydro {
 using cd = std::complex<double>;
 
 enum class Closure { ShallowWater, Graphene };
+
+// Convective part of the momentum equation (plans/hydro_momentum.md):
+//   A (d_t u + (u.grad) u) + c_div u (div u) + c_grad grad(u^2) + Gamma u = force + nu lap u.
+// Galilean: A = 1, (0, 0), an ordinary fluid and the form every run before Stage H6 used.
+// TomadinPolini: (-1/2, 0), Eq. (6) of arXiv:1307.0734. Dirac: (-1/2, -1/4), the degenerate
+// Dirac gas to second order in u. DiracExact: the same gas at any u < v_F, with
+// A = 1 + gamma^2 u u^T / (2 v_F^2) and the force weakened by gamma^(-1/2) (gate) and
+// gamma^(-2) (pressure); it needs q > 0, since u^2 / v_F^2 = u^2 / (2 q) in these units,
+// and only the nonlinear (time-domain and steady) solver can tell it from Dirac.
+// Auto: Galilean for the classical gas, DiracExact for graphene.
+enum class Convection { Auto, Galilean, TomadinPolini, Dirac, DiracExact, Custom };
 
 // Nondimensional closure: h(n) with h(1) = 0, h'(1) = 1 (notes, section 2).
 struct ClosureFn {
@@ -43,6 +55,41 @@ struct ClosureFn {
     return kind == Closure::ShallowWater ? n - 1 : (1 - q) * (n - 1) + 2 * q * (std::sqrt(n) - 1);
   }
   double Phip(double n) const { return kind == Closure::ShallowWater ? 1.0 : (1 - q) + q / std::sqrt(n); }
+  Convection conv = Convection::Auto;
+  double cdiv_custom = 0, cgrad_custom = 0;   // Convection::Custom
+  Convection convection() const {
+    if (conv != Convection::Auto) return conv;
+    return kind == Closure::ShallowWater ? Convection::Galilean : Convection::DiracExact;
+  }
+  double cdiv() const {
+    switch (convection()) {
+      case Convection::Galilean: return 0.0;
+      case Convection::Custom: return cdiv_custom;
+      default: return -0.5;
+    }
+  }
+  double cgrad() const {
+    switch (convection()) {
+      case Convection::Galilean: case Convection::TomadinPolini: return 0.0;
+      case Convection::Custom: return cgrad_custom;
+      default: return -0.25;
+    }
+  }
+  bool exact() const { return convection() == Convection::DiracExact && kind == Closure::Graphene && q > 0; }
+  // One-dimensional coefficient of u d_x u to second order: 1 + c_div + 2 c_grad.
+  double alpha1d() const { return 1.0 + cdiv() + 2.0 * cgrad(); }
+  // Sets kind and convection from a name: sw | graphene | legacy | tp | dirac2. Returns false if unknown.
+  bool set_by_name(const std::string& name) {
+    conv = Convection::Auto;
+    if (name == "sw") kind = Closure::ShallowWater;
+    else if (name == "graphene") kind = Closure::Graphene;
+    else if (name == "legacy") { kind = Closure::Graphene; conv = Convection::Galilean; }
+    else if (name == "tp") { kind = Closure::Graphene; conv = Convection::TomadinPolini; }
+    else if (name == "dirac2") { kind = Closure::Graphene; conv = Convection::Dirac; }
+    else return false;
+    return true;
+  }
+  void set_custom(double cd_, double cg_) { conv = Convection::Custom; cdiv_custom = cd_; cgrad_custom = cg_; }
   double kappa() const { return hpp(1.0); }
   // dc voltage coefficient c_V of |n_1|^2 (notes, section 3): -kappa/4 + Phi''(1)/4.
   double cV() const { return kind == Closure::ShallowWater ? 0.0 : -kappa() / 4 + (-q / 2) / 4; }
@@ -74,6 +121,10 @@ struct ThzParams {
   ClosureFn closure;
   double slip = std::numeric_limits<double>::infinity();  // l_s / W; 0 = no-slip
   double corner_deg = 25;
+  // Stage H6 variant C2: the contact fixes Phi(n) + contact_drift u^2 / 4 instead of Phi(n)
+  // (1: the Fermi energy of the drifting gas at fixed density; 0: the density alone, the
+  // Dyakonov-Shur condition and the default). Perturbation solver only.
+  double contact_drift = 0;
   std::vector<Port> ports;
   bool verbose = false;
   cd nu_omega(double Omega) const { return nu / cd(1.0, Omega * tau_ee); }

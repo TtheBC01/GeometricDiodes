@@ -204,9 +204,12 @@ SecondOrder ThzSolver::solve_dc(const FirstOrder& f) {
   trip.reserve(m_.tri.size() * 260 + m_.bedges.size() * 60 + g.ndof);
   Eigen::VectorXcd rhs = Eigen::VectorXcd::Zero(g.ndof);
   assemble_operator(g, 0.0, cd(p_.nu), trip);
-  // Second-order forcing: momentum f = -Re[(u1* . grad) u1]/2, continuity g = -Re[div(n1 u1*)]/2,
-  // with n1 and u1 both evaluated with the P2 basis.
+  // Second-order forcing: momentum f = -Re[(u1* . grad) u1 + c_div u1* (div u1)]/2 - c_grad grad|u1|^2 / 2
+  // (the last two terms are the Dirac-gas corrections of plans/hydro_momentum.md; both vanish
+  // for the classical gas), continuity g = -Re[div(n1 u1*)]/2, with n1 and u1 both evaluated
+  // with the P2 basis.
   const auto& Q = tri_quad7();
+  const double cdiv = p_.closure.cdiv(), cgrad = p_.closure.cgrad();
   std::array<double, 6> N; std::array<Vec2, 6> dN;
   for (const auto& T : m_.tri) {
     TriGeom gm = tri_geom(m_.X[T[0]], m_.X[T[1]], m_.X[T[2]]);
@@ -225,9 +228,11 @@ SecondOrder ThzSolver::solve_dc(const FirstOrder& f) {
         nq += ne[a] * N[a]; gn[0] += ne[a] * dN[a].x; gn[1] += ne[a] * dN[a].y;
       }
       double fk[2];
-      for (int k = 0; k < 2; ++k)
-        fk[k] = -0.5 * std::real(std::conj(u[0]) * gu[k][0] + std::conj(u[1]) * gu[k][1]);
       cd divu = gu[0][0] + gu[1][1];
+      for (int k = 0; k < 2; ++k)
+        fk[k] = -0.5 * std::real(std::conj(u[0]) * gu[k][0] + std::conj(u[1]) * gu[k][1])
+                - 0.5 * cdiv * std::real(std::conj(u[k]) * divu)
+                - cgrad * std::real(std::conj(u[0]) * gu[0][k] + std::conj(u[1]) * gu[1][k]);
       double gq = -0.5 * std::real(gn[0] * std::conj(u[0]) + gn[1] * std::conj(u[1]) + nq * std::conj(divu));
       for (int a = 0; a < 6; ++a) { ru[a][0] += w * N[a] * fk[0]; ru[a][1] += w * N[a] * fk[1]; }
       for (int v = 0; v < 3; ++v) rn[v] += w * L[v] * gq;
@@ -250,16 +255,18 @@ SecondOrder ThzSolver::solve_dc(const FirstOrder& f) {
       double tr[3] = {0, 0, 0};
       for (const auto& q : edge_quad3()) {
         auto phi = p2_edge_basis(q.s);
-        cd n1 = 0, un = 0;
+        cd n1 = 0, un = 0, ux = 0, uy = 0;
         for (int i = 0; i < 3; ++i) {
           n1 += phi[i] * f.n1[nodes[i]];
+          ux += phi[i] * f.u1x[nodes[i]]; uy += phi[i] * f.u1y[nodes[i]];
           un += phi[i] * (f.u1x[nodes[i]] * e.n.x + f.u1y[nodes[i]] * e.n.y);
         }
         drift[c] += q.w * e.len * 0.5 * std::real(n1 * std::conj(un));
-        for (int i = 0; i < 3; ++i) tr[i] += q.w * e.len * phi[i] * std::norm(n1);
+        // c_V |n1|^2, and for the contact variant the dc part of contact_drift u^2 / 4
+        for (int i = 0; i < 3; ++i) tr[i] += q.w * e.len * phi[i] * (cV * std::norm(n1) + p_.contact_drift / 8 * (std::norm(ux) + std::norm(uy)));
       }
       for (int i = 0; i < 3; ++i) {
-        double v[2] = {-cV * tr[i] * e.n.x, -cV * tr[i] * e.n.y}, r[2];
+        double v[2] = {-tr[i] * e.n.x, -tr[i] * e.n.y}, r[2];
         g.rot(nodes[i], v, r);
         for (int k = 0; k < 2; ++k) if (!g.dir[2 * nodes[i] + k]) rhs[2 * nodes[i] + k] += r[k];
       }

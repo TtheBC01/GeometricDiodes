@@ -33,12 +33,14 @@ int main(int argc, char** argv) {
   std::string geo = "funnel", set = "300K", out, closure = "graphene";
   std::vector<double> vs = {0.003, 0.01, 0.03, 0.1, 0.2, 0.3};
   double slip = INFINITY, hw = 20, hm = 120, n_cm2 = 1e12, d = 30e-9, eps = 3.8;
+  double cdiv_opt = NAN, cgrad_opt = NAN;
   for (int i = 1; i + 1 < argc; i += 2) {
     std::string k = argv[i], v = argv[i + 1];
     if (k == "--geo") geo = v; else if (k == "--set") set = v; else if (k == "--out") out = v;
     else if (k == "--slip") slip = v == "inf" ? INFINITY : std::stod(v);
     else if (k == "--hw") hw = std::stod(v); else if (k == "--hm") hm = std::stod(v);
     else if (k == "--closure") closure = v;
+    else if (k == "--cdiv") cdiv_opt = std::stod(v); else if (k == "--cgrad") cgrad_opt = std::stod(v);
     else if (k == "--n") n_cm2 = std::stod(v); else if (k == "--d") d = std::stod(v); else if (k == "--eps") eps = std::stod(v);
     else if (k == "--v") { vs.clear(); std::stringstream ss(v); std::string t; while (std::getline(ss, t, ',')) vs.push_back(std::stod(t)); }
     else { std::fprintf(stderr, "unknown option %s\n", k.c_str()); return 1; }
@@ -55,7 +57,8 @@ int main(int argc, char** argv) {
   ThzUnits u = ThzUnits::make(n_cm2, d, eps, G.W_ref * 1e-9, nu, tau, tauee);
   ThzParams p;
   p.Gamma = u.Gamma; p.nu = u.inv_Res; p.closure.q = u.q; p.slip = slip;
-  p.closure.kind = closure == "sw" ? Closure::ShallowWater : Closure::Graphene;
+  if (!p.closure.set_by_name(closure)) { std::fprintf(stderr, "unknown closure %s (sw | graphene | legacy | tp | dirac2)\n", closure.c_str()); return 1; }
+  if (std::isfinite(cdiv_opt) || std::isfinite(cgrad_opt)) p.closure.set_custom(std::isfinite(cdiv_opt) ? cdiv_opt : p.closure.cdiv(), std::isfinite(cgrad_opt) ? cgrad_opt : p.closure.cgrad());
   const double U0 = 1 - u.q;   // gate overdrive in units of V_unit
 
   auto t0 = std::chrono::steady_clock::now();
