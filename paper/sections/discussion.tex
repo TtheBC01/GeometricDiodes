@@ -27,7 +27,8 @@ while the connection of one contact to the gate
 produces a per cent at $43$~mV in any channel. At terahertz frequencies the
 gated funnel's rectification is mainly that of its terminations: tying the
 drain to the gate and driving the source produces $0.05$ to $0.26\AW$ in the
-$1\um$ funnel, while the symmetric
+$1\um$ funnel ($0.05$ to $0.18\AW$ with a viscosity that does not fall
+with frequency), while the symmetric
 drive that leaves only the shape produces a third of that current at
 $100$~K and $2$ to $4\%$ of it at $300$~K between $0.3$ and $1\THz$, and
 a response that falls below its square law at large signal at $0.3\THz$
@@ -131,7 +132,7 @@ Ballistic, dc & uniform field: $A=1.6$ to $1.9$ clean, $1.1$ to $1.6$ at $\lambd
 Viscous, dc, no gate & $|D-1|\leq10^{-2}$ within the drift limit & $10^{-3}$ to $3\times10^{-2}$ within the drift limit ($1\um$ valve) & drift speed below $0.3\,\vF$ caps $\Rey$ \\
 Viscous, dc, gated & contacts exchanged: $<10^{-3}$; polarity reversed: $0.48\,V/U_{0}$ & the same polarity term; exchange $<10^{-3}$ & the polarity term is the gate, in any channel \\
 Plasmonic, shape only & up to $0.10\AW$ at $100$~K and $2.3$~mA/W at $300$~K ($1\um$, to $1\THz$); $0.21\AW$ at the taper resonance ($175\nm$) & below $8\times10^{-4}\AW$ below $0.3\THz$; $0.018\AW$ at resonance & plasmon damping; viscosity at $100$~K; falls below its square law at large signal \\
-Plasmonic, DS & $0.05$ to $0.26\AW$ ($1\um$, to $1\THz$); $\eta=10^{-5}$ to $7\times10^{-5}$ at a drift of $0.3\,\vF$ at the reference point, $0.09\%$ at $0.95\,\vF$, on $75\ \Omega$ & $0.004$ to $0.09\AW$ at $6$ to $11$~k$\Omega$ & $r^{2}$; the drift limit; contacts; contact condition, temperature and viscosity of the gas \\
+Plasmonic, DS & $0.05$ to $0.26\AW$ ($1\um$, to $1\THz$; to $0.18\AW$ with a constant viscosity); $\eta=10^{-5}$ to $7\times10^{-5}$ at a drift of $0.3\,\vF$ at the reference point, $0.09\%$ at $0.95\,\vF$, on $75\ \Omega$ & $0.004$ to $0.09\AW$ at $6$ to $11$~k$\Omega$ & $r^{2}$; the drift limit; contacts; contact condition, temperature and viscosity of the gas \\
 Ballistic, $1\THz$, $6\um$, imposed field & $\RI=0.05\AW$ (uniform field); $0.2$ to $0.45\AW$ (drop at neck) & not computed & length, $fL/\vF=6$, if the field is spread over the device; not computed with the field computed \\
 Ballistic, $1\THz$, $0.55\um$, imposed field & $R_{\mathrm{abs}}=0.7\AW$, either profile; $0.14$ to $0.42\AW$ with half-diffuse edges or $\lambda=100\nm$ & not computed & the field is not computed \\
 Ballistic, $1\THz$, $0.55\um$, computed field & $R_{\mathrm{abs}}=0.12\AW$ with specular edges; $0.11\AW$ at $\lambda=100\nm$; rough edges: half at a head-on specularity of $0.5$, zero near $0.2$, $-0.03$ to $-0.05\AW$ at $0.05$; contacts of transparency $0.25$: $0.07$ to $0.12\AW$; collimating contacts: $0.03\AW$ or less in magnitude; $\RI=0.012$ to $0.026\AW$ & not computed & contact drops; edges; angular selection at the contacts; under a $30\nm$ gate the circuit term is larger at $1\THz$; $\eta\sim10^{-4}$ at $0.2$~V \\
@@ -251,6 +252,7 @@ Reference & Device and mechanism & $f$ (THz) & $T$ (K) & Responsivity & NEP (pW/
 \hline
 This work & $1\um$ funnel, DS, simulated & 0.3 to 1 & 300 & 0.05 A/W, 30 V/W & 100; 250 to 270 with $300\ \Omega\um$ contacts & available \\
 This work & same & 0.3 to 1 & 100 & 0.20 to 0.26 A/W, 35 to 45 V/W & 22 to 28 & available \\
+This work & same, constant viscosity & 0.3 to 1 & 100 & 0.09 to 0.18 A/W & 32 to 60 & available \\
 This work & same, $5\times10^{10}\percm$ & 0.3 & 100 & & 1.3 & available \\
 This work & $0.55\um$ ballistic funnel, computed field, matched array, simulated & 1 & 300 & 0.12 A/W & 130 & absorbed \\
 \end{tabular}
@@ -330,8 +332,10 @@ measured device too much more resistive than the modelled one, to test
 the model (Sec.~\ref{sec:dc}). Most idealisations favour the device. That is
 the safe direction for the negative results, on the Tesla valve and on the
 conversion efficiency, with three exceptions in the fluid model. The drift
-limit of $0.3\,\vF$ is an assumption, and the powers and efficiencies
-quoted at the limit scale as its square. The zero-temperature
+limit of $0.3\,\vF$ rests on estimates of heating and of phonon
+emission that place it between $0.2$ and $0.4\,\vF$
+(Sec.~\ref{sec:model-plasmonic}), and the powers and efficiencies quoted at the
+limit scale as its square. The zero-temperature
 coefficients of Eq.~\eqref{eq:mom} lower the $300$~K response by up to a
 fifth relative to isothermal flow. And the ideal-gas efficiency of
 $0.09\%$ near $\vF$ is one device on a ladder of coarse steps, not a
@@ -425,7 +429,10 @@ at that temperature. Three choices inside the fluid model move its
 terahertz numbers by amounts we have computed: a contact that fixes
 the energy carried per particle instead of the density lowers the DS
 responsivities of the funnels by up to a third, the coefficients of a
-gas at $300$~K in isothermal flow raise them by a fifth, and a fifth of
+gas at $300$~K in isothermal flow raise them by a fifth (and those of the
+least degenerate points of the density grid by up to a third at $100$~K
+and a half at $300$~K; in adiabatic flow the coefficients are those of
+zero temperature), and a fifth of
 the assumed viscosity changes the $100$~K responses of the $1\um$ funnel
 by a fifth to four tenths with the DS termination and by more for the shape
 alone
@@ -436,11 +443,16 @@ part of it and the source of its best noise figures. Our momentum equation
 differs from the one behind the photoresponse theory of
 Ref.~\cite{tomadin2013theory}, which would give a uniform channel $1.3$
 to $1.9$ times our response (Sec.~\ref{sec:model-plasmonic}). The two
-solvers are not one model at $100$~K: the time-domain solver has no
-viscoelastic term, its square law lies at about a half and a twentieth
+solvers are not one model at $100$~K, and the difference is the
+viscoelastic term alone: the time-domain solver does not have it, its
+square law lies at about a half and a twentieth
 of that of the small-signal solver at $0.3$ and $1\THz$ on the same mesh,
 and it finds the drift
-limit at up to five times the power; at $300$~K they agree. The
+limit at up to five times the power, while with a constant viscosity in
+both the two agree to the error of the mesh; at $300$~K they agree as
+they are. Which of the two viscosities a sample has decides the upper
+third of the $100$~K responsivities, and by up to a factor of three the
+efficiency at the drift limit at $1\THz$. The
 large-signal runs are also on the coarser mesh, and the friction and the
 viscous term of Eq.~\eqref{eq:exact} keep their low-speed form. The
 largest drift speed, on which the powers at the limit rest, changes by

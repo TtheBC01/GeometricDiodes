@@ -323,3 +323,12 @@ at 1.66 in Fig. 2(a) is replaced by the measured value at 0.1 V):
 | `landau1987fluid` | not fetched; standard textbook, cited from memory (2nd English edition, Pergamon 1987, Chapter XV, relativistic fluid dynamics) | | the Euler equation of an ideal relativistic fluid. The same equation is quoted, with a citation to this book, as Eq. (3) of `tomadin2013theory`, which was read in full |
 | `svintsov2013hydrodynamic` | re-read in full on 2026-11-17 (ar5iv) | Phys. Rev. B 88, 245444 (2013), journal reference confirmed on the arXiv abstract page | the convective term vanishes for degenerate carriers in one dimension (Eq. (19)); wave speeds u0/2 +- s0 on a drift (Eq. (39)). Not used: their transverse stress, Eq. (13), and the velocity-dependent part of Eq. (16), which do not agree with a direct evaluation (`tools/momentum_step0.py`) |
 | `tomadin2013theory` | re-read in full on 2026-11-17 (ar5iv) | | Eq. (13) is introduced there as "a crude approximation"; Eq. (43) equals our channel closed form with alpha = 1/2 |
+
+## Added on 2026-11-21 (the drift limit, Sec. II and the supplement)
+
+| key | status | source | use |
+|---|---|---|---|
+| `tielrooij2018out` | preprint read (arXiv:1702.03766v2, text extracted from the PDF) | Nat. Nanotechnol. 13, 41-46 (2018), journal reference and DOI confirmed on the arXiv abstract page | hBN-encapsulated graphene, mobility 25 000 to 30 000 cm^2/Vs: exponential cooling with 2.5 ps at room temperature and 1.7e12 cm^-2; slower and not exponential below about 200 K; hyperbolic modes of hBN at about 100 and 180 meV; cooling length about 1 um at room temperature. No cooling time is stated for 100 K |
+| `yamoah2017high` | abstract only (PubMed 28880529); the publisher's page refused automated access; volume and pages from Crossref | ACS Nano 11, 9914-9919 (2017) | room-temperature saturation velocity 6e7 cm/s at 8e11 cm^-2 and 2.7e7 cm/s at 4.4e12 cm^-2; attributed to hBN surface optical phonons above 100 meV. **Author list not verified beyond the first author** (entered as "and others"); the exponent of the velocity-field law they fit was not read |
+
+The title of `tielrooij2018out` is that of the v2 preprint PDF ("... through electron-hyperbolic phonon coupling"); the arXiv listing has a colon in place of "through". The statement that cooling in hBN-encapsulated graphene takes a few picoseconds at room temperature is repeated in Pogna et al., ACS Nano 15, 11285 (2021) (PMC8320233, introduction read), which is not cited.

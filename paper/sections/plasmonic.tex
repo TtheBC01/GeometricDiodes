@@ -30,7 +30,9 @@ $80$ to $100\%$ of the available power of a $75\ \Omega$ source at $100$~K
 ($87$ to $100\%$ above $0.1\THz$ at either temperature). The responsivity
 is $0.14$ to $0.26\AW$ at $100$~K ($0.20$ to $0.26\AW$ between $0.3$ and
 $1\THz$) and $0.053$ to $0.066\AW$ at $300$~K, without resonant structure
-from $10\GHz$ to $1\THz$. Above $1\THz$ the $100$~K response is not
+from $10\GHz$ to $1\THz$. The part of the $100$~K range above $0.18\AW$
+rests on the fall of the viscosity with frequency, which is taken up
+below. Above $1\THz$ the $100$~K response is not
 converged with the mesh (Supplemental Material) and is not shown; at
 $300$~K it falls slowly, to $0.044\AW$ at $3\THz$. The two extra terms of
 Eq.~\eqref{eq:mom} cost the funnel at $100$~K between nothing and four
@@ -117,7 +119,8 @@ also several plasmon wavelengths long, so its stages do not act coherently.
 
 With ideal contacts and the Johnson noise of $\Rdc$ alone, the
 noise-equivalent power of the $1\um$ funnel between $0.3$ and $1\THz$ is
-$22$ to $28\pWrtHz$ at $100$~K and $97$ to $102\pWrtHz$ at $300$~K. That
+$22$ to $28\pWrtHz$ at $100$~K ($32$ to $60\pWrtHz$ if the viscosity
+does not fall with frequency) and $97$ to $102\pWrtHz$ at $300$~K. That
 of the $175\nm$ funnel at $100$~K is $6$ to $29\pWrtHz$ in the same band
 and $4\pWrtHz$ at its taper resonance.
 
@@ -143,20 +146,43 @@ $-0.34$ and $-0.17$ if the flow is isothermal, with the temperature held
 fixed in the frame of the lattice, and $-0.47$ and $-0.24$ at
 $100$~K; with them, and nothing else changed, the DS responsivities at
 $300$~K are $16$ to $23\%$
-higher and those at $100$~K at most $4\%$ higher. This is the larger of
-the two limiting cases: in a flow that exchanges no heat within a period
-the two coefficients keep their zero-temperature values at any
-temperature. The third is the viscosity of the $100$~K set, which is an
-assumption (Table~\ref{tab:params}). With a fifth of it, $0.02$~m$^{2}$/s, the DS response of
+higher and those at $100$~K at most $4\%$ higher. This is one of two
+limiting cases. In the other, a flow that exchanges no heat, the entropy
+per carrier is conserved, the mass density follows $n^{3/2}$ as it does
+at zero temperature, and the two coefficients keep the values
+$-\tfrac12$ and $-\tfrac14$ exactly at any temperature (Supplemental
+Material). With the cooling time of $2.5$~ps quoted in
+Sec.~\ref{sec:model-plasmonic} the product of angular frequency and
+cooling time is $1.6$ at $0.1\THz$ and $16$ at $1\THz$, so the flow is
+nearer the second case, which is the one we use. The third is the
+viscosity of the $100$~K set, in its magnitude and in its dependence on
+frequency; both are
+assumptions (Table~\ref{tab:params}). With a fifth of the magnitude, $0.02$~m$^{2}$/s, the DS response of
 the $1\um$ funnel changes by factors of $1.4$, $0.75$ and $0.8$ at $0.1$,
 $0.3$ and $1\THz$ and the shape-only response by $4.8$ and $0.6$ at $0.1$
 and $0.3\THz$, with a change of sign at $1\THz$; these runs are on a mesh
 of $40\nm$ and are less converged than the others. At $300$~K a fifth of
-the viscosity changes the DS response by $3$ to $10\%$. The DS numbers of
+the viscosity changes the DS response by $3$ to $10\%$. The dependence
+on frequency is the viscoelastic form of Sec.~\ref{sec:model-plasmonic},
+in which the viscosity falls above $\omega\tauee=1$, at $100$~K above
+$0.16\THz$. With the viscosity held at its dc value instead [dotted
+curves in Fig.~\ref{fig:small}(b)] the DS response of the $1\um$ funnel
+at $100$~K is within $6\%$ of the values above below $0.1\THz$, is
+$0.09$ to $0.18\AW$ between $0.1$ and $0.9\THz$, and is $0.055\AW$ at
+$1\THz$, where the viscoelastic form gives $0.24\AW$. The shape-only
+response is then $0.013$ to $0.073\AW$ between $0.2$ and $1\THz$, and
+its share of the DS current between $0.3$ and $1\THz$ is $0.09$ to
+$0.41$ in place of $0.27$ to $0.38$. At $300$~K, where $\omega\tauee$
+reaches $0.6$ only at $1\THz$, the two solvers of Sec.~\ref{sec:large},
+one with the term and one without, agree on the efficiency per watt to
+$1\%$ at $0.1$ and $0.3\THz$ and to $10\%$ at $1\THz$. The DS numbers of
 this section are therefore uncertain by about a third downward from the
 contact, by a fifth upward from the temperature at $300$~K, and by some
-tens of per cent in either direction from the viscosity at $100$~K; the
-shape-only numbers at $100$~K depend on the viscosity by more than that.
+tens of per cent in either direction from the magnitude of the viscosity
+at $100$~K; those at $100$~K above $0.1\THz$ are lower by up to a factor
+of $2.7$ on the frequencies of the sweep, and of four at $1\THz$, if the
+viscosity does not fall with frequency. The shape-only numbers at
+$100$~K depend on the viscosity by more than that.
 The mesh adds up to $6\%$ to the DS numbers of the $1\um$ funnel at
 $100$~K and $1\%$ at $300$~K, and up to $11\%$ to its shape-only numbers
 (Supplemental Material). What the fluid description itself leaves out is
@@ -177,7 +203,9 @@ gas with the parameters of the $300$~K set, for which no line is drawn.
 responsivity into a $75\ \Omega$ antenna for the $1\um$ funnel, the $175\nm$
 funnel and the classical Tesla valve, with the drain tied to the gate
 (circuit asymmetry) and with the symmetric drive that isolates the shape.
-Open symbols mark a negative sign. The green band is $0.3$ to $1\THz$. In
+Open symbols mark a negative sign. The green band is $0.3$ to $1\THz$.
+Dotted, in (b): the two $100$~K curves with the viscosity held at its dc
+value, black for the circuit asymmetry and grey for the shape. In
 the grey band the shape-only response changes with the mesh by as much as
 its value, so that neither magnitude nor sign is established there. In
 (b) the $100$~K curves end at $1\THz$, above which they are not converged
@@ -228,21 +256,39 @@ at $100$~K to $1.1$, $1.0$ and $0.11$~W$^{-1}$, where the small-signal
 solver gives $1.0$, $2.4$ and $2.4$~W$^{-1}$. And they were run on a mesh
 of $80\nm$ at the walls, on which the small-signal level at $100$~K is $7$
 to $23\%$ below that of the $20\nm$ mesh used in Sec.~\ref{sec:small}
-(Supplemental Material). Each curve is therefore compared with the square
+(Supplemental Material). Nothing else separates them: with the viscosity
+held constant the small-signal solver gives $1.17$, $1.10$ and
+$0.13$~W$^{-1}$ at $100$~K on the $20\nm$ mesh, $6$, $10$ and $16\%$ above
+the time-domain values. Each curve is therefore compared with the square
 law of its own solver on its own mesh, and the $100$~K curve at $1\THz$ is
 indicative only. The
 efficiency meets that law to $1\%$ at the smallest amplitude at $0.1$ and
 $0.3\THz$ and stays within $7\%$ of it as long as the largest drift speed
 in the device is below the drift limit of $0.3\,\vF$
-[filled symbols in Fig.~\ref{fig:large}]. Interpolated between the
-amplitudes computed, that speed is reached at an available
-power of $26$, $38$ and $104\ \mu$W at $0.1$, $0.3$ and $1\THz$ at $100$~K
-and of $100$ to $130\ \mu$W at $300$~K, and the efficiency there is
+[filled symbols in Fig.~\ref{fig:large}]. With amplitudes computed $4\%$
+on either side of it, that speed is reached at an available
+power of $26$, $38$ and $105\ \mu$W at $0.1$, $0.3$ and $1\THz$ at $100$~K
+and of $100$ to $130\ \mu$W at $300$~K, and the efficiency there, $2$ to
+$8\%$ above the square law, is
 $1\times10^{-5}$ to $4\times10^{-5}$ at $100$~K and $4\times10^{-5}$ to
-$6\times10^{-5}$ at $300$~K. The small-signal solver puts the same speed
+$6\times10^{-5}$ at $300$~K. On a mesh of $40\nm$ at $0.3\THz$ the power
+at the limit differs by $1\%$ at either temperature and the efficiency
+there by $4\%$ at $100$~K and by less than $1\%$ at $300$~K. The
+small-signal solver puts the same speed
 at $17$ to $22\ \mu$W at $100$~K: with the viscoelastic term the drift per
 unit amplitude is $1.1$, $1.5$ and $2.5$ times larger at the three
-frequencies. At $300$~K the two solvers agree on it to $3\%$. Beyond the
+frequencies, and the efficiency at the limit is $2\times10^{-5}$,
+$4\times10^{-5}$ and $5\times10^{-5}$ in place of $3\times10^{-5}$,
+$4\times10^{-5}$ and $1.3\times10^{-5}$. At $300$~K the two solvers agree
+on the drift to $3\%$. Where the drift is largest depends on the
+temperature. At $100$~K it is on the axis in the neck at $0.1$ and
+$0.3\THz$, where $1\%$ of the area of the device drifts at more than
+half of it, and beside one corner of the neck at $1\THz$. At $300$~K the
+plasmon is damped along the $12\um$ lead, the drift is largest at the
+source contact across the width of the lead, and a fifth of the device
+drifts at more than half of it: the powers at the limit at $300$~K are
+those of a $4\um$ lead on a $75\ \Omega$ source and not a property of
+the funnel. Beyond the
 limit the response of the ideal gas rises
 above the square law, to between $1.1$ and $1.5$ times at $0.8\,\vF$ and
 between $1.1$ and $2.5$ times above $0.9\,\vF$ [Fig.~\ref{fig:large}(b)].
@@ -352,7 +398,10 @@ valid window raises that number to a tenth of a per cent. These
 efficiencies are square-law values at the assumed limit and scale as its
 square: with a limit of $0.2$ or $0.5\,\vF$ in place of $0.3\,\vF$ they
 would be $0.44$ or $2.8$ times as large, the latter if the square law
-still held there.
+still held there. They are also values of the small-signal solver, with
+the viscoelastic term: for the reference device at $100$~K the
+efficiency at the limit without it is the same at $0.3\THz$ and three
+times lower at $1\THz$ (Sec.~\ref{sec:large}).
 
 Contact resistance is the dominant practical loss, and it is not a series
 loss. A contact resistance $R_{c}$ at each contact of the reference device
@@ -379,7 +428,14 @@ at $0.3\THz$ falls from $24\pWrtHz$ at the reference point to
 $1.3\pWrtHz$ at $5\times10^{10}\percm$ at $100$~K if the $5$~ps scattering
 time survives there, $3.8\pWrtHz$ with constant mobility and $2.7\pWrtHz$ with
 $300\ \Omega\um$ contacts; at $300$~K the best valid point is
-$27\pWrtHz$.
+$27\pWrtHz$. The low-density points are also the least degenerate, and
+there the choice between adiabatic and isothermal flow of
+Sec.~\ref{sec:small} matters most. With the isothermal coefficients the
+response of the three valid $100$~K points below the reference density
+at $30\nm$, where $\EF/\kB T$ falls from $6$ to $3$, is $6$ to $35\%$
+higher, and that at $5\times10^{11}\percm$ and $300$~K is $24$ to $52\%$
+higher; the $1.3\pWrtHz$ would be $1.1\pWrtHz$. The power at the drift
+limit is the same in either case.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig6_operating_point.pdf}

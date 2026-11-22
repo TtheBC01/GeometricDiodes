@@ -921,3 +921,32 @@ from `tools/momentum_fine2.py`.
 Also to be corrected, in `results/HYDRO_MOMENTUM.md`: items 3, 7, 8 and
 12 quote sampled values as ranges, and every before/after ratio for the
 175 nm funnel and the Tesla valve.
+
+## 5. After the eighth draft (2026-11-21)
+
+- **The drift limit (2.3; 2.9, item 2) now has an estimate.** No new run:
+  `tools/drift_limit.py` writes `results/thz2/drift_limit.md`. First
+  optical-phonon threshold 0.41 v_F at 1e12 cm^-2 (100 meV modes of
+  hBN); electrons 5 % hotter than the lattice on the device average at
+  the limit at 300 K (cooling time 2.5 ps, Tielrooij et al. 2018), at
+  most 30 % locally; 20 to 28 % at 100 K with 10 ps (no measured value
+  for 100 K); measured saturation velocity 0.6 v_F at 8e11 cm^-2 (Yamoah
+  et al. 2017). Sec. II D, the limitations paragraph and a new section
+  and table of the supplement carry it; two references added and logged
+  in `refs_verification.md`. The limit is stated as lying between 0.2
+  and 0.4 v_F and as not conservative at 100 K.
+- **The remaining open points** (solver disagreement at 100 K, position
+  of the largest drift, coefficients at low density, the ladder and the
+  mesh at the limit) were run on 2026-11-21 as Stage H7: plan
+  `plans/hydro_closeout.md`, results `results/HYDRO_CLOSEOUT.md`. In
+  short: the solvers differ by the viscoelastic term alone (2.9, item
+  3: without it the 100 K response is 0.09 to 0.18 A/W, and 0.055 A/W
+  at 1 THz); the largest drift is in the neck at 100 K and at the source
+  contact at 300 K (2.9, item 2); isothermal coefficients raise the
+  low-density responses by up to a third at 100 K and a half at 300 K
+  (2.9, item 5); the powers at the limit were right to 1 % and are
+  converged with the mesh at 0.3 THz (2.9, item 4). The paper carries
+  these from its ninth draft (2026-11-21): Sec. IV A to IV C, the
+  dotted curves of Fig. 6(b), the abstract, introduction, discussion
+  (Tables III and IV, limitations), conclusion, Appendix C and a new
+  part of the supplement with two tables.

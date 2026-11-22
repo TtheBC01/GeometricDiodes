@@ -582,6 +582,193 @@ state, because the bias would require a drift speed above the Fermi
 velocity somewhere in the device; all of them are at $0.2$ or $0.3\,U_{0}$,
 and they are not used.
 
+\subsection*{Checks made after the eighth draft}
+
+\emph{The viscosity and the two solvers.} The small-signal solver uses
+the viscoelastic viscosity and the time-domain solver a constant one.
+With the viscosity held constant in the small-signal solver, the $1\um$
+funnel at $100$~K with the DS termination gives $1.17$, $1.10$ and
+$0.130$~W$^{-1}$ at $0.1$, $0.3$ and $1\THz$ on the $20\nm$ mesh, against
+$1.10$, $1.01$ and $0.112$~W$^{-1}$ for the small-amplitude level of the
+time-domain solver on the $80\nm$ mesh; the ratios of $1.06$, $1.10$ and
+$1.16$ are the mesh error of Table~\ref{tab:thzmesh}. The largest
+first-order drift per unit amplitude is $3.60$, $2.98$ and
+$1.64\,v_{F}/V_{u}$ against $3.58$, $2.96$ and $1.73$. With the
+viscoelastic form the three efficiencies are $0.99$, $2.43$ and
+$2.42$~W$^{-1}$ and the drifts $3.88$, $4.47$ and $4.14\,v_{F}/V_{u}$. The
+sweeps with a constant viscosity are the dotted curves of Fig.~6(b) of
+the main text.
+
+\emph{The amplitude at the drift limit.} The time-domain ladders step
+over a drift of $0.3\,v_{F}$ in steps of a factor $1.3$ to $2$ in
+amplitude. Runs at amplitudes $4\%$ below and above the interpolated
+crossing give drifts of $0.286$ to $0.289$ and $0.311$ to
+$0.313\,v_{F}$, and powers at the limit of $26.1$, $37.8$ and
+$105\ \mu$W at $100$~K and $134$, $108$ and $102\ \mu$W at $300$~K at
+$0.1$, $0.3$ and $1\THz$, within $1\%$ of the interpolated values. On
+the $40\nm$ mesh at $0.3\THz$ the drift at the amplitude nearest the
+limit is $1.006$ ($100$~K) and $0.9985$ ($300$~K) of its value on the
+$80\nm$ mesh and the efficiency at equal power $1.054$ and $0.992$ of it.
+
+\emph{Where the largest drift is.} Table~\ref{tab:driftpos} gives the
+position of the largest first-order drift and the share of the device
+area in which the drift exceeds half of it. At $100$~K and up to
+$0.3\THz$ the position is the same on the three meshes and the value
+changes by $1$ to $3\%$. At $100$~K and $1\THz$ it lies beside a
+re-entrant corner and the $80\nm$ mesh is $11\%$ low.
+
+\begin{table}[ht]
+\caption{\label{tab:driftpos}Largest first-order drift of the $1\um$
+funnel with the DS termination on the $20\nm$ mesh ($80\nm$ in
+brackets): value per unit amplitude, position ($x$ from the source
+contact, which is $14.6\um$ from the neck; $y$ from the axis), and the
+share of the area of the device in which the drift amplitude exceeds
+half of it.}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+Set & $f$ (THz) & drift ($v_{F}/V_{u}$) & $x$ ($\mu$m) & $y$ ($\mu$m) & share above half \\
+\hline
+$100$~K & 0.1 & 3.88 (3.84) & 14.60 & 0.01 & 1.4 \% \\
+ & 0.3 & 4.47 (4.34) & 14.60 & 0.01 & 1.0 \% \\
+ & 1 & 4.14 (3.67) & 14.61 & $-0.40$ & 0.3 \% \\
+$300$~K & 0.1 & 1.44 (1.44) & 0 & across the lead & 26 \% \\
+ & 0.3 & 1.62 (1.63) & 0 & across the lead & 21 \% \\
+ & 1 & 1.65 (1.73) & 0 & across the lead & 19 \% \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\emph{The coefficients at finite temperature.} Momentum conservation to
+second order in the drift, with the mass density $\rho=w/v_{F}^{2}$ of
+the gas at rest, gives for the first coefficient of Eq.~(8) of the main
+text $c_{\mathrm{div}}=1-\partial\ln\rho/\partial\ln n$, the derivative
+taken along the path of the flow. For an ideal gas of massless carriers
+the entropy per carrier depends on $\mu/k_{B}T$ alone, so that on an
+adiabat $\rho\propto n^{3/2}$ and $c_{\mathrm{div}}=-\tfrac12$ at any
+temperature; followed numerically without that argument, the coefficient
+is $-\tfrac12$ to $6\times10^{-8}$ at the five densities of the grid and
+both temperatures. At fixed temperature
+$\partial\ln\rho/\partial\ln n=2\xi$ with $\xi=F_{1}^{2}/F_{2}F_{0}$ in
+terms of the Fermi integrals $F_{j}$ of order $j$, which is the form of
+Ref.~\cite{svintsov2013hydrodynamic}; the second coefficient is then
+$(1-2\xi)/2$ if the temperature held is that of the drifting
+distribution in the frame of the lattice, which we use, and $-\xi/3$ if
+it is that in the frame of the gas. Table~\ref{tab:ftgrid} gives the
+isothermal first coefficient and what it does to the response at the
+least degenerate valid points of the grid. The amplitude at the drift
+limit is the same with either pair.
+
+\begin{table}[ht]
+\caption{\label{tab:ftgrid}Isothermal coefficients on the density grid
+($1\um$ funnel, DS termination, $20\nm$ mesh): the first coefficient of
+Eq.~(8) of the main text, and the current responsivity with the
+isothermal pair over that with the zero-temperature pair at $0.1$, $0.3$
+and $1\THz$.}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+Set & $n_{0}$ (cm$^{-2}$) & $d$ (nm) & $E_{F}/k_{B}T$ & $c_{\mathrm{div}}$ & ratio \\
+\hline
+$100$~K & $2\times10^{11}$ & 30 & 6.1 & $-0.396$ & 1.09, 1.06, 1.09 \\
+ & $10^{11}$ & 30 & 4.3 & $-0.331$ & 1.18, 1.12, 1.18 \\
+ & $5\times10^{10}$ & 30 & 3.0 & $-0.252$ & 1.35, 1.25, 1.26 \\
+$300$~K & $5\times10^{11}$ & 30 & 3.2 & $-0.264$ & 1.24, 1.31, 1.35 \\
+ & & 10 & 3.2 & $-0.264$ & 1.25, 1.32, 1.42 \\
+ & & 5 & 3.2 & $-0.264$ & 1.25, 1.33, 1.52 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\section{The drift limit of the fluid model}
+
+The fluid model keeps the electrons at the lattice temperature, has a
+friction linear in the drift and contains no optical phonons. Results are
+quoted up to a largest drift speed of $0.3\,v_{F}$. Three estimates of
+where the omissions matter follow; the numbers are in
+\texttt{results/thz2/drift\_limit.md} of the repository and use the
+small-signal runs of the $1\um$ funnel on the $20\nm$ mesh.
+
+\emph{Phonon emission.} A degenerate gas of fixed density that drifts at
+$\beta=u/v_{F}$ is occupied up to the energy
+$E_{F}(1-\beta^{2})^{3/4}/(1-\beta\cos\theta)$ in the direction $\theta$
+from the drift. Its forward edge lies
+$2\beta E_{F}(1-\beta^{2})^{-1/4}$ above its backward edge, and a phonon
+of energy $\hbar\Omega$ can be emitted from the one into empty states at
+the other where the two are equal. For the hyperbolic modes of hBN at
+$100$~meV~\cite{tielrooij2018out} that is $\beta=0.41$, $0.55$ and $0.77$
+at $10^{12}$, $5\times10^{11}$ and $2\times10^{11}$~cm$^{-2}$; for the
+$160$~meV phonon of graphene it is $0.61$, $0.77$ and $0.93$. At a
+temperature $T$ the edge is smeared by a few $k_{B}T$, which lowers these
+thresholds.
+
+\emph{Heating.} The energy of a degenerate Dirac gas at an electron
+temperature $T_{e}$ exceeds that at the lattice temperature $T_{L}$ by
+$(\pi^{2}/3)k_{B}^{2}(T_{e}^{2}-T_{L}^{2})/E_{F}$ per carrier. If the
+absorbed power $P_{\mathrm{abs}}$ heats the $N$ carriers of the device
+evenly and they cool in a time $\tau_{E}$,
+\begin{equation}
+T_{e}^{2}-T_{L}^{2}=\frac{3E_{F}}{\pi^{2}k_{B}^{2}}\,
+\frac{P_{\mathrm{abs}}\tau_{E}}{N}.
+\end{equation}
+Where the drift amplitude is $\beta$ over more than the cooling length
+$\sqrt{v_{F}^{2}\tau\tau_{E}/2}$, friction dissipates
+$E_{F}\beta^{2}/2\tau$ per carrier on the time average and
+\begin{equation}
+T_{e}^{2}-T_{L}^{2}=\frac{3}{2\pi^{2}}\left(\frac{E_{F}}{k_{B}}\right)^{2}
+\beta^{2}\,\frac{\tau_{E}}{\tau}.
+\end{equation}
+The first is a lower bound on the hottest point and the second, with the
+largest drift for $\beta$, an upper bound. Which is the nearer depends on
+where the drift is largest (Table~\ref{tab:driftpos}): at $100$~K it is
+in the neck, in a region of $1$ to $2\um^{2}$ that is smaller than the
+cooling length, so the average applies; at $300$~K it is at the source
+contact, where a fifth of the device, several cooling lengths long,
+drifts at more than half the largest speed, so the electrons near the
+source are close to the upper bound. The cooling time measured in
+hBN-encapsulated graphene at room temperature is $2.5$~ps at
+$1.7\times10^{12}$~cm$^{-2}$; below about $200$~K the decay is slower and
+not exponential~\cite{tielrooij2018out}, and we know of no value for
+$100$~K. Table~\ref{tab:drift} gives the result for the reference device
+($102\um^{2}$, $10^{12}$~cm$^{-2}$). Over the valid points of the grid of
+Sec.~IV~C of the main text at $0.3\THz$ the device average is $1$ to
+$5\%$ above the lattice at $300$~K, and at $100$~K $1$ to $17\%$ with
+$2.5$~ps and $2$ to $58\%$ with $10$~ps; the largest values at $100$~K
+are those of the highest density under the thinnest gate.
+
+\begin{table}[ht]
+\caption{\label{tab:drift}Electron temperature of the reference device
+when the largest first-order drift is $0.3\,v_{F}$, for the three
+frequencies $0.1$, $0.3$ and $1\THz$. Average: the absorbed power heats
+the device evenly. Local bound: a drift of $0.3\,v_{F}$ over more than a
+cooling length.}
+\begin{ruledtabular}
+\begin{tabular}{lccccc}
+Set & absorbed power ($\mu$W) & $\tau_{E}$ (ps) & cooling length ($\mu$m) & $T_{e}$, average (K) & $T_{e}$, local bound (K) \\
+\hline
+$300$~K & 121 to 149 & 2.5 & 1.1 & 314 to 318 & 391 \\
+$100$~K & 15 to 22 & 2.5 & 2.5 & 105 to 108 & 150 \\
+$100$~K & 15 to 22 & 10 & 5.0 & 120 to 128 & 245 \\
+$100$~K & 15 to 22 & 30 & 8.7 & 152 to 171 & 401 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\emph{Measured saturation.} The drift velocity of hBN-encapsulated
+graphene at room temperature saturates at $6\times10^{7}$~cm/s at
+$8\times10^{11}$~cm$^{-2}$ and at $2.7\times10^{7}$~cm/s at
+$4.4\times10^{12}$~cm$^{-2}$, which is attributed to the optical phonons
+of hBN above $100$~meV~\cite{yamoah2017high}. That is a steady field; in
+the alternating field of the present runs the heating is set by the time
+average.
+
+The limit of $0.3\,v_{F}$ is thus below the first phonon threshold at
+every density of the grid and half the measured saturation velocity at
+the reference density, and the electrons are then hotter than the lattice
+by $5\%$ or more. What a change of the electron temperature does to the
+response within the model can be read from two of its variants: the
+coefficients of the gas at $300$~K in place of those at zero temperature
+raise the $300$~K response by $16$ to $23\%$, and a fifth of the viscosity changes
+the $100$~K response by a fifth to four tenths (Sec.~IV~A of the main text).
+
 \section{Production parameters}
 
 Ballistic dc: 400\,000 trajectories per bias point in 64 batches. Ballistic

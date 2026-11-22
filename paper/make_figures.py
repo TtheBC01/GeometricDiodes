@@ -317,6 +317,10 @@ def fig4():
     sets = [("100K", "-"), ("300K", "--")]
     ri_panel(axes[0, 1], "S2_funnel_w1000", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"1 $\mu$m funnel, $R_{\rm dc}=172\ \Omega$ (100 K)",
              src=os.path.join(RES, FINE_DIR), fmax=F_CONVERGED, floor=1e-4)
+    # Stage H7, run R1: the 100 K curves with the viscosity held at its dc value (no viscoelastic term)
+    for term, color in (("dss", BLUE), ("sym", GREEN)):
+        rows = [r for r in load_csv(os.path.join(RES, "thz2", "h7", f"R1_funnel_w1000_100K_{term}_nuconst.csv")) if r["f_Hz"] <= F_CONVERGED["100K"]]
+        axes[0, 1].plot([r["f_Hz"] for r in rows], [abs(r["RI_A_per_W"]) for r in rows], ":", color="#111111" if term == "dss" else "#555555", lw=1.2, zorder=4)
     panel(axes[0, 1], "b")
     ri_panel(axes[1, 0], "S2_funnel", sets, [("dss", BLUE, ""), ("sym", GREEN, "")], r"175 nm funnel, $R_{\rm dc}=1.9$ k$\Omega$ (100 K)", floor=5e-4)
     axes[1, 0].annotate("taper\nresonance", xy=(1.87e12, 0.17), xytext=(1.95e12, 8.5e-4), fontsize=6.3, ha="center", va="bottom", linespacing=0.95,
@@ -329,6 +333,7 @@ def fig4():
          Line2D([], [], color=ORANGE, marker="o", ms=3.2, label="Tesla valve, drain to gate"),
          Line2D([], [], color=VERM, marker="o", ms=3.2, label="Tesla valve, symmetric drive (shape only)"),
          Line2D([], [], color=GREY, ls="-", label="100 K"), Line2D([], [], color=GREY, ls="--", label="300 K"),
+         Line2D([], [], color="#111111", ls=":", lw=1.2, label="100 K, constant viscosity, in (b)"),
          Line2D([], [], color=GREY, marker="o", mfc="white", ls="none", ms=3.2, label="open symbol: negative sign")]
     fig.legend(handles=h, loc="upper center", ncol=2, fontsize=6.5, bbox_to_anchor=(0.5, 1.005), columnspacing=1.5, handletextpad=0.4)
     fig.subplots_adjust(top=0.865)
