@@ -147,9 +147,9 @@ int main(int argc, char** argv) {
     csv << "geo,set,term,f_Hz,Omega,ReZ_ohm,ImZ_ohm,Isc_per_Va2,Voc_per_Va2,RI_A_per_W,RV_V_per_W,Pin_over_Pav,Rdc_ohm,"
            "ReZant_ohm,ImZant_ohm,Rant_ohm,Rc_ohm,n_cm2,d_m,T_K,tau_s,tauee_s,nu,EF_over_kT,U0_over_kT,q,valid_FL,valid_gate,flag_q,"
            "Vunit_V,Runit_ohm,NEP_W_per_rtHz,eta_per_W,Pknee_W,S_sat,eta_peak,eta_1uW,eta_10uW,eta_100uW,"
-           "cdiv,cgrad,u1max_over_vF_per_Va,Va_at_0p3vF\n";
+           "cdiv,cgrad,u1max_over_vF_per_Va,Va_at_0p3vF,u1max_x_nm,u1max_y_nm,area_share_half,area_share_quarter,u1rms_over_u1max\n";
   }
-  struct Row { cd Z, Zant; double Pin_Pav, Isc, Voc, Rant, u1max; };
+  struct Row { cd Z, Zant; double Pin_Pav, Isc, Voc, Rant, u1max, xmax = 0, ymax = 0, share2 = 0, share4 = 0, rms = 0; };
   // one evaluation at a given antenna resistance: linear solve, short-circuit and open-circuit dc solves
   auto evaluate = [&](double R_ohm, double f) {
     double R = u.R_nd(R_ohm), Om = u.Omega(f);
@@ -158,7 +158,25 @@ int main(int argc, char** argv) {
     FirstOrder fo = ss.solve_linear(Om);
     Row r; r.Rant = R_ohm;
     r.u1max = 0;   // largest first-order drift amplitude per unit antenna amplitude, in units of s_0
-    for (size_t a = 0; a < fo.u1x.size(); ++a) r.u1max = std::max(r.u1max, std::sqrt(std::norm(fo.u1x[a]) + std::norm(fo.u1y[a])));
+    // Stage H7: where that largest drift is, and how much of the device shares it. Per triangle the squared
+    // amplitude is averaged over its six nodes; the shares are of the device area.
+    auto amp2 = [&](int a) { return std::norm(fo.u1x[a]) + std::norm(fo.u1y[a]); };
+    for (size_t a = 0; a < fo.u1x.size(); ++a) {
+      double v = std::sqrt(amp2((int)a));
+      if (v > r.u1max) { r.u1max = v; r.xmax = m.X[a].x * m.scale; r.ymax = m.X[a].y * m.scale; }
+    }
+    {
+      double At = 0, A2 = 0, A4 = 0, S2 = 0;
+      for (const auto& t : m.tri) {
+        const Vec2 &a = m.X[t[0]], &b = m.X[t[1]], &c = m.X[t[2]];
+        double ar = 0.5 * std::abs((b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)), q = 0;
+        for (int k = 0; k < 6; ++k) q += amp2(t[k]) / 6;
+        At += ar; S2 += ar * q;
+        if (q >= 0.25 * r.u1max * r.u1max) A2 += ar;
+        if (q >= 0.0625 * r.u1max * r.u1max) A4 += ar;
+      }
+      r.share2 = A2 / At; r.share4 = A4 / At; r.rms = std::sqrt(S2 / At) / r.u1max;
+    }
     r.Z = (fo.V1[0] - fo.V1[1]) / fo.I1[0];                   // device impedance (V_s - V_d) / I_s, as in S2
     if (term == "sym") { cd Id = 0.5 * (fo.I1[0] - fo.I1[1]); r.Zant = (1.0 - R * Id) / Id; }
     else { int c = term == "dsd" ? 1 : 0; r.Zant = (1.0 - R * fo.I1[c]) / fo.I1[c]; }
@@ -197,7 +215,8 @@ int main(int argc, char** argv) {
                  << tauee << "," << nu << "," << EF_kT << "," << U0_kT << "," << u.q << "," << valid_FL << "," << valid_gate << ","
                  << flag_q << "," << u.V_unit << "," << u.R_unit << "," << NEP << "," << eta_per_W << "," << Pknee << "," << S << ","
                  << eta_peak << "," << eta_at(1e-6) << "," << eta_at(1e-5) << "," << eta_at(1e-4) << ","
-                 << p.closure.cdiv() << "," << p.closure.cgrad() << "," << r.u1max * u.s0 / units::vF << "," << 0.3 / (r.u1max * u.s0 / units::vF) << "\n";
+                 << p.closure.cdiv() << "," << p.closure.cgrad() << "," << r.u1max * u.s0 / units::vF << "," << 0.3 / (r.u1max * u.s0 / units::vF) << ","
+                 << r.xmax << "," << r.ymax << "," << r.share2 << "," << r.share4 << "," << r.rms << "\n";
   }
   return 0;
 }

@@ -1,0 +1,7 @@
+# set n d c_div c_grad   (isothermal, Svintsov's form; tools/closeout_coeffs.py)
+100K 2e11 30 -0.3958 -0.1979
+100K 1e11 30 -0.3307 -0.1653
+100K 5e10 30 -0.2517 -0.1259
+300K 5e11 30 -0.2641 -0.1321
+300K 5e11 10 -0.2641 -0.1321
+300K 5e11 5 -0.2641 -0.1321

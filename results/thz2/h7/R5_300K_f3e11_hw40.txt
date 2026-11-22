@@ -1,0 +1,8 @@
+convective closure: c_div -0.5000, c_grad -0.2500, exact in u / v_F; s0 / v_F 3.5700
+dc resistance 8.9443 R_unit = 581.3 ohm; dc load R_L 8.9443 R_unit = 581.3 ohm (bias tee); device length 6.65 W_ref, settle 10.0, relax 21.0
+f 3.000e+11 Hz, Omega 2.1120, period 2.975: small-signal I_dc/Va^2 4.4679e-03, eta/Va^2 1.6484e-03 (BDF2-discrete 1.6445e-03), P_in/P_av 0.980; 7 periods x 60 steps (0 bias updates from period 4 every 8)
+     Va   P_av (W)   P_in (W)    I_dc raw      I* (A)    P_dc (W)     eta_av    eta_abs  eta_small   n_min   n_max     tail     corr    drift   wall
+  0.100  3.685e-05  3.610e-05  1.0388e-06  1.0316e-06  6.1862e-10  1.679e-05  1.713e-05  1.648e-05  0.9509  1.0479  9.8e-04 -7.9e-03  1.0e-03    833
+        largest drift speed 0.170 v_F in the last period, 0.170 v_F in the run
+  0.178  1.169e-04  1.146e-04  3.4370e-06  3.3209e-06  6.4105e-09  5.485e-05  5.596e-05  5.229e-05  0.9113  1.0847  1.6e-02 -1.9e-02  8.0e-04    912
+        largest drift speed 0.312 v_F in the last period, 0.312 v_F in the run

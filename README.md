@@ -352,7 +352,15 @@ the Tesla valve are on their 14 nm mesh (`tools/momentum_runs.sh mesh14`);
 the large-signal runs remain on the 80 nm mesh. The 1 um funnel with the
 ordinary convective term is on the 20 nm mesh too
 (`tools/momentum_runs.sh legacy20`, files `fine/L_funnel_w1000_*`), for
-the comparison of the two equations in Sec. IV A. Every fluid number of the
+the comparison of the two equations in Sec. IV A.
+
+Stage H7 (plan `plans/hydro_closeout.md`, results
+`results/HYDRO_CLOSEOUT.md`, runs `tools/closeout_runs.sh` into
+`results/thz2/h7`) closes the open points of the fluid model: an estimate
+of the drift limit (`tools/drift_limit.py`), the 100 K response with a
+constant viscosity, where the largest drift sits, the coefficients of the
+gas at finite temperature (`tools/closeout_coeffs.py`), and the amplitude
+ladder and the mesh at the drift limit. Every fluid number of the
 paper, as a range over a stated band:
 
     .venv/bin/python tools/paper_numbers.py > results/thz2/paper_numbers.md
