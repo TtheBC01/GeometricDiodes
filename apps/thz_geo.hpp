@@ -12,6 +12,7 @@ struct ThzGeo { Boundary b; double W_ref; std::string mesh_name; };
 // chan: uniform 1 um x 10 um channel; funnel: 175 nm neck, 2 um leads 6 um long;
 // funnel_short: the same with 1 um leads; funnel_w1000: 1 um neck, 4 um leads
 // 12 um long; tesla_classic / tesla_classic_w1000: the classical valve (poly files).
+// funnel_w1000_L<nm>, chan_w4000_L<nm>, tesla_classic_w1000_L1000: other lead lengths.
 inline ThzGeo make_thz_geo(const std::string& name) {
   if (name == "chan") return {make_straight_channel(10000, 1000), 1000, "t_chan10"};
   if (name == "funnel") { FunnelParams f; f.Lc = 6000; f.Ld = 6000; return {make_funnel(f), 2000, "h_funnel"}; }
@@ -22,6 +23,21 @@ inline ThzGeo make_thz_geo(const std::string& name) {
   }
   // Stage H6 control C1: a plain channel with the lead width and the full length of funnel_w1000
   if (name == "chan_w4000") return {make_straight_channel(24000 + 1500 / std::tan(deg2rad(30)), 4000), 4000, "h_chan_w4000"};
+  // Stage H8: the same two devices with leads of another length, e.g. funnel_w1000_L3000 (nm)
+  for (const char* base : {"funnel_w1000_L", "chan_w4000_L"}) {
+    const std::string pre = base;
+    if (name.rfind(pre, 0) != 0) continue;
+    const double L = std::stod(name.substr(pre.size()));
+    if (!(L >= 100 && L <= 50000)) throw std::runtime_error("lead length out of range in " + name);
+    if (pre[0] == 'f') {
+      FunnelParams f; f.Wc = f.Wd = 4000; f.Wn = 1000; f.Lc = f.Ld = L;
+      return {make_funnel(f), 4000, "h_" + name};
+    }
+    return {make_straight_channel(2 * L + 1500 / std::tan(deg2rad(30)), 4000), 4000, "h_" + name};
+  }
+  // Stage H8: the 1 um valve with 1 um leads (tools/tesla_classic.py --Lc 1000 --Ld 1000)
+  if (name == "tesla_classic_w1000_L1000")
+    return {load_boundary("meshes/tesla_classic_w1000_L1000.poly"), 4000, "h_tesla_classic_w1000_L1000"};
   if (name == "tesla_classic") return {load_boundary("meshes/tesla_classic_h.poly"), 2000, "h_tesla_classic"};
   if (name == "tesla_classic_w1000") return {load_boundary("meshes/tesla_classic_w1000_h.poly"), 4000, "h_tesla_classic_w1000"};
   throw std::runtime_error("unknown geometry " + name);

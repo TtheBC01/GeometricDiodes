@@ -1,0 +1,8 @@
+tesla_classic_w1000 set 300K term dss closure graphene: 35473 nodes, W_ref 4000 nm, n 1e+12 cm^-2, d 30 nm, s0 3.570e+06 m/s, q 0.039, U0 1.4286 V, Gamma 1.1204, 1/Re_s 2.101e-03, Omega tau_ee per THz 0.63, R_unit 65.0 ohm (R_ant 75 -> 1.154), R_c 0.0 ohm (0.000), f_unit 0.142 THz, I_unit 2.288e-02 A, V_unit 1.4869 V, tau 1 ps (scale 1.000)
+convective closure: c_div -0.5000, c_grad -0.2500 (alpha in one dimension 0.0000); s0 / v_F 3.5700
+T 300 K: E_F 116.7 meV = 4.5 kT (Fermi liquid ok), U0 = 55.3 kT (gating ok), q 0.04
+dc resistance 43.9668 R_unit = 2857.4 ohm (+ 2 R_c = 2857.4 ohm)
+    f (Hz)    Omega   R_ant | Re Z (ohm) Im Z (ohm)  Re Z_ant |   I_sc/Va^2   V_oc/Va^2 |  R_I (A/W)  R_V (V/W) | P_in/P_av | NEP W/rtHz eta/P (1/W)  P_knee W
+ 1.000e+11   0.7040    75.0 |      83.27     -39.09     83.27 |  1.8329e-03 -8.0585e-02 |  1.138e-02 -3.252e+01 |    0.9399 |  2.116e-10  9.252e-02 9.212e-04
+ 3.000e+11   2.1120    75.0 |      68.36     -19.36     68.36 |  1.8236e-03 -8.0177e-02 |  1.132e-02 -3.235e+01 |    0.9800 |  2.127e-10  9.158e-02 9.212e-04
+ 1.000e+12   7.0400    75.0 |      67.72      -4.67     67.72 |  1.6038e-03 -7.0515e-02 |  9.958e-03 -2.845e+01 |    0.9963 |  2.418e-10  7.084e-02 9.212e-04
