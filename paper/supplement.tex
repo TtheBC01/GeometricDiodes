@@ -1,6 +1,6 @@
 % Supplemental Material for "Shape versus circuit: graphene geometric
 % diodes and Tesla valves as terahertz rectifiers".
-% Draft 2026-11-19 (seventh draft: tests of the momentum equation of the Dirac gas, Stage H6).
+% Draft 2026-11-22 (eleventh draft of the main text: checks of Stage H8, results/HYDRO_REFEREE.md; tenth draft 2026-11-21; seventh draft 2026-11-19: tests of the momentum equation of the Dirac gas, Stage H6).
 % Numbers from results/*.md and results/checks/.
 \documentclass[aps,prapplied,onecolumn,superscriptaddress,floatfix]{revtex4-2}
 \usepackage{graphicx}
@@ -448,7 +448,7 @@ $300$~K, shape only & 0.108 & $2.9\times10^{-4}$ & $3.8\times10^{-4}$ & $4.1\tim
 
 The small-signal results of the $1\um$ funnel, of the plain-channel
 control and of the density and gate grid in the main text are from the
-$20\nm$ mesh of Table~\ref{tab:thzmesh}. Over the $25$ frequencies up to
+$20\nm$ mesh of Table~\ref{tab:thzmesh}. Over the $20$ frequencies up to
 $1\THz$ that mesh misses at most $6\%$ of the extrapolated DS response at
 $100$~K and $11\%$ of the shape-only response, and $0.3\%$ and $5\%$ at
 $300$~K. Two errors are distinct. The first is at the walls and at the
@@ -457,7 +457,8 @@ where the viscous boundary layer is thin. The $80\nm$ mesh, on which the
 large-signal runs were made and cannot be repeated on a finer one with the
 memory available, is low by up to $21\%$ in the DS response at $100$~K
 between $0.3$ and $1\THz$ and by a quarter in the shape-only response; at
-$300$~K it is within $2\%$ and $7\%$ above $0.2\THz$. The second is in the interior. The $80\nm$ mesh
+$300$~K it is within $2\%$ in the DS response and, above $0.25\THz$,
+within $9\%$ in the shape-only response. The second is in the interior. The $80\nm$ mesh
 has elements of up to $480\nm$ in the leads, the plasma wavelength at the
 reference point is $3.6\um$ at $1\THz$ and $1.2\um$ at $3\THz$, and with
 fewer than about eight elements per wavelength the response is wrong: at
@@ -574,7 +575,7 @@ gate tied to the other contact $a$ falls in the same way and $b$ moves
 from $-0.065$ to $-0.050$. The low-bias
 exchange asymmetry is therefore reported as a bound. For the Tesla valve
 the exchange asymmetry at $V/U_{0}=0.01$ falls from $3\times10^{-6}$ to
-$4\times10^{-7}$ between wall spacings of 20 and 10 nm. The
+$4.5\times10^{-7}$ between wall spacings of 20 and 10 nm. The
 mirror-symmetric constriction of P19 has an unstructured mesh that is not
 itself mirror symmetric, so its exchange asymmetry measures the
 discretisation floor. Twelve of the 112 production points have no steady
@@ -593,7 +594,8 @@ $1.10$, $1.01$ and $0.112$~W$^{-1}$ for the small-amplitude level of the
 time-domain solver on the $80\nm$ mesh; the ratios of $1.06$, $1.10$ and
 $1.16$ are the mesh error of Table~\ref{tab:thzmesh}. The largest
 first-order drift per unit amplitude is $3.60$, $2.98$ and
-$1.64\,v_{F}/V_{u}$ against $3.58$, $2.96$ and $1.73$. With the
+$1.64\,v_{F}/V_{u}$ against $3.58$, $2.93$ and $1.67$ at the smallest
+amplitude of the time-domain ladders. With the
 viscoelastic form the three efficiencies are $0.99$, $2.43$ and
 $2.42$~W$^{-1}$ and the drifts $3.88$, $4.47$ and $4.14\,v_{F}/V_{u}$. The
 sweeps with a constant viscosity are the dotted curves of Fig.~6(b) of
@@ -677,6 +679,159 @@ $300$~K & $5\times10^{11}$ & 30 & 3.2 & $-0.264$ & 1.24, 1.31, 1.35 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
+
+\subsection*{Checks made after the tenth draft}
+
+\emph{The length of the leads.} The $1\um$ funnel of the main text has
+leads of $12\um$ on each side. The sweeps of Sec.~IV~A were repeated
+with leads of $6$, $3$ and $1\um$ and nothing else changed (devices
+$14.6$, $8.6$ and $4.6\um$ long; $56\,119$, $34\,447$ and $19\,979$
+nodes on the $20\nm$ mesh), with both terminations and at both
+temperatures, and with a plain channel $4\um$ wide of each length with
+the DS termination. Table~\ref{tab:leadsfreq} gives the $300$~K
+responses. On a mesh of $40\nm$ the DS response with $1\um$ leads at
+$300$~K is $0.5$ to $1.7\%$ below these values and the shape-only
+response differs by at most $1.8\%$ of the DS response. The square-law
+efficiency at the drift limit at $300$~K with the DS termination is
+$1.5\times10^{-5}$ to $1.1\times10^{-4}$ between $0.1$ and $1\THz$ at
+every lead length: the shorter devices respond more per watt and reach
+the limit at less power, $23$ to $77\ \mu$W with $1\um$ leads against
+$120$ to $157\ \mu$W with $12\um$. At $100$~K every device is a
+resonator. The share of the shape between $0.3$ and $1\THz$ is $0.27$ to
+$0.38$ with $12\um$ leads, $0.04$ to $0.61$ with $6\um$, $0.15$ to $2.4$
+with $3\um$ and $0.02$ to $5.3$ with $1\um$; the DS response of the
+funnel between $0.1$ and $1\THz$ is $0.08$ to $0.40\AW$, $-0.003$ to
+$0.46\AW$ and $-1.0$ to $0.65\AW$ for the three shorter leads, and that
+of the plain channel $-0.16$ to $0.15\AW$, $-0.73$ to $0.11\AW$ and
+$-2.0$ to $-0.05\AW$. The $100$~K sweeps with shorter leads were not
+repeated on another mesh.
+
+\begin{table}[ht]
+\caption{\label{tab:leadsfreq}The $1\um$ funnel at $300$~K with leads of
+four lengths on a $75\ \Omega$ antenna, $20\nm$ mesh: shape-only
+response (symmetric drive, mA/W, with its sign) and response with the DS
+termination (A/W).}
+\begin{ruledtabular}
+\begin{tabular}{ccccccccc}
+ & \multicolumn{2}{c}{$12\um$} & \multicolumn{2}{c}{$6\um$} & \multicolumn{2}{c}{$3\um$} & \multicolumn{2}{c}{$1\um$} \\
+$f$ (THz) & shape & DS & shape & DS & shape & DS & shape & DS \\
+\hline
+0.108 & 0.41 & 0.056 & 2.3 & 0.091 & 11.2 & 0.126 & $-0.65$ & 0.120 \\
+0.137 & 0.93 & 0.056 & 2.0 & 0.090 & 16.0 & 0.128 & 9.7 & 0.123 \\
+0.173 & 1.2 & 0.056 & 2.0 & 0.088 & 20.0 & 0.129 & 24.1 & 0.132 \\
+0.220 & 0.47 & 0.056 & 4.2 & 0.086 & 19.5 & 0.124 & 43.3 & 0.147 \\
+0.279 & 1.4 & 0.055 & 10.7 & 0.086 & 10.9 & 0.118 & 66.5 & 0.165 \\
+0.353 & 0.90 & 0.055 & 15.1 & 0.091 & 2.9 & 0.120 & 82.4 & 0.176 \\
+0.448 & 2.3 & 0.055 & 2.2 & 0.087 & 17.4 & 0.120 & 62.2 & 0.163 \\
+0.568 & 1.7 & 0.055 & 15.3 & 0.092 & 42.6 & 0.139 & 4.8 & 0.126 \\
+0.721 & 1.1 & 0.054 & 0.61 & 0.090 & 14.5 & 0.127 & $-36.6$ & 0.139 \\
+0.914 & 1.2 & 0.053 & 11.2 & 0.089 & $-7.7$ & 0.131 & $-52.0$ & 0.097 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\emph{The efficiency at the drift limit under thin gates.} Time-domain
+ladders were run for the $1\um$ funnel with $12\um$ leads and the DS
+termination at five points of the density and gate grid, on the $80\nm$
+mesh, at $0.25$ to $1.75$ times ($100$~K) or $0.25$ to $1.25$ times
+($300$~K) the amplitude at which the small-signal solver puts the
+first-order drift at $0.3\,v_{F}$. All $31$ amplitudes reached a
+periodic state. Table~\ref{tab:laddersfull} gives the values where the
+largest drift is $0.3\,v_{F}$, interpolated between two steps. At the
+amplitude that the small-signal solver assigns to the limit the largest
+drift is $0.36$ to $0.41\,v_{F}$. Above the limit the efficiency rises
+further above the square law, to $1.2$ to $1.7$ times between $0.56$ and
+$0.75\,v_{F}$. On a mesh of $40\nm$ the first point of the table gives a
+ratio to the square law of $1.155$ and $1.680$ at $1.0$ and $1.5$ times
+the limit amplitude, against $1.186$ and $1.723$ on the $80\nm$ mesh,
+and the same drift to $0.3\%$. Up to $0.45\,v_{F}$ the dc output changes
+by at most $2\%$ over the last period of a run; at $300$~K the
+extrapolation of the period means changes it by up to $8\%$, which is
+the uncertainty of the $300$~K ratios. The small-signal solver was also
+run at the three $100$~K points with the viscosity held at its dc
+value. Its efficiency per watt is then $0.13$ to $0.19$ of that with the
+viscoelastic form, the same on the $20$ and $80\nm$ meshes to $2\%$ and
+within $3\%$ of the small-amplitude level of the time-domain solver; the
+first-order drift per unit amplitude changes by $1$ to $3\%$.
+
+\begin{table}[ht]
+\caption{\label{tab:laddersfull}Small-signal and time-domain results at
+five thin-gate points of the density grid ($1\um$ funnel, $12\um$ leads,
+DS termination, $75\ \Omega$). $\eta/P$: square-law efficiency per watt
+of available power from the small-signal solver with the viscoelastic
+viscosity ($20\nm$ mesh), with a constant viscosity ($20$ and $80\nm$),
+and from the smallest amplitude of the time-domain ladder ($80\nm$).
+$P_{\mathrm{lim}}$: power at which the first-order drift of the
+small-signal solver reaches $0.3\,v_{F}$. Last four columns, from the
+time-domain ladder where its largest drift is $0.3\,v_{F}$: power,
+smallest density over the gated value, efficiency over the square law of
+that solver, and efficiency.}
+\begin{ruledtabular}
+\begin{tabular}{cccccccccccc}
+ & & & \multicolumn{4}{c}{$\eta/P$ (W$^{-1}$)} & & \multicolumn{4}{c}{time domain at $0.3\,v_{F}$} \\
+Set & $n_{0}$ (cm$^{-2}$), $d$ (nm) & $f$ (THz) & visc. & const. 20 & const. 80 & time & $P_{\mathrm{lim}}$ ($\mu$W) & $P$ ($\mu$W) & $n_{\min}$ & $S$ & $\eta$ \\
+\hline
+$100$~K & $5\times10^{11}$, 5 & 0.3 & 25.0 & 3.31 & 3.26 & 3.18 & 20.2 & 13.1 & 0.81 & 1.12 & $4.7\times10^{-5}$ \\
+ & $2\times10^{11}$, 10 & 0.3 & 122 & 21.0 & 20.8 & 20.3 & 4.43 & 3.30 & 0.82 & 1.04 & $6.9\times10^{-5}$ \\
+ & $10^{12}$, 5 & 0.3 & 6.84 & 1.31 & 1.30 & 1.27 & 63.5 & 47.4 & 0.83 & 1.04 & $6.3\times10^{-5}$ \\
+$300$~K & $5\times10^{11}$, 5 & 0.1 & 7.61 & & & 7.61 & 22.4 & 14.2 & 0.75 & 1.11 & $1.2\times10^{-4}$ \\
+ & $10^{12}$, 5 & 0.3 & 1.38 & & & 1.35 & 68.3 & 47.8 & 0.82 & 1.12 & $7.2\times10^{-5}$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\begin{table}[ht]
+\caption{\label{tab:valvemesh}Mesh sequence of the Tesla valve with a
+$1\um$ channel on a $75\ \Omega$ antenna: current responsivity with the
+symmetric drive (mA/W) and with the DS termination (A/W) for wall
+spacings of $114$, $80$ and $57\nm$.}
+\begin{ruledtabular}
+\begin{tabular}{ccccccccc}
+ & & & \multicolumn{3}{c}{shape only (mA/W)} & \multicolumn{3}{c}{DS (A/W)} \\
+Set & leads ($\mu$m) & $f$ (THz) & 114 & 80 & 57 & 114 & 80 & 57 \\
+\hline
+$300$~K & 12 & 0.1 & $-0.022$ & $-0.021$ & $-0.019$ & 0.0114 & 0.0114 & 0.0113 \\
+ & & 0.3 & $-0.0024$ & $-0.0016$ & $-0.0012$ & 0.0113 & 0.0113 & 0.0113 \\
+ & & 1 & $0.0045$ & $0.015$ & $0.00015$ & 0.0100 & 0.0100 & 0.0101 \\
+ & 1 & 0.1 & $-0.50$ & $-0.48$ & $-0.46$ & 0.0199 & 0.0200 & 0.0199 \\
+ & & 0.3 & $-0.17$ & $-0.15$ & $-0.12$ & 0.0216 & 0.0215 & 0.0215 \\
+ & & 1 & $0.090$ & $0.084$ & $0.10$ & 0.0146 & 0.0144 & 0.0143 \\
+$100$~K & 12 & 0.1 & 6.0 & 6.1 & 6.1 & 0.0474 & 0.0473 & 0.0472 \\
+ & & 0.3 & 4.5 & 5.0 & 5.2 & 0.0425 & 0.0433 & 0.0435 \\
+ & & 1 & $-0.78$ & 0.68 & 1.6 & 0.0264 & 0.0310 & 0.0326 \\
+ & 1 & 0.1 & 8.3 & 8.3 & 8.4 & 0.0620 & 0.0617 & 0.0617 \\
+ & & 0.3 & 4.5 & 4.6 & 5.2 & 0.0769 & 0.0764 & 0.0773 \\
+ & & 1 & 2.8 & 7.5 & 9.5 & 0.0850 & 0.0930 & 0.0972 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+\emph{The Tesla valve with a $1\um$ channel.} The valve of the dc runs,
+every length of the $175\nm$ valve times $1000/175$ with four loops and
+leads $4\um$ wide, was swept with leads of $12\um$ ($56.8\um$ end to
+end, $53\,433$ nodes) and of $1\um$ ($34.8\um$, $38\,693$ nodes) on a
+mesh of $80\nm$ at the walls and $480\nm$ inside, with both terminations
+at both temperatures. Its dc resistance is $2863$ and $873\ \Omega$ at
+$300$ and $100$~K with the long leads and $2451$ and $788\ \Omega$ with
+the short ones. Between $0.1$ and $1\THz$ the magnitude of the
+shape-only response is $9\times10^{-7}$ to $5.9\times10^{-5}\AW$
+($300$~K) and $2.9\times10^{-4}$ to $0.012\AW$ ($100$~K) with the long
+leads, and $1.1\times10^{-4}$ to $8.8\times10^{-4}\AW$ and
+$1.5\times10^{-4}$ to $0.021\AW$ with the short ones. Relative to the
+shape-only response of the $1\um$ funnel with the same leads at the same
+ten frequencies it is $0.001$ to $0.08$ ($300$~K) and $0.004$ to $0.18$
+($100$~K) with the long leads and $0.002$ to $0.09$ and $0.001$ to
+$0.28$ with the short ones, except at $0.108\THz$ and $300$~K ($0.9$)
+and at $0.568\THz$ and $100$~K ($2.5$) with the short leads, where the
+funnel's response changes sign. The square-law efficiency at the drift
+limit on $75\ \Omega$ is at most $1.0\times10^{-7}$ ($300$~K) and
+$2.4\times10^{-6}$ ($100$~K) for the shape and $1\times10^{-6}$ to
+$3.6\times10^{-5}$ with the DS termination; with the antenna matched at
+$0.1$, $0.3$ and $1\THz$ it is at most $2.2\times10^{-6}$ and
+$4.0\times10^{-5}$. Table~\ref{tab:valvemesh} gives the mesh sequence.
+The DS response is converged to $1\%$, and to $5\%$ at $1\THz$ and
+$100$~K; the shape-only response is not converged at $1\THz$ and moves
+by $4$ to $26\%$ between the two finer meshes at $0.1$ and $0.3\THz$.
 
 \section{The drift limit of the fluid model}
 
@@ -820,7 +975,10 @@ devices they vary. The runs with a fifth of the viscosity are on a mesh
 of $40\nm$. The comparison of the $1\um$ funnel with the ordinary
 convective term is made on the $20\nm$ mesh for both equations; on the
 $80\nm$ mesh the ratio of the two responses differs by $9\%$ or less
-between $10\GHz$ and $1\THz$.
+between $10\GHz$ and $1\THz$. The lead-length sweeps are on the $20\nm$
+mesh, the sweeps of the $1\um$ Tesla valve on a mesh of $80\nm$ at the
+walls, and the five thin-gate ladders on the $80\nm$ mesh of the $1\um$
+funnel with seven or five amplitudes each.
 
 \bibliography{refs,refs_detectors,refs_prior}
 

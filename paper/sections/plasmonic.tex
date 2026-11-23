@@ -23,7 +23,8 @@ the response would be $1.7$ to $2.9$ times larger at $100$~K and $1.6$ to
 $1.9$ times at $300$~K, between $0.8$ and $1.5$ of the classical one at
 $100$~K.
 
-Figure~\ref{fig:small}(b) shows the $1\um$ funnel. With the DS termination
+Figure~\ref{fig:small}(b) shows the $1\um$ funnel, whose dc resistance
+$\Rdc$ is $172\ \Omega$ at $100$~K and $582\ \Omega$ at $300$~K. With the DS termination
 the real part of its impedance is $36$ to $160\ \Omega$ at $100$~K and $65$
 to $220\ \Omega$ at $300$~K between $10\GHz$ and $1\THz$, and it absorbs
 $80$ to $100\%$ of the available power of a $75\ \Omega$ source at $100$~K
@@ -54,25 +55,55 @@ $300$~K. Two qualifications and one control apply to that split. The
 first qualification is that it is a ratio of currents from the
 small-signal solver; in efficiency a third is a ninth, and the
 time-domain solver of Sec.~\ref{sec:large} gives another value. The
-second is the leads. The $1\um$ funnel has straight leads
-of $12\um$ on each side, longer than the $3.6\um$ that a plasmon
-travels in a momentum-relaxation time at $300$~K, so the smallness of the shape term at $300$~K may owe
-something to the leads: the $175\nm$ funnel with leads of $1\um$ gives
-$-0.05\AW$ by its shape against $0.10\AW$ with the DS termination at
-$1\THz$ and $300$~K. The control is a plain channel with the width of the
+second is the leads, and it decides the split at $300$~K. The $1\um$
+funnel has straight leads of $12\um$ on each side, and a plasmon travels
+$3.6\um$ in a momentum-relaxation time at $300$~K: with the symmetric
+drive the wave launched at each contact has all but died out where the
+taper begins. We repeated the sweeps with leads of $6$, $3$ and $1\um$
+and nothing else changed (Table~\ref{tab:leads}). The DS response rises
+as the leads and their resistance are removed, by a factor of $1.5$
+to $3$. The shape-only response rises far more, by a factor of $3$ to
+$90$ from the longest leads to the shortest, and its share of the DS
+current between $0.3$ and $1\THz$ goes from $1.6$ to $4.2\%$ to between
+$4$ and $54\%$, with a median over the six frequencies of the sweep of
+$39\%$. With leads of $3$ and $1\um$ the shape-only response changes
+sign inside the band, so that the share has deep minima; the device is
+then $2.4$ and $1.3$ decay lengths long and resonates even at $300$~K.
+The $175\nm$ funnel behaves in the same way: with leads of $1\um$ it
+gives $-0.05\AW$ by its shape against $0.10\AW$ with the DS termination
+at $1\THz$ and $300$~K. At $300$~K, then, the shape contributes a few
+per cent in a device several decay lengths long and something comparable
+to the terminations in one of about one decay length. The control is a
+plain channel with the width of the
 leads and the full length of the $1\um$ funnel, on the same antenna. With
-the DS termination it gives $0.062$ to $0.066\AW$ between $0.3$ and
+the DS termination and leads of $12\um$ it gives $0.062$ to $0.066\AW$
+between $0.3$ and
 $1\THz$ at $300$~K, and the funnel gives $0.83$ to $0.85$ of that at every
 frequency from $0.1$ to $1\THz$: at room temperature the constriction takes
-away from what the terminations give. At $100$~K the channel gives $0.11$
+away from what the terminations give. The same holds with leads of $6$
+and $3\um$, where the funnel gives $0.73$ to $0.91$ of the channel of
+its own length; with leads of $1\um$ the two have different resonances
+and the funnel gives $0.8$ to $1.8$ of the channel. At no lead length
+does the DS-terminated funnel do systematically better than a strip.
+At $100$~K the channel with $12\um$ leads gives $0.11$
 to $0.19\AW$ between $0.1$ and $1\THz$ and the funnel $1.1$ to $2.4$ times
 as much ($1.4$ to $2.4$ times between $0.3$ and $1\THz$); below $0.1\THz$
 the funnel gives between $0.9$ and $1.25$ of the channel. With the
 symmetric termination the plain channel must give nothing, and it gives
 less than $3\times10^{-6}\AW$ up to $1\THz$ at either temperature, four
 orders of magnitude below the shape-only response of the funnel at
-$100$~K.
-The sign of the DS response follows the termination: exchanging the roles of
+$100$~K. At $100$~K the decay length is $18\um$ and every one of these
+devices is a resonator, so that shortening the leads moves all the
+curves and tests nothing cleanly. The share of a third is likewise that
+of the $12\um$ leads: with shorter ones it lies between $0.02$ and $5$
+from one frequency to the next. With leads of $1\um$ the shape-only
+response reaches $0.35\AW$ and the DS response of the funnel lies
+between $-1.0$ and $0.65\AW$ between $0.1$ and $1\THz$, while the plain
+channel of the same length gives $-0.05$ to $-2.0\AW$, more than the
+funnel in magnitude at eight of ten frequencies and with the opposite
+sign at eight. We have not checked these $100$~K sweeps against the
+mesh or examined the change of sign, and we take no number from them.
+The sign of the DS response of the reference devices follows the termination: exchanging the roles of
 source and drain reverses it. That the shape of a channel modifies the
 response set by its boundary conditions, rather than replacing it, is in
 line with what is known for silicon and graphene field-effect detectors: a
@@ -80,6 +111,26 @@ non-uniform channel changes the responsivity by about ten per
 cent~\cite{zhang2021terafet}, and a Corbino geometry, which concentrates
 the field at the inner contact, raises it
 substantially~\cite{khavronin2020singularity}.
+
+\begin{table*}
+\caption{The $1\um$ funnel at $300$~K against the length of its leads,
+between $0.3$ and $1\THz$ (six frequencies) on a $75\ \Omega$ antenna.
+$L/\ell$: length of the device over the $3.6\um$ that a plasmon travels
+in a momentum-relaxation time. Share: magnitude of the shape-only
+response over the DS response, range and median. Last column: DS
+response of the funnel over that of a plain channel of the same length.}
+\label{tab:leads}
+\begin{ruledtabular}
+\begin{tabular}{ccccccc}
+Leads ($\mu$m) & $L/\ell$ & $\Rdc$ ($\Omega$) & DS (A/W) & Shape (mA/W) & Share (\%) & Funnel/channel \\
+\hline
+12 & 7.5 & 582 & 0.053--0.055 & 0.9--2.3 & 1.6--4.2 (2.4) & 0.83--0.85 \\
+6 & 4.1 & 364 & 0.086--0.092 & 0.6--15 & 0.7--17 (12) & 0.75--0.83 \\
+3 & 2.4 & 255 & 0.118--0.139 & 2.9--43 & 2.4--31 (10) & 0.75--0.91 \\
+1 & 1.3 & 179 & 0.097--0.176 & 4.8--82 & 3.8--54 (39) & 0.79--1.8 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
 
 The $175\nm$ funnel [Fig.~\ref{fig:small}(c)] has a dc resistance of
 $1.9$~k$\Omega$ and absorbs as little as $15\%$ of the available power at
@@ -113,14 +164,34 @@ antenna: below $50\GHz$ it absorbs $3$ to $30\%$ of the available power,
 and although the plasmon resonances match it better above $0.1\THz$,
 whatever
 the DS termination adds, $0.004$ to $0.09\AW$, is the terminations and not
-the loops. The valve's asymmetry is an inertial loss that needs a Reynolds
+the loops. A valve with a channel of $1\um$, every length scaled by
+$1000/175$, is nearer the antenna, at $2.9$~k$\Omega$ at $300$~K and
+$0.9$~k$\Omega$ at $100$~K, and its shape does no more
+(Supplemental Material). With the $12\um$ leads of the $1\um$ funnel its
+shape-only response is below $6\times10^{-5}\AW$ at $300$~K and
+$3\times10^{-4}$ to $0.012\AW$ at
+$100$~K between $0.1$ and $1\THz$; with leads of $1\um$, so that the
+wave reaches the loops at $300$~K, it is below $9\times10^{-4}\AW$ at
+$300$~K and at most $0.021\AW$ at $100$~K. These are $4$ to $1000$ times
+below the shape-only response of the $1\um$ funnel with the same leads
+at $38$ of the $40$ frequencies and temperatures compared; at the other
+two the funnel's response passes through zero. With the DS termination
+the $1\um$ valve gives $0.009$ to $0.022\AW$ at $300$~K and $0.02$ to
+$0.09\AW$ at $100$~K, a fifth or less of the funnel at $300$~K, and a
+matched antenna does not change its efficiency at the drift limit, which
+is below $4\times10^{-5}$ with the DS termination and below
+$3\times10^{-6}$ for the shape. The shape-only values of this valve
+change by a factor of two or more between meshes at $1\THz$ and by up to
+a quarter at $0.1$ and $0.3\THz$; they are bounds of the right order. The valve's asymmetry is an inertial loss that needs a Reynolds
 number of ten; at terahertz frequencies the long path that produces it is
 also several plasmon wavelengths long, so its stages do not act coherently.
 
 With ideal contacts and the Johnson noise of $\Rdc$ alone, the
 noise-equivalent power of the $1\um$ funnel between $0.3$ and $1\THz$ is
-$22$ to $28\pWrtHz$ at $100$~K ($32$ to $60\pWrtHz$ if the viscosity
-does not fall with frequency) and $97$ to $102\pWrtHz$ at $300$~K. That
+$22$ to $28\pWrtHz$ at $100$~K (if the viscosity does not fall with
+frequency, $32$ to $60\pWrtHz$ up to $0.9\THz$ and $100\pWrtHz$ at
+$1\THz$) and $97$ to $102\pWrtHz$ at $300$~K, or $55$ to $99\pWrtHz$
+with leads of $1\um$. That
 of the $175\nm$ funnel at $100$~K is $6$ to $29\pWrtHz$ in the same band
 and $4\pWrtHz$ at its taper resonance.
 
@@ -208,8 +279,8 @@ Dotted, in (b): the two $100$~K curves with the viscosity held at its dc
 value, black for the circuit asymmetry and grey for the shape. In
 the grey band the shape-only response changes with the mesh by as much as
 its value, so that neither magnitude nor sign is established there. In
-(b) the $100$~K curves end at $1\THz$, above which they are not converged
-with the mesh.}
+(b) the $100$~K curves are drawn to $0.91\THz$, the last frequency of the
+sweep below $1\THz$; above $1\THz$ they are not converged with the mesh.}
 \label{fig:small}
 \end{figure*}
 
@@ -268,8 +339,7 @@ in the device is below the drift limit of $0.3\,\vF$
 [filled symbols in Fig.~\ref{fig:large}]. With amplitudes computed $4\%$
 on either side of it, that speed is reached at an available
 power of $26$, $38$ and $105\ \mu$W at $0.1$, $0.3$ and $1\THz$ at $100$~K
-and of $100$ to $130\ \mu$W at $300$~K, and the efficiency there, $2$ to
-$8\%$ above the square law, is
+and of $100$ to $130\ \mu$W at $300$~K, and the efficiency there is
 $1\times10^{-5}$ to $4\times10^{-5}$ at $100$~K and $4\times10^{-5}$ to
 $6\times10^{-5}$ at $300$~K. On a mesh of $40\nm$ at $0.3\THz$ the power
 at the limit differs by $1\%$ at either temperature and the efficiency
@@ -280,7 +350,8 @@ unit amplitude is $1.1$, $1.5$ and $2.5$ times larger at the three
 frequencies, and the efficiency at the limit is $2\times10^{-5}$,
 $4\times10^{-5}$ and $5\times10^{-5}$ in place of $3\times10^{-5}$,
 $4\times10^{-5}$ and $1.3\times10^{-5}$. At $300$~K the two solvers agree
-on the drift to $3\%$. Where the drift is largest depends on the
+on the drift to $3\%$, and the small-signal solver gives an efficiency at
+the limit of $5\times10^{-5}$ to $7\times10^{-5}$. Where the drift is largest depends on the
 temperature. At $100$~K it is on the axis in the neck at $0.1$ and
 $0.3\THz$, where $1\%$ of the area of the device drifts at more than
 half of it, and beside one corner of the neck at $1\THz$. At $300$~K the
@@ -387,13 +458,13 @@ $0.8$ of the gate overdrive in place of $0.07$, is reached before the drift
 limit. A lower density raises $r$, to $0.22$ at the edge of the
 Fermi-liquid limit, and the efficiency to $3\times10^{-4}$. A matched
 antenna in place of $75\ \Omega$ gives at
-best $5.6\times10^{-4}$ at $100$~K and $1.3\times10^{-4}$ at $300$~K. If the mobility rather
+best $5.6\times10^{-4}$ at $100$~K and $1.8\times10^{-4}$ at $300$~K. If the mobility rather
 than the scattering time is held constant as the density falls, the
 low-density gain in $\eta/\Pav$ shrinks by a factor of up to $8.5$ and the
 efficiency at the limit is $0.8\times10^{-4}$ to $2.7\times10^{-4}$ below
 the reference density. The design rule is
 therefore to put the drift limit at the available power; the element then converts
-at $0.4\times10^{-4}$ to $5\times10^{-4}$, and nothing in $n_{0}$ or $d$ inside the
+at $10^{-5}$ to $5\times10^{-4}$, and nothing in $n_{0}$ or $d$ inside the
 valid window raises that number to a tenth of a per cent. These
 efficiencies are square-law values at the assumed limit and scale as its
 square: with a limit of $0.2$ or $0.5\,\vF$ in place of $0.3\,\vF$ they
@@ -401,7 +472,72 @@ would be $0.44$ or $2.8$ times as large, the latter if the square law
 still held there. They are also values of the small-signal solver, with
 the viscoelastic term: for the reference device at $100$~K the
 efficiency at the limit without it is the same at $0.3\THz$ and three
-times lower at $1\THz$ (Sec.~\ref{sec:large}).
+to four times lower at $1\THz$ (Sec.~\ref{sec:large}).
+
+The upper ends of these ranges lie under the thin gates, at amplitudes
+of $0.5$ to $1.0$ of the gate overdrive, where the square law of a
+field-effect detector is expected to give
+way~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}. We
+therefore ran the time-domain solver at the five grid points that carry
+them (Table~\ref{tab:ladders}): at $100$~K the largest valid efficiency
+of the grid, the largest amplitude and the reference density under the
+$5\nm$ gate, and at $300$~K the top of the range, at $0.1\THz$, and the
+reference density under the $5\nm$ gate. The law
+holds. All five ladders pass the drift limit, with the density nowhere
+below three quarters of its gated value, and at the limit the efficiency
+is $1.04$ to $1.12$ times the square law of the same solver; at the
+first point of the table a mesh of $40\nm$ gives the same ratio to
+$3\%$. Two other things lower the
+numbers. The first is the drift, which grows faster than the amplitude:
+at the limit it is $16$ to $26\%$ above the first-order value, so that
+the limit is reached at $0.63$ to $0.75$ of the power that the
+small-signal solver assigns to it. At $300$~K, where the two solvers are
+one model, the efficiency at the limit is for that reason $0.70$ and
+$0.77$ of the grid value, $1.2\times10^{-4}$ in place of
+$1.7\times10^{-4}$ at the top of the $300$~K range. The second is the
+viscosity, at $100$~K. The time-domain solver gives $5\times10^{-5}$ to
+$7\times10^{-5}$ at the three points where the grid has
+$4.4\times10^{-4}$ to $5.4\times10^{-4}$, and most of that factor of
+seven to eleven is not a matter of amplitude: with the viscosity held
+constant the small-signal solver itself gives $6\times10^{-5}$ to
+$1.0\times10^{-4}$ at its limit, and its square law then agrees with
+that of the time-domain solver to $3\%$ on one mesh. Under a thin gate
+the fall of the viscosity with frequency thus carries $81$ to $87\%$ of
+the efficiency per watt at $0.3\THz$, against a little over half for the
+reference device, while it changes the drift per unit amplitude by $3\%$
+at most. The largest $100$~K efficiencies of
+Fig.~\ref{fig:operating}(b), those under the thin gates, therefore stand
+on the viscoelastic form of
+the viscosity, which is an assumption (Table~\ref{tab:params}) and which
+no large-signal calculation here contains; the low-density points under
+the $30\nm$ gate, which reach $3\times10^{-4}$, were not examined in
+this way. At the seven points followed in time, with a viscosity that
+does not fall with frequency, the element converts at
+$10^{-5}$ to $1.2\times10^{-4}$ at the drift limit.
+
+\begin{table*}
+\caption{Time-domain check of the efficiency at the drift limit under
+thin gates ($1\um$ funnel with $12\um$ leads, DS termination,
+$75\ \Omega$). Grid: square law of the small-signal solver, which has
+the viscoelastic term, at the amplitude where its first-order drift is
+$0.3\,\vF$ [Fig.~\ref{fig:operating}(b)]. Constant $\nu$: the same with
+the viscosity held at its dc value. Time domain: efficiency where the
+largest drift reaches $0.3\,\vF$, the amplitude there over the gate
+overdrive $U_{0}$, and the efficiency over the square law of that
+solver, $S$. Efficiencies in units of $10^{-4}$.}
+\label{tab:ladders}
+\begin{ruledtabular}
+\begin{tabular}{cccccccc}
+Set & $n_{0}$ (cm$^{-2}$), $d$ (nm) & $f$ (THz) & Grid & Constant $\nu$ & Time domain & $V_{a}/U_{0}$ & $S$ \\
+\hline
+$100$~K & $5\times10^{11}$, 5 & 0.3 & 5.1 & 0.63 & 0.47 & 0.75 & 1.12 \\
+ & $2\times10^{11}$, 10 & 0.3 & 5.4 & 0.96 & 0.70 & 0.47 & 1.04 \\
+ & $10^{12}$, 5 & 0.3 & 4.4 & 0.87 & 0.63 & 0.71 & 1.04 \\
+$300$~K & $5\times10^{11}$, 5 & 0.1 & 1.7 & & 1.19 & 0.77 & 1.11 \\
+ & $10^{12}$, 5 & 0.3 & 0.94 & & 0.72 & 0.71 & 1.12 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
 
 Contact resistance is the dominant practical loss, and it is not a series
 loss. A contact resistance $R_{c}$ at each contact of the reference device
@@ -431,7 +567,7 @@ $300\ \Omega\um$ contacts; at $300$~K the best valid point is
 $27\pWrtHz$. The low-density points are also the least degenerate, and
 there the choice between adiabatic and isothermal flow of
 Sec.~\ref{sec:small} matters most. With the isothermal coefficients the
-response of the three valid $100$~K points below the reference density
+response of the three least degenerate valid $100$~K points
 at $30\nm$, where $\EF/\kB T$ falls from $6$ to $3$, is $6$ to $35\%$
 higher, and that at $5\times10^{11}\percm$ and $300$~K is $24$ to $52\%$
 higher; the $1.3\pWrtHz$ would be $1.1\pWrtHz$. The power at the drift

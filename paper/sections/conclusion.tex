@@ -6,21 +6,33 @@ electronic Tesla valve in the ballistic, viscous and plasmonic transport
 limits, from dc to $30\THz$ and from the small-signal limit to the largest
 amplitudes the models allow,
 and separated in each what the shape does from what the circuit does. The
-Tesla valve shows no ballistic asymmetry of a valve's sign, gives a
+Tesla valve shows no ballistic dc asymmetry of a valve's sign in an
+imposed field, gives a
 viscous diodicity of at most three per cent at the drift velocities the
-graphene Fermi liquid allows, and at $1\THz$ its shape rectifies twenty to
-thirty times less than that of a funnel of the same width. In the
+graphene Fermi liquid allows, and in the gated fluid its shape
+rectifies at $0.02\AW$ or less up to $1\THz$, with a channel of
+$175\nm$ or of $1\um$: twenty to thirty times less than a funnel of the
+same width at $1\THz$ for the narrow valve, and four to a thousand times
+less than a funnel with the same leads for the wide one, except where
+the funnel's response changes sign; it was not
+computed with its field or as a ballistic device under an ac drive. In the
 electron fluid the funnel's rectification belongs mainly to the circuit: a steady
 current in a gated channel of any shape shows an asymmetry of $0.48$ times
 the bias over the gate overdrive under reversal of polarity and less than
 $10^{-3}$ under exchange of the contacts, and the terahertz response,
 $0.05$ to $0.26\AW$ into a $75\ \Omega$ antenna, is carried mainly by the
 Dyakonov-Shur asymmetry of the terminations. In the $1\um$ funnel
-between $0.3$ and $1\THz$ the
-shape alone gives a third of it at $100$~K and a few per cent
-at $300$~K, where a plain channel with the same terminations gives a
-fifth more than the funnel, and in the $175\nm$ funnel it reaches half
-of it as a matched horn at a taper resonance. These figures rest on the
+with leads of $12\um$ the shape alone gives a third of it at $100$~K
+and $2$ to $4\%$ at $300$~K between $0.3$ and $1\THz$. The second
+figure is a property of the leads, which are seven decay lengths of the
+plasmon long. With leads of $1\um$ the response of the terminations at
+$300$~K is $0.10$ to $0.18\AW$ and the shape gives $4$ to $54\%$ of it,
+two fifths at most frequencies. A plain channel with the same
+terminations gives a tenth to a third more than the funnel down to leads
+of $3\um$, and between half and five quarters of it at $1\um$. In the
+$175\nm$ funnel with the $100$~K parameters, which are outside the fluid
+regime at that size, the shape reaches half of the response as a matched
+horn at a taper resonance. These figures rest on the
 momentum equation of the degenerate Dirac gas, whose convective term
 vanishes in one dimension at zero temperature. Those for the
 terminations move by up to a third with the
@@ -32,8 +44,16 @@ range is $0.05$ to $0.18\AW$. The conversion efficiency follows the square
 law of field-effect detectors up to a drift speed of $0.3\,\vF$, which we
 take as the limit of the model and which the reference device reaches at
 $0.07$ to $0.2$ of the gate overdrive;
-it is $10^{-5}$ to $5\times10^{-4}$ there at every density
-and gate distance in the degenerate window, and the ideal gas of the
+by that law it is $10^{-5}$ to $5\times10^{-4}$ there at every density
+and gate distance in the degenerate window. The time-domain solver
+confirms the law at seven of those points and lowers the upper end. At
+the five under thin gates the drift limit comes at two thirds to three
+quarters of the power, which takes the largest $300$~K value from
+$1.7\times10^{-4}$ to $1.2\times10^{-4}$, and at $100$~K it gives
+$5\times10^{-5}$ to $7\times10^{-5}$ where the square law has
+$4\times10^{-4}$ to $5\times10^{-4}$, because four fifths of the latter
+rest on a viscosity that falls with frequency, which the time-domain
+solver does not have. The ideal gas of the
 reference device, followed to $0.95\,\vF$, stays below a tenth of a per
 cent; contact resistance attacks
 the asymmetry itself.
@@ -44,10 +64,12 @@ $fL/\vF$, half at $0.4$ and gone at $1.7$ for a field spread over the
 device. The $6\um$ funnel that anchors the dc literature is too long by a
 factor of fifteen at $1\THz$ if its field is so spread. With its field
 computed its dc asymmetry at
-$0.1$~V is $1.02$, consistent with the value measured at that bias and
+$0.1$~V is $1.02$, close to the value measured at that bias on a device
+more than ten times as resistive, which is no test of the model, and
 far from the $1.6$ of an imposed uniform field without scattering, and
 more than half of the bias falls at its neck; what it does at $1\THz$
-with that field was not computed. A $0.55\um$ funnel is short enough, and with
+with that field was not computed. A $0.55\um$ funnel is near the
+half-response point at $1\THz$, and with
 an imposed field it gives $0.7\AW$ per absorbed watt at $1\THz$ for
 either of two profiles. With the field computed from the charge of the
 electrons, a gate and the contacts it gives $0.12\AW$ at the
@@ -68,15 +90,23 @@ under a close one, and with contacts of the same resistance that pass
 only electrons near normal incidence it falls to the resolution of the
 method.
 
-Geometry, then, can make a graphene terahertz rectifier, in one regime, at
+Geometry, then, can make a graphene terahertz rectifier in two cases.
+One is the ballistic gas, at
 one size, with edges among the more specular of those measured for
-etched graphene and between contacts that absorb at wide angles, and
-what it makes there is about twice
-what the circuit makes at room temperature. It does not make a rectenna that harvests:
-within the range in which the models are trusted the efficiency is
-$10^{-5}$ to $5\times10^{-4}$ for the fluid element and
-of order $10^{-4}$ for the ballistic funnel with its field computed, at
-the largest amplitude computed. What it makes is a square-law detector with a
+etched graphene and between contacts that absorb at wide angles, in a
+model without collisions between electrons;
+what it makes there, $0.12$~A per absorbed watt, stands beside the
+$0.05$ to $0.18$~A per available watt of the fluid's circuit term at room
+temperature. The other is the fluid funnel about one plasmon decay
+length long, where the shape gives up to $0.08\AW$ at room temperature
+beside terminations that give more, in the funnel or in a strip. It
+does not make a rectenna that harvests:
+at the limits we set for the models the efficiency is
+$10^{-5}$ to $1.2\times10^{-4}$ of the available power for the fluid
+element in the time domain, and up to $5\times10^{-4}$ by the square law
+at $100$~K with a viscosity that falls with frequency, and
+of order $10^{-4}$ of the absorbed power for the ballistic funnel with
+its field computed, at the largest amplitude computed. What it makes is a square-law detector with a
 Johnson-limited noise-equivalent power of the order of
 $100$~pW/Hz$^{1/2}$ at room temperature: $100$ for the plasmonic element
 with ideal contacts and $140$ to $150$ with contacts of $100\ \Omega\um$, if the
