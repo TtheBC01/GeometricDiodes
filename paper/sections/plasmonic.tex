@@ -9,107 +9,82 @@ channel driven by an ideal source with an open drain, the classical gas
 reproduces the closed form of Dyakonov and
 Shur~\cite{dyakonov1996detection} to better than $0.1\%$ from $10\GHz$ to
 $1.2\THz$ and to $0.6\%$ at $3\THz$, through the plasmon resonances at
-$100$~K [Fig.~\ref{fig:small}(a)]. For the Dirac gas of
-Eq.~\eqref{eq:mom} without viscosity the solver lies on the corresponding
-closed form, Eq.~\eqref{eq:channel}, to the same accuracy ($1\%$ at
-$3\THz$), and the response is half that of the classical gas. That is an
-identity: with the density-dependent mass, the quantum capacitance and no
-convective term in one dimension, Eq.~\eqref{eq:channel} is exactly half
-the result of Dyakonov and Shur at every frequency
-(Appendix~\ref{app:perturbation}). With the viscosity of the $100$~K set
-the Dirac gas gives $0.43$ to $0.51$ of the classical response from
-$10\GHz$ to $1\THz$. With the ordinary convective term and the same mass
-the response would be $1.7$ to $2.9$ times larger at $100$~K and $1.6$ to
-$1.9$ times at $300$~K, between $0.8$ and $1.5$ of the classical one at
-$100$~K.
+$100$~K [Fig.~\ref{fig:small}(a)]. The Dirac gas of Eq.~\eqref{eq:mom}
+without viscosity lies on its own closed form, Eq.~\eqref{eq:channel}, to
+the same accuracy, and that form is exactly half the result of Dyakonov
+and Shur at every frequency (Appendix~\ref{app:perturbation}). With the
+viscosity of the $100$~K set the Dirac gas gives $0.43$ to $0.51$ of the
+classical response from $10\GHz$ to $1\THz$.
 
 Figure~\ref{fig:small}(b) shows the $1\um$ funnel, whose dc resistance
-$\Rdc$ is $172\ \Omega$ at $100$~K and $582\ \Omega$ at $300$~K. With the DS termination
-the real part of its impedance is $36$ to $160\ \Omega$ at $100$~K and $65$
-to $220\ \Omega$ at $300$~K between $10\GHz$ and $1\THz$, and it absorbs
-$80$ to $100\%$ of the available power of a $75\ \Omega$ source at $100$~K
-($87$ to $100\%$ above $0.1\THz$ at either temperature). The responsivity
-is $0.14$ to $0.26\AW$ at $100$~K ($0.20$ to $0.26\AW$ between $0.3$ and
-$1\THz$) and $0.053$ to $0.066\AW$ at $300$~K, without resonant structure
-from $10\GHz$ to $1\THz$. The part of the $100$~K range above $0.18\AW$
-rests on the fall of the viscosity with frequency, which is taken up
-below. Above $1\THz$ the $100$~K response is not
-converged with the mesh (Supplemental Material) and is not shown; at
-$300$~K it falls slowly, to $0.044\AW$ at $3\THz$. The two extra terms of
-Eq.~\eqref{eq:mom} cost the funnel at $100$~K between nothing and four
-tenths of the response that the ordinary convective term would give,
-against four to seven tenths for the uniform channel; at $300$~K both lose
-about four tenths between $0.3$ and $1\THz$. With the symmetric
-termination, which isolates the shape, the response at $100$~K is
-$6\times10^{-4}$ to $0.02\AW$ below $100\GHz$ and rises to $0.06$ to
+$\Rdc$ is $172\ \Omega$ at $100$~K and $582\ \Omega$ at $300$~K. With the
+DS termination it absorbs $87$ to $100\%$ of the available power of a
+$75\ \Omega$ source above $0.1\THz$ at either temperature, and its
+responsivity is $0.14$ to $0.26\AW$ at $100$~K ($0.20$ to $0.26\AW$
+between $0.3$ and $1\THz$) and $0.053$ to $0.066\AW$ at $300$~K, without
+resonant structure from $10\GHz$ to $1\THz$. Above $1\THz$ the $100$~K
+response is not converged with the mesh (Supplemental Material) and is
+not shown; at $300$~K it falls slowly, to $0.044\AW$ at $3\THz$. With the
+symmetric termination, which isolates the shape, the response at $100$~K
+is $6\times10^{-4}$ to $0.02\AW$ below $100\GHz$ and rises to $0.06$ to
 $0.10\AW$ between $0.2$ and $1\THz$ as the taper becomes comparable to the
 plasmon wavelength. At $300$~K, where friction and viscosity damp the
 plasmon, it is of order $10^{-4}\AW$ or less below $100\GHz$, which the
 mesh does not resolve, and $0.5$ to $2.3$~mA/W between $0.2$ and $1\THz$.
-Below $100\GHz$ the
-shape-only response is the curvature of the steady current-voltage relation
-of Sec.~\ref{sec:dc}; a ladder test ties the two solvers together there.
 Between $0.3$ and $1\THz$ the shape alone thus gives $0.27$ to $0.38$ of
 the DS current at $100$~K, about a third, and $1.6$ to $4.2\%$ of it at
-$300$~K. Two qualifications and one control apply to that split. The
-first qualification is that it is a ratio of currents from the
-small-signal solver; in efficiency a third is a ninth, and the
-time-domain solver of Sec.~\ref{sec:large} gives another value. The
-second is the leads, and it decides the split at $300$~K. The $1\um$
-funnel has straight leads of $12\um$ on each side, and a plasmon travels
-$3.6\um$ in a momentum-relaxation time at $300$~K: with the symmetric
-drive the wave launched at each contact has all but died out where the
-taper begins. We repeated the sweeps with leads of $6$, $3$ and $1\um$
-and nothing else changed (Table~\ref{tab:leads}). The DS response rises
-as the leads and their resistance are removed, by a factor of $1.5$
-to $3$. The shape-only response rises far more, by a factor of $3$ to
-$90$ from the longest leads to the shortest, and its share of the DS
-current between $0.3$ and $1\THz$ goes from $1.6$ to $4.2\%$ to between
-$4$ and $54\%$, with a median over the six frequencies of the sweep of
-$39\%$. With leads of $3$ and $1\um$ the shape-only response changes
-sign inside the band, so that the share has deep minima; the device is
-then $2.4$ and $1.3$ decay lengths long and resonates even at $300$~K.
-The $175\nm$ funnel behaves in the same way: with leads of $1\um$ it
-gives $-0.05\AW$ by its shape against $0.10\AW$ with the DS termination
-at $1\THz$ and $300$~K. At $300$~K, then, the shape contributes a few
-per cent in a device several decay lengths long and something comparable
-to the terminations in one of about one decay length. The control is a
-plain channel with the width of the
-leads and the full length of the $1\um$ funnel, on the same antenna. With
-the DS termination and leads of $12\um$ it gives $0.062$ to $0.066\AW$
-between $0.3$ and
-$1\THz$ at $300$~K, and the funnel gives $0.83$ to $0.85$ of that at every
-frequency from $0.1$ to $1\THz$: at room temperature the constriction takes
-away from what the terminations give. The same holds with leads of $6$
-and $3\um$, where the funnel gives $0.73$ to $0.91$ of the channel of
-its own length; with leads of $1\um$ the two have different resonances
-and the funnel gives $0.8$ to $1.8$ of the channel. At no lead length
-does the DS-terminated funnel do systematically better than a strip.
-At $100$~K the channel with $12\um$ leads gives $0.11$
-to $0.19\AW$ between $0.1$ and $1\THz$ and the funnel $1.1$ to $2.4$ times
-as much ($1.4$ to $2.4$ times between $0.3$ and $1\THz$); below $0.1\THz$
-the funnel gives between $0.9$ and $1.25$ of the channel. With the
-symmetric termination the plain channel must give nothing, and it gives
-less than $3\times10^{-6}\AW$ up to $1\THz$ at either temperature, four
-orders of magnitude below the shape-only response of the funnel at
-$100$~K. At $100$~K the decay length is $18\um$ and every one of these
-devices is a resonator, so that shortening the leads moves all the
-curves and tests nothing cleanly. The share of a third is likewise that
-of the $12\um$ leads: with shorter ones it lies between $0.02$ and $5$
-from one frequency to the next. With leads of $1\um$ the shape-only
-response reaches $0.35\AW$ and the DS response of the funnel lies
-between $-1.0$ and $0.65\AW$ between $0.1$ and $1\THz$, while the plain
-channel of the same length gives $-0.05$ to $-2.0\AW$, more than the
-funnel in magnitude at eight of ten frequencies and with the opposite
-sign at eight. We have not checked these $100$~K sweeps against the
-mesh or examined the change of sign, and we take no number from them.
-The sign of the DS response of the reference devices follows the termination: exchanging the roles of
-source and drain reverses it. That the shape of a channel modifies the
-response set by its boundary conditions, rather than replacing it, is in
-line with what is known for silicon and graphene field-effect detectors: a
-non-uniform channel changes the responsivity by about ten per
-cent~\cite{zhang2021terafet}, and a Corbino geometry, which concentrates
-the field at the inner contact, raises it
+$300$~K. These are ratios of currents; in efficiency a third is a ninth.
+
+The split at $300$~K is decided by the leads. The $1\um$ funnel has
+straight leads of $12\um$ on each side, and a plasmon travels $3.6\um$ in
+a momentum-relaxation time at $300$~K: with the symmetric drive the wave
+launched at each contact has all but died out where the taper begins. We
+repeated the sweeps with leads of $6$, $3$ and $1\um$ and nothing else
+changed (Table~\ref{tab:leads}). The DS response rises by a factor of
+$1.5$ to $3$ as the leads and their resistance are removed. The
+shape-only response rises by a factor of $3$ to $90$, and its share of
+the DS current between $0.3$ and $1\THz$ goes from $1.6$ to $4.2\%$ to
+between $4$ and $54\%$, with a median over the six frequencies of the
+sweep of $39\%$. With leads of $3$ and $1\um$ the shape-only response
+changes sign inside the band, so that the share has deep minima; the
+device is then $2.4$ and $1.3$ decay lengths long and resonates even at
+$300$~K. The $175\nm$ funnel behaves in the same way: with leads of
+$1\um$ it gives $-0.05\AW$ by its shape against $0.10\AW$ with the DS
+termination at $1\THz$ and $300$~K. At $300$~K, then, the shape
+contributes a few per cent in a device several decay lengths long and
+something comparable to the terminations in one of about one decay
+length.
+
+The control is a plain channel with the width of the leads and the full
+length of the funnel, on the same antenna. With the symmetric termination
+it must give nothing, and it gives less than $3\times10^{-6}\AW$ up to
+$1\THz$ at either temperature. With the DS termination at $300$~K and
+leads of $12\um$ it gives $0.062$ to $0.066\AW$ between $0.3$ and
+$1\THz$, and the funnel gives $0.83$ to $0.85$ of that at every frequency
+from $0.1$ to $1\THz$: at room temperature the constriction takes away
+from what the terminations give. The same holds with leads of $6$ and
+$3\um$, where the funnel gives $0.73$ to $0.91$ of the channel of its own
+length; with leads of $1\um$ the two have different resonances and the
+funnel gives $0.8$ to $1.8$ of the channel. At no lead length does the
+DS-terminated funnel do systematically better than a strip. At $100$~K
+the channel with $12\um$ leads gives $0.11$ to $0.19\AW$ between $0.1$
+and $1\THz$ and the funnel $1.1$ to $2.4$ times as much. At that
+temperature the decay length is $18\um$ and every one of these devices is
+a resonator, so that shortening the leads moves all the curves and tests
+nothing cleanly: the share of a third is that of the $12\um$ leads, and
+with shorter ones it lies between $0.02$ and $5$ from one frequency to
+the next. With leads of $1\um$ the plain channel then gives $-0.05$ to
+$-2.0\AW$ between $0.1$ and $1\THz$, larger than the funnel's in magnitude
+at eight of ten frequencies and opposite in sign at eight (Supplemental
+Material). We have not checked these $100$~K sweeps against the mesh or
+examined the change of sign, and we take no number from them. The sign of
+the DS response of the reference devices follows the termination:
+exchanging the roles of source and drain reverses it. That the shape of
+a channel modifies the response set by its boundary conditions, rather
+than replacing it, is in line with what is known for field-effect
+detectors: a non-uniform channel changes the responsivity by about ten
+per cent~\cite{zhang2021terafet}, and a Corbino geometry, which
+concentrates the field at the inner contact, raises it
 substantially~\cite{khavronin2020singularity}.
 
 \begin{table*}
@@ -133,131 +108,113 @@ Leads ($\mu$m) & $L/\ell$ & $\Rdc$ ($\Omega$) & DS (A/W) & Shape (mA/W) & Share 
 \end{table*}
 
 The $175\nm$ funnel [Fig.~\ref{fig:small}(c)] has a dc resistance of
-$1.9$~k$\Omega$ and absorbs as little as $15\%$ of the available power at
-$10\GHz$, about half or more above $0.1\THz$ and nearly all of it at its
-resonances. Its shape does more than that of the wide device. At $100$~K
-the shape-only response is $0.02$ to $0.19\AW$ in magnitude between $0.3$
-and $1\THz$, with changes of sign, against $0.06$ to $0.30\AW$ with the DS
-termination. At $1.87\THz$ the taper passes
-through a series resonance, the horn is matched to the antenna, and the
-shape-only responsivity reaches $0.21\AW$ at $100$~K, half of the $0.43\AW$
-of the DS termination at the same frequency. The two extra terms of
-Eq.~\eqref{eq:mom} change these two numbers by $4\%$ relative to the
-ordinary convective term: at the resonance the
-response is carried by the density terms. The resonance belongs to the
-taper and not to the leads: a control with $1\um$ leads has it at the same
-frequency, with an impedance of $56-10i\ \Omega$ there for the symmetric
-drive. In a plasmonic design the funnel shape earns its keep in this way,
-as a matched horn at low temperature. At
-$300$~K it gives $0.013\AW$ against $0.066\AW$ for the terminations at the
-same frequency.
+$1.9$~k$\Omega$ and absorbs about half or more of the available power
+above $0.1\THz$. Its shape does more than that of the wide device. At
+$100$~K the shape-only response is $0.02$ to $0.19\AW$ in magnitude
+between $0.3$ and $1\THz$, with changes of sign, against $0.06$ to
+$0.30\AW$ with the DS termination. At $1.87\THz$ the taper passes through
+a series resonance, the horn is matched to the antenna, and the
+shape-only responsivity reaches $0.21\AW$ at $100$~K, half of the
+$0.43\AW$ of the DS termination at the same frequency. A control with
+$1\um$ leads has the resonance at the same frequency, so it belongs to
+the taper. In a plasmonic design the funnel shape earns its keep in this
+way, as a matched horn at low temperature. At $300$~K it gives
+$0.013\AW$ against $0.066\AW$ for the terminations at the same frequency.
 
-The Tesla valve [Fig.~\ref{fig:small}(d)] contributes little. Its
-shape-only responsivity is below $8\times10^{-4}\AW$ below $300\GHz$,
-where values under about $5\times10^{-4}\AW$ are not resolved by the mesh
-in magnitude or sign, and
-reaches $1.8\times10^{-2}\AW$ only at a $100$~K resonance near $0.7\THz$. At
+The Tesla valve [Fig.~\ref{fig:small}(d)] contributes little. The
+shape-only responsivity of the $175\nm$ valve is below
+$8\times10^{-4}\AW$ below $300\GHz$, where values under about
+$5\times10^{-4}\AW$ are not resolved by the mesh, and reaches
+$1.8\times10^{-2}\AW$ only at a $100$~K resonance near $0.7\THz$. At
 $1\THz$ it is $1.0\times10^{-2}\AW$ at $100$~K and $4.5\times10^{-4}\AW$
-at $300$~K, about twenty and thirty times below the $175\nm$ funnel. Its dc
-resistance of $6$ to $11$~k$\Omega$ is two orders of magnitude from the
-antenna: below $50\GHz$ it absorbs $3$ to $30\%$ of the available power,
-and although the plasmon resonances match it better above $0.1\THz$,
-whatever
-the DS termination adds, $0.004$ to $0.09\AW$, is the terminations and not
-the loops. A valve with a channel of $1\um$, every length scaled by
-$1000/175$, is nearer the antenna, at $2.9$~k$\Omega$ at $300$~K and
-$0.9$~k$\Omega$ at $100$~K, and its shape does no more
-(Supplemental Material). With the $12\um$ leads of the $1\um$ funnel its
-shape-only response is below $6\times10^{-5}\AW$ at $300$~K and
-$3\times10^{-4}$ to $0.012\AW$ at
-$100$~K between $0.1$ and $1\THz$; with leads of $1\um$, so that the
-wave reaches the loops at $300$~K, it is below $9\times10^{-4}\AW$ at
-$300$~K and at most $0.021\AW$ at $100$~K. These are $4$ to $1000$ times
-below the shape-only response of the $1\um$ funnel with the same leads
-at $38$ of the $40$ frequencies and temperatures compared; at the other
-two the funnel's response passes through zero. With the DS termination
-the $1\um$ valve gives $0.009$ to $0.022\AW$ at $300$~K and $0.02$ to
-$0.09\AW$ at $100$~K, a fifth or less of the funnel at $300$~K, and a
-matched antenna does not change its efficiency at the drift limit, which
-is below $4\times10^{-5}$ with the DS termination and below
-$3\times10^{-6}$ for the shape. The shape-only values of this valve
+at $300$~K, about twenty and thirty times below the $175\nm$ funnel. Its
+dc resistance of $6$ to $11$~k$\Omega$ is two orders of magnitude from
+the antenna, and what the DS termination adds, $0.004$ to $0.09\AW$, is
+the terminations and not the loops. A valve with a channel of $1\um$,
+every length scaled by $1000/175$, is nearer the antenna, at
+$2.9$~k$\Omega$ at $300$~K and $0.9$~k$\Omega$ at $100$~K, and its shape
+does no more (Supplemental Material). Between $0.1$ and $1\THz$, with
+leads of $12\um$ or of $1\um$, its shape-only response is below
+$9\times10^{-4}\AW$ at $300$~K and at most $0.021\AW$ at $100$~K. That is
+$4$ to $1000$ times below the shape-only response of the $1\um$ funnel
+with the same leads at $38$ of the $40$ frequencies and temperatures
+compared; at the other two the funnel's response passes through zero.
+With the DS termination the $1\um$ valve gives $0.009$ to $0.022\AW$ at
+$300$~K and $0.02$ to $0.09\AW$ at $100$~K, a fifth or less of the funnel
+at $300$~K, and a matched antenna does not bring its efficiency at the
+drift limit above $4\times10^{-5}$. The shape-only values of this valve
 change by a factor of two or more between meshes at $1\THz$ and by up to
-a quarter at $0.1$ and $0.3\THz$; they are bounds of the right order. The valve's asymmetry is an inertial loss that needs a Reynolds
-number of ten; at terahertz frequencies the long path that produces it is
-also several plasmon wavelengths long, so its stages do not act coherently.
+a quarter at $0.1$ and $0.3\THz$; they are bounds of the right order. The
+valve's asymmetry is an inertial loss that needs a Reynolds number of
+ten; at terahertz frequencies the long path that produces it is also
+several plasmon wavelengths long, so its stages do not act coherently.
 
 With ideal contacts and the Johnson noise of $\Rdc$ alone, the
 noise-equivalent power of the $1\um$ funnel between $0.3$ and $1\THz$ is
 $22$ to $28\pWrtHz$ at $100$~K (if the viscosity does not fall with
 frequency, $32$ to $60\pWrtHz$ up to $0.9\THz$ and $100\pWrtHz$ at
 $1\THz$) and $97$ to $102\pWrtHz$ at $300$~K, or $55$ to $99\pWrtHz$
-with leads of $1\um$. That
-of the $175\nm$ funnel at $100$~K is $6$ to $29\pWrtHz$ in the same band
-and $4\pWrtHz$ at its taper resonance.
+with leads of $1\um$. That of the $175\nm$ funnel at $100$~K is $6$ to
+$29\pWrtHz$ in the same band and $4\pWrtHz$ at its taper resonance.
 
-Three choices of the model enter these numbers at first order, and we have
-varied them. The first is the contact. A contact that fixes the density
-is the condition of Dyakonov and Shur and of
-Refs.~\cite{tomadin2013theory,svintsov2013hydrodynamic}; a contact that
-instead fixes the energy carried per particle of the drifting gas, the
-ratio of the energy flux to the particle flux, fixes
-$\Phi(n)+m^{*}u^{2}/4$. With it the DS response of the $1\um$ funnel
-between $0.1$ and $1\THz$ falls
-to $0.65$ to $0.93$ of the values above at $100$~K and to $0.65$ to $0.74$
-at $300$~K, and that of the $175\nm$ funnel to $0.64$ to $1.02$ and $0.66$
-to $0.74$; the shape-only response of the $1\um$ funnel moves by
-factors of $0.6$ to $1.3$ at $100$~K and $0.6$ to $1.8$ at $300$~K. The
-uniform channel with an ideal source is
-far more sensitive, falling to between two thirds and a tenth at $100$~K. The
-response is linear in the coefficient of $u^{2}$ in the contact condition,
-so other choices can be read off these two. The second is the
-temperature. For a gas at $300$~K with the density of the reference point
-the coefficients $-\tfrac12$ and $-\tfrac14$ of Eq.~\eqref{eq:mom} become
-$-0.34$ and $-0.17$ if the flow is isothermal, with the temperature held
-fixed in the frame of the lattice, and $-0.47$ and $-0.24$ at
-$100$~K; with them, and nothing else changed, the DS responsivities at
-$300$~K are $16$ to $23\%$
-higher and those at $100$~K at most $4\%$ higher. This is one of two
-limiting cases. In the other, a flow that exchanges no heat, the entropy
-per carrier is conserved, the mass density follows $n^{3/2}$ as it does
-at zero temperature, and the two coefficients keep the values
-$-\tfrac12$ and $-\tfrac14$ exactly at any temperature (Supplemental
-Material). With the cooling time of $2.5$~ps quoted in
-Sec.~\ref{sec:model-plasmonic} the product of angular frequency and
-cooling time is $1.6$ at $0.1\THz$ and $16$ at $1\THz$, so the flow is
-nearer the second case, which is the one we use. The third is the
-viscosity of the $100$~K set, in its magnitude and in its dependence on
-frequency; both are
-assumptions (Table~\ref{tab:params}). With a fifth of the magnitude, $0.02$~m$^{2}$/s, the DS response of
-the $1\um$ funnel changes by factors of $1.4$, $0.75$ and $0.8$ at $0.1$,
-$0.3$ and $1\THz$ and the shape-only response by $4.8$ and $0.6$ at $0.1$
-and $0.3\THz$, with a change of sign at $1\THz$; these runs are on a mesh
-of $40\nm$ and are less converged than the others. At $300$~K a fifth of
-the viscosity changes the DS response by $3$ to $10\%$. The dependence
-on frequency is the viscoelastic form of Sec.~\ref{sec:model-plasmonic},
-in which the viscosity falls above $\omega\tauee=1$, at $100$~K above
-$0.16\THz$. With the viscosity held at its dc value instead [dotted
-curves in Fig.~\ref{fig:small}(b)] the DS response of the $1\um$ funnel
-at $100$~K is within $6\%$ of the values above below $0.1\THz$, is
-$0.09$ to $0.18\AW$ between $0.1$ and $0.9\THz$, and is $0.055\AW$ at
-$1\THz$, where the viscoelastic form gives $0.24\AW$. The shape-only
-response is then $0.013$ to $0.073\AW$ between $0.2$ and $1\THz$, and
-its share of the DS current between $0.3$ and $1\THz$ is $0.09$ to
-$0.41$ in place of $0.27$ to $0.38$. At $300$~K, where $\omega\tauee$
-reaches $0.6$ only at $1\THz$, the two solvers of Sec.~\ref{sec:large},
-one with the term and one without, agree on the efficiency per watt to
-$1\%$ at $0.1$ and $0.3\THz$ and to $10\%$ at $1\THz$. The DS numbers of
-this section are therefore uncertain by about a third downward from the
-contact, by a fifth upward from the temperature at $300$~K, and by some
-tens of per cent in either direction from the magnitude of the viscosity
-at $100$~K; those at $100$~K above $0.1\THz$ are lower by up to a factor
-of $2.7$ on the frequencies of the sweep, and of four at $1\THz$, if the
-viscosity does not fall with frequency. The shape-only numbers at
-$100$~K depend on the viscosity by more than that.
-The mesh adds up to $6\%$ to the DS numbers of the $1\um$ funnel at
-$100$~K and $1\%$ at $300$~K, and up to $11\%$ to its shape-only numbers
-(Supplemental Material). What the fluid description itself leaves out is
-taken up in Sec.~\ref{sec:discussion}.
+Table~\ref{tab:sens} lists what the choices of the model do to these
+numbers. A contact that fixes the density is the condition of Dyakonov
+and Shur and of
+Refs.~\cite{tomadin2013theory,svintsov2013hydrodynamic}; one that fixes
+the energy carried per particle of the drifting gas fixes
+$\Phi(n)+m^{*}u^{2}/4$ instead. The response is linear in the coefficient
+of $u^{2}$ in the contact condition, so other choices can be read off
+these two. The coefficients $-\tfrac12$ and $-\tfrac14$ of
+Eq.~\eqref{eq:mom} hold at any temperature for a flow that exchanges no
+heat; for isothermal flow at the reference density they are $-0.34$ and
+$-0.17$ at $300$~K and $-0.47$ and $-0.24$ at $100$~K (Supplemental
+Material). With the cooling time of $2.5$~ps measured in encapsulated
+graphene at room temperature~\cite{tielrooij2018out} the product of
+angular frequency and cooling time is $1.6$ at $0.1\THz$ and $16$ at
+$1\THz$, so the flow is nearer the first case, which is the one we use.
+The viscosity of the $100$~K set is an assumption in its magnitude and
+in its dependence on frequency (Table~\ref{tab:params}). In the
+viscoelastic form of Sec.~\ref{sec:model-plasmonic} it falls above
+$\omega\tauee=1$, at $100$~K above $0.16\THz$. With the viscosity held
+at its dc value instead [dotted curves in Fig.~\ref{fig:small}(b)] the
+DS response of the $1\um$ funnel at $100$~K is $0.09$ to $0.18\AW$
+between $0.1$ and $0.9\THz$ and $0.055\AW$ at $1\THz$, where the
+viscoelastic form gives $0.24\AW$, and the share of the shape between
+$0.3$ and $1\THz$ is $0.09$ to $0.41$ in place of $0.27$ to $0.38$. The
+DS numbers of this section are therefore uncertain by about a third
+downward from the contact, by a fifth upward from the temperature at
+$300$~K, and by some tens of per cent in either direction from the
+magnitude of the viscosity at $100$~K; those at $100$~K above $0.1\THz$
+are lower by up to a factor of $2.7$ on the frequencies of the sweep, and
+of four at $1\THz$, if the viscosity does not fall with frequency. The
+shape-only numbers at $100$~K depend on the viscosity by more than that.
+What the fluid description itself leaves out is taken up in
+Sec.~\ref{sec:discussion}.
+
+\begin{table*}
+\caption{What the choices of the model do to the small-signal response
+of the $1\um$ funnel with $12\um$ leads between $0.1$ and $1\THz$.
+Factors multiply the values of the text. The runs with a fifth of the
+viscosity at $100$~K are on a mesh of $40\nm$ and are less converged
+than the others. The uniform channel with an ideal source is more
+sensitive than the funnel: the second contact condition leaves between
+two thirds and a tenth of its response at $100$~K, and the ordinary
+convective term raises it $1.7$ to $2.9$ times at $100$~K and $1.6$ to
+$1.9$ times at $300$~K.}
+\label{tab:sens}
+\begin{ruledtabular}
+\begin{tabular}{L{0.26\textwidth}L{0.22\textwidth}L{0.19\textwidth}L{0.25\textwidth}}
+Choice varied & DS, $100$~K & DS, $300$~K & Shape only \\
+\hline
+Contact fixes the energy per particle, not the density & $0.65$ to $0.93$ ($175\nm$ funnel: $0.64$ to $1.02$) & $0.65$ to $0.74$ ($175\nm$ funnel: $0.66$ to $0.74$) & $0.6$ to $1.3$ at $100$~K, $0.6$ to $1.8$ at $300$~K \\[3pt]
+Isothermal coefficients in Eq.~\eqref{eq:mom} & at most $4\%$ higher & $16$ to $23\%$ higher & \\[3pt]
+A fifth of the viscosity & $1.4$, $0.75$ and $0.8$ at $0.1$, $0.3$ and $1\THz$ & changes by $3$ to $10\%$ & at $100$~K: $4.8$ and $0.6$ at $0.1$ and $0.3\THz$, opposite sign at $1\THz$ \\[3pt]
+Viscosity constant in frequency & within $6\%$ below $0.1\THz$; $0.09$ to $0.18\AW$ from $0.1$ to $0.9\THz$; $0.055\AW$ at $1\THz$ & efficiency per watt changes by $1\%$ at $0.1$ and $0.3\THz$, $10\%$ at $1\THz$ & at $100$~K: $0.013$ to $0.073\AW$ from $0.2$ to $1\THz$ \\[3pt]
+Ordinary convective term in place of Eq.~\eqref{eq:mom} & up to $1.7$ & about $1.7$ from $0.3$ to $1\THz$ & \\[3pt]
+Mesh ($20\nm$ against the extrapolated limit) & up to $6\%$ low & $1\%$ & up to $11\%$ low \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig4_plasmonic_small_signal.pdf}
@@ -289,24 +246,22 @@ sweep below $1\THz$; above $1\THz$ they are not converged with the mesh.}
 
 A detector is judged by responsivity and noise, a harvester by conversion
 efficiency $\eta=P_{\mathrm{dc}}/\Pav$ at the power the antenna supplies.
-The framework is that of Kachorovskii
-\textit{et al.}~\cite{kachorovskii2013performance} for field-effect
-detectors, who define the same ratio with respect to the absorbed power,
-find it quadratic in the amplitude at small signal, and show that it has an
-absolute maximum of the order of ten per cent, reached below threshold where
-the voltage scale is the thermal one; the change from quadratic to linear
-response at an amplitude equal to the gate swing is established in theory
-and experiment~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}.
-A gapless monolayer has no subthreshold regime, so the voltage scale of
-the gated fluid is the gate overdrive. For the Dirac gas a second scale
-comes first. A plasma wave of relative density amplitude $\delta n/n_{0}$
-carries a drift $s_{0}\,\delta n/n_{0}$, and $s_{0}=3.6\,\vF$ under our
-gate, so a density swing of $28\%$ would already move the carriers at
-$\vF$, which Eq.~\eqref{eq:exact} does not allow.
-In second-order perturbation the device is a dc Thevenin source with
-open-circuit voltage $V_{\mathrm{oc}}=r\,V_{a}^{2}/V_{u}$ and resistance
-$\Rdc$, where $V_{u}=m^{*}s_{0}^{2}/e$ is the natural voltage unit of the
-gated fluid ($1.49$~V here, the gate overdrive up to the quantum-capacitance
+For field-effect detectors that efficiency is quadratic in the amplitude
+at small signal, turns linear at an amplitude equal to the gate
+swing~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}, and has
+an absolute maximum of the order of ten per cent, reached below threshold
+where the voltage scale is the thermal
+one~\cite{kachorovskii2013performance}. A gapless monolayer has no
+subthreshold regime, so the voltage scale of the gated fluid is the gate
+overdrive. For the Dirac gas a second scale comes first. A plasma wave of
+relative density amplitude $\delta n/n_{0}$ carries a drift
+$s_{0}\,\delta n/n_{0}$, and $s_{0}=3.6\,\vF$ under our gate, so a
+density swing of $28\%$ would already move the carriers at $\vF$, which
+Eq.~\eqref{eq:exact} does not allow. In second-order perturbation the
+device is a dc Thevenin source with open-circuit voltage
+$V_{\mathrm{oc}}=r\,V_{a}^{2}/V_{u}$ and resistance $\Rdc$, where
+$V_{u}=m^{*}s_{0}^{2}/e$ is the natural voltage unit of the gated fluid
+($1.49$~V here, the gate overdrive up to the quantum-capacitance
 correction) and $r$ is a pure number. Into a matched dc load
 \begin{equation}
 \eta=2r^{2}\,\frac{\Rant}{\Rdc}\,\frac{V_{a}^{2}}{V_{u}^{2}}
@@ -319,83 +274,64 @@ $2.9$~W$^{-1}$ at $100$~K and $0.40$ to $0.64$~W$^{-1}$ at $300$~K. What
 the nonlinear solver decides is how far the law holds and what ends it.
 
 Figure~\ref{fig:large} shows the time-domain results for the DS-terminated
-$1\um$ funnel. Two things separate these runs from the small-signal ones
-in level. The time-domain solver has no viscoelastic term, which
-leaves the $300$~K small-signal efficiencies nearly as they are ($0.45$,
-$0.45$ and $0.34$~W$^{-1}$ at $0.1$, $0.3$ and $1\THz$) and changes those
-at $100$~K to $1.1$, $1.0$ and $0.11$~W$^{-1}$, where the small-signal
-solver gives $1.0$, $2.4$ and $2.4$~W$^{-1}$. And they were run on a mesh
-of $80\nm$ at the walls, on which the small-signal level at $100$~K is $7$
-to $23\%$ below that of the $20\nm$ mesh used in Sec.~\ref{sec:small}
-(Supplemental Material). Nothing else separates them: with the viscosity
-held constant the small-signal solver gives $1.17$, $1.10$ and
-$0.13$~W$^{-1}$ at $100$~K on the $20\nm$ mesh, $6$, $10$ and $16\%$ above
-the time-domain values. Each curve is therefore compared with the square
-law of its own solver on its own mesh, and the $100$~K curve at $1\THz$ is
-indicative only. The
+$1\um$ funnel. The time-domain solver has a constant viscosity and was
+run on a mesh of $80\nm$ at the walls; with the viscosity held constant
+in both, the two solvers agree to the error of that mesh (Supplemental
+Material). Without the viscoelastic term the $300$~K efficiencies per
+watt are nearly those of Sec.~\ref{sec:small}, and those at $100$~K are
+$1.1$, $1.0$ and $0.11$~W$^{-1}$ at $0.1$, $0.3$ and $1\THz$, where the
+small-signal solver gives $1.0$, $2.4$ and $2.4$~W$^{-1}$. Each curve is
+therefore compared with the square law of its own solver on its own
+mesh, and the $100$~K curve at $1\THz$ is indicative only. The
 efficiency meets that law to $1\%$ at the smallest amplitude at $0.1$ and
 $0.3\THz$ and stays within $7\%$ of it as long as the largest drift speed
 in the device is below the drift limit of $0.3\,\vF$
-[filled symbols in Fig.~\ref{fig:large}]. With amplitudes computed $4\%$
-on either side of it, that speed is reached at an available
-power of $26$, $38$ and $105\ \mu$W at $0.1$, $0.3$ and $1\THz$ at $100$~K
-and of $100$ to $130\ \mu$W at $300$~K, and the efficiency there is
-$1\times10^{-5}$ to $4\times10^{-5}$ at $100$~K and $4\times10^{-5}$ to
-$6\times10^{-5}$ at $300$~K. On a mesh of $40\nm$ at $0.3\THz$ the power
-at the limit differs by $1\%$ at either temperature and the efficiency
-there by $4\%$ at $100$~K and by less than $1\%$ at $300$~K. The
-small-signal solver puts the same speed
-at $17$ to $22\ \mu$W at $100$~K: with the viscoelastic term the drift per
-unit amplitude is $1.1$, $1.5$ and $2.5$ times larger at the three
-frequencies, and the efficiency at the limit is $2\times10^{-5}$,
-$4\times10^{-5}$ and $5\times10^{-5}$ in place of $3\times10^{-5}$,
-$4\times10^{-5}$ and $1.3\times10^{-5}$. At $300$~K the two solvers agree
-on the drift to $3\%$, and the small-signal solver gives an efficiency at
-the limit of $5\times10^{-5}$ to $7\times10^{-5}$. Where the drift is largest depends on the
-temperature. At $100$~K it is on the axis in the neck at $0.1$ and
-$0.3\THz$, where $1\%$ of the area of the device drifts at more than
-half of it, and beside one corner of the neck at $1\THz$. At $300$~K the
-plasmon is damped along the $12\um$ lead, the drift is largest at the
-source contact across the width of the lead, and a fifth of the device
-drifts at more than half of it: the powers at the limit at $300$~K are
-those of a $4\um$ lead on a $75\ \Omega$ source and not a property of
-the funnel. Beyond the
-limit the response of the ideal gas rises
-above the square law, to between $1.1$ and $1.5$ times at $0.8\,\vF$ and
-between $1.1$ and $2.5$ times above $0.9\,\vF$ [Fig.~\ref{fig:large}(b)].
-A control run with the second-order terms of
-Eq.~\eqref{eq:mom} alone stays on the law, at $0.95$ of it where the full
-equation gives $1.44$, so the rise comes from the terms of
-Eq.~\eqref{eq:exact} beyond second order; we have not separated them. At
-the next amplitude the drift would exceed $\vF$
-and there is no periodic state: the runs end at $0.33$ to $0.59$~mW at
-$100$~K and $0.92$~mW at $300$~K, an amplitude of $0.3$ to $0.5\,V_{u}$,
-well short of the gate overdrive, with the density inside the device
-between $0.7$ and $1.3$ of its gated value (the $100$~K ladder at $1\THz$
-was stopped earlier, at $0.56\,\vF$). The largest efficiency reached
-is $0.09\%$, at $0.94$ to $0.96\,\vF$. It is the last point of a ladder
-with steps of a tenth of $V_{u}$ and is still rising steeply there, so the
-value as the drift approaches $\vF$ is not bracketed. We do not offer the
-range above $0.3\,\vF$ as a
-prediction for a device: heating and the emission of optical phonons,
-which the model lacks, limit the drift of a real sample inside that
-range. Returning the dc current through the antenna instead of a matched
-load costs the expected $15\%$ up to the drift limit and up to $24\%$
-above it.
+[filled symbols in Fig.~\ref{fig:large}]. That speed is reached at an
+available power of $26$, $38$ and $105\ \mu$W at $0.1$, $0.3$ and $1\THz$
+at $100$~K and of $100$ to $130\ \mu$W at $300$~K, and the efficiency
+there is $1\times10^{-5}$ to $4\times10^{-5}$ at $100$~K and
+$4\times10^{-5}$ to $6\times10^{-5}$ at $300$~K; on a mesh of $40\nm$ at
+$0.3\THz$ the power at the limit differs by $1\%$ and the efficiency by
+$4\%$ or less. The small-signal solver, with the viscoelastic term, puts
+the same speed at $17$ to $22\ \mu$W at $100$~K, with an efficiency at
+the limit of $2\times10^{-5}$, $4\times10^{-5}$ and $5\times10^{-5}$ at
+the three frequencies in place of $3\times10^{-5}$, $4\times10^{-5}$ and
+$1.3\times10^{-5}$. At $300$~K the two solvers agree on the drift to
+$3\%$, and the small-signal solver gives $5\times10^{-5}$ to
+$7\times10^{-5}$ at the limit. Where the drift is largest depends on the
+temperature (Supplemental Material). At $100$~K it is in the neck. At
+$300$~K the plasmon is damped along the $12\um$ lead and the drift is
+largest at the source contact, across the width of the lead: the powers
+at the limit at $300$~K are those of a $4\um$ lead on a $75\ \Omega$
+source and not a property of the funnel.
+
+Beyond the limit the response of the ideal gas rises above the square
+law, to between $1.1$ and $1.5$ times at $0.8\,\vF$ and between $1.1$ and
+$2.5$ times above $0.9\,\vF$ [Fig.~\ref{fig:large}(b)]. A control run
+with the second-order terms of Eq.~\eqref{eq:mom} alone stays on the law,
+at $0.95$ of it where the full equation gives $1.44$, so the rise comes
+from the terms of Eq.~\eqref{eq:exact} beyond second order. At the next
+amplitude the drift would exceed $\vF$ and there is no periodic state:
+the runs end at $0.33$ to $0.59$~mW at $100$~K and $0.92$~mW at $300$~K,
+an amplitude of $0.3$ to $0.5\,V_{u}$, well short of the gate overdrive
+(the $100$~K ladder at $1\THz$ was stopped earlier, at $0.56\,\vF$). The
+largest efficiency reached is $0.09\%$, at $0.94$ to $0.96\,\vF$, on a
+curve that is still rising steeply, so the value as the drift approaches
+$\vF$ is not bracketed. The range above $0.3\,\vF$ is that of the ideal
+gas and not a prediction for a device: heating and the emission of
+optical phonons, which the model lacks, limit the drift of a real sample
+inside it. Returning the dc current through the antenna instead of a
+matched load costs the expected $15\%$ up to the drift limit and up to
+$24\%$ above it.
 
 The shape-only response does not gain on that of the terminations at
-large signal. With
-the symmetric drive the funnel gives $0.19$~W$^{-1}$ at $0.3\THz$ and
-$100$~K, a fifth of the efficiency of the DS term of the same device in
-the same solver (the small-signal solver, with the viscoelastic term,
-gives an eighth); it
-is $7\%$ below its square law at the drift limit and falls to $0.77$ of it
-at $0.54\,\vF$ and $0.45$ at $0.79\,\vF$ [Fig.~\ref{fig:large}(b)], while
-the response of the terminations rises. At $1\THz$ and $100$~K, where the
-shape-only efficiency is $10^{-3}$~W$^{-1}$ in this solver and its level
-is indicative only, it is $45\%$ above its law at $0.26\,\vF$, the last
-amplitude computed. The picture of a geometric diode
-that improves when driven hard is not what the fluid does at $0.3\THz$.
+large signal. With the symmetric drive the funnel gives $0.19$~W$^{-1}$
+at $0.3\THz$ and $100$~K, a fifth of the efficiency of the DS term of the
+same device in the same solver; it is $7\%$ below its square law at the
+drift limit and falls to $0.77$ of it at $0.54\,\vF$ and $0.45$ at
+$0.79\,\vF$ [Fig.~\ref{fig:large}(b)], while the response of the
+terminations rises. The picture of a geometric diode that improves when
+driven hard is not what the fluid does at $0.3\THz$.
 
 The scale of the result is set by Eq.~\eqref{eq:eta}. A beam of
 $1$~W/m$^{2}$ delivers about $10$~nW to a half-wave antenna at $1\THz$,
@@ -463,57 +399,47 @@ than the scattering time is held constant as the density falls, the
 low-density gain in $\eta/\Pav$ shrinks by a factor of up to $8.5$ and the
 efficiency at the limit is $0.8\times10^{-4}$ to $2.7\times10^{-4}$ below
 the reference density. The design rule is
-therefore to put the drift limit at the available power; the element then converts
+therefore to put the drift limit at the available power; by the square
+law the element then converts
 at $10^{-5}$ to $5\times10^{-4}$, and nothing in $n_{0}$ or $d$ inside the
 valid window raises that number to a tenth of a per cent. These
-efficiencies are square-law values at the assumed limit and scale as its
-square: with a limit of $0.2$ or $0.5\,\vF$ in place of $0.3\,\vF$ they
+efficiencies scale as the square of the assumed limit: with $0.2$ or
+$0.5\,\vF$ in place of $0.3\,\vF$ they
 would be $0.44$ or $2.8$ times as large, the latter if the square law
-still held there. They are also values of the small-signal solver, with
-the viscoelastic term: for the reference device at $100$~K the
-efficiency at the limit without it is the same at $0.3\THz$ and three
-to four times lower at $1\THz$ (Sec.~\ref{sec:large}).
+still held there.
 
 The upper ends of these ranges lie under the thin gates, at amplitudes
 of $0.5$ to $1.0$ of the gate overdrive, where the square law of a
 field-effect detector is expected to give
-way~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}. We
+way~\cite{gutin2012plasmonic,rudin2014theory,but2014nonlinear}, and they
+are values of the small-signal solver, with the viscoelastic term. We
 therefore ran the time-domain solver at the five grid points that carry
-them (Table~\ref{tab:ladders}): at $100$~K the largest valid efficiency
-of the grid, the largest amplitude and the reference density under the
-$5\nm$ gate, and at $300$~K the top of the range, at $0.1\THz$, and the
-reference density under the $5\nm$ gate. The law
-holds. All five ladders pass the drift limit, with the density nowhere
-below three quarters of its gated value, and at the limit the efficiency
-is $1.04$ to $1.12$ times the square law of the same solver; at the
-first point of the table a mesh of $40\nm$ gives the same ratio to
-$3\%$. Two other things lower the
-numbers. The first is the drift, which grows faster than the amplitude:
-at the limit it is $16$ to $26\%$ above the first-order value, so that
-the limit is reached at $0.63$ to $0.75$ of the power that the
-small-signal solver assigns to it. At $300$~K, where the two solvers are
-one model, the efficiency at the limit is for that reason $0.70$ and
-$0.77$ of the grid value, $1.2\times10^{-4}$ in place of
-$1.7\times10^{-4}$ at the top of the $300$~K range. The second is the
-viscosity, at $100$~K. The time-domain solver gives $5\times10^{-5}$ to
-$7\times10^{-5}$ at the three points where the grid has
-$4.4\times10^{-4}$ to $5.4\times10^{-4}$, and most of that factor of
-seven to eleven is not a matter of amplitude: with the viscosity held
-constant the small-signal solver itself gives $6\times10^{-5}$ to
-$1.0\times10^{-4}$ at its limit, and its square law then agrees with
-that of the time-domain solver to $3\%$ on one mesh. Under a thin gate
-the fall of the viscosity with frequency thus carries $81$ to $87\%$ of
-the efficiency per watt at $0.3\THz$, against a little over half for the
-reference device, while it changes the drift per unit amplitude by $3\%$
-at most. The largest $100$~K efficiencies of
+them (Table~\ref{tab:ladders}). The law holds. All five ladders pass the
+drift limit, with the density nowhere below three quarters of its gated
+value, and at the limit the efficiency is $1.04$ to $1.12$ times the
+square law of the same solver. Two other things lower the numbers. The
+first is the drift, which grows faster than the amplitude, so that the
+limit is reached at $0.63$ to $0.75$ of the power that the small-signal
+solver assigns to it. At $300$~K, where the two solvers are one model,
+the efficiency at the limit is for that reason $0.70$ and $0.77$ of the
+grid value, $1.2\times10^{-4}$ in place of $1.7\times10^{-4}$ at the top
+of the $300$~K range. The second is the viscosity, at $100$~K. The
+time-domain solver gives $5\times10^{-5}$ to $7\times10^{-5}$ at the
+three points where the grid has $4.4\times10^{-4}$ to
+$5.4\times10^{-4}$, and most of that factor of seven to eleven is not a
+matter of amplitude: with the viscosity held constant the small-signal
+solver itself gives $6\times10^{-5}$ to $1.0\times10^{-4}$ at its limit.
+Under a thin gate the fall of the viscosity with frequency thus carries
+$81$ to $87\%$ of the efficiency per watt at $0.3\THz$, against a little
+over half for the reference device. The largest $100$~K efficiencies of
 Fig.~\ref{fig:operating}(b), those under the thin gates, therefore stand
-on the viscoelastic form of
-the viscosity, which is an assumption (Table~\ref{tab:params}) and which
-no large-signal calculation here contains; the low-density points under
-the $30\nm$ gate, which reach $3\times10^{-4}$, were not examined in
-this way. At the seven points followed in time, with a viscosity that
-does not fall with frequency, the element converts at
-$10^{-5}$ to $1.2\times10^{-4}$ at the drift limit.
+on the viscoelastic form of the viscosity, which is an assumption
+(Table~\ref{tab:params}) and which no large-signal calculation here
+contains; the low-density points under the $30\nm$ gate, which reach
+$3\times10^{-4}$, were not examined in this way. At the seven points
+followed in time, with a viscosity that does not fall with frequency,
+the element converts at $10^{-5}$ to $1.2\times10^{-4}$ at the drift
+limit.
 
 \begin{table*}
 \caption{Time-domain check of the efficiency at the drift limit under
@@ -551,9 +477,8 @@ source current, and a resistance at the drain lifts it off the gate
 potential at the signal frequency: the boundary condition that makes the
 Dyakonov-Shur mechanism work is partly removed. Matching the antenna to the
 new impedance recovers little. That a lower access resistance raises the
-photoresponse of graphene detectors strongly, by up to a factor twenty for
-a tenfold reduction, has been measured and described with a
-series-resistance model~\cite{castello2024impact}, and that the shunt
+photoresponse of graphene detectors strongly has been
+measured~\cite{castello2024impact}, and that the shunt
 between gate and drain at the signal frequency is what makes a transistor
 mix is the basis of the distributed self-mixing
 picture~\cite{lisauskas2009rational}; the present result connects the two.
@@ -565,13 +490,12 @@ $1.3\pWrtHz$ at $5\times10^{10}\percm$ at $100$~K if the $5$~ps scattering
 time survives there, $3.8\pWrtHz$ with constant mobility and $2.7\pWrtHz$ with
 $300\ \Omega\um$ contacts; at $300$~K the best valid point is
 $27\pWrtHz$. The low-density points are also the least degenerate, and
-there the choice between adiabatic and isothermal flow of
-Sec.~\ref{sec:small} matters most. With the isothermal coefficients the
-response of the three least degenerate valid $100$~K points
-at $30\nm$, where $\EF/\kB T$ falls from $6$ to $3$, is $6$ to $35\%$
-higher, and that at $5\times10^{11}\percm$ and $300$~K is $24$ to $52\%$
-higher; the $1.3\pWrtHz$ would be $1.1\pWrtHz$. The power at the drift
-limit is the same in either case.
+there the choice between adiabatic and isothermal flow matters most: with
+the isothermal coefficients the response of the three least degenerate
+valid $100$~K points at $30\nm$ is $6$ to $35\%$ higher and that at
+$5\times10^{11}\percm$ and $300$~K is $24$ to $52\%$ higher
+(Supplemental Material). The power at the drift limit is the same in
+either case.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig6_operating_point.pdf}

@@ -196,7 +196,9 @@ of 0.05 to 0.07 A/W. With 1 um leads the fluid funnel's shape gives up
 to 0.08 A/W at 300 K and its terminations 0.10 to 0.18 A/W, so both now
 name the short fluid funnel as a second case. New in the paper: Tables
 II and III of the main text, and a section with Tables S16 to S18 in the
-supplement.
+supplement. In the twelfth draft (2026-11-22, shortened, no result
+changed) those two tables are Tables II and IV, and the verdict table
+is Table VII.
 
 - **A.** "At 300 K the shape gives 1.6 to 4.2 %" becomes a statement
   about a device 7.5 decay lengths long. In a device of 1.3 decay

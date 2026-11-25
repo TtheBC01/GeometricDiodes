@@ -47,15 +47,12 @@ calculations and about ten times $\EF/e$, so the nearness of the clean
 uniform-field value of $1.62$ at $0.1$~V to it has no significance. At
 $0.1$~V the published curve gives an asymmetry of $1.03$ to $1.04$, which
 we read from the figure with an uncertainty of $0.02$
-[Fig.~\ref{fig:ballistic-dc}(a)]; for an asymmetry this weak the ratio of
-voltages at fixed current and the ratio of currents at fixed voltage
-coincide. The computed $1.017$ is consistent with it, and that is not a
-validation of the model. The measured device has a resistance of $12$ to
-$20$~k$\Omega$ against $0.93$~k$\Omega$ in the model, so most of its
-resistance lies in what the model does not contain, which may be the
-contacts, a density below our estimate, disorder, or all of them; and an
-asymmetry this close to one would follow from many models. We claim no
-quantitative agreement with the experiment. What the calculations
+[Fig.~\ref{fig:ballistic-dc}(a)]. The computed $1.017$ is consistent with
+it, but the comparison does not test the model: the measured device has a
+resistance of $12$ to
+$20$~k$\Omega$ against $0.93$~k$\Omega$, so most of its
+resistance lies in what the model does not contain, and an
+asymmetry this close to one would follow from many models. What the calculations
 establish is the mechanism and the scale: electrons accelerated toward
 the neck by the bias arrive with more kinetic energy and more transverse
 modes than those decelerated toward it, and how much that rectifies
@@ -70,11 +67,10 @@ and $0.89\pm0.01$ at $0.1$~V. That is as far from one as the funnel at
 $\lambda=700\nm$, but of the wrong sign, the blocking direction being
 the easier one, and it is gone as soon as edges are partly diffuse or bulk
 scattering is present. The straight control gives $1.00\pm0.01$ and
-$0.99\pm0.01$ in the clean specular limit. Over all eighteen conditions it lies between
-$0.94$ and $1.06$, with three points more than two standard errors from
-one, so the errors quoted for these runs are too small by a factor of
-about $1.3$; with errors enlarged by that factor the two exceptions of
-the valve remain, at $2.7$ and $8$ standard errors. These
+$0.99\pm0.01$ in the clean specular limit; over all eighteen conditions
+its scatter shows that the errors quoted for these runs are too small by
+a factor of about $1.3$, which leaves the two exceptions of the valve
+standing. These
 errors are ten or more times those of the computed-field result of
 Eq.~\eqref{eq:deviceD}, so an asymmetry of a per cent or two in a Tesla
 valve is not excluded by them, and no Tesla valve was run with a computed
@@ -153,9 +149,7 @@ $|D-1|<3\times10^{-5}$ (the funnel, $1.5\times10^{-4}$), three orders of
 magnitude below the reported five per cent, which was observed for holes in a single-loop valve as a ratio of
 four-terminal resistances. Steady incompressible
 electron hydrodynamics does not reproduce that observation; whatever
-produces it is not the inertial Tesla mechanism, and we do not explain it.
-The candidates that Eq.~\eqref{eq:ns} excludes are the compressibility of the
-gated fluid, taken up in Sec.~\ref{sec:gated}, and electron heating. Second, the Reynolds number is bounded.
+produces it is not the inertial Tesla mechanism. Second, the Reynolds number is bounded.
 The drift speed in a channel of width $w$ is $u=\Rey\,\nu/w$, and keeping it
 below $0.3\,\vF$, the drift limit that we assume for all the fluid models
 (Sec.~\ref{sec:model-plasmonic}), caps
@@ -183,20 +177,17 @@ $86$~k$\Omega$ for less.
 
 These statements are for graphene, for steady laminar flow and below the
 drift limit, and an experiment in another material shows what lies outside
-them. In a GaAs electron gas at $4$~K, with channels of $2.5$ and $5\um$,
+them. In a GaAs electron gas at $4$~K
 the forward and reverse characteristics of a Tesla valve coincide up to
 about $300\ \mu$A and then separate, the reverse resistance rising to a
-diodicity of about $40$; the authors estimate a Reynolds number of at
-least $7$ and attribute the effect to the onset of
-turbulence~\cite{sarypov2026electron}. Below the threshold this is the
+diodicity of about $40$, which the authors attribute to the onset of
+turbulence at a Reynolds number of at least
+$7$~\cite{sarypov2026electron}. Below the threshold this is the
 reciprocity found here at low Reynolds number. Above it, the steady
 solution of Eq.~\eqref{eq:ns} gives $D-1$ of order $0.1$ at $\Rey=7$ to
-$10$ with slip walls and less without, two orders of magnitude short, so
-the large diodicity is not the steady inertial loss computed in this
-section. Unsteady flow, the heating of the electrons that the authors
-report and a drift speed that is a sizeable fraction of the Fermi velocity
-are all outside Eq.~\eqref{eq:ns}, and we make no statement about that
-regime.
+$10$ with slip walls, two orders of magnitude short: the large diodicity
+is not the steady inertial loss computed in this
+section, and unsteady, heated flow is outside Eq.~\eqref{eq:ns}.
 
 \begin{figure*}
 \includegraphics[width=\textwidth]{\figpath/fig3_viscous_dc.pdf}
@@ -266,22 +257,19 @@ contacts the asymmetry is at most $3\times10^{-4}$ at any point of the main set 
 inside the drift limit. Where it is above the discretisation
 floor it is the
 inertial term of the previous subsection, little changed by the gate
-[Fig.~\ref{fig:gated}(b)]: inside the drift limit, at nine of the ten
+[Fig.~\ref{fig:gated}(b)]: at nine of the ten
 points at which the
 incompressible diodicity exceeds $3\times10^{-5}$ the gated solution agrees with
-it in magnitude within a factor two at the same Reynolds number, damping, wall condition
-and mesh, seven of the nine in sign as well, and the exception is the $1\um$ Tesla valve at the edge of the
-limit, where the gated value is ten times smaller. With the gate tied to
-the other contact seven of the ten agree within a factor two and the
-largest departure is a factor three. Beyond the limit the
+it in magnitude within a factor two, and the exception is the $1\um$ Tesla valve at the edge of the
+limit, where the gated value is ten times smaller. Beyond the limit the
 comparison loses its meaning: the terms of Eq.~\eqref{eq:exact} beyond
 second order grow, and a bias that would require a drift above $\vF$ has no
 steady state at all ($12$ of the $112$ points computed). At low bias the exchange asymmetry on the meshes of the main set of runs is
 linear in the bias, which Eq.~\eqref{eq:1d} forbids. It is numerical: for
 the funnel its coefficient falls by a factor of sixteen as the wall mesh
 is refined from $28$ to $10\nm$, while the quadratic, inertial coefficient
-changes by a sixth to a quarter, depending on the contact to which the
-gate is tied [Fig.~\ref{fig:gated}(c)]. We therefore report the low-bias
+changes by a sixth to a quarter [Fig.~\ref{fig:gated}(c) and Supplemental
+Material]. We therefore report the low-bias
 shape term of a gated channel as a bound, $1.4\times10^{-5}$ at $14$~mV for
 the funnel and $4.5\times10^{-7}$ for the Tesla valve.
 
@@ -295,11 +283,9 @@ graphene Tesla valve with a $10\nm$ channel at $50$~mV, is not reproduced
 here as an effect of the shape: at $43$~mV the exchange asymmetry of our
 valve is $10^{-5}$ on the mesh of the main runs and $10^{-6}$ on the finest
 one, and the polarity term of Eq.~\eqref{eq:dpol} is
-$1.7\%$ at $50$~mV for any channel under our gate. Second, the circuit term is not
-offered as an explanation of the measurement of
+$1.7\%$ at $50$~mV for any channel under our gate. Second, the circuit term does not explain the measurement of
 Ref.~\cite{geurs2020rectification}, which is a ratio of four-terminal
-resistances and is reported to vanish outside the viscous regime; that
-observation remains unexplained by the gated model as well. Third, the
+resistances and is reported to vanish outside the viscous regime. Third, the
 result depends on the monolayer: the plasma speed under a $30\nm$ gate is
 $3.6\,\vF$, so the drift limit keeps the flow below a tenth of the wave
 speed. In bilayer graphene, where the flow can be driven to the wave

@@ -179,16 +179,12 @@ contacts, the gate at $300\nm$, a grid of $7.5\nm$ and $5\times10^{7}$
 particles for its $1.6\times10^{5}$ electrons.
 
 Tests T22 to T32 of the Supplemental Material were passed before use,
-two of them in a form that had to be relaxed and is described there.
-They include the
-capacitance of the contact strips, the static screening of a weak
-potential, the speed of the gated plasma wave, which is $0.98$ to $0.99$
-of the collisionless value of $3.90\,\vF$ under the $30\nm$ gate, the
+two of them in a relaxed form that is described there.
+They include the static screening of a weak
+potential, the speed of the gated plasma wave, the
 results of the imposed-field model for the same device when the
-interaction is switched off, a linear conductance that the interaction
-leaves unchanged within $1\%$, the reflection law and the detailed
-balance of the rough wall, and the absorption law, the strip conductance
-and the equilibrium of the reflecting contacts. The sample particles collide with each
+interaction is switched off, the detailed
+balance of the rough wall, and the equilibrium of the reflecting contacts. The sample particles collide with each
 other through the grid, which relaxes the Fermi distribution towards a
 classical one; in the open device a particle is replaced by a contact
 within about a picosecond, and the rectified current at the operating
@@ -224,9 +220,7 @@ elements~\cite{taylor1973numerical} on triangular
 meshes~\cite{geuzaine2009gmsh} with Newton iteration and a sparse direct
 solver~\cite{guennebaud2010eigen}; the wall condition
 $\bm{u}\cdot\bm{n}=0$ is imposed with length-weighted
-normals~\cite{engelman1982implementation}, which makes the discrete wall flux
-vanish exactly and removes a spurious diodicity of $10^{-5}$ that polygonal
-walls otherwise produce. Validation covers Poiseuille and Brinkman flow with
+normals~\cite{engelman1982implementation}. Validation covers Poiseuille and Brinkman flow with
 slip, Stokes reciprocity ($D-1<10^{-10}$ at $\Rey=0$), the Kovasznay
 solution~\cite{kovasznay1948laminar}, the backward-facing
 step~\cite{armaly1983experimental,erturk2008numerical}, and the
@@ -353,39 +347,30 @@ which the model does not contain, are not negligible in a real sample.
 We call $0.3\,\vF$ the drift limit. It is not a derived bound, and every
 power quoted at the limit, and every square-law efficiency quoted there,
 scales as its square. Three estimates place it (Supplemental Material).
-First, the edge of a Fermi sea that drifts at a speed $u$ is spread in
-energy by $2(u/\vF)\EF$ to lowest order in $u/\vF$, and the emission of an optical phonon
-opens where that spread, taken in full, equals the phonon energy: at $0.41\,\vF$ for the
-$100$~meV modes of hexagonal boron nitride~\cite{tielrooij2018out} at
-$10^{12}$~cm$^{-2}$, and at higher speeds for lower densities and for the
-phonons of graphene. Second, the absorbed power heats the electrons. With
-the cooling time of $2.5$~ps measured in encapsulated graphene at room
-temperature~\cite{tielrooij2018out}, the electrons of the reference
-device at $300$~K are $5\%$ hotter than the lattice on the average over
-the device when the largest drift is $0.3\,\vF$, and up to $30\%$
-hotter near the source contact, where the drift is then largest
-(Sec.~\ref{sec:large}). Below about $200$~K the measured
-cooling is slower and no longer
-exponential~\cite{tielrooij2018out}; with $10$~ps the average at
-$100$~K is $20$ to $28\%$ above the lattice. Third, the drift velocity
-measured in encapsulated graphene at room temperature saturates at
-$0.6\,\vF$ at $8\times10^{11}$~cm$^{-2}$~\cite{yamoah2017high}, twice
+The emission of optical phonons by the drifting Fermi sea opens at
+$0.41\,\vF$ for the $100$~meV modes of hexagonal boron
+nitride~\cite{tielrooij2018out} at $10^{12}$~cm$^{-2}$, and at higher
+speeds for lower densities and for the phonons of graphene. With the
+measured cooling times~\cite{tielrooij2018out}, the electrons of the
+reference device at the limit are $5\%$ hotter than the lattice on the
+average over the device at $300$~K, up to $30\%$ near the source
+contact, and $20$ to $28\%$ on the average at $100$~K. And the drift
+velocity measured in encapsulated graphene at room temperature saturates
+at $0.6\,\vF$ at $8\times10^{11}$~cm$^{-2}$~\cite{yamoah2017high}, twice
 the limit. At $0.3\,\vF$ the effects that the model omits are thus of
 the order of tens of per cent. The limit is not conservative at
 $100$~K, and these estimates do not fix it to better than between $0.2$
 and $0.4\,\vF$.
-The validation ladder has twenty-seven tests: the static limit against the viscous solver, the plasmon
+The validation ladder has twenty-seven tests (Supplemental Material),
+among them the plasmon
 dispersion, the Dyakonov-Shur closed form and its counterpart for the
 Dirac gas [Fig.~\ref{fig:small}(a)],
 reciprocity of the symmetric termination, mesh and time-step convergence,
-agreement of the two solvers at small amplitude, invariance under
-co-scaling of the physical parameters at fixed nondimensional groups,
+agreement of the two solvers at small amplitude,
 the speeds of waves on a drifting fluid, which are $u_{0}/2\pm s_{0}$ for
 the Dirac gas~\cite{svintsov2013hydrodynamic} against $u_{0}\pm s_{0}$ for
-an ordinary one, a radial flow that separates the two new terms of
-Eq.~\eqref{eq:mom}, and,
-for the steady states, a quadrature for the gated channel and the
-incompressible limit against the viscous solver.
+an ordinary one, and a radial flow that separates the two new terms of
+Eq.~\eqref{eq:mom}.
 
 \begin{table}
 \caption{Parameter sets. The ballistic model follows the experiment of
